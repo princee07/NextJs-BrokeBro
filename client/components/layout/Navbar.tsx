@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedEyes from '../ui/AnimatedEyes';
+import { LoginLink, RegisterLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-nextjs";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -14,6 +16,8 @@ const Navbar = () => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   
+  const { isAuthenticated } = useKindeAuth();
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -131,28 +135,28 @@ const Navbar = () => {
             
             {/* Authentication Buttons with Hover Effects */}
             <div className="flex items-center space-x-3">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Link href="/auth/login">
-                  <div className="px-6 py-2 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-orange-600/20 transition-all duration-300">
-                    Login
-                  </div>
-                </Link>
-              </motion.div>
-              
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Link href="/auth/signup">
-                  <div className="px-6 py-2 rounded-full bg-gradient-to-r from-pink-600 to-orange-500 text-white font-semibold text-sm border border-orange-400/30 hover:shadow-lg hover:shadow-pink-600/20 transition-all duration-300">
-                    Sign Up
-                  </div>
-                </Link>
-              </motion.div>
-              
+              {isAuthenticated ? (
+                <LogoutLink className="px-6 py-2 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-orange-600/20 transition-all duration-300">
+                  Logout
+                </LogoutLink>
+              ) : (
+                <>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <LoginLink>
+                      <div className="px-6 py-2 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-orange-600/20 transition-all duration-300">
+                        Login
+                      </div>
+                    </LoginLink>
+                  </motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <RegisterLink>
+                      <div className="px-6 py-2 rounded-full bg-gradient-to-r from-pink-600 to-orange-500 text-white font-semibold text-sm border border-orange-400/30 hover:shadow-lg hover:shadow-pink-600/20 transition-all duration-300">
+                        Sign Up
+                      </div>
+                    </RegisterLink>
+                  </motion.div>
+                </>
+              )}
               {/* Mobile Menu Button */}
               <motion.button 
                 className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-orange-500/20 to-pink-600/20"
@@ -288,20 +292,29 @@ const Navbar = () => {
               ))}
               
               <div className="mt-6 pb-4 px-4 grid grid-cols-2 gap-3">
-                <Link 
-                  href="/auth/login"
-                  className="block text-center py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm hover:from-orange-600 hover:to-orange-700 transition-colors duration-300"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Login
-                </Link>
-                <Link 
-                  href="/auth/signup"
-                  className="block text-center py-2 rounded-lg bg-gradient-to-r from-pink-500 to-pink-600 text-white font-semibold text-sm hover:from-pink-600 hover:to-pink-700 transition-colors duration-300"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Sign Up
-                </Link>
+                {isAuthenticated ? (
+                  <LogoutLink
+                    className="block text-center py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm hover:from-orange-600 hover:to-orange-700 transition-colors duration-300"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Logout
+                  </LogoutLink>
+                ) : (
+                  <>
+                    <LoginLink
+                      className="block text-center py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm hover:from-orange-600 hover:to-orange-700 transition-colors duration-300"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Login
+                    </LoginLink>
+                    <RegisterLink
+                      className="block text-center py-2 rounded-lg bg-gradient-to-r from-pink-500 to-pink-600 text-white font-semibold text-sm hover:from-pink-600 hover:to-pink-700 transition-colors duration-300"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Sign Up
+                    </RegisterLink>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>
