@@ -7,15 +7,9 @@ import OfferSlider from '@/components/sections/OfferSlider';
  import TopBrands from '@/components/sections/TopBrands';
  import OrbitTestimonials from '@/components/sections/OrbitTestimonials';
 
-
 export default function Home() {
   return (
     <>
-    <h1>This is Kinde App</h1>
-    <RegisterLink>Sign Up</RegisterLink>
-    <LoginLink>Login</LoginLink>
-  
-    
       <Hero />
       <OfferSlider />
       <TopBrands/>

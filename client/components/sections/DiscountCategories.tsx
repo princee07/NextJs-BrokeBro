@@ -6,7 +6,7 @@ import { useInView } from 'react-intersection-observer';
 import { 
   FaLaptopCode, FaUtensils, FaTshirt, FaPlane, 
   FaFilm, FaBookOpen, FaGamepad, FaHeadphones,
-  FaApple, FaMicrosoft, FaAdobe, FaSpotify,
+  FaApple, FaMicrosoft, FaFileAlt, FaSpotify,
   FaUber, FaShoppingBag, FaFilm as FaNetflix
 } from 'react-icons/fa';
 
@@ -27,7 +27,7 @@ const DiscountCategories = () => {
   const brandIcons = {
     apple: FaApple,
     microsoft: FaMicrosoft,
-    adobe: FaAdobe,
+    adobe: FaFileAlt,
     spotify: FaSpotify,
     netflix: FaNetflix,
     uber: FaUber,
