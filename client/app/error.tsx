@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client"
 
 import { useEffect } from 'react'
@@ -42,3 +43,6 @@ export default function Error({
     </div>
   )
 }
+=======
+"use client"
+>>>>>>> lavanya
