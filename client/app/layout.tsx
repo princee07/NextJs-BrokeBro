@@ -1,4 +1,5 @@
 import NavbarWrapper from '@/components/layout/NavbarWrapper';
+import Footer from '@/components/layout/Footer';
 import "../app/styles/global.css";
 import type { ReactNode } from "react";
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -7,6 +8,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <NavbarWrapper />
         <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );

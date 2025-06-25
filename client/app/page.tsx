@@ -6,7 +6,7 @@ import OfferSlider from '@/components/sections/OfferSlider';
  import ExploreProducts from '@/components/sections/ExploreProduct';
  import TopBrands from '@/components/sections/TopBrands';
  import OrbitTestimonials from '@/components/sections/OrbitTestimonials';
-
+import Footer from "@/components/layout/Footer";
 export default function Home() {
   return (
     <>
@@ -15,7 +15,7 @@ export default function Home() {
       <TopBrands/>
       <ExploreProducts/>
        <OrbitTestimonials/>
-    
+        <Footer/>
 
     </>
   );

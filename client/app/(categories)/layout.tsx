@@ -1,4 +1,4 @@
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function CategoriesLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto">
@@ -6,7 +6,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
     </div>
   );
-}   
+}
+
 // This layout component is designed to wrap around the content of the categories page.
 // It provides a flexible layout with a scrollable area for the main content.
 // The `children` prop allows for dynamic content to be injected into this layout.
