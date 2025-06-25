@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from "next/link";
 import { RegisterLink, LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,15 +14,36 @@ export default function NavbarClient({ user }: { user: any }) {
   const [searchFocused, setSearchFocused] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
-useEffect(() => {
-  console.log("user",user)
-},[user])
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setIsHydrated(true);
+    console.log("user", user);
+  }, [user]);
+
+  // Don't render auth section until hydrated to prevent flash
+  const shouldShowAuth = isHydrated;
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setProfileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const navCategories = [
@@ -36,12 +57,11 @@ useEffect(() => {
   return (
     <header className="fixed w-full z-50 flex flex-col">
       {/* Main Navbar */}
-      <nav 
-        className={`w-full transition-all duration-500 relative ${
-          scrolled 
-            ? 'py-0 bg-black/90 backdrop-blur-md shadow-lg shadow-orange-900/10' 
+      <nav
+        className={`w-full transition-all duration-500 relative ${scrolled
+            ? 'py-0 bg-black/90 backdrop-blur-md shadow-lg shadow-orange-900/10'
             : 'py-0 bg-black'
-        }`}
+          }`}
         style={{ height: '70px' }}
       >
         <div className="container mx-auto px-4 h-full">
@@ -58,7 +78,7 @@ useEffect(() => {
                     src="/assets/images/brokebro.png" 
                     alt="BrokeBro Logo" 
                     fill
-                    style={{ 
+                    style={{
                       objectFit: 'contain',
                       objectPosition: 'left center'
                     }}
@@ -72,14 +92,14 @@ useEffect(() => {
             <div className="hidden lg:flex items-center justify-center space-x-1 mx-auto">
               <div className="relative flex items-center space-x-1 p-1 rounded-full bg-black/60">
                 {hoveredCategory && (
-                  <motion.div 
+                  <motion.div
                     className="absolute h-full rounded-full bg-gradient-to-r from-orange-600/20 to-pink-600/20 backdrop-blur-sm"
                     layoutId="navHighlight"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ 
-                      type: "spring", 
-                      stiffness: 200, 
+                    transition={{
+                      type: "spring",
+                      stiffness: 200,
                       damping: 20
                     }}
                     style={{
@@ -98,20 +118,18 @@ useEffect(() => {
                     whileTap={{ scale: 0.98 }}
                   >
                     <Link href={category.path}>
-                      <div className={`relative px-4 py-2 rounded-full transition-all duration-300 ${
-                        activeCategory === category.name 
-                          ? 'text-white' 
+                      <div className={`relative px-4 py-2 rounded-full transition-all duration-300 ${activeCategory === category.name
+                          ? 'text-white'
                           : 'text-gray-300 hover:text-white'
-                      }`}>
-                        <span className={`text-sm font-medium ${
-                          hoveredCategory === category.name 
+                        }`}>
+                        <span className={`text-sm font-medium ${hoveredCategory === category.name
                             ? 'bg-gradient-to-r from-orange-300 to-pink-300 text-transparent bg-clip-text'
                             : ''
-                        }`}>
+                          }`}>
                           {category.name}
                         </span>
                         {(hoveredCategory === category.name || activeCategory === category.name) && (
-                          <motion.div 
+                          <motion.div
                             className="absolute -bottom-1 left-0 right-0 mx-auto h-0.5 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full"
                             initial={{ width: 0 }}
                             animate={{ width: '60%' }}
@@ -125,47 +143,158 @@ useEffect(() => {
                 ))}
               </div>
             </div>
-            
             {/* Authentication Buttons */}
-         
+
             <div className="flex items-center space-x-3">
-             
-              {user ? (
-                  <div className="flex items-center space-x-3">
-      <span className="text-amber-50">Hi, {user?.given_name}</span>
-      {user?.picture && (
-        <Image
-          src={user.picture}
-          alt="User Avatar"
-          width={40}
-          height={40}
-          className="rounded-full"
-        />
-      )}
-      <LogoutLink className="px-6 py-2 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-orange-600/20 transition-all duration-300">
-        Logout
-      </LogoutLink>
-    </div>
+
+              {shouldShowAuth ? (
+                user ? (
+                  <div className="relative flex items-center space-x-3" ref={dropdownRef}>
+                    <span className="text-amber-50">Hi, {user?.given_name}</span>
+
+                    {/* Profile Avatar - Clickable */}
+                    <motion.button
+                      onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                      className="relative focus:outline-none"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {user?.picture ? (
+                        <Image
+                          src={user.picture}
+                          alt="User Avatar"
+                          width={40}
+                          height={40}
+                          className="rounded-full border-2 border-orange-500/50 hover:border-orange-500 transition-colors duration-300"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 flex items-center justify-center text-white font-semibold">
+                          {user?.given_name?.charAt(0) || 'U'}
+                        </div>
+                      )}
+
+                      {/* Dropdown indicator */}
+                      <motion.div
+                        className="absolute -bottom-1 -right-1 w-3 h-3 bg-orange-500 rounded-full flex items-center justify-center"
+                        animate={{ rotate: profileDropdownOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
+                      </motion.div>
+                    </motion.button>
+
+                    {/* Dropdown Menu */}
+                    <AnimatePresence>
+                      {profileDropdownOpen && (
+                        <motion.div
+                          className="absolute right-0 top-full mt-2 w-64 bg-black/95 backdrop-blur-md rounded-lg border border-orange-500/20 shadow-lg shadow-orange-500/10 z-50"
+                          initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                          transition={{ duration: 0.2, ease: "easeOut" }}
+                        >
+                          {/* User Info Header */}
+                          <div className="p-4 border-b border-orange-500/20">
+                            <div className="flex items-center space-x-3">
+                              {user?.picture ? (
+                                <Image
+                                  src={user.picture}
+                                  alt="User Avatar"
+                                  width={50}
+                                  height={50}
+                                  className="rounded-full"
+                                />
+                              ) : (
+                                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 flex items-center justify-center text-white font-semibold text-lg">
+                                  {user?.given_name?.charAt(0) || 'U'}
+                                </div>
+                              )}
+                              <div>
+                                <p className="text-white font-semibold">{user?.given_name} {user?.family_name}</p>
+                                <p className="text-gray-400 text-sm">{user?.email}</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Menu Items */}
+                          <div className="py-2">
+                            <Link
+                              href="/profile"
+                              className="flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-orange-500/10 transition-colors duration-200"
+                              onClick={() => setProfileDropdownOpen(false)}
+                            >
+                              <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                              </svg>
+                              Profile
+                            </Link>
+
+                            <Link
+                              href="/favourites"
+                              className="flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-orange-500/10 transition-colors duration-200"
+                              onClick={() => setProfileDropdownOpen(false)}
+                            >
+                              <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                              </svg>
+                              Favourites
+                            </Link>
+
+                            <Link
+                              href="/settings"
+                              className="flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-orange-500/10 transition-colors duration-200"
+                              onClick={() => setProfileDropdownOpen(false)}
+                            >
+                              <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              </svg>
+                              Settings
+                            </Link>
+                            <div className="border-t border-orange-500/20 mt-2 pt-2">
+                              <LogoutLink>
+                                <div className="flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-red-500/10 transition-colors duration-200 w-full cursor-pointer">
+                                  <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                  </svg>
+                                  Logout
+                                </div>
+                              </LogoutLink>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <LoginLink>
+                        <div className="px-6 py-2 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-orange-600/20 transition-all duration-300">
+                          Login
+                        </div>
+                      </LoginLink>
+                    </motion.div>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <RegisterLink>
+                        <div className="px-6 py-2 rounded-full bg-gradient-to-r from-pink-600 to-orange-500 text-white font-semibold text-sm border border-orange-400/30 hover:shadow-lg hover:shadow-pink-600/20 transition-all duration-300">
+                          Sign Up
+                        </div>
+                      </RegisterLink>
+                    </motion.div>
+                  </>
+                )
               ) : (
-                <>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <LoginLink>
-                      <div className="px-6 py-2 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-orange-600/20 transition-all duration-300">
-                        Login
-                      </div>
-                    </LoginLink>
-                  </motion.div>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <RegisterLink>
-                      <div className="px-6 py-2 rounded-full bg-gradient-to-r from-pink-600 to-orange-500 text-white font-semibold text-sm border border-orange-400/30 hover:shadow-lg hover:shadow-pink-600/20 transition-all duration-300">
-                        Sign Up
-                      </div>
-                    </RegisterLink>
-                  </motion.div>
-                </>
+                // Loading state - show skeleton
+                <div className="flex items-center space-x-3">
+                  <div className="w-16 h-8 bg-gray-700/50 rounded-full animate-pulse"></div>
+                  <div className="w-16 h-8 bg-gray-700/50 rounded-full animate-pulse"></div>
+                </div>
               )}
               {/* Mobile Menu Button */}
-              <motion.button 
+              <motion.button
                 className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-orange-500/20 to-pink-600/20"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 whileTap={{ scale: 0.9 }}
@@ -191,37 +320,35 @@ useEffect(() => {
           </div>
         </div>
       </nav>
-      
+
       {/* Enhanced Search Bar */}
       <div className="bg-gradient-to-r from-black via-black/95 to-black/90 py-4 px-4 border-b border-orange-500/20 shadow-md">
         <div className="container mx-auto flex justify-center">
           <div className="relative w-full max-w-2xl group">
             {/* Background animation effect */}
-            <div 
-              className={`absolute inset-0 rounded-full transition-all duration-500 ${
-                searchFocused 
-                  ? 'bg-gradient-to-r from-orange-600/10 to-pink-600/10 blur-md' 
+            <div
+              className={`absolute inset-0 rounded-full transition-all duration-500 ${searchFocused
+                  ? 'bg-gradient-to-r from-orange-600/10 to-pink-600/10 blur-md'
                   : 'bg-black/0'
-              }`} 
+                }`}
             />
             {/* Search bar container with gradient borders */}
-            <div className={`relative bg-gradient-to-r p-[1.5px] rounded-full overflow-hidden ${
-              searchFocused 
-                ? 'from-orange-500 via-orange-400 to-pink-600' 
+            <div className={`relative bg-gradient-to-r p-[1.5px] rounded-full overflow-hidden ${searchFocused
+                ? 'from-orange-500 via-orange-400 to-pink-600'
                 : 'from-orange-500/50 to-orange-600/50'
-            } transition-all duration-300`}>
+              } transition-all duration-300`}>
               <div className="relative flex items-center bg-black rounded-full overflow-hidden">
                 {/* Search icon */}
                 <div className="absolute left-4">
-                  <motion.svg 
-                    xmlns="http://www.w3.org/2000/svg" 
+                  <motion.svg
+                    xmlns="http://www.w3.org/2000/svg"
                     className={`h-5 w-5 ${searchFocused ? 'text-orange-500' : 'text-gray-400'} transition-colors duration-300`}
                     animate={{
                       scale: searchFocused ? [1, 1.2, 1] : 1
                     }}
                     transition={{ duration: 0.3 }}
-                    fill="none" 
-                    viewBox="0 0 24 24" 
+                    fill="none"
+                    viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -244,18 +371,18 @@ useEffect(() => {
               </div>
             </div>
             {/* Pulse effect on focus */}
-            <motion.div 
+            <motion.div
               className="absolute inset-0 rounded-full opacity-0"
-              animate={{ 
+              animate={{
                 opacity: searchFocused ? [0, 0.1, 0] : 0,
                 scale: searchFocused ? [0.95, 1.05] : 1
               }}
-              transition={{ 
-                duration: 1.5, 
-                repeat: searchFocused ? Infinity : 0, 
-                repeatType: 'loop' 
+              transition={{
+                duration: 1.5,
+                repeat: searchFocused ? Infinity : 0,
+                repeatType: 'loop'
               }}
-              style={{ 
+              style={{
                 boxShadow: '0 0 20px 5px rgba(249, 115, 22, 0.3)',
                 background: 'radial-gradient(circle, rgba(249,115,22,0.3) 0%, rgba(0,0,0,0) 70%)'
               }}
@@ -263,11 +390,11 @@ useEffect(() => {
           </div>
         </div>
       </div>
-      
+
       {/* Mobile Menu with Animations */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div 
+          <motion.div
             className="lg:hidden bg-gradient-to-b from-black/95 to-black backdrop-blur-lg absolute w-full shadow-lg overflow-hidden"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
@@ -282,7 +409,7 @@ useEffect(() => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Link 
+                  <Link
                     href={category.path}
                     className="block py-3 px-4 text-gray-100 hover:text-white border-b border-orange-500/10 hover:bg-orange-500/5"
                     onClick={() => setMobileMenuOpen(false)}
@@ -292,30 +419,33 @@ useEffect(() => {
                     </div>
                   </Link>
                 </motion.div>
-              ))}
-              <div className="mt-6 pb-4 px-4 grid grid-cols-2 gap-3">
-                {user ? (
-                  <LogoutLink
-                    className="block text-center py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm hover:from-orange-600 hover:to-orange-700 transition-colors duration-300"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Logout
-                  </LogoutLink>
+              ))}              <div className="mt-6 pb-4 px-4 grid grid-cols-2 gap-3">
+                {shouldShowAuth ? (
+                  user ? (
+                    <LogoutLink>
+                      <div className="block text-center py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm hover:from-orange-600 hover:to-orange-700 transition-colors duration-300 cursor-pointer">
+                        Logout
+                      </div>
+                    </LogoutLink>
+                  ) : (
+                    <>
+                      <LoginLink
+                        className="block text-center py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm hover:from-orange-600 hover:to-orange-700 transition-colors duration-300"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Login
+                      </LoginLink>
+                      <RegisterLink
+                        className="block text-center py-2 rounded-lg bg-gradient-to-r from-pink-500 to-pink-600 text-white font-semibold text-sm hover:from-pink-600 hover:to-pink-700 transition-colors duration-300"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Sign Up
+                      </RegisterLink>
+                    </>
+                  )
                 ) : (
-                  <>
-                    <LoginLink
-                      className="block text-center py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm hover:from-orange-600 hover:to-orange-700 transition-colors duration-300"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Login
-                    </LoginLink>
-                    <RegisterLink
-                      className="block text-center py-2 rounded-lg bg-gradient-to-r from-pink-500 to-pink-600 text-white font-semibold text-sm hover:from-pink-600 hover:to-pink-700 transition-colors duration-300"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Sign Up
-                    </RegisterLink>
-                  </>
+                  // Loading state for mobile
+                  <div className="col-span-2 h-10 bg-gray-700/50 rounded-lg animate-pulse"></div>
                 )}
               </div>
             </div>
