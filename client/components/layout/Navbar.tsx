@@ -47,7 +47,7 @@ useEffect(() => {
         <div className="container mx-auto px-4 h-full">
           <div className="flex justify-between items-center h-full">
             {/* Logo */}
-            <Link href="/" className="relative h-full flex items-center">
+            <Link href="https://brokebro.in/assets/image.png" className="relative h-full flex items-center">
               <motion.div 
                 className="relative"
                 whileHover={{ scale: 1.05 }}
@@ -55,7 +55,7 @@ useEffect(() => {
               >
                 <div className="relative h-20 w-56" style={{ marginBottom: '-5px' }}>
                   <Image 
-                    src="/assets/images/broke-bro.png" 
+                    src="/assets/images/brokebro.png" 
                     alt="BrokeBro Logo" 
                     fill
                     style={{ 

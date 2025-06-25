@@ -11,7 +11,7 @@ import NavbarClient from "@/components/layout/Navbar";
 export default function Home() {
   return (
     <>
-    <NavbarClient user={undefined}/>
+
       <Hero />
       <OfferSlider />
       <TopBrands/>
