@@ -49,8 +49,8 @@ export default function NavbarClient({ user }: { user: any }) {
   const navCategories = [
     { name: 'INTERNSHIPS', path: '/categories/intern' },
     { name: 'FASHION & BEAUTY', path: '/categories/fashion' },
-    { name: 'TRAVEL AND LIFESTYLE', path: '/categories/lifestyle' },
-    { name: 'TECHNOLOGY', path: '/categories/technology' },
+    { name: 'TRAVEL AND LIFESTYLE', path: '/lifestyle' },
+    { name: 'TECHNOLOGY', path: '/technology' },
     { name: 'FREEBIES FOR ALL', path: '/freebies' },
   ];
 
