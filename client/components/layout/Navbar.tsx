@@ -95,14 +95,54 @@ export default function NavbarClient({ user }: { user: any }) {
         try {
           const res = await fetch(`/api/user?email=${user.email}`);
           const data = await res.json();
+          // Log the response for debugging
+          console.log('API /api/user response:', data);
           setCoins(data.coins ?? 0);
           setReferralCode(data.user?.referralCode ?? '');
-        } catch {
+        } catch (err) {
           setCoins(0);
+          setReferralCode('');
+          console.error('Error fetching user coins/referral:', err);
         }
       }
     }
     fetchCoins();
+  }, [user]);
+
+  useEffect(() => {
+    async function ensureUserExists() {
+      if (user?.email) {
+        try {
+          // Try to fetch user from DB
+          let res = await fetch(`/api/user?email=${user.email}`);
+          let data = await res.json();
+          if (res.status === 404 || data?.error === 'User not found') {
+            // User not found, create user in DB
+            const createRes = await fetch('/api/user', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                name: user.given_name || user.name || '',
+                email: user.email,
+                image: user.picture || '',
+                referralCode: '', // You can enhance this to use referral from localStorage if needed
+              })
+            });
+            const createData = await createRes.json();
+            setCoins(createData.user?.coins ?? 0);
+            setReferralCode(createData.user?.referralCode ?? '');
+          } else {
+            setCoins(data.coins ?? 0);
+            setReferralCode(data.user?.referralCode ?? '');
+          }
+        } catch (err) {
+          setCoins(0);
+          setReferralCode('');
+          console.error('Error ensuring user exists:', err);
+        }
+      }
+    }
+    ensureUserExists();
   }, [user]);
 
   return (
@@ -326,18 +366,20 @@ export default function NavbarClient({ user }: { user: any }) {
                 ) : (
                   <>
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <LoginLink>
-                        <div className="px-6 py-2 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-orange-600/20 transition-all duration-300">
-                          Login
-                        </div>
-                      </LoginLink>
+                      <button
+                        onClick={() => router.push("/login")}
+                        className="px-6 py-2 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-orange-600/20 transition-all duration-300"
+                      >
+                        Login
+                      </button>
                     </motion.div>
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <RegisterLink>
-                        <div className="px-6 py-2 rounded-full bg-gradient-to-r from-pink-600 to-orange-500 text-white font-semibold text-sm border border-orange-400/30 hover:shadow-lg hover:shadow-pink-600/20 transition-all duration-300">
-                          Sign Up
-                        </div>
-                      </RegisterLink>
+                      <button
+                        onClick={() => router.push("/signup")}
+                        className="px-6 py-2 rounded-full bg-gradient-to-r from-pink-600 to-orange-500 text-white font-semibold text-sm border border-orange-400/30 hover:shadow-lg hover:shadow-pink-600/20 transition-all duration-300"
+                      >
+                        Sign Up
+                      </button>
                     </motion.div>
                   </>
                 )
@@ -514,7 +556,7 @@ export default function NavbarClient({ user }: { user: any }) {
           <div className="bg-black rounded-lg p-8 w-[420px] min-h-[220px] border border-orange-500/30 shadow-lg relative">
             <button className="absolute top-3 right-4 text-gray-400 hover:text-white text-2xl" onClick={() => setShowReferralModal(false)}>&times;</button>
             <h2 className="text-2xl font-bold text-orange-400 mb-4">Refer & Earn</h2>
-            <p className="text-gray-300 mb-4 text-base">Share your referral link with friends.<br/>Both of you get <span className="text-amber-300 font-semibold">10 coins</span>!</p>
+            <p className="text-gray-300 mb-4 text-base">Share your referral link with friends.<br />Both of you get <span className="text-amber-300 font-semibold">10 coins</span>!</p>
             <div className="bg-gray-800 rounded px-3 py-2 flex items-center mb-2">
               <span className="text-sm text-white truncate flex-1">{`${typeof window !== 'undefined' ? window.location.origin : ''}/signup?ref=${referralCode}`}</span>
               <button

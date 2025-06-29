@@ -42,16 +42,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: 'User created', user });
 }
 
-// GET /api/user/coins - get current user's coin balance
+// GET /api/user/coins - get current user's coin balance and referral code
 export async function GET(req: NextRequest) {
     await dbConnect();
     const email = req.nextUrl.searchParams.get('email');
     if (!email) {
         return NextResponse.json({ error: 'Email required' }, { status: 400 });
     }
-    const user = await User.findOne({ email });
+    let user = await User.findOne({ email });
     if (!user) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
-    return NextResponse.json({ coins: user.coins });
+    // If user does not have a referralCode, generate and save one
+    if (!user.referralCode) {
+        user.referralCode = Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+        await user.save();
+    }
+    return NextResponse.json({ coins: user.coins, user: { referralCode: user.referralCode } });
 }
