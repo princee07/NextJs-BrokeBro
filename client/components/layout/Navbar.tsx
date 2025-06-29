@@ -6,6 +6,7 @@ import Link from "next/link";
 import { RegisterLink, LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedEyes from '../ui/AnimatedEyes';
+import { useRouter } from 'next/navigation';
 
 // Pop sound path
 const popSoundPath = '/assets/sounds/pop.mp4';
@@ -19,7 +20,11 @@ export default function NavbarClient({ user }: { user: any }) {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [coins, setCoins] = useState<number | null>(null);
+  const [showReferralModal, setShowReferralModal] = useState(false);
+  const [referralCode, setReferralCode] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     setIsHydrated(true);
@@ -84,6 +89,22 @@ export default function NavbarClient({ user }: { user: any }) {
     { name: 'FREEBIES FOR ALL', path: '/freebies' },
   ];
 
+  useEffect(() => {
+    async function fetchCoins() {
+      if (user?.email) {
+        try {
+          const res = await fetch(`/api/user?email=${user.email}`);
+          const data = await res.json();
+          setCoins(data.coins ?? 0);
+          setReferralCode(data.user?.referralCode ?? '');
+        } catch {
+          setCoins(0);
+        }
+      }
+    }
+    fetchCoins();
+  }, [user]);
+
   return (
     <header className="fixed w-full z-50 flex flex-col mt-8 md:mt-10">
       {/* Main Navbar */}
@@ -97,16 +118,16 @@ export default function NavbarClient({ user }: { user: any }) {
         <div className="container mx-auto px-4 h-full">
           <div className="flex justify-between items-center h-full">
             {/* Logo */}
-            <Link href="https://brokebro.in/assets/image.png" className="relative h-full flex items-center">
-              <motion.div 
+            <Link href="/" className="relative h-full flex items-center">
+              <motion.div
                 className="relative"
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
                 <div className="relative h-20 w-56" style={{ marginBottom: '-5px' }}>
-                  <Image 
-                    src="/assets/images/brokebro.png" 
-                    alt="BrokeBro Logo" 
+                  <Image
+                    src="/assets/images/brokebro.png"
+                    alt="BrokeBro Logo"
                     fill
                     style={{
                       objectFit: 'contain',
@@ -233,9 +254,24 @@ export default function NavbarClient({ user }: { user: any }) {
                               <div>
                                 <p className="text-white font-semibold">{user?.given_name} {user?.family_name}</p>
                                 <p className="text-gray-400 text-sm">{user?.email}</p>
+                                {coins !== null && (
+                                  <div className="mt-1 flex items-center text-amber-300 text-sm font-semibold">
+                                    <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" /></svg>
+                                    {coins} Coins
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
+
+                          {/* Refer & Earn Button */}
+                          <button
+                            className="w-full flex items-center justify-center px-4 py-2 text-orange-400 hover:text-white hover:bg-orange-500/10 transition-colors duration-200 font-semibold border-b border-orange-500/20"
+                            onClick={() => setShowReferralModal(true)}
+                          >
+                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m4 4h-1v-4h-1m-4 4h-1v-4h-1" /></svg>
+                            Refer & Earn
+                          </button>
 
                           {/* Menu Items */}
                           <div className="py-2">
@@ -385,7 +421,7 @@ export default function NavbarClient({ user }: { user: any }) {
                 />
                 {/* Animated Eyes */}
                 <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                  <AnimatedEyes inline />
+                  <AnimatedEyes />
                 </div>
               </div>
             </div>
@@ -471,6 +507,28 @@ export default function NavbarClient({ user }: { user: any }) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Referral Modal */}
+      {showReferralModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="bg-black rounded-lg p-8 w-[420px] min-h-[220px] border border-orange-500/30 shadow-lg relative">
+            <button className="absolute top-3 right-4 text-gray-400 hover:text-white text-2xl" onClick={() => setShowReferralModal(false)}>&times;</button>
+            <h2 className="text-2xl font-bold text-orange-400 mb-4">Refer & Earn</h2>
+            <p className="text-gray-300 mb-4 text-base">Share your referral link with friends.<br/>Both of you get <span className="text-amber-300 font-semibold">10 coins</span>!</p>
+            <div className="bg-gray-800 rounded px-3 py-2 flex items-center mb-2">
+              <span className="text-sm text-white truncate flex-1">{`${typeof window !== 'undefined' ? window.location.origin : ''}/signup?ref=${referralCode}`}</span>
+              <button
+                className="ml-3 px-3 py-1 bg-orange-500 text-white rounded text-sm font-semibold hover:bg-orange-600"
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    navigator.clipboard.writeText(`${window.location.origin}/signup?ref=${referralCode}`);
+                  }
+                }}
+              >Copy</button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
