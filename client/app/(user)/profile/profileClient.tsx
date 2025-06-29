@@ -19,7 +19,7 @@ export default function ProfileClient({ user }: { user: any }) {
   });
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
       {/* Profile Form on the left */}
       <div className="lg:col-span-2 bg-gray-900/90 rounded-2xl shadow-xl p-8">
         <ProfileForm user={user} onUpdate={handleUpdate} />
@@ -29,7 +29,7 @@ export default function ProfileClient({ user }: { user: any }) {
       <div className="bg-gray-900/90 rounded-2xl shadow-xl p-8 flex flex-col items-center justify-center">
         <h3 className="text-xl font-bold text-white mb-4">Your BrokeBro ID</h3>
         <div style={{ background: 'white', padding: '16px' }}>
-            <QRCode value={qrCodeData} size={160} />
+          <QRCode value={qrCodeData} size={160} />
         </div>
         <p className="text-gray-400 text-sm mt-4 text-center">Scan to see your full BrokeBro profile details.</p>
       </div>

@@ -51,4 +51,8 @@
   .custom-cursor-container, .custom-cursor-container * {
     cursor: none;
   }
+
+  html, body {
+    overflow-y: auto !important;
+  }
 }

@@ -35,6 +35,7 @@ const OfferSlider = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+
   // Array of offers - each with unique styling and enhanced content
   const offers = [
     {

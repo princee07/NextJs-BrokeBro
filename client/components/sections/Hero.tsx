@@ -1,22 +1,45 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import ModalAd from '../ModalAd';
+
+// Pop sound path
+const popSoundPath = '/assets/sounds/pop.mp4';
 
 const Hero = () => {
   const [typedText, setTypedText] = useState('');
   const [currentDealIndex, setCurrentDealIndex] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
-  
+  const [showAd, setShowAd] = useState(false);
+  const [adIndex, setAdIndex] = useState(0);
+  const adTimeout = useRef<NodeJS.Timeout | null>(null);
+
   // Text to type out
   const fullText = "STUDENT DISCOUNTS UNLOCKED";
-  
+
   // Deal headings that will appear sequentially
   const dealHeadings = [
     "Save 50% on Software Subscriptions",
     "Get 30% Off Tech Purchases"
+  ];
+
+  // Ad data
+  const ads = [
+    {
+      imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_1A_Website.png?v=1697116566&width=2000",
+      linkUrl: "https://www.myunidays.com/IN/en-IN"
+    },
+    {
+      imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_3_Website.png?v=1697116591&width=2000",
+      linkUrl: "https://www.udemy.com/"
+    },
+    {
+      imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_2A_Website.png?v=1697116587&width=2000",
+      linkUrl: "https://www.adidas.com/"
+    }
   ];
 
   // Typing effect
@@ -24,61 +47,87 @@ const Hero = () => {
     if (typedText.length < fullText.length) {
       const timeout = setTimeout(() => {
         setTypedText(fullText.substring(0, typedText.length + 1));
-      }, 75); 
-      
+      }, 75);
+
       return () => clearTimeout(timeout);
     } else {
       const resetTimeout = setTimeout(() => {
         setTypedText('');
       }, 3000);
-      
+
       return () => clearTimeout(resetTimeout);
     }
   }, [typedText, fullText]);
-  
+
   // Blinking cursor effect
   useEffect(() => {
     const interval = setInterval(() => {
       setShowCursor(prev => !prev);
     }, 500);
-    
+
     return () => clearInterval(interval);
   }, []);
-  
+
   // Rotate through deal headings
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentDealIndex(prev => (prev + 1) % dealHeadings.length);
     }, 3000);
-    
+
     return () => clearInterval(interval);
   }, []);
 
+  // Show ad with sound after full page load
+  useEffect(() => {
+    const handleLoad = () => {
+      setShowAd(true);
+      const audio = new Audio(popSoundPath);
+      audio.play();
+    };
+    if (document.readyState === 'complete') {
+      handleLoad();
+    } else {
+      window.addEventListener('load', handleLoad);
+    }
+    return () => window.removeEventListener('load', handleLoad);
+  }, []);
+
+  // Auto-advance ads every 4 seconds
+  useEffect(() => {
+    if (!showAd) return;
+    adTimeout.current = setTimeout(() => {
+      setAdIndex((prev) => (prev + 1) % ads.length);
+      const audio = new Audio(popSoundPath);
+      audio.play();
+    }, 4000);
+    return () => { if (adTimeout.current) clearTimeout(adTimeout.current); };
+  }, [adIndex, showAd]);
+
   const brandCards = [
-    { 
-      name: 'Autodesk', 
-      logo: '/autodesk.png', 
+    {
+      name: 'lenovo',
+      logo: '/assets/images/figma.png',
       gradient: 'from-blue-400 to-teal-300',
       slug: 'autodesk',
       discount: '60% OFF'
     },
-    { 
-      name: 'GoIbibo', 
-      logo: '/goibibo.png', 
+    {
+      name: 'GoIbibo',
+      logo: '/assets/images/goibibo.png',
       gradient: 'from-orange-500 to-red-400',
       slug: 'goibibo',
       discount: '₹1000 OFF'
     },
-    { 
-      name: 'Unity', 
-      logo: '/unity.png', 
+    {
+      name: 'Unity',
+      logo: '/assets/images/unity.png',
       gradient: 'from-gray-700 to-gray-900',
       slug: 'unity',
       discount: '50% OFF'
     },
-    { 
-      name: 'KFC', 
-      logo: '/kfc.png', 
+    {
+      name: 'KFC',
+      logo: '/assets/images/kfc.png',
       gradient: 'from-red-600 to-red-700',
       slug: 'kfc',
       discount: '30% OFF'
@@ -89,13 +138,62 @@ const Hero = () => {
   const column1Cards = [...brandCards.slice(0, 2), ...brandCards.slice(0, 2)];
   const column2Cards = [...brandCards.slice(2), ...brandCards.slice(2)];
 
+  // Ensure only the animated right-side ModalAd is rendered. Remove all other modal ads.
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
+      {/* Only the animated ModalAd at right side, large, swipe/fade animation. No other modal ads anywhere. */}
+      <AnimatePresence mode="wait">
+        {showAd && (
+          <motion.div
+            key={adIndex}
+            initial={{ x: 400, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: 400, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30, opacity: { duration: 0.3 } }}
+            className="fixed top-24 right-0 z-50 w-[420px] h-[180px] max-w-full flex items-center"
+            style={{ boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}
+          >
+            <ModalAd
+              key={ads[adIndex].imageUrl}
+              imageUrl={ads[adIndex].imageUrl}
+              linkUrl={ads[adIndex].linkUrl}
+              className="w-full h-full"
+              onClose={() => {
+                setShowAd(false);
+                const audio = new Audio(popSoundPath);
+                audio.play();
+              }}
+            />
+            {/* Next/Prev controls */}
+            <button
+              onClick={() => {
+                setAdIndex((adIndex - 1 + ads.length) % ads.length);
+                const audio = new Audio(popSoundPath); audio.play();
+              }}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white rounded-full p-1 z-10"
+              aria-label="Previous ad"
+            >
+              &#8592;
+            </button>
+            <button
+              onClick={() => {
+                setAdIndex((adIndex + 1) % ads.length);
+                const audio = new Audio(popSoundPath); audio.play();
+              }}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white rounded-full p-1 z-10"
+              aria-label="Next ad"
+            >
+              &#8594;
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-violet-900/20 via-black to-black"></div>
       <div className="absolute top-0 left-0 w-full h-full">
         {/* Animated gradient blobs */}
-        <motion.div 
+        <motion.div
           className="absolute top-10 left-10 w-72 h-72 bg-purple-700/20 rounded-full filter blur-3xl"
           animate={{
             x: [0, 30, 0],
@@ -107,7 +205,7 @@ const Hero = () => {
             repeatType: "reverse"
           }}
         />
-        <motion.div 
+        <motion.div
           className="absolute top-20 right-20 w-96 h-96 bg-orange-500/10 rounded-full filter blur-3xl"
           animate={{
             x: [0, -40, 0],
@@ -121,7 +219,7 @@ const Hero = () => {
           }}
         />
       </div>
-      
+
       {/* Content Container */}
       <div className="container mx-auto px-4 pb-20 relative z-10">
         <div className="flex flex-col lg:flex-row items-start lg:items-center">
@@ -129,7 +227,7 @@ const Hero = () => {
           <div className="w-full lg:w-1/2 mb-10 lg:mb-0 lg:sticky lg:top-32 mt-56">
             {/* Fixed height container for main heading */}
             <div className="h-[130px] md:h-[150px]">
-              <motion.div 
+              <motion.div
                 className="space-y-2"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -146,11 +244,11 @@ const Hero = () => {
                 </div>
               </motion.div>
             </div>
-            
+
             {/* Deal headings with spacing to prevent overlap */}
             <div className="mt-8">
               <AnimatePresence mode="wait">
-                <motion.p 
+                <motion.p
                   key={currentDealIndex}
                   className="text-xl md:text-2xl text-gray-300 font-medium"
                   initial={{ opacity: 0, y: 10 }}
@@ -162,7 +260,7 @@ const Hero = () => {
                 </motion.p>
               </AnimatePresence>
             </div>
-            
+
             {/* Description with good spacing */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -171,43 +269,43 @@ const Hero = () => {
               className="mt-10"
             >
               <p className="text-xl text-gray-300 max-w-xl leading-relaxed">
-                <span className="font-semibold text-orange-400">College is expensive enough.</span> We've partnered with top brands to bring you 
+                <span className="font-semibold text-orange-400">College is expensive enough.</span> We've partnered with top brands to bring you
                 exclusive student discounts that make a difference.
               </p>
-              
+
               {/* Feature list */}
               <ul className="mt-6 space-y-3">
                 {[
                   "Verified with your student ID or .edu email",
                   "Exclusive deals not available to the public"
                 ].map((feature, index) => (
-                <motion.li 
-                  key={feature}
-                  className="flex items-center text-gray-300"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.8 + (index * 0.15) }}
-                >
-                  <div className="bg-gradient-to-r from-orange-500 to-pink-500 rounded-full p-1 mr-3 shadow-md shadow-orange-500/20">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  {feature}
-                </motion.li>
-              ))}
+                  <motion.li
+                    key={feature}
+                    className="flex items-center text-gray-300"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.8 + (index * 0.15) }}
+                  >
+                    <div className="bg-gradient-to-r from-orange-500 to-pink-500 rounded-full p-1 mr-3 shadow-md shadow-orange-500/20">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    {feature}
+                  </motion.li>
+                ))}
               </ul>
             </motion.div>
-            
+
             {/* CTA Button */}
-            <motion.div 
+            <motion.div
               className="mt-10"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.3 }}
             >
               <Link href="/auth/signup">
-                <motion.div 
+                <motion.div
                   className="relative inline-block bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 text-white font-bold text-lg py-4 px-8 rounded-full transition-all duration-300 overflow-hidden hover:shadow-lg hover:shadow-orange-600/20"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -222,7 +320,7 @@ const Hero = () => {
               </Link>
             </motion.div>
           </div>
-          
+
           {/* Vertical Sliding Columns */}
           <div className="w-full lg:w-1/2 pl-0 lg:pl-6 mt-44">
             <div className="grid grid-cols-2 gap-3 h-[500px] md:h-[650px] overflow-hidden rounded-2xl">
@@ -230,10 +328,10 @@ const Hero = () => {
               <div className="relative h-full overflow-hidden">
                 <motion.div
                   className="absolute top-0 left-0 w-full"
-                  animate={{ 
+                  animate={{
                     y: [0, -1500] // Move upward
                   }}
-                  transition={{ 
+                  transition={{
                     duration: 30,
                     repeat: Infinity,
                     repeatType: "loop",
@@ -242,7 +340,7 @@ const Hero = () => {
                 >
                   {column1Cards.map((brand, index) => (
                     <Link key={`col1-${index}`} href={`/brands/${brand.slug}`}>
-                      <div 
+                      <div
                         className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group`}
                       >
                         <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
@@ -254,12 +352,12 @@ const Hero = () => {
                           <span className="text-sm">{brand.discount}</span>
                         </div>
                         <div className="relative h-full flex items-center justify-center p-6">
-                          <Image 
+                          <Image
                             src={brand.logo}
                             alt={brand.name}
-                            width={160}
-                            height={160}
-                            style={{ objectFit: 'contain' }}
+                            width={300}
+                            height={400}
+                            style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
                             className="transition-transform duration-700 group-hover:scale-110"
                           />
                         </div>
@@ -270,15 +368,15 @@ const Hero = () => {
                     </Link>
                   ))}
                 </motion.div>
-                
+
                 {/* Clone for seamless looping */}
                 <motion.div
                   className="absolute top-0 left-0 w-full"
                   initial={{ y: 1500 }}
-                  animate={{ 
+                  animate={{
                     y: [1500, 0]
                   }}
-                  transition={{ 
+                  transition={{
                     duration: 30,
                     repeat: Infinity,
                     repeatType: "loop",
@@ -287,7 +385,7 @@ const Hero = () => {
                 >
                   {column1Cards.map((brand, index) => (
                     <Link key={`col1-clone-${index}`} href={`/brands/${brand.slug}`}>
-                      <div 
+                      <div
                         className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group`}
                       >
                         <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
@@ -299,12 +397,12 @@ const Hero = () => {
                           <span className="text-sm">{brand.discount}</span>
                         </div>
                         <div className="relative h-full flex items-center justify-center p-6">
-                          <Image 
+                          <Image
                             src={brand.logo}
                             alt={brand.name}
-                            width={160}
-                            height={160}
-                            style={{ objectFit: 'contain' }}
+                            width={300}
+                            height={400}
+                            style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
                             className="transition-transform duration-700 group-hover:scale-110"
                           />
                         </div>
@@ -316,15 +414,15 @@ const Hero = () => {
                   ))}
                 </motion.div>
               </div>
-              
+
               {/* Right Column */}
               <div className="relative h-full overflow-hidden">
                 <motion.div
                   className="absolute top-0 left-0 w-full"
-                  animate={{ 
+                  animate={{
                     y: [0, 1500]
                   }}
-                  transition={{ 
+                  transition={{
                     duration: 28,
                     repeat: Infinity,
                     repeatType: "loop",
@@ -333,7 +431,7 @@ const Hero = () => {
                 >
                   {column2Cards.map((brand, index) => (
                     <Link key={`col2-${index}`} href={`/brands/${brand.slug}`}>
-                      <div 
+                      <div
                         className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group`}
                       >
                         <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
@@ -344,12 +442,12 @@ const Hero = () => {
                           <span className="text-sm">{brand.discount}</span>
                         </div>
                         <div className="relative h-full flex items-center justify-center p-6">
-                          <Image 
+                          <Image
                             src={brand.logo}
                             alt={brand.name}
-                            width={160}
-                            height={160}
-                            style={{ objectFit: 'contain' }}
+                            width={300}
+                            height={400}
+                            style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
                             className="transition-transform duration-700 group-hover:scale-110"
                           />
                         </div>
@@ -360,15 +458,15 @@ const Hero = () => {
                     </Link>
                   ))}
                 </motion.div>
-                
+
                 {/* Clone for seamless looping */}
                 <motion.div
                   className="absolute top-0 left-0 w-full"
                   initial={{ y: -1500 }}
-                  animate={{ 
+                  animate={{
                     y: [-1500, 0]
                   }}
-                  transition={{ 
+                  transition={{
                     duration: 28,
                     repeat: Infinity,
                     repeatType: "loop",
@@ -377,7 +475,7 @@ const Hero = () => {
                 >
                   {column2Cards.map((brand, index) => (
                     <Link key={`col2-clone-${index}`} href={`/brands/${brand.slug}`}>
-                      <div 
+                      <div
                         className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group`}
                       >
                         <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
@@ -388,12 +486,12 @@ const Hero = () => {
                           <span className="text-sm">{brand.discount}</span>
                         </div>
                         <div className="relative h-full flex items-center justify-center p-6">
-                          <Image 
+                          <Image
                             src={brand.logo}
                             alt={brand.name}
-                            width={160}
-                            height={160}
-                            style={{ objectFit: 'contain' }}
+                            width={300}
+                            height={400}
+                            style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
                             className="transition-transform duration-700 group-hover:scale-110"
                           />
                         </div>

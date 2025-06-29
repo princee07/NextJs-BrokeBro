@@ -9,10 +9,10 @@ import Link from 'next/link';
 const products = [
   {
     id: 1,
-    name: 'ROG Zephyrus G14',
-    category: 'Gaming',
+    name: 'soxytoes',
+    category: 'Genz shocks',
     price: '₹142,990',
-    image: '/product-laptop-1.png',  // Use placeholder images
+    image: 'https://soxytoes.com/cdn/shop/files/Theme_1A_Website.png?v=1697116566&width=2000',
     color: ['bg-slate-600', 'bg-white'],
     size: 'large',
     featured: true
@@ -74,7 +74,7 @@ const promotions = [
     color: 'bg-orange-500/20',
     textColor: 'text-orange-500',
     size: 'large',
-    image: '/gamer-promo.png' // Use placeholder image
+    image: 'https://soxytoes.com/cdn/shop/files/Theme_1A_Website.png?v=1697116566&width=2000'
   },
   {
     id: 'promo2',
@@ -247,7 +247,7 @@ export default function ExploreProducts() {
                   <motion.div
                     whileHover={{ scale: 1.05 }}
                     transition={{ type: "spring", stiffness: 300 }}
-                    className="relative h-40 w-full"
+                    className={`relative w-full ${product.id === 1 ? 'h-72' : 'h-40'}`}
                   >
                     <Image 
                       src={product.image} 

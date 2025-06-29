@@ -7,6 +7,9 @@ import { RegisterLink, LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextj
 import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedEyes from '../ui/AnimatedEyes';
 
+// Pop sound path
+const popSoundPath = '/assets/sounds/pop.mp4';
+
 export default function NavbarClient({ user }: { user: any }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -46,6 +49,33 @@ export default function NavbarClient({ user }: { user: any }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Ad URLs for swiping/fading
+  // const ads = [
+  //   {
+  //     imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_1A_Website.png?v=1697116566&width=2000",
+  //     linkUrl: "https://www.myunidays.com/IN/en-IN"
+  //   },
+  //   {
+  //     imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_2A_Website.png?v=1697116587&width=2000",
+  //     linkUrl: "https://www.myunidays.com/IN/en-IN"
+  //   },
+  //   {
+  //     imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_3_Website.png?v=1697116591&width=2000",
+  //     linkUrl: "https://www.myunidays.com/IN/en-IN"
+  //   }
+  // ];
+
+  // Auto-advance ads every 5 seconds
+  // useEffect(() => {
+  //   if (!showAd) return;
+  //   const timer = setTimeout(() => {
+  //     setAdIndex((prev) => (prev + 1) % ads.length);
+  //     const audio = new Audio(popSoundPath);
+  //     audio.play();
+  //   }, 5000);
+  //   return () => clearTimeout(timer);
+  // }, [adIndex, showAd]);
+
   const navCategories = [
     { name: 'INTERNSHIPS', path: '/intern' },
     { name: 'FASHION & BEAUTY', path: '/fashion' },
@@ -56,12 +86,12 @@ export default function NavbarClient({ user }: { user: any }) {
   ];
 
   return (
-    <header className="fixed w-full z-50 flex flex-col">
+    <header className="fixed w-full z-50 flex flex-col mt-8 md:mt-10">
       {/* Main Navbar */}
       <nav
         className={`w-full transition-all duration-500 relative ${scrolled
-            ? 'py-0 bg-black/90 backdrop-blur-md shadow-lg shadow-orange-900/10'
-            : 'py-0 bg-black'
+          ? 'py-0 bg-black/90 backdrop-blur-md shadow-lg shadow-orange-900/10'
+          : 'py-0 bg-black'
           }`}
         style={{ height: '70px' }}
       >
@@ -120,12 +150,12 @@ export default function NavbarClient({ user }: { user: any }) {
                   >
                     <Link href={category.path}>
                       <div className={`relative px-4 py-2 rounded-full transition-all duration-300 ${activeCategory === category.name
-                          ? 'text-white'
-                          : 'text-gray-300 hover:text-white'
+                        ? 'text-white'
+                        : 'text-gray-300 hover:text-white'
                         }`}>
                         <span className={`text-sm font-medium ${hoveredCategory === category.name
-                            ? 'bg-gradient-to-r from-orange-300 to-pink-300 text-transparent bg-clip-text'
-                            : ''
+                          ? 'bg-gradient-to-r from-orange-300 to-pink-300 text-transparent bg-clip-text'
+                          : ''
                           }`}>
                           {category.name}
                         </span>
@@ -173,17 +203,6 @@ export default function NavbarClient({ user }: { user: any }) {
                           {user?.given_name?.charAt(0) || 'U'}
                         </div>
                       )}
-
-                      {/* Dropdown indicator */}
-                      <motion.div
-                        className="absolute -bottom-1 -right-1 w-3 h-3 bg-orange-500 rounded-full flex items-center justify-center"
-                        animate={{ rotate: profileDropdownOpen ? 180 : 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                        </svg>
-                      </motion.div>
                     </motion.button>
 
                     {/* Dropdown Menu */}
@@ -329,14 +348,14 @@ export default function NavbarClient({ user }: { user: any }) {
             {/* Background animation effect */}
             <div
               className={`absolute inset-0 rounded-full transition-all duration-500 ${searchFocused
-                  ? 'bg-gradient-to-r from-orange-600/10 to-pink-600/10 blur-md'
-                  : 'bg-black/0'
+                ? 'bg-gradient-to-r from-orange-600/10 to-pink-600/10 blur-md'
+                : 'bg-black/0'
                 }`}
             />
             {/* Search bar container with gradient borders */}
             <div className={`relative bg-gradient-to-r p-[1.5px] rounded-full overflow-hidden ${searchFocused
-                ? 'from-orange-500 via-orange-400 to-pink-600'
-                : 'from-orange-500/50 to-orange-600/50'
+              ? 'from-orange-500 via-orange-400 to-pink-600'
+              : 'from-orange-500/50 to-orange-600/50'
               } transition-all duration-300`}>
               <div className="relative flex items-center bg-black rounded-full overflow-hidden">
                 {/* Search icon */}
@@ -367,7 +386,7 @@ export default function NavbarClient({ user }: { user: any }) {
                 />
                 {/* Animated Eyes */}
                 <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                  <AnimatedEyes />
+                  <AnimatedEyes inline />
                 </div>
               </div>
             </div>

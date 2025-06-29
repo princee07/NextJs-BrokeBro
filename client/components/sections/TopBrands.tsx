@@ -10,25 +10,25 @@ const TopBrands = () => {
   const topBrands = [
     // Row 1
     [
-      { id: 1, name: 'Amazon', logo: '/logos/amazon.png', discount: '15% Off' },
-      { id: 2, name: 'Apple', logo: '/logos/apple.png', discount: '8% Off' },
-      { id: 3, name: 'HP', logo: '/logos/hp.png', discount: '22% Off' },
-      { id: 4, name: 'Microsoft', logo: '/logos/microsoft.png', discount: '10% Off' },
-      { id: 5, name: 'Samsung', logo: '/logos/samsung.png', discount: '18% Off' },
-      { id: 6, name: 'Dell', logo: '/logos/dell.png', discount: '25% Off' },
-      { id: 7, name: 'Lenovo', logo: '/logos/lenovo.png', discount: '20% Off' },
-      { id: 8, name: 'Asus', logo: '/logos/asus.png', discount: '17% Off' },
+      { id: 1, name: 'Amazon', logo: '/assets/logos/amazon.png', discount: '15% Off' },
+      { id: 2, name: 'Apple', logo: '/assets/logos/apple.png', discount: '8% Off' },
+      { id: 3, name: 'HP', logo: '/assets/logos/hp.png', discount: '22% Off' },
+      { id: 4, name: 'Microsoft', logo: '/assets/logos/microsoft.png', discount: '10% Off' },
+      { id: 5, name: 'Snapdeal', logo: '/assets/logos/snapdeal.png', discount: '18% Off' },
+      { id: 6, name: 'Dell', logo: '/assets/logos/dell.png', discount: '25% Off' },
+      { id: 7, name: 'Lenovo', logo: '/assets/logos/lenovo.png', discount: '20% Off' },
+      { id: 8, name: 'Asus', logo: '/assets/logos/asus.png', discount: '17% Off' },
     ],
     // Row 2
     [
-      { id: 9, name: 'Myntra', logo: '/logos/myntra.png', discount: '30% Off' },
-      { id: 10, name: 'Flipkart', logo: '/logos/flipkart.png', discount: '12% Off' },
-      { id: 11, name: 'Ajio', logo: '/logos/ajio.png', discount: '35% Off' },
-      { id: 12, name: 'Sony', logo: '/logos/sony.png', discount: '10% Off' },
-      { id: 13, name: 'JBL', logo: '/logos/jbl.png', discount: '25% Off' },
-      { id: 14, name: 'Boat', logo: '/logos/boat.png', discount: '40% Off' },
-      { id: 15, name: 'LG', logo: '/logos/lg.png', discount: '15% Off' },
-      { id: 16, name: 'Xiaomi', logo: '/logos/xiaomi.png', discount: '22% Off' },
+      { id: 9, name: 'Myntra', logo: '/assets/logos/myntra.png', discount: '30% Off' },
+      { id: 10, name: 'Flipkart', logo: '/assets/logos/flipkart.png', discount: '12% Off' },
+      { id: 11, name: 'Ajio', logo: '/assets/logos/ajio.png', discount: '35% Off' },
+      { id: 12, name: 'Soxytoes', logo: '/assets/logos/soxytoes.png', discount: '10% Off' },
+      { id: 13, name: 'nike', logo: '/assets/logos/nike.png', discount: '25% Off' },
+      { id: 14, name: 'myntra', logo: '/assets/logos/myntra.png', discount: '40% Off' },
+      { id: 15, name: 'autodesk', logo: '/assets/logos/autodesk.png', discount: '15% Off' },
+      { id: 16, name: 'kfc', logo: '/assets/logos/kfc.png', discount: '22% Off' },
     ]
   ];
 
@@ -105,7 +105,7 @@ const TopBrands = () => {
                     className="w-44 h-24 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative"
                   >
                     {/* Brand logo */}
-                    <div className="relative w-24 h-12">
+                    <div className="relative w-32 h-20 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200">
                       <Image
                         src={brand.logo}
                         alt={brand.name}
@@ -164,7 +164,7 @@ const TopBrands = () => {
                     className="w-44 h-24 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative"
                   >
                     {/* Brand logo */}
-                    <div className="relative w-24 h-12">
+                    <div className="relative w-32 h-20 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200">
                       <Image
                         src={brand.logo}
                         alt={brand.name}
