@@ -77,11 +77,10 @@ export default function NavbarClient({ user }: { user: any }) {
   // }, [adIndex, showAd]);
 
   const navCategories = [
-    { name: 'INTERNSHIPS', path: '/intern' },
-    { name: 'FASHION & BEAUTY', path: '/fashion' },
-    { name: 'TRAVEL AND LIFESTYLE', path: '/categories/lifestyle' },
-    { name: 'TECHNOLOGY', path: '/categories/technology' },
-    { name: 'EVENTS', path: '/events' },
+    { name: 'INTERNSHIPS', path: '/categories/intern' },
+    { name: 'FASHION & BEAUTY', path: '/categories/fashion' },
+    { name: 'TRAVEL AND LIFESTYLE', path: '/lifestyle' },
+    { name: 'TECHNOLOGY', path: '/technology' },
     { name: 'FREEBIES FOR ALL', path: '/freebies' },
   ];
 
@@ -98,16 +97,16 @@ export default function NavbarClient({ user }: { user: any }) {
         <div className="container mx-auto px-4 h-full">
           <div className="flex justify-between items-center h-full">
             {/* Logo */}
-            <Link href="/" className="relative h-full flex items-center">
-              <motion.div
+            <Link href="https://brokebro.in/assets/image.png" className="relative h-full flex items-center">
+              <motion.div 
                 className="relative"
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
                 <div className="relative h-20 w-56" style={{ marginBottom: '-5px' }}>
-                  <Image
-                    src="/assets/images/broke-bro.png"
-                    alt="BrokeBro Logo"
+                  <Image 
+                    src="/assets/images/brokebro.png" 
+                    alt="BrokeBro Logo" 
                     fill
                     style={{
                       objectFit: 'contain',
