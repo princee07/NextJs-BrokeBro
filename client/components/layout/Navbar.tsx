@@ -7,6 +7,8 @@ import { RegisterLink, LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextj
 import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedEyes from '../ui/AnimatedEyes';
 import { useRouter } from 'next/navigation';
+import Modal from '../ui/Modal';
+import VerificationModal from '../auth/VerificationModal';
 
 // Pop sound path
 const popSoundPath = '/assets/sounds/pop.mp4';
@@ -23,6 +25,7 @@ export default function NavbarClient({ user }: { user: any }) {
   const [coins, setCoins] = useState<number | null>(null);
   const [showReferralModal, setShowReferralModal] = useState(false);
   const [referralCode, setReferralCode] = useState('');
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -273,6 +276,17 @@ export default function NavbarClient({ user }: { user: any }) {
                             Refer & Earn
                           </button>
 
+                          {/* Get Verified Button */}
+                          <button
+                            className="w-full flex items-center justify-center px-4 py-2 text-green-500 hover:text-white hover:bg-green-600/10 transition-colors duration-200 font-semibold border-b border-green-500/20 bg-green-500/5"
+                            onClick={() => setShowVerificationModal(true)}
+                          >
+                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2zm0 2c-2.21 0-4 1.79-4 4v1h8v-1c0-2.21-1.79-4-4-4z" />
+                            </svg>
+                            <span className="font-bold">Get Verified</span>
+                          </button>
+
                           {/* Menu Items */}
                           <div className="py-2">
                             <Link
@@ -514,7 +528,7 @@ export default function NavbarClient({ user }: { user: any }) {
           <div className="bg-black rounded-lg p-8 w-[420px] min-h-[220px] border border-orange-500/30 shadow-lg relative">
             <button className="absolute top-3 right-4 text-gray-400 hover:text-white text-2xl" onClick={() => setShowReferralModal(false)}>&times;</button>
             <h2 className="text-2xl font-bold text-orange-400 mb-4">Refer & Earn</h2>
-            <p className="text-gray-300 mb-4 text-base">Share your referral link with friends.<br/>Both of you get <span className="text-amber-300 font-semibold">10 coins</span>!</p>
+            <p className="text-gray-300 mb-4 text-base">Share your referral link with friends.<br />Both of you get <span className="text-amber-300 font-semibold">10 coins</span>!</p>
             <div className="bg-gray-800 rounded px-3 py-2 flex items-center mb-2">
               <span className="text-sm text-white truncate flex-1">{`${typeof window !== 'undefined' ? window.location.origin : ''}/signup?ref=${referralCode}`}</span>
               <button
@@ -529,6 +543,9 @@ export default function NavbarClient({ user }: { user: any }) {
           </div>
         </div>
       )}
+
+      {/* Verification Modal */}
+      <VerificationModal isOpen={showVerificationModal} onClose={() => setShowVerificationModal(false)} />
     </header>
   );
 }
