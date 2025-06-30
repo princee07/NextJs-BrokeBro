@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/app/lib/db/connect';
 import User from '@/app/lib/db/models/user.model';
+import { v4 as uuidv4 } from 'uuid';
 
 // POST /api/user/referral - handle referral code on signup
 export async function POST(req: NextRequest) {
@@ -51,7 +52,9 @@ export async function GET(req: NextRequest) {
     }
     const user = await User.findOne({ email });
     if (!user) {
-        return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        return NextResponse.json({ coins: 0, user: null });
     }
-    return NextResponse.json({ coins: user.coins });
+    
+    // Simply return the user's data. A referral code is generated on creation.
+    return NextResponse.json({ coins: user.coins, user: { referralCode: user.referralCode } });
 }
