@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import ModalAd from '../ModalAd';
+import Modal from '../ui/Modal';
 
 // Pop sound path
 const popSoundPath = '/assets/sounds/pop.mp4';
@@ -16,6 +17,8 @@ const Hero = () => {
   const [showAd, setShowAd] = useState(false);
   const [adIndex, setAdIndex] = useState(0);
   const adTimeout = useRef<NodeJS.Timeout | null>(null);
+  const [showBrandModal, setShowBrandModal] = useState(false);
+  const [selectedBrand, setSelectedBrand] = useState<any>(null);
 
   // Text to type out
   const fullText = "STUDENT DISCOUNTS UNLOCKED";
@@ -339,33 +342,33 @@ const Hero = () => {
                   }}
                 >
                   {column1Cards.map((brand, index) => (
-                    <Link key={`col1-${index}`} href={`/brands/${brand.slug}`}>
-                      <div
-                        className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group`}
-                      >
-                        <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
-                        {/* Student Discount Badge */}
-                        <div className="absolute top-4 left-0 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-lg transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300">
-                          <span className="text-sm">STUDENT DEAL</span>
-                        </div>
-                        <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white font-bold py-1 px-3 rounded-full shadow-lg">
-                          <span className="text-sm">{brand.discount}</span>
-                        </div>
-                        <div className="relative h-full flex items-center justify-center p-6">
-                          <Image
-                            src={brand.logo}
-                            alt={brand.name}
-                            width={300}
-                            height={400}
-                            style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
-                            className="transition-transform duration-700 group-hover:scale-110"
-                          />
-                        </div>
-                        <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
-                          <p className="text-white font-semibold">{brand.name} Student Deals</p>
-                        </div>
+                    <div
+                      key={`col1-${index}`}
+                      onClick={() => { setSelectedBrand(brand); setShowBrandModal(true); }}
+                      className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
+                    >
+                      <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
+                      {/* Student Discount Badge */}
+                      <div className="absolute top-4 left-0 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-lg transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300">
+                        <span className="text-sm">STUDENT DEAL</span>
                       </div>
-                    </Link>
+                      <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white font-bold py-1 px-3 rounded-full shadow-lg">
+                        <span className="text-sm">{brand.discount}</span>
+                      </div>
+                      <div className="relative h-full flex items-center justify-center p-6">
+                        <Image
+                          src={brand.logo}
+                          alt={brand.name}
+                          width={300}
+                          height={400}
+                          style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
+                          className="transition-transform duration-700 group-hover:scale-110"
+                        />
+                      </div>
+                      <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
+                        <p className="text-white font-semibold">{brand.name} Student Deals</p>
+                      </div>
+                    </div>
                   ))}
                 </motion.div>
 
@@ -384,33 +387,33 @@ const Hero = () => {
                   }}
                 >
                   {column1Cards.map((brand, index) => (
-                    <Link key={`col1-clone-${index}`} href={`/brands/${brand.slug}`}>
-                      <div
-                        className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group`}
-                      >
-                        <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
-                        {/* Student Discount Badge */}
-                        <div className="absolute top-4 left-0 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-lg transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300">
-                          <span className="text-sm">STUDENT DEAL</span>
-                        </div>
-                        <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white font-bold py-1 px-3 rounded-full shadow-lg">
-                          <span className="text-sm">{brand.discount}</span>
-                        </div>
-                        <div className="relative h-full flex items-center justify-center p-6">
-                          <Image
-                            src={brand.logo}
-                            alt={brand.name}
-                            width={300}
-                            height={400}
-                            style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
-                            className="transition-transform duration-700 group-hover:scale-110"
-                          />
-                        </div>
-                        <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
-                          <p className="text-white font-semibold">{brand.name} Student Deals</p>
-                        </div>
+                    <div
+                      key={`col1-clone-${index}`}
+                      onClick={() => { setSelectedBrand(brand); setShowBrandModal(true); }}
+                      className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
+                    >
+                      <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
+                      {/* Student Discount Badge */}
+                      <div className="absolute top-4 left-0 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-lg transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300">
+                        <span className="text-sm">STUDENT DEAL</span>
                       </div>
-                    </Link>
+                      <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white font-bold py-1 px-3 rounded-full shadow-lg">
+                        <span className="text-sm">{brand.discount}</span>
+                      </div>
+                      <div className="relative h-full flex items-center justify-center p-6">
+                        <Image
+                          src={brand.logo}
+                          alt={brand.name}
+                          width={300}
+                          height={400}
+                          style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
+                          className="transition-transform duration-700 group-hover:scale-110"
+                        />
+                      </div>
+                      <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
+                        <p className="text-white font-semibold">{brand.name} Student Deals</p>
+                      </div>
+                    </div>
                   ))}
                 </motion.div>
               </div>
@@ -430,32 +433,32 @@ const Hero = () => {
                   }}
                 >
                   {column2Cards.map((brand, index) => (
-                    <Link key={`col2-${index}`} href={`/brands/${brand.slug}`}>
-                      <div
-                        className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group`}
-                      >
-                        <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
-                        <div className="absolute top-4 left-0 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-lg transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300">
-                          <span className="text-sm">STUDENT DEAL</span>
-                        </div>
-                        <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white font-bold py-1 px-3 rounded-full shadow-lg">
-                          <span className="text-sm">{brand.discount}</span>
-                        </div>
-                        <div className="relative h-full flex items-center justify-center p-6">
-                          <Image
-                            src={brand.logo}
-                            alt={brand.name}
-                            width={300}
-                            height={400}
-                            style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
-                            className="transition-transform duration-700 group-hover:scale-110"
-                          />
-                        </div>
-                        <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
-                          <p className="text-white font-semibold">{brand.name} Student Deals</p>
-                        </div>
+                    <div
+                      key={`col2-${index}`}
+                      onClick={() => { setSelectedBrand(brand); setShowBrandModal(true); }}
+                      className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
+                    >
+                      <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
+                      <div className="absolute top-4 left-0 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-lg transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300">
+                        <span className="text-sm">STUDENT DEAL</span>
                       </div>
-                    </Link>
+                      <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white font-bold py-1 px-3 rounded-full shadow-lg">
+                        <span className="text-sm">{brand.discount}</span>
+                      </div>
+                      <div className="relative h-full flex items-center justify-center p-6">
+                        <Image
+                          src={brand.logo}
+                          alt={brand.name}
+                          width={300}
+                          height={400}
+                          style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
+                          className="transition-transform duration-700 group-hover:scale-110"
+                        />
+                      </div>
+                      <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
+                        <p className="text-white font-semibold">{brand.name} Student Deals</p>
+                      </div>
+                    </div>
                   ))}
                 </motion.div>
 
@@ -474,32 +477,32 @@ const Hero = () => {
                   }}
                 >
                   {column2Cards.map((brand, index) => (
-                    <Link key={`col2-clone-${index}`} href={`/brands/${brand.slug}`}>
-                      <div
-                        className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group`}
-                      >
-                        <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
-                        <div className="absolute top-4 left-0 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-lg transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300">
-                          <span className="text-sm">STUDENT DEAL</span>
-                        </div>
-                        <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white font-bold py-1 px-3 rounded-full shadow-lg">
-                          <span className="text-sm">{brand.discount}</span>
-                        </div>
-                        <div className="relative h-full flex items-center justify-center p-6">
-                          <Image
-                            src={brand.logo}
-                            alt={brand.name}
-                            width={300}
-                            height={400}
-                            style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
-                            className="transition-transform duration-700 group-hover:scale-110"
-                          />
-                        </div>
-                        <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
-                          <p className="text-white font-semibold">{brand.name} Student Deals</p>
-                        </div>
+                    <div
+                      key={`col2-clone-${index}`}
+                      onClick={() => { setSelectedBrand(brand); setShowBrandModal(true); }}
+                      className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
+                    >
+                      <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
+                      <div className="absolute top-4 left-0 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-lg transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300">
+                        <span className="text-sm">STUDENT DEAL</span>
                       </div>
-                    </Link>
+                      <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white font-bold py-1 px-3 rounded-full shadow-lg">
+                        <span className="text-sm">{brand.discount}</span>
+                      </div>
+                      <div className="relative h-full flex items-center justify-center p-6">
+                        <Image
+                          src={brand.logo}
+                          alt={brand.name}
+                          width={300}
+                          height={400}
+                          style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
+                          className="transition-transform duration-700 group-hover:scale-110"
+                        />
+                      </div>
+                      <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
+                        <p className="text-white font-semibold">{brand.name} Student Deals</p>
+                      </div>
+                    </div>
                   ))}
                 </motion.div>
               </div>
@@ -507,6 +510,78 @@ const Hero = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal for brand card */}
+      <Modal isOpen={showBrandModal} onClose={() => setShowBrandModal(false)}>
+        {selectedBrand && (
+          <div className="flex flex-col items-center text-center p-4">
+            {/* Brand logo in a rounded rectangle */}
+            <div className="w-full max-w-xs h-24 bg-white rounded-xl flex items-center justify-center mb-4 shadow-lg">
+              <Image src={selectedBrand.logo} alt={selectedBrand.name} width={160} height={80} style={{ objectFit: 'contain', width: '100%', height: '80px' }} />
+            </div>
+            <h2 className="text-2xl font-extrabold mb-1 text-gray-100 drop-shadow">{selectedBrand.name} Student Discount</h2>
+            <p className="text-lg font-semibold text-pink-400 mb-2">{selectedBrand.discount}</p>
+            <div className="w-full border-b border-gray-700 my-3"></div>
+            {/* Rating row */}
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <span className="text-gray-300 text-sm mr-2">Rate this offer:</span>
+              <button className="text-2xl hover:scale-110 transition-transform">👎</button>
+              <button className="text-2xl hover:scale-110 transition-transform">👍</button>
+            </div>
+            <p className="mb-4 text-gray-300 text-sm">Enter this code in the promotional code area during checkout to benefit from the student discount.</p>
+            {/* Reveal code button with animation */}
+            <RevealCodeButton />
+            <a href="#" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">Visit {selectedBrand.name} website</a>
+          </div>
+        )}
+      </Modal>
+    </div>
+  );
+};
+
+const RevealCodeButton = () => {
+  const [revealed, setRevealed] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const code = "STUDENT10";
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1200);
+    } catch (e) {
+      // fallback or error
+    }
+  };
+
+  return (
+    <div className="relative flex flex-col items-center">
+      <button
+        className={`relative bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow-md transition-all duration-300 mb-2 overflow-hidden focus:outline-none`}
+        onClick={() => setRevealed(true)}
+        disabled={revealed}
+        style={{ minWidth: 160 }}
+      >
+        {revealed ? (
+          <span className="tracking-widest text-2xl animate-pulse flex items-center gap-2">
+            {code}
+            <button
+              onClick={handleCopy}
+              className="ml-2 text-base bg-white/20 hover:bg-white/40 rounded px-2 py-1 text-white border border-white/30 transition"
+              style={{ lineHeight: 1 }}
+              tabIndex={0}
+              type="button"
+            >
+              📋
+            </button>
+          </span>
+        ) : (
+          <span>Reveal code</span>
+        )}
+      </button>
+      {copied && (
+        <span className="absolute top-full mt-1 text-green-400 text-xs font-semibold bg-black/80 px-2 py-1 rounded shadow">Copied!</span>
+      )}
     </div>
   );
 };

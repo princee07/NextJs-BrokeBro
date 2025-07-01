@@ -9,7 +9,8 @@ import AnimatedEyes from '../ui/AnimatedEyes';
 import { useRouter } from 'next/navigation';
 import Modal from '../ui/Modal';
 import VerificationModal from '../auth/VerificationModal';
-
+import BannerSection from '../sections/BannerSection';
+import DiscountBar from './DiscountBar';
 // Pop sound path
 const popSoundPath = '/assets/sounds/pop.mp4';
 
@@ -85,11 +86,12 @@ export default function NavbarClient({ user }: { user: any }) {
   // }, [adIndex, showAd]);
 
   const navCategories = [
-    { name: 'INTERNSHIPS', path: '/categories/intern' },
-    { name: 'FASHION & BEAUTY', path: '/categories/fashion' },
+    { name: 'INTERNSHIPS', path: '/intern' },
+    { name: 'FASHION & BEAUTY', path: '/fashion' },
     { name: 'TRAVEL AND LIFESTYLE', path: '/lifestyle' },
     { name: 'TECHNOLOGY', path: '/technology' },
     { name: 'FREEBIES FOR ALL', path: '/freebies' },
+    { name: 'EVENTS', path: '/events' },
   ];
 
   useEffect(() => {
@@ -110,6 +112,8 @@ export default function NavbarClient({ user }: { user: any }) {
 
   return (
     <header className="fixed w-full z-50 flex flex-col mt-8 md:mt-10">
+      {/* Discount Bar at the very top */}
+      <DiscountBar />
       {/* Main Navbar */}
       <nav
         className={`w-full transition-all duration-500 relative ${scrolled

@@ -90,12 +90,12 @@ const promotions = [
 // Category data
 const categories = [
   'All',
+  'Shoes',
   'Laptops',
-  'Gaming',
-  'Accessories',
-  'Audio',
-  'Monitors',
-  'Tablets'
+  'Food & Drinks',
+  'Jewellery',
+  'Beauty',
+  'Gym'
 ];
 
 export default function ExploreProducts() {
