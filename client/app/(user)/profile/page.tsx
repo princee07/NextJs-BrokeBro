@@ -15,8 +15,8 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 flex items-center justify-center py-16 px-4">
-      <div className="w-full max-w-2xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-40 md:pt-44 pb-16 px-4">
+      <div className="w-full max-w-7xl mx-auto">
         <div className="relative bg-gradient-to-r from-orange-500/80 via-pink-600/80 to-purple-700/80 rounded-3xl shadow-2xl p-8 mb-10 overflow-hidden group transition-transform duration-300 hover:scale-[1.02]">
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-pink-500/30 rounded-full blur-2xl z-0 animate-pulse" />
           <div className="flex flex-col md:flex-row items-center md:items-end gap-6 z-10 relative">
