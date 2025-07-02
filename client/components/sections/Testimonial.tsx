@@ -29,22 +29,6 @@ const testimonials = [
   },
 ];
 
-const cardVariants = {
-  offscreen: { opacity: 0, y: 80, rotate: -8, scale: 0.95 },
-  onscreen: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    rotate: 0,
-    scale: 1,
-    transition: {
-      type: "spring",
-      bounce: 0.35,
-      duration: 0.9,
-      delay: i * 0.18,
-    },
-  }),
-};
-
 export default function Testimonial() {
   return (
     <section className="relative w-full py-24 bg-gradient-to-br from-neutral-900 via-neutral-950 to-black overflow-hidden">
@@ -63,11 +47,10 @@ export default function Testimonial() {
             <motion.div
               key={t.name}
               className="relative bg-neutral-800/80 border border-orange-400/20 rounded-3xl shadow-xl p-8 w-full max-w-xs flex flex-col items-center backdrop-blur-md hover:scale-105 transition-transform duration-300"
-              initial="offscreen"
-              whileInView="onscreen"
+              initial={{ opacity: 0, y: 80, rotate: -8, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, rotate: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.4 }}
-              custom={i}
-              variants={cardVariants}
+              transition={{ type: "spring", bounce: 0.35, duration: 0.9, delay: i * 0.18 }}
             >
               <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gradient-to-br from-orange-500 to-pink-500 rounded-full p-1 shadow-lg">
                 <Image

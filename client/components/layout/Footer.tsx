@@ -20,32 +20,12 @@ const Footer = () => {
     }
   }, [isInView, controls]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Newsletter signup logic would go here
     setIsSubmitted(true);
     setTimeout(() => setIsSubmitted(false), 5000);
     setEmail('');
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.5, ease: "easeOut" }
-    }
   };
 
   return (
@@ -59,13 +39,12 @@ const Footer = () => {
       <div className="container mx-auto px-4 relative z-10">
         {/* Newsletter Section */}
         <motion.div 
-          variants={containerVariants}
           initial="hidden"
           animate={controls}
           className="mb-16 bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-6 md:p-10 shadow-xl border border-gray-800"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <motion.div variants={itemVariants}>
+            <motion.div className="">
               <h3 className="text-3xl font-bold text-white mb-2">
                 Stay Updated for{" "}
                 <span className="bg-gradient-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent">
@@ -124,7 +103,6 @@ const Footer = () => {
             </motion.div>
 
             <motion.div 
-              variants={itemVariants} 
               className="hidden md:flex justify-center"
             >
               <div className="relative h-40 w-40">
@@ -141,13 +119,12 @@ const Footer = () => {
 
         {/* Main Footer Content */}
         <motion.div 
-          variants={containerVariants}
           initial="hidden"
           animate={controls}
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 mb-16"
         >
           {/* Brand Column */}
-          <motion.div variants={itemVariants} className="lg:col-span-2">
+          <motion.div className="lg:col-span-2">
             <div className="flex items-center mb-4">
               <div className="w-10 h-10 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center">
                 <span className="text-white font-bold text-xl">B</span>
@@ -207,7 +184,7 @@ const Footer = () => {
           </motion.div>
 
           {/* Quick Links */}
-          <motion.div variants={itemVariants}>
+          <motion.div>
             <h4 className="text-white font-bold text-lg mb-4">Shop</h4>
             <ul className="space-y-2">
               <li>
@@ -232,7 +209,7 @@ const Footer = () => {
           </motion.div>
 
           {/* Company Links */}
-          <motion.div variants={itemVariants}>
+          <motion.div>
             <h4 className="text-white font-bold text-lg mb-4">Company</h4>
             <ul className="space-y-2">
               <li>
@@ -254,7 +231,7 @@ const Footer = () => {
           </motion.div>
 
           {/* Contact & Support */}
-          <motion.div variants={itemVariants}>
+          <motion.div>
             <h4 className="text-white font-bold text-lg mb-4">Contact & Help</h4>
             <ul className="space-y-3">
               <li className="flex items-start">
@@ -291,7 +268,6 @@ const Footer = () => {
 
         {/* Download App Banner */}
         <motion.div
-          variants={itemVariants}
           className="w-full mb-10 p-6 bg-gray-900 rounded-xl border border-gray-800 flex flex-col md:flex-row items-center justify-between"
         >
           <div className="mb-4 md:mb-0">
@@ -322,13 +298,11 @@ const Footer = () => {
         <div className="pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <motion.p 
-              variants={itemVariants}
               className="text-gray-500 text-sm mb-4 md:mb-0"
             >
               © {new Date().getFullYear()} BrokeBro. All rights reserved.
             </motion.p>
             <motion.div 
-              variants={itemVariants}
               className="flex flex-wrap gap-x-6 gap-y-2"
             >
               <Link href="/terms" className="text-gray-500 text-sm hover:text-orange-500 transition-colors">
@@ -348,7 +322,6 @@ const Footer = () => {
           
           {/* Payment methods */}
           <motion.div 
-            variants={itemVariants}
             className="mt-6 flex flex-wrap justify-center md:justify-start gap-3"
           >
             <div className="h-6 w-10 bg-gray-800 rounded opacity-70"></div>
