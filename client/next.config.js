@@ -4,7 +4,9 @@ const nextConfig = {
     domains: [
       'soxytoes.com',
       'lh3.googleusercontent.com',
-      'i.pravatar.cc', // allow pravatar for next/image
+      'i.pravatar.cc', 
+      'randomuser.me'
+      // allow pravatar for next/image
       // add more domains as needed
     ],
   },
