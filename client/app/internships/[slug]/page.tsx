@@ -13,7 +13,7 @@ export default function InternshipDetailPage(props: any) {
   }
 
   return (
-    <main className="bg-gradient-to-b from-[#0d1117] to-[#010409] min-h-screen pt-40 pb-20">
+    <main className="bg-gradient-to-b from-[#0d1117] to-[#010409] min-h-screen pt-56 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="lg:grid lg:grid-cols-3 lg:gap-8">
                 {/* Main Content */}
@@ -89,6 +89,7 @@ export default function InternshipDetailPage(props: any) {
                               <button className='p-2 rounded-lg hover:bg-gray-800/60'><Share2 className='w-5 h-5 text-gray-400'/></button>
                            </div>
                            <button className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg">Quick Apply</button>
+                           <a href="/resume-builder/templates" className="w-full block mt-4 bg-gradient-to-r from-orange-500 to-amber-600 text-white font-bold py-3 rounded-lg text-center hover:from-orange-600 hover:to-amber-700 transition-all duration-300 shadow-md hover:shadow-orange-500/20">Build Resume with AI</a>
                         </div>
                         {/* Stats Card */}
                         <div className="bg-[#161b22] p-4 rounded-lg shadow-lg border border-gray-800 text-center">

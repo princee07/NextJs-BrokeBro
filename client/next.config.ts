@@ -5,7 +5,8 @@ const nextConfig: NextConfig = {
     domains: ["lh3.googleusercontent.com",
       "public.blob.vercel-storage.com",
       "hebbkx1anhila5yf.public.blob.vercel-storage.com",
-      "lh3.googleusercontent.com", "i.pravatar.cc"
+      "lh3.googleusercontent.com", "i.pravatar.cc",
+      'randomuser.me'
    ],
   
   },

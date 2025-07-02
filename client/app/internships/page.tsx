@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function InternshipsPage() {
   return (
-    <main className="bg-gradient-to-b from-[#0d1117] to-[#010409] min-h-screen pt-40 pb-20">
+    <main className="bg-gradient-to-b from-[#0d1118] to-[#010409] min-h-screen pt-40 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold text-gray-100 mb-10">Internships</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
