@@ -8,11 +8,19 @@ export function middleware(request: NextRequest) {
   // If the user is visiting a referral link, store the code in a cookie.
   const referralCode = url.searchParams.get('ref')
   if (referralCode) {
-    // This cookie is NOT httpOnly, so the client-side script can read it.
+    // Set cookie for 30 days to ensure it persists through the signup flow
     response.cookies.set('brokebro_ref', referralCode, {
       path: '/',
-      maxAge: 60 * 15, // 15 minutes
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      sameSite: 'lax',
     })
+
+    // If user is on homepage with ref code, redirect to signup
+    if (url.pathname === '/' && referralCode) {
+      url.pathname = '/signup'
+      url.searchParams.set('ref', referralCode)
+      return NextResponse.redirect(url)
+    }
   }
 
   return response

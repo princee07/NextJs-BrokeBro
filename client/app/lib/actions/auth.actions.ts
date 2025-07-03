@@ -3,6 +3,7 @@
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
 import dbConnect from "../db/connect";
 import User from "../db/models/user.model";
+import { v4 as uuidv4 } from 'uuid';
 
 export async function handleUserCreation({
   user,
@@ -43,5 +44,6 @@ export async function handleUserCreation({
     image: user.picture,
     coins: initialCoins,
     referredBy,
+    referralCode: uuidv4().slice(0, 8), // Generate unique referral code
   });
 } 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import QRCode from "react-qr-code";
+import ReferralSection from "@/components/ReferralSection";
 
 export default function ProfileClient({ user }: { user: any }) {
   const [uploadedResume, setUploadedResume] = useState<File | null>(null);
@@ -210,6 +211,9 @@ export default function ProfileClient({ user }: { user: any }) {
           </div>
         </div>
       </div>
+
+      {/* Refer & Earn Section */}
+      <ReferralSection />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Profile Info - takes more space */}
