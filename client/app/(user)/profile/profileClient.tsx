@@ -254,13 +254,89 @@ export default function ProfileClient({ user }: { user: any }) {
           </div>
         </div>
 
-        {/* QR Code Section */}
-        <div className="lg:col-span-1 bg-gray-900/90 rounded-2xl shadow-xl p-8 flex flex-col items-center justify-center">
-          <h3 className="text-xl font-bold text-white mb-4">Your BrokeBro ID</h3>
-          <div style={{ background: 'white', padding: '16px', borderRadius: '12px' }}>
-            <QRCode value={qrCodeData} size={140} />
+        {/* BrokeBro ID Card */}
+        <div className="lg:col-span-1 bg-gray-900/90 rounded-2xl shadow-xl p-6">
+          <h3 className="text-xl font-bold text-white mb-4 text-center">Your BrokeBro ID Card</h3>
+
+          {/* ID Card - Exact replica */}
+          <div className="relative bg-black rounded-2xl p-0 border-2 border-orange-500 shadow-2xl mx-auto max-w-sm aspect-[3/5] overflow-hidden">
+            {/* Inner orange border */}
+            <div className="absolute inset-3 border-2 border-orange-500 rounded-xl"></div>
+
+            {/* Card Content */}
+            <div className="relative h-full flex flex-col p-6">
+              {/* BrokeBro Logo at top */}
+              <div className="text-center mb-8 mt-4">
+                <div className="text-orange-500 font-black text-4xl tracking-tighter leading-none mb-2">
+                  BROKE
+                </div>
+                <div className="flex items-center justify-center gap-0">
+                  <span className="text-orange-500 font-black text-4xl tracking-tighter">BR</span>
+                  <div className="flex gap-1 ml-1">
+                    <div className="w-8 h-8 bg-white rounded-full relative overflow-hidden">
+                      <div className="w-full h-4 bg-orange-500 absolute top-0"></div>
+                      <div className="w-full h-4 bg-white absolute bottom-0"></div>
+                      <div className="w-3.5 h-3.5 bg-black rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+                    </div>
+                    <div className="w-8 h-8 bg-white rounded-full relative overflow-hidden">
+                      <div className="w-full h-4 bg-orange-500 absolute top-0"></div>
+                      <div className="w-full h-4 bg-white absolute bottom-0"></div>
+                      <div className="w-3.5 h-3.5 bg-black rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* User Information */}
+              <div className="flex-1 space-y-6">
+                {/* Name */}
+                <div>
+                  <div className="text-orange-500 text-sm font-bold uppercase tracking-wider mb-2">NAME</div>
+                  <div className="text-white font-bold text-xl leading-tight">
+                    {user?.given_name} {user?.family_name}
+                  </div>
+                </div>
+
+                {/* University */}
+                <div>
+                  <div className="text-orange-500 text-sm font-bold uppercase tracking-wider mb-2">UNIVERSITY</div>
+                  <div className="text-white font-semibold text-base leading-tight">
+                    Indian Institute<br />of Technology
+                  </div>
+                </div>
+
+                {/* Bottom section with Student ID and QR */}
+                <div className="flex justify-between items-end mt-auto">
+                  <div>
+                    <div className="text-orange-500 text-sm font-bold uppercase tracking-wider mb-2">STUDENT ID</div>
+                    <div className="text-white font-bold text-lg">
+                      {user?.id?.slice(-9) || '123456789'}
+                    </div>
+                  </div>
+
+                  {/* QR Code */}
+                  <div className="bg-white p-3 rounded-md">
+                    <QRCode value={qrCodeData} size={110} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Banner */}
+              <div className="absolute bottom-0 left-0 right-0 bg-orange-500 text-black text-center py-3 font-black text-sm tracking-[0.2em] uppercase">
+                STUDENT DISCOUNT
+              </div>
+            </div>
           </div>
-          <p className="text-gray-400 text-sm mt-4 text-center">Scan to see your full BrokeBro profile details.</p>
+
+          {/* Download Button */}
+          <div className="mt-6 text-center">
+            <button className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors text-sm flex items-center gap-2 mx-auto">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Download ID Card
+            </button>
+          </div>
         </div>
       </div>
     </div>
