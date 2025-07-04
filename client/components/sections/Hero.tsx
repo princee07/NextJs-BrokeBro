@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import ModalAd from '../ModalAd';
 import Modal from '../ui/Modal';
+import RevealCodeButton from '../ui/RevealCodeButton';
 
 // Pop sound path
 const popSoundPath = '/assets/sounds/pop.mp4';
@@ -112,28 +113,32 @@ const Hero = () => {
       logo: '/assets/images/figma.png',
       gradient: 'from-blue-400 to-teal-300',
       slug: 'autodesk',
-      discount: '60% OFF'
+      discount: '60% OFF',
+      code: 'LENOVO60',
     },
     {
       name: 'GoIbibo',
       logo: '/assets/images/goibibo.png',
       gradient: 'from-orange-500 to-red-400',
       slug: 'goibibo',
-      discount: '₹1000 OFF'
+      discount: '₹1000 OFF',
+      code: 'GOIBIBO1000',
     },
     {
       name: 'Unity',
       logo: '/assets/images/unity.png',
       gradient: 'from-gray-700 to-gray-900',
       slug: 'unity',
-      discount: '50% OFF'
+      discount: '50% OFF',
+      code: 'UNITY50',
     },
     {
       name: 'KFC',
       logo: '/assets/images/kfc.png',
       gradient: 'from-red-600 to-red-700',
       slug: 'kfc',
-      discount: '30% OFF'
+      discount: '30% OFF',
+      code: 'KFC30',
     }
   ];
 
@@ -530,58 +535,11 @@ const Hero = () => {
             </div>
             <p className="mb-4 text-gray-300 text-sm">Enter this code in the promotional code area during checkout to benefit from the student discount.</p>
             {/* Reveal code button with animation */}
-            <RevealCodeButton />
+            <RevealCodeButton code={selectedBrand.code || 'STUDENT10'} />
             <a href="#" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">Visit {selectedBrand.name} website</a>
           </div>
         )}
       </Modal>
-    </div>
-  );
-};
-
-const RevealCodeButton = () => {
-  const [revealed, setRevealed] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const code = "STUDENT10";
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1200);
-    } catch (e) {
-      // fallback or error
-    }
-  };
-
-  return (
-    <div className="relative flex flex-col items-center">
-      <button
-        className={`relative bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow-md transition-all duration-300 mb-2 overflow-hidden focus:outline-none`}
-        onClick={() => setRevealed(true)}
-        disabled={revealed}
-        style={{ minWidth: 160 }}
-      >
-        {revealed ? (
-          <span className="tracking-widest text-2xl animate-pulse flex items-center gap-2">
-            {code}
-            <button
-              onClick={handleCopy}
-              className="ml-2 text-base bg-white/20 hover:bg-white/40 rounded px-2 py-1 text-white border border-white/30 transition"
-              style={{ lineHeight: 1 }}
-              tabIndex={0}
-              type="button"
-            >
-              📋
-            </button>
-          </span>
-        ) : (
-          <span>Reveal code</span>
-        )}
-      </button>
-      {copied && (
-        <span className="absolute top-full mt-1 text-green-400 text-xs font-semibold bg-black/80 px-2 py-1 rounded shadow">Copied!</span>
-      )}
     </div>
   );
 };
