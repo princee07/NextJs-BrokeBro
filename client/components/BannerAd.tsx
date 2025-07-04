@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { MdClose } from "react-icons/md";
 import Link from "next/link";
+import Image from 'next/image';
 
 interface BannerAdProps {
   imageUrl?: string;
@@ -41,11 +42,13 @@ const BannerAd: React.FC<BannerAdProps> = ({
       style={{ minHeight: 180 }}
     >
       {fullWidthImage && imageUrl && (
-        <img
+        <Image
           src={imageUrl}
           alt="Banner Ad"
+          fill
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{ minHeight: 180 }}
+          priority
         />
       )}
       {/* Only show close button, remove all other content */}

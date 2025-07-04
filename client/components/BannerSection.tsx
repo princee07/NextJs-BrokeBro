@@ -5,28 +5,53 @@ import BannerAd from "./BannerAd";
 
 const bannerAds = [
 	{
-		imageUrl:
-			"https://soxytoes.com/cdn/shop/files/Theme_1A_Website.png?v=1697116566&width=2000",
-		title: "Student Discounts",
-		description: "Unlock exclusive student offers on top brands.",
-		ctaText: "Get Started",
-		ctaLink: "https://www.myunidays.com/IN/en-IN",
+		imageUrl: "/assets/banners/Biba.png",
+		title: "Biba Festive Sale",
+		description: "Flat 30% off on ethnic wear for students.",
+		ctaText: "Shop Biba",
+		ctaLink: "https://www.biba.in/",
 	},
 	{
-		imageUrl:
-			"https://soxytoes.com/cdn/shop/files/Theme_3_Website.png?v=1697116591&width=2000",
-		title: "Big Sale on Laptops!",
-		description: "Up to 40% off for students. Limited time only.",
-		ctaText: "Shop Now",
-		ctaLink: "/categories/technology",
+		imageUrl: "/assets/banners/clove.png",
+		title: "Clove Exclusive",
+		description: "Get 20% off on all Clove products.",
+		ctaText: "Shop Clove",
+		ctaLink: "https://www.clove.com/",
 	},
 	{
-		imageUrl:
-			"https://soxytoes.com/cdn/shop/files/Theme_2A_Website.png?v=1697116587&width=2000",
-		title: "Refer & Earn",
-		description: "Invite friends and earn exclusive rewards.",
-		ctaText: "Invite Now",
-		ctaLink: "/refer",
+		imageUrl: "/assets/banners/glued.png",
+		title: "Glued Gaming Arena",
+		description: "Special student entry offers at Glued.",
+		ctaText: "Book Now",
+		ctaLink: "https://www.glued.in/",
+	},
+	{
+		imageUrl: "/assets/banners/hkvitals.png",
+		title: "HK Vitals Health",
+		description: "Up to 25% off on supplements for students.",
+		ctaText: "Explore HK Vitals",
+		ctaLink: "https://www.hkvitals.com/",
+	},
+	{
+		imageUrl: "/assets/banners/jewelry.png",
+		title: "Jewelry Bonanza",
+		description: "Flat 15% off on select jewelry brands.",
+		ctaText: "Shop Jewelry",
+		ctaLink: "https://www.jewelry.com/",
+	},
+	{
+		imageUrl: "/assets/banners/soxytoes.png",
+		title: "Soxytoes Socks",
+		description: "Buy 2 get 1 free on Soxytoes socks.",
+		ctaText: "Shop Soxytoes",
+		ctaLink: "https://soxytoes.com/",
+	},
+	{
+		imageUrl: "/assets/banners/swissbeauty.png",
+		title: "Swiss Beauty",
+		description: "Exclusive 18% off for students on Swiss Beauty.",
+		ctaText: "Shop Swiss Beauty",
+		ctaLink: "https://www.swissbeauty.in/",
 	},
 ];
 

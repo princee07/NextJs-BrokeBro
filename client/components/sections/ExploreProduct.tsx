@@ -5,97 +5,107 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 
-// Mock product data with placeholder images
+// Category data based on your banners
+const categories = [
+  'All',
+  'Biba',
+  'Clove',
+  'Glued',
+  'HK Vitals',
+  'Jewelry',
+  'Soxytoes',
+  'Swiss Beauty',
+];
+
+// Update products to match banner categories and images
 const products = [
   {
     id: 1,
-    name: 'soxytoes',
-    category: 'Genz shocks',
-    price: '₹142,990',
-    image: 'https://soxytoes.com/cdn/shop/files/Theme_1A_Website.png?v=1697116566&width=2000',
-    color: ['bg-slate-600', 'bg-white'],
-    size: 'large',
+    name: 'Biba Festive Kurti',
+    category: 'Biba',
+    price: '₹1,499',
+    image: '/assets/banners/Biba.png',
+    color: ['bg-pink-200', 'bg-white'],
+    size: 'medium',
     featured: true
   },
   {
     id: 2,
-    name: 'Logitech MX Master 3',
-    category: 'Accessories',
-    price: '₹9,999',
-    image: '/product-mouse-1.png',
-    color: ['bg-gray-700', 'bg-gray-500'],
+    name: 'Clove Essential Oil',
+    category: 'Clove',
+    price: '₹299',
+    image: '/assets/banners/clove.png',
+    color: ['bg-yellow-200', 'bg-white'],
     size: 'small'
   },
   {
     id: 3,
-    name: 'Dell XPS 13',
-    category: 'Laptops',
-    price: '₹112,990',
-    image: '/product-laptop-2.png',
+    name: 'Glued Gaming Pass',
+    category: 'Glued',
+    price: '₹499',
+    image: '/assets/banners/glued.png',
     color: ['bg-blue-400', 'bg-gray-800'],
     size: 'medium'
   },
   {
     id: 4,
-    name: 'Sony WH-1000XM4',
-    category: 'Audio',
-    price: '₹29,990',
-    image: '/product-headphone-1.png',
-    color: ['bg-black', 'bg-amber-500'],
+    name: 'HK Vitals Multivitamin',
+    category: 'HK Vitals',
+    price: '₹899',
+    image: '/assets/banners/hkvitals.png',
+    color: ['bg-green-200', 'bg-white'],
     size: 'small'
   },
   {
     id: 5,
-    name: 'iPad Pro 12.9"',
-    category: 'Tablets',
-    price: '₹109,990',
-    image: '/product-tablet-1.png',
-    color: ['bg-gray-200', 'bg-gray-600'],
+    name: 'Jewelry Set',
+    category: 'Jewelry',
+    price: '₹2,999',
+    image: '/assets/banners/jewelry.png',
+    color: ['bg-yellow-100', 'bg-gray-600'],
     size: 'medium',
     featured: true
   },
   {
     id: 6,
-    name: 'Razer BlackShark V2 Pro',
-    category: 'Gaming',
-    price: '₹14,999',
-    image: '/product-headphone-2.png',
-    color: ['bg-green-500', 'bg-gray-900'],
+    name: 'Soxytoes Socks',
+    category: 'Soxytoes',
+    price: '₹399',
+    image: '/assets/banners/soxytoes.png',
+    color: ['bg-red-200', 'bg-gray-900'],
+    size: 'small'
+  },
+  {
+    id: 7,
+    name: 'Swiss Beauty Lipstick',
+    category: 'Swiss Beauty',
+    price: '₹249',
+    image: '/assets/banners/swissbeauty.png',
+    color: ['bg-pink-100', 'bg-white'],
     size: 'small'
   }
 ];
 
-// Mock promotion data
+// Update promo cards to match segments
 const promotions = [
   {
     id: 'promo1',
-    title: 'Game On',
-    subtitle: 'Student discount on gaming laptops',
-    color: 'bg-orange-500/20',
-    textColor: 'text-orange-500',
+    title: 'Biba Festive Sale',
+    subtitle: 'Flat 30% off on ethnic wear for students.',
+    color: 'bg-pink-200/20',
+    textColor: 'text-pink-500',
     size: 'large',
-    image: 'https://m.media-amazon.com/images/S/aplus-media-library-service-media/63138ddf-610c-4663-9583-0ec71147a57e.__CR0,0,970,300_PT0_SX970_V1___.jpg'
+    image: '/assets/banners/Biba.png'
   },
   {
     id: 'promo2',
-    title: 'Summer Break',
-    subtitle: 'Special deals on accessories',
-    color: 'bg-blue-500/20',
-    textColor: 'text-blue-400',
+    title: 'Soxytoes Socks Offer',
+    subtitle: 'Buy 2 get 1 free on Soxytoes socks.',
+    color: 'bg-red-200/20',
+    textColor: 'text-red-500',
     size: 'medium',
-    image: '/summer-promo.png' // Use placeholder image
+    image: '/assets/banners/soxytoes.png'
   }
-];
-
-// Category data
-const categories = [
-  'All',
-  'Shoes',
-  'Laptops',
-  'Food & Drinks',
-  'Jewellery',
-  'Beauty',
-  'Gym'
 ];
 
 export default function ExploreProducts() {
@@ -113,11 +123,11 @@ export default function ExploreProducts() {
       },
       { threshold: 0.1 } // Trigger when 10% of the section is visible
     );
-    
+
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
-    
+
     return () => {
       if (sectionRef.current) {
         observer.unobserve(sectionRef.current);
@@ -126,12 +136,43 @@ export default function ExploreProducts() {
   }, []);
 
   // Filter products based on selected category
-  const filteredProducts = selectedCategory === 'All' 
-    ? products 
+  const filteredProducts = selectedCategory === 'All'
+    ? products
     : products.filter(product => product.category === selectedCategory);
 
+  // Banner images for each segment in order
+  const bannerOrder = [
+    '/assets/banners/Biba.png',
+    '/assets/banners/clove.png',
+    '/assets/banners/glued.png',
+    '/assets/banners/hkvitals.png',
+    '/assets/banners/jewelry.png',
+    '/assets/banners/soxytoes.png',
+    '/assets/banners/swissbeauty.png',
+  ];
+  const [bannerIndex, setBannerIndex] = useState(0);
+  const [isManual, setIsManual] = useState(false);
+
+  // Auto-rotate banner every 3 seconds unless a category is selected
+  useEffect(() => {
+    if (selectedCategory !== 'All') return;
+    setIsManual(false);
+    const interval = setInterval(() => {
+      setBannerIndex((prev) => (prev + 1) % bannerOrder.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [selectedCategory]);
+
+  // When a category is clicked, show its banner and stop auto-rotation
+  useEffect(() => {
+    if (selectedCategory === 'All') return;
+    setIsManual(true);
+    const idx = categories.findIndex(cat => cat === selectedCategory) - 1;
+    if (idx >= 0) setBannerIndex(idx);
+  }, [selectedCategory]);
+
   return (
-    <section 
+    <section
       ref={sectionRef}
       className="w-full bg-black py-20 px-4 md:px-8 lg:px-12 overflow-hidden"
     >
@@ -165,11 +206,10 @@ export default function ExploreProducts() {
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-4 py-2 rounded-full text-sm transition-all ${
-                selectedCategory === category
-                  ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white'
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-              }`}
+              className={`px-4 py-2 rounded-full text-sm transition-all ${selectedCategory === category
+                ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white'
+                : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                }`}
             >
               {category}
             </button>
@@ -178,44 +218,48 @@ export default function ExploreProducts() {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {/* Promotional Card */}
+          {/* Promotional Card - Rotating banner for all segments, static when a category is selected */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
             transition={{ duration: 0.5, delay: 0.3 }}
             className="relative col-span-1 md:col-span-2 rounded-2xl overflow-hidden h-[240px] bg-gradient-to-r from-gray-900 to-gray-800"
           >
-            <div className="absolute inset-0 flex flex-col justify-center p-8">
+            <div className="absolute inset-0 flex flex-col justify-center p-8 z-10">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                 transition={{ duration: 0.5, delay: 0.6 }}
               >
-                <h3 className="text-3xl font-bold text-white mb-2">Game Like Never Before</h3>
-                <p className="text-gray-300 mb-4">Student discounts on gaming laptops & accessories</p>
-                <Link href="/gaming">
+                <h3 className="text-3xl font-bold text-white mb-2">
+                  {categories[bannerIndex + 1] + ' Special'}
+                </h3>
+                <p className="text-gray-300 mb-4">
+                  {`Exclusive student deals on ${categories[bannerIndex + 1]}.`}
+                </p>
+                <Link href={`/categories/${categories[bannerIndex + 1].toLowerCase().replace(/\s/g, '-')}`}>
                   <button className="px-6 py-2 bg-gradient-to-r from-orange-500 to-amber-600 rounded-full text-white text-sm font-medium hover:shadow-lg hover:shadow-orange-500/20 transition-all">
                     View All
                   </button>
                 </Link>
               </motion.div>
             </div>
-            
-            {/* Promotional image */}
-            <motion.div 
+            {/* Rotating or static banner image for each segment */}
+            <motion.div
+              key={bannerIndex}
               initial={{ opacity: 0, scale: 0.9, x: 40 }}
               animate={inView ? { opacity: 1, scale: 1, x: 0 } : { opacity: 0, scale: 0.9, x: 40 }}
               transition={{ duration: 0.7, delay: 0.5 }}
-              className="absolute right-0 bottom-0 h-full w-1/2"
+              className="absolute inset-0 z-0"
             >
-              <div className="relative h-full w-full">
-                <Image 
-                  src="/gamer-promo.png" 
-                  alt="Gaming Promotion"
-                  fill
-                  style={{ objectFit: "contain", objectPosition: "right bottom" }}
-                />
-              </div>
+              <Image
+                src={bannerOrder[bannerIndex]}
+                alt={`${categories[bannerIndex + 1]} Banner`}
+                fill
+                style={{ objectFit: 'cover', objectPosition: 'center' }}
+                className="rounded-2xl"
+                priority
+              />
             </motion.div>
           </motion.div>
 
@@ -226,9 +270,8 @@ export default function ExploreProducts() {
               initial={{ opacity: 0, y: 50 }}
               animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
               transition={{ duration: 0.5, delay: 0.3 + (index * 0.1) }}
-              className={`rounded-2xl overflow-hidden bg-gray-900 ${
-                product.size === 'large' ? 'col-span-1 md:col-span-2' : ''
-              } ${product.size === 'medium' ? 'row-span-1' : ''}`}
+              className={`rounded-2xl overflow-hidden bg-gray-900 ${product.size === 'large' ? 'col-span-1 md:col-span-2' : ''
+                } ${product.size === 'medium' ? 'row-span-1' : ''}`}
             >
               <div className="p-4 h-full flex flex-col">
                 <div className="flex justify-between items-start mb-2">
@@ -242,22 +285,22 @@ export default function ExploreProducts() {
                     ))}
                   </div>
                 </div>
-                
+
                 <div className="relative flex-grow flex items-center justify-center p-4 mb-3">
                   <motion.div
                     whileHover={{ scale: 1.05 }}
                     transition={{ type: "spring", stiffness: 300 }}
                     className={`relative w-full ${product.id === 1 ? 'h-72' : 'h-40'}`}
                   >
-                    <Image 
-                      src={product.image} 
+                    <Image
+                      src={product.image}
                       alt={product.name}
                       fill
                       style={{ objectFit: "contain" }}
                     />
                   </motion.div>
                 </div>
-                
+
                 <div className="flex justify-between items-center mt-auto">
                   <span className="font-bold text-white">{product.price}</span>
                   <Link href={`/product/${product.id}`}>
@@ -288,16 +331,16 @@ export default function ExploreProducts() {
                 </button>
               </Link>
             </div>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6, delay: 0.8 }}
               className="absolute right-2 bottom-0 h-32 w-32"
             >
               <div className="relative h-full w-full">
-                <Image 
-                  src="/accessory-promo.png" 
+                <Image
+                  src="/accessory-promo.png"
                   alt="Accessory Promotion"
                   fill
                   style={{ objectFit: "contain", objectPosition: "right bottom" }}
@@ -305,7 +348,7 @@ export default function ExploreProducts() {
               </div>
             </motion.div>
           </motion.div>
-          
+
           {/* View all button */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
