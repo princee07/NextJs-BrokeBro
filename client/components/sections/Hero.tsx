@@ -109,20 +109,67 @@ const Hero = () => {
 
   const brandCards = [
     {
-      name: 'lenovo',
-      logo: '/assets/images/figma.png',
-      gradient: 'from-blue-400 to-teal-300',
-      slug: 'autodesk',
-      discount: '60% OFF',
-      code: 'LENOVO60',
+      name: 'Akina',
+      logo: '/assets/images/akina.png',
+      gradient: 'from-white-500 to-teal-300',
+      slug: 'akina',
+      discount: '60% OFF'
     },
     {
-      name: 'GoIbibo',
-      logo: '/assets/images/goibibo.png',
+      name: 'just lil things',
+      logo: '/assets/images/justlilthings.png',
+      gradient: 'from-pink-400 to-teal-100',
+      slug: 'just lil things',
+      discount: '60% OFF'
+    },
+    {
+      name: 'lakme',
+      logo: '/assets/images/lakme.png',
+      gradient: 'from-purple-400 to-teal-300',
+      slug: 'lakme',
+      discount: '60% OFF'
+    },
+    {
+      name: 'soxytoes',
+      logo: '/assets/images/soxytoes.png',
       gradient: 'from-orange-500 to-red-400',
-      slug: 'goibibo',
-      discount: '₹1000 OFF',
-      code: 'GOIBIBO1000',
+      slug: 'soxytoes',
+      discount: '₹1000 OFF'
+    },
+    {
+      name: 'just lil things',
+      logo: '/assets/images/justlilthings.png',
+      gradient: 'from-pink-400 to-teal-100',
+      slug: 'just lil things',
+      discount: '60% OFF'
+    },
+    {
+      name: 'Ultimate Rides',
+      logo: '/assets/images/UltimateRC.png',
+      gradient: 'from-orange-500 to-red-400',
+      slug: 'Ultimate Rides',
+      discount: '₹1000 OFF'
+    },
+    {
+      name: 'glued',
+      logo: '/assets/images/glued.png',
+      gradient: 'from-orange-500 to-red-400',
+      slug: 'glued',
+      discount: '₹1000 OFF'
+    },
+    {
+      name: 'just lil things',
+      logo: '/assets/images/justlilthings.png',
+      gradient: 'from-pink-400 to-teal-100',
+      slug: 'just lil things',
+      discount: '60% OFF'
+    },
+    {
+      name: 'gamepalacio',
+      logo: '/assets/images/gamepalacio.png',
+      gradient: 'from-black to-yellow-600',
+      slug: 'gamepalacio',
+      discount: '₹1000 OFF'
     },
     {
       name: 'Unity',
@@ -521,8 +568,8 @@ const Hero = () => {
         {selectedBrand && (
           <div className="flex flex-col items-center text-center p-4">
             {/* Brand logo in a rounded rectangle */}
-            <div className="w-full max-w-xs h-24 bg-white rounded-xl flex items-center justify-center mb-4 shadow-lg">
-              <Image src={selectedBrand.logo} alt={selectedBrand.name} width={160} height={80} style={{ objectFit: 'contain', width: '100%', height: '80px' }} />
+            <div className="w-full max-w-xs h-40 bg-white rounded-xl flex items-center justify-center mb-4 shadow-lg">
+              <Image src={selectedBrand.logo} alt={selectedBrand.name} width={240} height={120} style={{ objectFit: 'contain', width: '100%', height: '120px' }} />
             </div>
             <h2 className="text-2xl font-extrabold mb-1 text-gray-100 drop-shadow">{selectedBrand.name} Student Discount</h2>
             <p className="text-lg font-semibold text-pink-400 mb-2">{selectedBrand.discount}</p>

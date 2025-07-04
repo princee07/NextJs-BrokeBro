@@ -74,7 +74,7 @@ const promotions = [
     color: 'bg-orange-500/20',
     textColor: 'text-orange-500',
     size: 'large',
-    image: 'https://soxytoes.com/cdn/shop/files/Theme_1A_Website.png?v=1697116566&width=2000'
+    image: 'https://m.media-amazon.com/images/S/aplus-media-library-service-media/63138ddf-610c-4663-9583-0ec71147a57e.__CR0,0,970,300_PT0_SX970_V1___.jpg'
   },
   {
     id: 'promo2',

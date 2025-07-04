@@ -266,33 +266,7 @@ const Footer = () => {
           </motion.div>
         </motion.div>
 
-        {/* Download App Banner */}
-        <motion.div
-          className="w-full mb-10 p-6 bg-gray-900 rounded-xl border border-gray-800 flex flex-col md:flex-row items-center justify-between"
-        >
-          <div className="mb-4 md:mb-0">
-            <h4 className="text-white font-bold text-lg">Download Our App</h4>
-            <p className="text-gray-400 text-sm">Shop easily and track your orders on the go</p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link href="#">
-              <Image 
-                src="/app-store-badge.png" 
-                alt="Download on App Store"
-                width={140}
-                height={42}
-              />
-            </Link>
-            <Link href="#">
-              <Image 
-                src="/google-play-badge.png" 
-                alt="Get it on Google Play"
-                width={140}
-                height={42}
-              />
-            </Link>
-          </div>
-        </motion.div>
+      
 
         {/* Bottom Footer */}
         <div className="pt-8 border-t border-gray-800">
