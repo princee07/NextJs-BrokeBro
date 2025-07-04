@@ -6,7 +6,8 @@ const nextConfig: NextConfig = {
       "public.blob.vercel-storage.com",
       "hebbkx1anhila5yf.public.blob.vercel-storage.com",
       "lh3.googleusercontent.com", "i.pravatar.cc",
-      'randomuser.me'
+      'randomuser.me',
+      'm.media-amazon.com',
    ],
   
   },
