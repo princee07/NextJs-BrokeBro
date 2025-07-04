@@ -136,6 +136,13 @@ const Hero = () => {
       discount: '₹1000 OFF'
     },
     {
+      name: 'just lil things',
+      logo: '/assets/images/justlilthings.png',
+      gradient: 'from-pink-400 to-teal-100',
+      slug: 'just lil things',
+      discount: '60% OFF'
+    },
+    {
       name: 'Ultimate Rides',
       logo: '/assets/images/UltimateRC.png',
       gradient: 'from-orange-500 to-red-400',
@@ -148,6 +155,13 @@ const Hero = () => {
       gradient: 'from-orange-500 to-red-400',
       slug: 'glued',
       discount: '₹1000 OFF'
+    },
+    {
+      name: 'just lil things',
+      logo: '/assets/images/justlilthings.png',
+      gradient: 'from-pink-400 to-teal-100',
+      slug: 'just lil things',
+      discount: '60% OFF'
     },
     {
       name: 'gamepalacio',
