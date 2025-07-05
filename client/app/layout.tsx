@@ -3,7 +3,7 @@ import "./styles/global.css";
 import NavbarWrapper from "@/components/layout/NavbarWrapper";
 import Footer from "@/components/layout/Footer";
 import ReferralProcessor from "@/components/auth/ReferralProcessor";
-
+import { Analytics } from "@vercel/analytics/next"
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
