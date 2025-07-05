@@ -320,7 +320,9 @@ export default function ProfileClient({ user }: { user: any }) {
 
                   {/* QR Code */}
                   <div className="bg-white p-3 rounded-md">
-                    <QRCode value={qrCodeData} size={110} />
+                
+<QRCode value={qrCodeData} size={110} title="QR Code" />
+
                   </div>
                 </div>
               </div>
