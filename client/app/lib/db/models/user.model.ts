@@ -8,6 +8,9 @@ export interface IUser extends Document {
   referralCode: string;
   coins: number;
   referredBy?: string;
+  resumeFileName?: string;
+  resumeFilePath?: string;
+  resumeUploadDate?: Date;
   createdAt?: Date;
   updatedAt?: Date;
   // ...add other fields as needed
@@ -25,6 +28,9 @@ const UserSchema: Schema = new Schema<IUser>({
   },
   coins: { type: Number, default: 0 },
   referredBy: { type: String, default: null },
+  resumeFileName: { type: String, default: null },
+  resumeFilePath: { type: String, default: null },
+  resumeUploadDate: { type: Date, default: null },
   // ...add other fields as needed
 }, {
   timestamps: true, // This adds createdAt and updatedAt automatically

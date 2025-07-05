@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { writeFile, mkdir } from 'fs/promises';
+import { writeFile, mkdir, unlink } from 'fs/promises';
 import path from 'path';
+import dbConnect from "@/app/lib/db/connect";
+import User from "@/app/lib/db/models/user.model";
 
 export async function POST(request: NextRequest) {
     try {
         // Check if user is authenticated
         const { getUser } = getKindeServerSession();
-        const user = await getUser();
+        const kindeUser = await getUser();
 
-        if (!user) {
+        if (!kindeUser) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
@@ -31,6 +33,24 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'File size exceeds 5MB limit' }, { status: 400 });
         }
 
+        // Connect to database
+        await dbConnect();
+
+        // Find user in database
+        const user = await User.findOne({ email: kindeUser.email });
+        if (!user) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        }
+
+        // Delete old resume file if exists
+        if (user.resumeFilePath) {
+            try {
+                await unlink(user.resumeFilePath);
+            } catch (error) {
+                console.log('Old resume file not found or already deleted');
+            }
+        }
+
         // Create uploads directory if it doesn't exist
         const uploadsDir = path.join(process.cwd(), 'uploads', 'resumes');
         try {
@@ -42,7 +62,7 @@ export async function POST(request: NextRequest) {
         // Generate unique filename
         const timestamp = Date.now();
         const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-        const filename = `${user.id}_${timestamp}_${originalName}`;
+        const filename = `${kindeUser.id}_${timestamp}_${originalName}`;
         const filepath = path.join(uploadsDir, filename);
 
         // Save file
@@ -50,15 +70,12 @@ export async function POST(request: NextRequest) {
         const buffer = Buffer.from(bytes);
         await writeFile(filepath, buffer);
 
-        // TODO: Save file info to database
-        // You might want to store:
-        // - user_id
-        // - original_filename
-        // - stored_filename
-        // - file_path
-        // - file_size
-        // - upload_date
-        // - file_type
+        // Update user record with resume info
+        await User.findByIdAndUpdate(user._id, {
+            resumeFileName: filename,
+            resumeFilePath: filepath,
+            resumeUploadDate: new Date()
+        });
 
         return NextResponse.json({
             message: 'Resume uploaded successfully',
@@ -78,17 +95,28 @@ export async function GET(request: NextRequest) {
     try {
         // Check if user is authenticated
         const { getUser } = getKindeServerSession();
-        const user = await getUser();
+        const kindeUser = await getUser();
 
-        if (!user) {
+        if (!kindeUser) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        // TODO: Fetch user's uploaded resumes from database
-        // For now, return empty array
+        // Connect to database
+        await dbConnect();
+
+        // Find user in database
+        const user = await User.findOne({ email: kindeUser.email });
+        if (!user) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        }
 
         return NextResponse.json({
-            resumes: []
+            resumes: user.resumeFileName ? [{
+                filename: user.resumeFileName,
+                uploadDate: user.resumeUploadDate,
+                hasResume: true
+            }] : [],
+            hasResume: !!(user.resumeFileName && user.resumeFilePath)
         });
 
     } catch (error) {
@@ -101,21 +129,36 @@ export async function DELETE(request: NextRequest) {
     try {
         // Check if user is authenticated
         const { getUser } = getKindeServerSession();
-        const user = await getUser();
+        const kindeUser = await getUser();
 
-        if (!user) {
+        if (!kindeUser) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { searchParams } = new URL(request.url);
-        const filename = searchParams.get('filename');
+        // Connect to database
+        await dbConnect();
 
-        if (!filename) {
-            return NextResponse.json({ error: 'Filename not provided' }, { status: 400 });
+        // Find user in database
+        const user = await User.findOne({ email: kindeUser.email });
+        if (!user) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
 
-        // TODO: Delete file from filesystem and database record
-        // Verify user owns the file before deleting
+        // Delete file from filesystem
+        if (user.resumeFilePath) {
+            try {
+                await unlink(user.resumeFilePath);
+            } catch (error) {
+                console.log('Resume file not found or already deleted');
+            }
+        }
+
+        // Remove resume info from user record
+        await User.findByIdAndUpdate(user._id, {
+            resumeFileName: null,
+            resumeFilePath: null,
+            resumeUploadDate: null
+        });
 
         return NextResponse.json({
             message: 'Resume deleted successfully'

@@ -32,6 +32,9 @@ export async function GET(request: NextRequest) {
                 coins: user.coins || 0,
                 referralCode: user.referralCode,
                 image: user.image,
+                hasResume: !!(user.resumeFileName && user.resumeFilePath),
+                resumeFileName: user.resumeFileName,
+                resumeUploadDate: user.resumeUploadDate,
             },
             coins: user.coins || 0, // Backward compatibility
         });
