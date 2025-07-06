@@ -1,6 +1,7 @@
 import { VerificationStatus } from '@/types/verification';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { addVerificationToMemory, getVerificationsFromMemory } from './memory-storage';
 
 // Path to store verification data (in production, use a real database)
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -31,16 +32,29 @@ export async function getAllVerifications(): Promise<VerificationStatus[]> {
         // Check if we're in a production environment
         const isProduction = process.env.NODE_ENV === 'production';
         const isVercel = process.env.VERCEL === '1';
+        const isReadOnlyFS = process.env.VERCEL_ENV || process.env.RENDER || process.env.NETLIFY;
 
-        if (isVercel || isProduction) {
-            // In production, return mock data or fetch from actual database
-            console.log('Production environment - returning mock verification data');
+        console.log('🔍 Environment check:', {
+            NODE_ENV: process.env.NODE_ENV,
+            VERCEL: process.env.VERCEL,
+            VERCEL_ENV: process.env.VERCEL_ENV,
+            isProduction,
+            isVercel,
+            isReadOnlyFS
+        });
 
-            // TODO: Replace with actual database query
-            // Example: return await db.verifications.findMany();
+        if (isVercel || isProduction || isReadOnlyFS) {
+            // In production, use in-memory storage
+            console.log('🔴 Production environment - retrieving from memory storage');
+            const memoryVerifications = getVerificationsFromMemory();
+            console.log('🔴 Retrieved from memory:', memoryVerifications.length, 'verifications');
 
-            // Return empty array for now in production
-            return [];
+            // Convert string dates back to Date objects
+            return memoryVerifications.map((v: any) => ({
+                ...v,
+                submittedAt: new Date(v.submittedAt),
+                reviewedAt: v.reviewedAt ? new Date(v.reviewedAt) : undefined,
+            }));
         }
 
         // Development/local environment - use file system
@@ -63,7 +77,7 @@ export async function getAllVerifications(): Promise<VerificationStatus[]> {
 // Save a new verification
 export async function saveVerification(verification: VerificationStatus): Promise<void> {
     try {
-        console.log('Attempting to save verification...');
+        console.log('🚀 Attempting to save verification...');
 
         // For production environments that don't support file system writes,
         // you can implement alternative storage here:
@@ -74,14 +88,25 @@ export async function saveVerification(verification: VerificationStatus): Promis
         // Check if we're in a production environment with read-only filesystem
         const isProduction = process.env.NODE_ENV === 'production';
         const isVercel = process.env.VERCEL === '1';
+        const isReadOnlyFS = process.env.VERCEL_ENV || process.env.RENDER || process.env.NETLIFY;
 
-        if (isVercel || isProduction) {
-            // In production, log the verification instead of saving to file
-            console.log('Production environment detected - logging verification:');
-            console.log(JSON.stringify(verification, null, 2));
+        console.log('🔍 Save environment check:', {
+            NODE_ENV: process.env.NODE_ENV,
+            VERCEL: process.env.VERCEL,
+            VERCEL_ENV: process.env.VERCEL_ENV,
+            isProduction,
+            isVercel,
+            isReadOnlyFS
+        });
 
-            // TODO: Replace with actual database save
-            // Example: await db.verifications.create({ data: verification });
+        if (isVercel || isProduction || isReadOnlyFS) {
+            // In production, save to memory storage
+            console.log('🟠 Production environment detected - saving to memory storage:');
+            console.log('🟠 Verification ID:', verification.id);
+            console.log('🟠 Student name:', verification.studentData.studentName);
+
+            addVerificationToMemory(verification);
+            console.log('🟠 Successfully added to memory storage');
             return;
         }
 
@@ -102,6 +127,31 @@ export async function updateVerificationStatus(
     adminNotes?: string
 ): Promise<boolean> {
     try {
+        const isProduction = process.env.NODE_ENV === 'production';
+        const isVercel = process.env.VERCEL === '1';
+        const isReadOnlyFS = process.env.VERCEL_ENV || process.env.RENDER || process.env.NETLIFY;
+
+        if (isVercel || isProduction || isReadOnlyFS) {
+            // In production, update in memory storage
+            const verifications = getVerificationsFromMemory();
+            const index = verifications.findIndex(v => v.id === verificationId);
+
+            if (index === -1) {
+                return false;
+            }
+
+            verifications[index] = {
+                ...verifications[index],
+                status,
+                reviewedAt: new Date(),
+                adminNotes,
+            };
+
+            console.log('Updated verification in memory storage:', verificationId);
+            return true;
+        }
+
+        // Development/local environment - use file system
         const verifications = await getAllVerifications();
         const index = verifications.findIndex(v => v.id === verificationId);
 

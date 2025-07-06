@@ -18,7 +18,10 @@ export async function GET(request: NextRequest) {
         const limit = parseInt(searchParams.get('limit') || '10');
 
         // Get all verifications from database
+        console.log('🟡 Admin API: Fetching verifications...');
         const allVerifications = await getAllVerifications();
+        console.log('🟡 Admin API: Retrieved verifications count:', allVerifications.length);
+        console.log('🟡 Admin API: Verification IDs:', allVerifications.map(v => v.id));
 
         // Filter by status if provided
         let filteredVerifications = allVerifications;
