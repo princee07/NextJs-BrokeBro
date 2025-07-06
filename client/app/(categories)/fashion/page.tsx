@@ -1,6 +1,6 @@
 "use client";
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaHeart, FaRegHeart, FaTshirt, FaShoePrints, FaTags, FaRunning, FaFire } from 'react-icons/fa';
 import { MdOutlineCategory } from 'react-icons/md';
 import { motion, RepeatType } from 'framer-motion';
@@ -18,19 +18,41 @@ const banners = [
   {
     title: 'GET UP TO 50%',
     subtitle: 'For the holiday season',
-    img: '/assets/images/fashion-hero-1.png',
+    img: '/assets/banners/Biba.png',
     bg: 'bg-yellow-100',
   },
   {
     title: 'GET UP TO 30% OFF SHIRTS',
-    img: '/assets/images/fashion-hero-2.png',
+    subtitle: 'Premium collection',
+    img: '/assets/banners/soxytoes.png',
     bg: 'bg-blue-100',
+  },
+  {
+    title: 'SWISS BEAUTY DEALS',
+    subtitle: 'Beauty products at best prices',
+    img: '/assets/banners/swissbeauty.png',
+    bg: 'bg-pink-100',
+  },
+  {
+    title: 'CLOVE DENTAL CARE',
+    subtitle: 'Student health offers',
+    img: '/assets/banners/clove.png',
+    bg: 'bg-green-100',
+  },
+  {
+    title: 'HK VITALS SUPPLEMENTS',
+    subtitle: 'Health & wellness deals',
+    img: '/assets/banners/hkvitals.png',
+    bg: 'bg-purple-100',
   },
 ];
 
 const newInProducts = [
-  { name: 'Nike React Art3mis', price: '$99', oldPrice: '$150', img: '/assets/images/fashion-hero-3.png' },
-  { name: 'Blazer Mid Vintage 77', price: '$249', oldPrice: '$300', img: '/assets/images/fashion-hero-4.png' },
+  { name: 'Myntra Premium Collection', price: '$99', oldPrice: '$150', img: '/assets/images/myntra.png' },
+  { name: 'Nike Premium Collection', price: '$89', oldPrice: '$120', img: '/assets/images/nike1.jpg' },
+  { name: 'Swiss Beauty Essentials', price: '$49', oldPrice: '$70', img: '/assets/images/swissbeauty.png' },
+  { name: 'Lakme Beauty Kit', price: '$65', oldPrice: '$90', img: '/assets/images/lakme.png' },
+  { name: 'Soxytoes Fashion', price: '$35', oldPrice: '$50', img: '/assets/images/soxytoes.png' },
 ];
 
 const sportsWear = [
@@ -65,44 +87,54 @@ const categoryLayouts: Record<string, {
       {
         title: 'New Arrivals',
         subtitle: 'Latest fashion just for you',
-        img: '/assets/images/fashion-hero-1.png',
+        img: '/assets/images/nike1.jpg',
         bg: 'bg-yellow-100',
       },
       {
         title: 'Fresh Styles',
         subtitle: 'Handpicked for you',
-        img: '/assets/images/fashion-hero-2.png',
+        img: '/assets/images/soxytoes.png',
         bg: 'bg-blue-100',
       },
     ],
     gallery: [
-      { img: '/assets/images/fashion-hero-3.png', alt: 'Gallery 1' },
-      { img: '/assets/images/fashion-hero-4.png', alt: 'Gallery 2' },
+      { img: '/assets/images/myntra.png', alt: 'Myntra Fashion' },
+      { img: '/assets/images/nike1.jpg', alt: 'Nike Collection' },
+      { img: '/assets/images/soxytoes.png', alt: 'Soxytoes Fashion' },
+      { img: '/assets/images/swissbeauty.png', alt: 'Swiss Beauty' },
+      { img: '/assets/images/lakme.png', alt: 'Lakme Cosmetics' },
+      { img: '/assets/images/MARScosmetics.png', alt: 'Mars Cosmetics' },
+      { img: '/assets/images/justlilthings.png', alt: 'Just Lil Things' },
+      { img: '/assets/images/myntra.png', alt: 'Fashion Accessories' },
     ],
     products: newInProducts,
   },
   clothing: {
     banners: [
       {
-        title: 'Clothing Brands',
+        title: 'Myntra Fashion',
         subtitle: 'Trendy outfits from top brands',
-        img: '/assets/images/fashion-hero-2.png',
+        img: '/assets/images/myntra.png',
         bg: 'bg-blue-100',
       },
       {
         title: 'Premium Fabrics',
         subtitle: 'Feel the difference',
-        img: '/assets/images/fashion-hero-1.png',
+        img: '/assets/images/soxytoes.png',
         bg: 'bg-pink-100',
       },
     ],
     gallery: [
-      { img: '/assets/images/fashion-hero-3.png', alt: 'Clothing Gallery 1' },
-      { img: '/assets/images/fashion-hero-4.png', alt: 'Clothing Gallery 2' },
+      { img: '/assets/images/myntra.png', alt: 'Myntra Fashion' },
+      { img: '/assets/images/soxytoes.png', alt: 'Soxytoes Collection' },
+      { img: '/assets/images/nike1.jpg', alt: 'Nike Fashion' },
+      { img: '/assets/images/justlilthings.png', alt: 'Just Lil Things' },
     ],
     products: [
-      { name: 'Zara Classic Tee', price: '$39', oldPrice: '$49', img: '/assets/images/fashion-hero-3.png' },
-      { name: 'H&M Denim Jacket', price: '$89', oldPrice: '$120', img: '/assets/images/fashion-hero-4.png' },
+      { name: 'Myntra Fashion Collection', price: '$89', oldPrice: '$120', img: '/assets/images/myntra.png' },
+      { name: 'Soxytoes Classic Tee', price: '$39', oldPrice: '$49', img: '/assets/images/soxytoes.png' },
+      { name: 'Nike Fashion Line', price: '$65', oldPrice: '$85', img: '/assets/images/nike1.jpg' },
+      { name: 'Just Lil Things Style', price: '$45', oldPrice: '$60', img: '/assets/images/justlilthings.png' },
     ],
   },
   shoes: {
@@ -134,23 +166,27 @@ const categoryLayouts: Record<string, {
       {
         title: 'Accessories',
         subtitle: 'Complete your look',
-        img: '/assets/images/glasses.png',
+        img: '/assets/images/justlilthings.png',
         bg: 'bg-green-100',
       },
       {
-        title: 'Watches & More',
+        title: 'Myntra Fashion',
         subtitle: 'Style in every detail',
-        img: '/assets/images/fashion-hero-1.png',
+        img: '/assets/images/myntra.png',
         bg: 'bg-blue-100',
       },
     ],
     gallery: [
-      { img: '/assets/images/glasses.png', alt: 'Accessories Gallery 1' },
-      { img: '/assets/images/fashion-hero-2.png', alt: 'Accessories Gallery 2' },
+      { img: '/assets/images/myntra.png', alt: 'Myntra Collection' },
+      { img: '/assets/images/justlilthings.png', alt: 'Fashion Accessories' },
+      { img: '/assets/images/soxytoes.png', alt: 'Soxytoes Accessories' },
+      { img: '/assets/images/nike1.jpg', alt: 'Nike Accessories' },
     ],
     products: [
-      { name: 'Ray-Ban Sunglasses', price: '$150', oldPrice: '$200', img: '/assets/images/glasses.png' },
-      { name: 'Fossil Watch', price: '$199', oldPrice: '$250', img: '/assets/images/fashion-hero-1.png' },
+      { name: 'Myntra Fashion Collection', price: '$150', oldPrice: '$200', img: '/assets/images/myntra.png' },
+      { name: 'Just Lil Things Accessories', price: '$199', oldPrice: '$250', img: '/assets/images/justlilthings.png' },
+      { name: 'Soxytoes Accessories', price: '$45', oldPrice: '$60', img: '/assets/images/soxytoes.png' },
+      { name: 'Nike Style Accessories', price: '$85', oldPrice: '$110', img: '/assets/images/nike1.jpg' },
     ],
   },
   activewear: {
@@ -204,10 +240,31 @@ const FashionPage = () => {
   const [selectedGender, setSelectedGender] = useState('women');
   const [selectedCategory, setSelectedCategory] = useState('newin');
   const [favourites, setFavourites] = useState<Record<string, boolean>>({});
+  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const toggleFav = (name: string) => {
     setFavourites((prev) => ({ ...prev, [name]: !prev[name] }));
   };
+
+  // Filter products based on search query
+  const filteredProducts = categoryLayouts[selectedCategory].products.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Clear search when changing categories
+  useEffect(() => {
+    setSearchQuery('');
+  }, [selectedCategory]);
+
+  // Auto-slide banner effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBannerIndex((prev) => (prev + 1) % banners.length);
+    }, 4000); // Change banner every 4 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="flex flex-col pt-64 relative overflow-x-hidden overflow-y-hidden bg-gradient-to-br from-slate-900 via-gray-900 to-indigo-900 transition-colors duration-1000">
@@ -228,50 +285,72 @@ const FashionPage = () => {
         animate="animate"
       />
 
-      {/* Hero Banner */}
+      {/* Auto-Sliding Hero Banner */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         className="w-full flex flex-col items-center justify-center px-2 mb-10 z-10"
       >
-        <div className="w-full max-w-6xl rounded-[2.5rem] bg-gradient-to-r from-pink-200 via-purple-200 to-blue-100 shadow-2xl p-12 relative overflow-hidden flex flex-col md:flex-row items-center gap-8">
-          {/* Decorative images left */}
+        <div className="w-full max-w-6xl rounded-[2.5rem] shadow-2xl relative overflow-hidden min-h-[400px]">
+          {/* Background Image - Full Container */}
           <motion.div
-            className="hidden md:block absolute left-0 top-0 w-44 h-44 z-0"
-            initial={{ opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
+            key={`bg-${currentBannerIndex}`}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.8 }}
+            className="absolute inset-0 z-0"
           >
-            <Image src="/assets/images/fashion-hero-1.png" alt="Decor Left" width={176} height={176} className="object-contain opacity-80 drop-shadow-2xl" />
+            <Image
+              src={banners[currentBannerIndex].img}
+              alt={banners[currentBannerIndex].title}
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority
+            />
+            {/* Overlay for better text readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"></div>
           </motion.div>
-          {/* Main Banner Content */}
-          <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center">
-            <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4 tracking-tight" style={{ letterSpacing: '0.04em' }}>DISCOUNTS UP TO 50% FROM<br />ANSWEAR CLUB ORIGINAL GOODS</h1>
-            <div className="text-lg md:text-2xl text-gray-700 font-semibold mb-2">PROMOCODE: <span className="font-bold text-black">10030</span></div>
+
+          {/* Content Overlay */}
+          <motion.div
+            key={currentBannerIndex}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.8 }}
+            className="relative z-10 flex flex-col justify-center items-start text-left p-12 h-full min-h-[400px]"
+          >
+            <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 tracking-tight drop-shadow-2xl">
+              {banners[currentBannerIndex].title}
+            </h1>
+            <div className="text-lg md:text-2xl text-white/90 font-semibold mb-6 drop-shadow-lg">
+              {banners[currentBannerIndex].subtitle}
+            </div>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.97 }}
-              className="mt-4 px-10 py-4 bg-black text-white rounded-full font-semibold shadow hover:bg-gray-800 transition text-xl"
-            >Shop now</motion.button>
+              className="mt-4 px-10 py-4 bg-white text-black rounded-full font-semibold shadow-xl hover:bg-gray-100 transition text-xl"
+            >
+              Shop now
+            </motion.button>
+          </motion.div>
+
+          {/* Banner Indicators */}
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+            {banners.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentBannerIndex(index)}
+                className={`w-3 h-3 rounded-full transition-all ${index === currentBannerIndex
+                  ? 'bg-gray-800 scale-125'
+                  : 'bg-gray-400 hover:bg-gray-600'
+                  }`}
+              />
+            ))}
           </div>
-          {/* Decorative images right */}
-          <motion.div
-            className="hidden md:block absolute right-0 top-0 w-44 h-44 z-0"
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <Image src="/assets/images/fashion-hero-2.png" alt="Decor Right" width={176} height={176} className="object-contain opacity-80 drop-shadow-2xl" />
-          </motion.div>
-          {/* Animated Glasses */}
-          <motion.div
-            className="absolute left-1/2 bottom-0 -translate-x-1/2 z-10"
-            animate={{ y: [0, -16, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <Image src="/assets/images/glasses.png" alt="Glasses" width={60} height={32} className="object-contain" />
-          </motion.div>
         </div>
       </motion.div>
 
@@ -289,12 +368,24 @@ const FashionPage = () => {
               </button>
             ))}
           </div>
-          <input
-            type="text"
-            placeholder="Search for items, brands and inspiration..."
-            className="flex-1 bg-transparent px-4 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-400 text-gray-700 placeholder-gray-400"
-            style={{ minWidth: 0 }}
-          />
+          <div className="flex-1 relative">
+            <input
+              type="text"
+              placeholder="Search for items, brands and inspiration..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-transparent px-4 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-400 text-gray-700 placeholder-gray-400"
+              style={{ minWidth: 0 }}
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                ✕
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -339,43 +430,63 @@ const FashionPage = () => {
           </div>
           {/* Category-specific Gallery */}
           {categoryLayouts[selectedCategory].gallery && (
-            <div className="flex flex-wrap gap-10 justify-center my-10">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 my-10">
               {categoryLayouts[selectedCategory].gallery!.map((img, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 * i, duration: 0.6 }}
-                  className="rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-slate-900 via-gray-900 to-indigo-900"
+                  className="rounded-2xl overflow-hidden shadow-xl bg-gradient-to-br from-slate-900 via-gray-900 to-indigo-900 hover:scale-105 transition-transform duration-300"
                 >
-                  <Image src={img.img} alt={img.alt} width={320} height={220} className="object-contain bg-gray-900/40 p-2" />
+                  <div className="relative w-full h-48">
+                    <Image
+                      src={img.img}
+                      alt={img.alt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                    <div className="absolute bottom-2 left-2 text-white text-sm font-medium drop-shadow-lg">
+                      {img.alt}
+                    </div>
+                  </div>
                 </motion.div>
               ))}
             </div>
           )}
           {/* Category-specific Products */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {categoryLayouts[selectedCategory].products.map((prod: any, i: number) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + i * 0.1, duration: 0.7 }}
-                className="bg-gradient-to-br from-slate-900/80 via-indigo-900/80 to-gray-900/80 rounded-2xl shadow-xl p-7 flex flex-col items-center relative group transition-all hover:scale-105 hover:shadow-2xl border border-indigo-900/40"
-              >
-                <div className="absolute top-3 right-3 cursor-pointer z-10" onClick={() => toggleFav(prod.name)}>
-                  {favourites[prod.name] ? <FaHeart className="text-pink-400 text-xl drop-shadow" /> : <FaRegHeart className="text-gray-300 text-xl" />}
-                </div>
-                <Image src={prod.img} alt={prod.name} width={120} height={120} className="object-contain rounded-xl mb-2 drop-shadow-xl" />
-                <div className="text-center">
-                  <h4 className="font-semibold text-indigo-100 text-base mb-1 drop-shadow">{prod.name}</h4>
-                  <div className="flex items-center justify-center gap-2">
-                    {prod.oldPrice && <span className="text-indigo-400/60 line-through text-sm">{prod.oldPrice}</span>}
-                    <span className="text-indigo-100 font-bold text-lg">{prod.price}</span>
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map((prod: any, i: number) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 + i * 0.1, duration: 0.7 }}
+                  className="bg-gradient-to-br from-slate-900/80 via-indigo-900/80 to-gray-900/80 rounded-2xl shadow-xl p-7 flex flex-col items-center relative group transition-all hover:scale-105 hover:shadow-2xl border border-indigo-900/40"
+                >
+                  <div className="absolute top-3 right-3 cursor-pointer z-10" onClick={() => toggleFav(prod.name)}>
+                    {favourites[prod.name] ? <FaHeart className="text-pink-400 text-xl drop-shadow" /> : <FaRegHeart className="text-gray-300 text-xl" />}
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                  <Image src={prod.img} alt={prod.name} width={120} height={120} className="object-contain rounded-xl mb-2 drop-shadow-xl" />
+                  <div className="text-center">
+                    <h4 className="font-semibold text-indigo-100 text-base mb-1 drop-shadow">{prod.name}</h4>
+                    <div className="flex items-center justify-center gap-2">
+                      {prod.oldPrice && <span className="text-indigo-400/60 line-through text-sm">{prod.oldPrice}</span>}
+                      <span className="text-indigo-100 font-bold text-lg">{prod.price}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
+                <div className="text-6xl mb-4 opacity-30">🔍</div>
+                <h3 className="text-2xl font-bold text-indigo-100 mb-2">No products found</h3>
+                <p className="text-indigo-300">Try searching with different keywords or browse other categories</p>
+              </div>
+            )}
           </div>
         </main>
       </div>
