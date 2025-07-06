@@ -216,22 +216,177 @@ export default function ExploreProducts() {
     ? products
     : products.filter(product => product.category === selectedCategory);
 
-  // Enhanced banner images for different categories - Only banners, no logos
-  const categoryBanners: { [key: string]: string[] } = {
-    'Fashion': ['/assets/images/myntra.png', '/assets/images/nike1.jpg', '/assets/banners/Biba.png'],
-    'Tech': ['/assets/laptops/laptopbanner.png', '/assets/images/msoffice.jpg', '/assets/images/realme.jpg'],
-    'Beauty': ['/assets/banners/swissbeauty.png', '/assets/images/lakme.png', '/assets/images/MARScosmetics.png'],
-    'Gaming': ['/assets/laptops/laptopbanner.png', '/assets/banners/glued.png', '/assets/images/gamepalacio.png'],
-    'Accessories': ['/assets/banners/soxytoes.png', '/assets/banners/jewelry.png', '/assets/images/justlilthings.png'],
-    'Health': ['/assets/banners/hkvitals.png', '/assets/banners/clove.png'],
-    'Lifestyle': ['/assets/banners/Biba.png', '/assets/banners/jewelry.png', '/assets/images/kfc.png', '/assets/images/goibibo.png', '/assets/images/spicejet.jpg']
+  // Enhanced banner images for different categories - All brand assets
+  const categoryBanners: { [key: string]: Array<{ image: string, url?: string, brand?: string }> } = {
+    'Fashion': [
+      // Main Fashion Banners
+      { image: '/assets/banners/Biba.png', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
+      { image: '/assets/banners/soxytoes.png', brand: 'Soxytoes' },
+      { image: '/assets/banners/jewelry.png', brand: 'Jewelry' },
+
+      // Biba Collection - All Images (Clickable)
+      { image: '/assets/biba/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
+      { image: '/assets/biba/300x2500.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
+      { image: '/assets/biba/250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
+      { image: '/assets/biba/200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
+
+      // Levis Collection - All Images (Clickable)
+      { image: '/assets/levis/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
+      { image: '/assets/levis/300x300.png', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
+      { image: '/assets/levis/300x300.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
+      { image: '/assets/levis/250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
+      { image: '/assets/levis/200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
+
+      // Fastrack Collection - All Images
+      { image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_300x250.jpeg', brand: 'Fastrack' },
+      { image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x250.jpeg', brand: 'Fastrack' },
+      { image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x200.jpeg', brand: 'Fastrack' },
+
+      // Legacy Fashion Items
+      { image: '/assets/images/myntra.png', brand: 'Myntra' },
+      { image: '/assets/images/nike1.jpg', brand: 'Nike' }
+    ], 'Tech': [
+      // Main Tech Banners (Clickable)
+      { image: '/assets/banners/samsung.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
+      { image: '/assets/banners/moglix.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix' },
+      { image: '/assets/laptops/laptopbanner.png', brand: 'Laptops' },
+
+      // Samsung Collection - All Images (Clickable)
+      { image: '/assets/samsung/Samsung_CPS_Get_Galaxy_S23_FE_avil_benefits_upto_Rs.14399_300x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
+      { image: '/assets/samsung/Samsung_CPS_Get_Galaxy_S23_FE_avil_benefits_upto_Rs.14399_250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
+      { image: '/assets/samsung/Samsung_CPS_Get_Galaxy_S23_FE_avil_benefits_upto_Rs.14399_200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
+      { image: '/assets/samsung/24318_KV_Ultra_Banner_336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
+      { image: '/assets/samsung/24318_KV_Ultra_Banner_300x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
+      { image: '/assets/samsung/24318_KV_Ultra_Banner_300x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
+      { image: '/assets/samsung/24318_KV_Ultra_Banner_250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
+      { image: '/assets/samsung/24318_KV_Ultra_Banner_200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
+      { image: '/assets/samsung/24318_KV_Ultra_Banner_160x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
+      { image: '/assets/samsung/24318_KV_Ultra_Banner_120x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
+
+      // Moglix Collection - All Images (Clickable)
+      { image: '/assets/moglix/480x320.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix' },
+      { image: '/assets/moglix/360x240.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix' },
+      { image: '/assets/moglix/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix' },
+      { image: '/assets/moglix/300x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix' },
+      { image: '/assets/moglix/250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix' },
+      { image: '/assets/moglix/200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix' },
+
+      // Legacy Tech Items
+      { image: '/assets/images/msoffice.jpg', brand: 'Microsoft Office' },
+      { image: '/assets/images/realme.jpg', brand: 'Realme' }
+    ], 'Beauty': [
+      // Main Beauty Banners (Clickable)
+      { image: '/assets/banners/swissbeauty.png', url: 'https://track.vcommission.com/click?campaign_id=12372&pub_id=120422', brand: 'Swiss Beauty' },
+
+      // Lakme Collection - All Images
+      { image: '/assets/lakme/image.png', brand: 'Lakme' },
+      { image: '/assets/lakme/image2.png', brand: 'Lakme' },
+
+      // Legacy Beauty Items
+      { image: '/assets/images/lakme.png', brand: 'Lakme' },
+      { image: '/assets/images/MARScosmetics.png', brand: 'MARS Cosmetics' }
+    ], 'Gaming': [
+      // Main Gaming Banners
+      { image: '/assets/banners/glued.png', brand: 'Glued' },
+      { image: '/assets/laptops/laptopbanner.png', brand: 'Gaming Laptops' },
+
+      // Samsung Gaming Devices - Multiple Formats (Clickable)
+      { image: '/assets/samsung/24318_KV_Ultra_Banner_300x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung Gaming' },
+      { image: '/assets/samsung/24318_KV_Ultra_Banner_300x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung Gaming' },
+      { image: '/assets/samsung/24318_KV_Ultra_Banner_160x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung Gaming' },
+      { image: '/assets/samsung/24318_KV_Ultra_Banner_120x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung Gaming' },
+
+      // Legacy Gaming Items
+      { image: '/assets/images/gamepalacio.png', brand: 'Game Palacio' }
+    ],
+    'Accessories': [
+      // Main Accessories Banners
+      { image: '/assets/banners/soxytoes.png', brand: 'Soxytoes' },
+      { image: '/assets/banners/jewelry.png', brand: 'Jewelry' },
+
+      // Fastrack Accessories - All Images
+      { image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_300x250.jpeg', brand: 'Fastrack' },
+      { image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x250.jpeg', brand: 'Fastrack' },
+      { image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x200.jpeg', brand: 'Fastrack' },
+
+      // Salty Collection - All Images (Clickable)
+      { image: '/assets/salty/468x60.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
+      { image: '/assets/salty/300x300.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
+      { image: '/assets/salty/250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
+      { image: '/assets/salty/200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
+      { image: '/assets/salty/160x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
+
+      // Legacy Accessories
+      { image: '/assets/images/justlilthings.png', brand: 'Just Lil Things' }
+    ], 'Health': [
+      // Main Health Banners (Clickable)
+      { image: '/assets/banners/hkvitals.png', brand: 'HK Vitals' },
+      { image: '/assets/banners/clove.png', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+
+      // Clove Collection - All Images (Premium Healthcare - Clickable)
+      { image: '/assets/clove/336x280d.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/336x280b.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/336x280-h.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/336x280-a.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/336X280.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/300x300-t.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/300x300-g.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/300x300-c.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/300x300-b.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/300x300-a.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/300X300.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/300x250b.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/300x250-h.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/300x250-d.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/300X250-1.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/300X250.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/250x250c.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/250x250-h.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/250x250-a.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/250-x250-b.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/250X250.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/200x200s.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/200x200b.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/200x200-h.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/200x200-a.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
+      { image: '/assets/clove/200X200.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' }
+    ],
+    'Lifestyle': [
+      // Biba Lifestyle (Clickable)
+      { image: '/assets/banners/Biba.png', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
+      { image: '/assets/biba/200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
+      { image: '/assets/biba/250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
+      { image: '/assets/biba/300x2500.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
+      { image: '/assets/biba/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },      // Levis Lifestyle - All Images (Clickable)
+      { image: '/assets/levis/300x300.png', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
+      { image: '/assets/levis/300x300.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
+      { image: '/assets/levis/250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
+      { image: '/assets/levis/200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
+      { image: '/assets/levis/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
+
+      // Salty Lifestyle Products - All Images (Clickable)
+      { image: '/assets/salty/468x60.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
+      { image: '/assets/salty/300x300.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
+      { image: '/assets/salty/250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
+      { image: '/assets/salty/200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
+      { image: '/assets/salty/160x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
+
+      // Other Lifestyle Brands
+      { image: '/assets/banners/jewelry.png', brand: 'Jewelry' },
+      { image: '/assets/banners/soxytoes.png', brand: 'Soxytoes' },
+
+      // Legacy Lifestyle Items
+      { image: '/assets/images/kfc.png', brand: 'KFC' },
+      { image: '/assets/images/goibibo.png', brand: 'Goibibo' },
+      { image: '/assets/images/spicejet.jpg', brand: 'SpiceJet' }
+    ]
   };
 
   const getCurrentBanners = () => {
     if (selectedCategory === 'All') {
       return Object.values(categoryBanners).flat();
     }
-    return categoryBanners[selectedCategory] || ['/assets/laptops/laptopbanner.png'];
+    return categoryBanners[selectedCategory] || [{ image: '/assets/laptops/laptopbanner.png' }];
   };
 
   const [bannerIndex, setBannerIndex] = useState(0);
@@ -298,38 +453,111 @@ export default function ExploreProducts() {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {/* Simple Banner Showcase */}
+          {/* Enhanced Banner Showcase - Full Coverage */}
           <motion.div
             key={bannerIndex}
             initial={{ opacity: 0, y: 50 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="col-span-1 md:col-span-2 lg:col-span-3 rounded-2xl overflow-hidden h-[300px] md:h-[350px] transition-all duration-1000 ease-in-out"
-            style={{
-              backgroundImage: `url(${getCurrentBanners()[bannerIndex]})`,
-              backgroundSize: 'contain',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              backgroundColor: '#111827'
-            }}
+            className="col-span-1 md:col-span-2 lg:col-span-3 rounded-2xl overflow-hidden h-[350px] md:h-[400px] lg:h-[450px] transition-all duration-1000 ease-in-out relative group"
           >
+            {getCurrentBanners()[bannerIndex]?.url ? (
+              // Clickable banner with affiliate link
+              <a
+                href={getCurrentBanners()[bannerIndex].url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full h-full cursor-pointer hover:scale-105 transition-transform duration-300 relative"
+              >
+                <Image
+                  src={getCurrentBanners()[bannerIndex].image}
+                  alt={getCurrentBanners()[bannerIndex].brand || 'Product Banner'}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
+                  priority
+                />
+                {/* Gradient overlay for better readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+
+                {/* Brand info overlay */}
+                <div className="absolute bottom-6 left-6 z-10">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                    <h3 className="text-white font-bold text-xl mb-1">
+                      {getCurrentBanners()[bannerIndex].brand || 'Premium Brand'}
+                    </h3>
+                    <p className="text-white/80 text-sm">Exclusive deals for students</p>
+                  </div>
+                </div>
+
+                {/* Hover overlay for clickable banners */}
+                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <div className="bg-white/90 px-6 py-3 rounded-full text-black font-medium text-lg backdrop-blur-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    🛒 Shop {getCurrentBanners()[bannerIndex].brand || 'Now'}
+                  </div>
+                </div>
+
+                {/* Click indicator */}
+                <div className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium opacity-90">
+                  Click to Shop
+                </div>
+              </a>
+            ) : (
+              // Non-clickable banner
+              <div className="w-full h-full relative">
+                <Image
+                  src={getCurrentBanners()[bannerIndex].image}
+                  alt={getCurrentBanners()[bannerIndex].brand || 'Product Banner'}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
+                  priority
+                />
+                {/* Gradient overlay for better readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+
+                {/* Brand info overlay */}
+                <div className="absolute bottom-6 left-6 z-10">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                    <h3 className="text-white font-bold text-xl mb-1">
+                      {getCurrentBanners()[bannerIndex].brand || 'Premium Brand'}
+                    </h3>
+                    <p className="text-white/80 text-sm">Quality products for students</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Banner navigation dots */}
+            <div className="absolute bottom-4 right-6 flex gap-2">
+              {getCurrentBanners().slice(0, 5).map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setBannerIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${index === bannerIndex % getCurrentBanners().length
+                      ? 'bg-orange-500 w-6'
+                      : 'bg-white/50 hover:bg-white/70'
+                    }`}
+                />
+              ))}
+            </div>
           </motion.div>
 
-          {/* Enhanced Product Cards */}
+          {/* Enhanced Product Cards with Better Layout */}
           {filteredProducts.map((product, index) => (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, y: 50 }}
               animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
               transition={{ duration: 0.5, delay: 0.4 + (index * 0.1) }}
-              className={`group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 ${product.size === 'large' ? 'col-span-1 md:col-span-2' : ''
+              className={`group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10 ${product.size === 'large' ? 'col-span-1 md:col-span-2 h-[400px]' : 'h-[350px]'
                 } ${product.size === 'medium' ? 'row-span-1' : ''}`}
             >
-              <div className="p-5 h-full flex flex-col relative">
+              <div className="p-6 h-full flex flex-col relative">
                 {/* Badge */}
                 {product.badge && (
-                  <div className="absolute top-3 left-3 z-10">
-                    <span className="px-3 py-1 bg-gradient-to-r from-orange-500 to-amber-600 rounded-full text-xs font-medium text-white">
+                  <div className="absolute top-4 left-4 z-10">
+                    <span className="px-3 py-1 bg-gradient-to-r from-orange-500 to-amber-600 rounded-full text-xs font-medium text-white shadow-lg">
                       {product.badge}
                     </span>
                   </div>
@@ -337,61 +565,64 @@ export default function ExploreProducts() {
 
                 {/* Brand Logo */}
                 {product.brandLogo && (
-                  <div className="absolute top-3 right-3 z-10">
-                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
+                  <div className="absolute top-4 right-4 z-10">
+                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
                       <Image
                         src={product.brandLogo}
                         alt={`${product.category} brand`}
-                        width={24}
-                        height={24}
+                        width={28}
+                        height={28}
                         style={{ objectFit: 'contain' }}
                       />
                     </div>
                   </div>
                 )}
 
-                <div className="flex justify-between items-start mb-4 mt-8">
-                  <div>
+                <div className="flex justify-between items-start mb-6 mt-12">
+                  <div className="flex-1">
                     <span className="text-xs text-orange-400 font-medium uppercase tracking-wide">
                       {product.category}
                     </span>
-                    <h3 className="text-white font-semibold text-lg leading-tight mt-1">
+                    <h3 className="text-white font-bold text-xl leading-tight mt-2">
                       {product.name}
                     </h3>
                   </div>
-                  <div className="flex space-x-1">
+                  <div className="flex space-x-1 ml-4">
                     {product.color.map((color, idx) => (
-                      <div key={idx} className={`w-3 h-3 rounded-full ${color} border border-gray-600`}></div>
+                      <div key={idx} className={`w-4 h-4 rounded-full ${color} border-2 border-gray-600 shadow-sm`}></div>
                     ))}
                   </div>
                 </div>
 
-                {/* Product Image */}
-                <div className="relative flex-grow flex items-center justify-center p-4 mb-4 bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl">
+                {/* Product Image - Enhanced */}
+                <div className="relative flex-grow flex items-center justify-center mb-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl p-6 group-hover:bg-gradient-to-br group-hover:from-gray-700/50 group-hover:to-gray-800/50 transition-all duration-300">
                   <motion.div
-                    whileHover={{ scale: 1.05, rotate: 2 }}
+                    whileHover={{ scale: 1.08, rotate: 1 }}
                     transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                    className={`relative w-full ${product.size === 'large' ? 'h-48' : 'h-32'}`}
+                    className={`relative w-full ${product.size === 'large' ? 'h-56' : 'h-40'}`}
                   >
                     <Image
                       src={product.image}
                       alt={product.name}
                       fill
                       style={{ objectFit: "contain" }}
-                      className="drop-shadow-lg group-hover:drop-shadow-2xl transition-all duration-300"
+                      className="drop-shadow-xl group-hover:drop-shadow-2xl transition-all duration-300"
                     />
                   </motion.div>
+
+                  {/* Subtle glow effect */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-orange-500/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
 
-                {/* Price and Discount */}
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-white text-lg">{product.price}</span>
+                {/* Price and Discount - Enhanced */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="font-bold text-white text-2xl">{product.price}</span>
                     {product.originalPrice && (
-                      <span className="text-gray-500 line-through text-sm">{product.originalPrice}</span>
+                      <span className="text-gray-500 line-through text-lg">{product.originalPrice}</span>
                     )}
                     {product.discount && (
-                      <span className="px-2 py-1 bg-green-500/20 border border-green-500/30 rounded text-green-400 text-xs font-medium">
+                      <span className="px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full text-green-400 text-sm font-medium">
                         {product.discount}
                       </span>
                     )}
@@ -406,16 +637,16 @@ export default function ExploreProducts() {
                           </svg>
                         ))}
                       </div>
-                      <span className="text-gray-400 text-xs">(4.5)</span>
+                      <span className="text-gray-400 text-sm font-medium">(4.5)</span>
                     </div>
 
                     <Link href={`/product/${product.id}`}>
                       <motion.button
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
-                        className="w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-amber-600 flex items-center justify-center hover:shadow-lg hover:shadow-orange-500/25 transition-all duration-300"
+                        className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-amber-600 flex items-center justify-center hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-300"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
                       </motion.button>
@@ -426,68 +657,80 @@ export default function ExploreProducts() {
             </motion.div>
           ))}
 
-          {/* Enhanced Secondary Promo Card */}
+          {/* Enhanced Secondary Promo Card with Full Coverage */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
             transition={{ duration: 0.5, delay: 0.6 + (filteredProducts.length * 0.1) }}
-            className="relative col-span-1 md:col-span-2 rounded-2xl overflow-hidden h-[280px] bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-pink-600/20 border border-blue-500/30"
+            className="relative col-span-1 md:col-span-2 rounded-2xl overflow-hidden h-[320px] bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-pink-600/20 border border-blue-500/30 group"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent z-10" />
+            {/* Background Image */}
+            <div className="absolute inset-0">
+              <Image
+                src="/assets/laptops/laptopbanner.png"
+                alt="Laptop Promotion"
+                fill
+                className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/30" />
+            </div>
 
-            <div className="absolute inset-0 flex items-center justify-between p-6 z-20">
+            <div className="absolute inset-0 flex items-center justify-between p-8 z-20">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                 transition={{ duration: 0.6, delay: 0.8 }}
-                className="flex-1"
+                className="flex-1 max-w-md"
               >
-                <div className="mb-3">
-                  <span className="inline-block px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full text-blue-400 text-sm font-medium">
-                    Limited Time
+                <div className="mb-4">
+                  <span className="inline-flex items-center px-4 py-2 bg-blue-500/20 border border-blue-500/30 rounded-full text-blue-400 text-sm font-medium backdrop-blur-sm">
+                    <span className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse"></span>
+                    Limited Time Offer
                   </span>
                 </div>
-                <h3 className="text-3xl font-bold text-white mb-2">Laptop Special</h3>
-                <p className="text-blue-200 mb-4 max-w-sm">
-                  Premium laptops with student discounts. Dell, HP, Lenovo - all brands available!
+                <h3 className="text-4xl font-bold text-white mb-3">Student Laptop Sale</h3>
+                <p className="text-blue-100 mb-6 text-lg leading-relaxed">
+                  Premium laptops with exclusive student discounts. Dell, HP, Lenovo & more brands available with extended warranty!
                 </p>
-                <div className="flex gap-3">
+                <div className="flex gap-4">
                   <Link href="/laptops">
-                    <button className="px-5 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full text-white text-sm font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300">
-                      Shop Laptops
-                    </button>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full text-white font-medium hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300"
+                    >
+                      Shop Now
+                    </motion.button>
                   </Link>
-                  <button className="px-5 py-2 border border-blue-500/50 rounded-full text-blue-300 hover:border-blue-400 hover:text-blue-200 transition-all">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-6 py-3 border border-blue-500/50 rounded-full text-blue-300 hover:border-blue-400 hover:text-blue-200 hover:bg-blue-500/10 transition-all duration-300"
+                  >
                     View All Deals
-                  </button>
+                  </motion.button>
                 </div>
               </motion.div>
 
+              {/* Floating elements */}
               <motion.div
                 initial={{ opacity: 0, y: 20, scale: 0.8 }}
                 animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.8 }}
                 transition={{ duration: 0.6, delay: 1.0 }}
-                className="hidden md:block absolute right-0 top-0 w-64 h-full"
+                className="hidden md:block absolute right-8 top-8"
               >
-                <div className="relative w-full h-full rounded-2xl overflow-hidden">
-                  <Image
-                    src="/assets/laptops/laptopbanner.png"
-                    alt="Laptop Promotion"
-                    fill
-                    style={{ objectFit: 'cover', objectPosition: 'center' }}
-                    className="drop-shadow-xl opacity-80"
-                  />
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-l from-transparent via-blue-900/30 to-blue-900/60" />
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
+                  <div className="text-2xl font-bold text-white">Up to 40%</div>
+                  <div className="text-blue-200 text-sm">Student Discount</div>
                 </div>
               </motion.div>
             </div>
 
             {/* Animated background elements */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-4 right-4 w-20 h-20 bg-blue-500 rounded-full blur-xl animate-pulse" />
-              <div className="absolute bottom-8 left-8 w-16 h-16 bg-purple-500 rounded-full blur-xl animate-pulse delay-1000" />
-              <div className="absolute top-1/2 right-1/3 w-12 h-12 bg-pink-500 rounded-full blur-xl animate-pulse delay-2000" />
+            <div className="absolute inset-0 opacity-20">
+              <div className="absolute top-8 right-16 w-24 h-24 bg-blue-500 rounded-full blur-2xl animate-pulse" />
+              <div className="absolute bottom-12 left-12 w-20 h-20 bg-purple-500 rounded-full blur-2xl animate-pulse delay-1000" />
+              <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-pink-500 rounded-full blur-2xl animate-pulse delay-2000" />
             </div>
           </motion.div>
 
