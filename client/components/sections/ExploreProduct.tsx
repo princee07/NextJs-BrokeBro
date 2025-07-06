@@ -5,106 +5,182 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 
-// Category data based on your banners
+// Category data based on available assets
 const categories = [
   'All',
-  'Biba',
-  'Clove',
-  'Glued',
-  'HK Vitals',
-  'Jewelry',
-  'Soxytoes',
-  'Swiss Beauty',
+  'Fashion',
+  'Tech',
+  'Beauty',
+  'Lifestyle',
+  'Gaming',
+  'Health',
+  'Accessories',
 ];
 
-// Update products to match banner categories and images
+// Enhanced products with real brand images and better categorization
 const products = [
   {
     id: 1,
-    name: 'Biba Festive Kurti',
-    category: 'Biba',
-    price: '₹1,499',
-    image: '/assets/banners/Biba.png',
-    color: ['bg-pink-200', 'bg-white'],
-    size: 'medium',
-    featured: true
+    name: 'Myntra Fashion Collection',
+    category: 'Fashion',
+    price: '₹999 - ₹4,999',
+    originalPrice: '₹2,999 - ₹7,999',
+    discount: '30% OFF',
+    image: '/assets/images/myntra.png',
+    brandLogo: '/assets/logos/myntra.png',
+    color: ['bg-pink-200', 'bg-white', 'bg-gray-200'],
+    size: 'large',
+    featured: true,
+    badge: 'Trending'
   },
   {
     id: 2,
-    name: 'Clove Essential Oil',
-    category: 'Clove',
-    price: '₹299',
-    image: '/assets/banners/clove.png',
-    color: ['bg-yellow-200', 'bg-white'],
-    size: 'small'
+    name: 'Apple MacBook Pro',
+    category: 'Tech',
+    price: '₹1,29,900',
+    originalPrice: '₹1,49,900',
+    discount: '13% OFF',
+    image: '/assets/logos/apple.png',
+    brandLogo: '/assets/logos/apple.png',
+    color: ['bg-gray-800', 'bg-gray-600'],
+    size: 'medium',
+    badge: 'Student Special'
   },
   {
     id: 3,
-    name: 'Glued Gaming Pass',
-    category: 'Glued',
-    price: '₹499',
-    image: '/assets/banners/glued.png',
-    color: ['bg-blue-400', 'bg-gray-800'],
-    size: 'medium'
-  },
-  {
-    id: 4,
-    name: 'HK Vitals Multivitamin',
-    category: 'HK Vitals',
-    price: '₹899',
-    image: '/assets/banners/hkvitals.png',
-    color: ['bg-green-200', 'bg-white'],
+    name: 'Swiss Beauty Makeup Kit',
+    category: 'Beauty',
+    price: '₹599',
+    originalPrice: '₹899',
+    discount: '33% OFF',
+    image: '/assets/banners/swissbeauty.png',
+    brandLogo: '/assets/images/swissbeauty.png',
+    color: ['bg-pink-100', 'bg-rose-200'],
     size: 'small'
   },
   {
+    id: 4,
+    name: 'Dell Inspiron Laptop',
+    category: 'Tech',
+    price: '₹45,990',
+    originalPrice: '₹65,990',
+    discount: '30% OFF',
+    image: '/assets/laptops/laptopbanner.png',
+    brandLogo: '/assets/logos/dell.png',
+    color: ['bg-blue-200', 'bg-gray-200'],
+    size: 'large',
+    featured: true,
+    badge: 'Best Seller'
+  },
+  {
     id: 5,
-    name: 'Jewelry Set',
-    category: 'Jewelry',
-    price: '₹2,999',
-    image: '/assets/banners/jewelry.png',
-    color: ['bg-yellow-100', 'bg-gray-600'],
+    name: 'Nike Athletic Wear',
+    category: 'Fashion',
+    price: '₹2,499',
+    originalPrice: '₹3,999',
+    discount: '37% OFF',
+    image: '/assets/images/nike1.jpg',
+    brandLogo: '/assets/logos/nike.png',
+    color: ['bg-orange-200', 'bg-black', 'bg-white'],
     size: 'medium',
-    featured: true
+    badge: 'Sports Special'
   },
   {
     id: 6,
-    name: 'Soxytoes Socks',
-    category: 'Soxytoes',
-    price: '₹399',
+    name: 'Soxytoes Premium Socks',
+    category: 'Accessories',
+    price: '₹299',
+    originalPrice: '₹499',
+    discount: '40% OFF',
     image: '/assets/banners/soxytoes.png',
-    color: ['bg-red-200', 'bg-gray-900'],
+    brandLogo: '/assets/logos/soxytoes.png',
+    color: ['bg-red-200', 'bg-blue-200', 'bg-green-200'],
     size: 'small'
   },
   {
     id: 7,
-    name: 'Swiss Beauty Lipstick',
-    category: 'Swiss Beauty',
-    price: '₹249',
-    image: '/assets/banners/swissbeauty.png',
-    color: ['bg-pink-100', 'bg-white'],
+    name: 'HP Pavilion Gaming Laptop',
+    category: 'Gaming',
+    price: '₹67,990',
+    originalPrice: '₹89,990',
+    discount: '24% OFF',
+    image: '/assets/laptops/laptopbanner.png',
+    brandLogo: '/assets/logos/hp.png',
+    color: ['bg-green-200', 'bg-black'],
+    size: 'medium',
+    badge: 'Gaming Pro'
+  },
+  {
+    id: 8,
+    name: 'Lakme Cosmetics',
+    category: 'Beauty',
+    price: '₹449',
+    originalPrice: '₹699',
+    discount: '36% OFF',
+    image: '/assets/images/lakme.png',
+    brandLogo: '/assets/images/lakme.png',
+    color: ['bg-purple-200', 'bg-pink-200'],
     size: 'small'
+  },
+  {
+    id: 9,
+    name: 'Microsoft Office Suite',
+    category: 'Tech',
+    price: '₹4,899',
+    originalPrice: '₹8,999',
+    discount: '46% OFF',
+    image: '/assets/images/msoffice.jpg',
+    brandLogo: '/assets/logos/microsoft.png',
+    color: ['bg-blue-500', 'bg-orange-500'],
+    size: 'small',
+    badge: 'Student License'
+  },
+  {
+    id: 10,
+    name: 'Lenovo ThinkPad Series',
+    category: 'Tech',
+    price: '₹52,990',
+    originalPrice: '₹74,990',
+    discount: '29% OFF',
+    image: '/assets/laptops/laptopbanner.png',
+    brandLogo: '/assets/logos/lenovo.png',
+    color: ['bg-red-200', 'bg-black'],
+    size: 'medium',
+    badge: 'Professional'
   }
 ];
 
-// Update promo cards to match segments
+// Enhanced promotional banners
 const promotions = [
   {
     id: 'promo1',
-    title: 'Biba Festive Sale',
-    subtitle: 'Flat 30% off on ethnic wear for students.',
-    color: 'bg-pink-200/20',
-    textColor: 'text-pink-500',
+    title: 'Fashion Week Sale',
+    subtitle: 'Up to 50% off on fashion brands like Myntra & Nike.',
+    color: 'bg-gradient-to-r from-purple-600/20 to-pink-600/20',
+    textColor: 'text-purple-400',
     size: 'large',
-    image: '/assets/banners/Biba.png'
+    image: '/assets/images/myntra.png',
+    category: 'Fashion'
   },
   {
     id: 'promo2',
-    title: 'Soxytoes Socks Offer',
-    subtitle: 'Buy 2 get 1 free on Soxytoes socks.',
-    color: 'bg-red-200/20',
-    textColor: 'text-red-500',
+    title: 'Laptop Mega Sale',
+    subtitle: 'Premium laptops for students with extended warranty.',
+    color: 'bg-gradient-to-r from-blue-600/20 to-cyan-600/20',
+    textColor: 'text-blue-400',
+    size: 'large',
+    image: '/assets/laptops/laptopbanner.png',
+    category: 'Tech'
+  },
+  {
+    id: 'promo3',
+    title: 'Beauty Essentials',
+    subtitle: 'Premium cosmetics at student-friendly prices.',
+    color: 'bg-gradient-to-r from-pink-600/20 to-rose-600/20',
+    textColor: 'text-pink-400',
     size: 'medium',
-    image: '/assets/banners/soxytoes.png'
+    image: '/assets/images/lakme.png',
+    category: 'Beauty'
   }
 ];
 
@@ -140,35 +216,39 @@ export default function ExploreProducts() {
     ? products
     : products.filter(product => product.category === selectedCategory);
 
-  // Banner images for each segment in order
-  const bannerOrder = [
-    '/assets/banners/Biba.png',
-    '/assets/banners/clove.png',
-    '/assets/banners/glued.png',
-    '/assets/banners/hkvitals.png',
-    '/assets/banners/jewelry.png',
-    '/assets/banners/soxytoes.png',
-    '/assets/banners/swissbeauty.png',
-  ];
+  // Enhanced banner images for different categories - Only banners, no logos
+  const categoryBanners: { [key: string]: string[] } = {
+    'Fashion': ['/assets/images/myntra.png', '/assets/images/nike1.jpg', '/assets/banners/Biba.png'],
+    'Tech': ['/assets/laptops/laptopbanner.png', '/assets/images/msoffice.jpg', '/assets/images/realme.jpg'],
+    'Beauty': ['/assets/banners/swissbeauty.png', '/assets/images/lakme.png', '/assets/images/MARScosmetics.png'],
+    'Gaming': ['/assets/laptops/laptopbanner.png', '/assets/banners/glued.png', '/assets/images/gamepalacio.png'],
+    'Accessories': ['/assets/banners/soxytoes.png', '/assets/banners/jewelry.png', '/assets/images/justlilthings.png'],
+    'Health': ['/assets/banners/hkvitals.png', '/assets/banners/clove.png'],
+    'Lifestyle': ['/assets/banners/Biba.png', '/assets/banners/jewelry.png', '/assets/images/kfc.png', '/assets/images/goibibo.png', '/assets/images/spicejet.jpg']
+  };
+
+  const getCurrentBanners = () => {
+    if (selectedCategory === 'All') {
+      return Object.values(categoryBanners).flat();
+    }
+    return categoryBanners[selectedCategory] || ['/assets/laptops/laptopbanner.png'];
+  };
+
   const [bannerIndex, setBannerIndex] = useState(0);
   const [isManual, setIsManual] = useState(false);
 
-  // Auto-rotate banner every 3 seconds unless a category is selected
+  // Auto-rotate banner every 4 seconds
   useEffect(() => {
-    if (selectedCategory !== 'All') return;
-    setIsManual(false);
+    const currentBanners = getCurrentBanners();
     const interval = setInterval(() => {
-      setBannerIndex((prev) => (prev + 1) % bannerOrder.length);
-    }, 3000);
+      setBannerIndex((prev) => (prev + 1) % currentBanners.length);
+    }, 4000);
     return () => clearInterval(interval);
   }, [selectedCategory]);
 
-  // When a category is clicked, show its banner and stop auto-rotation
+  // Reset banner index when category changes
   useEffect(() => {
-    if (selectedCategory === 'All') return;
-    setIsManual(true);
-    const idx = categories.findIndex(cat => cat === selectedCategory) - 1;
-    if (idx >= 0) setBannerIndex(idx);
+    setBannerIndex(0);
   }, [selectedCategory]);
 
   return (
@@ -218,135 +298,197 @@ export default function ExploreProducts() {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {/* Promotional Card - Rotating banner for all segments, static when a category is selected */}
+          {/* Simple Banner Showcase */}
           <motion.div
+            key={bannerIndex}
             initial={{ opacity: 0, y: 50 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="relative col-span-1 md:col-span-2 rounded-2xl overflow-hidden h-[240px] bg-gradient-to-r from-gray-900 to-gray-800"
+            className="col-span-1 md:col-span-2 lg:col-span-3 rounded-2xl overflow-hidden h-[300px] md:h-[350px] transition-all duration-1000 ease-in-out"
+            style={{
+              backgroundImage: `url(${getCurrentBanners()[bannerIndex]})`,
+              backgroundSize: 'contain',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              backgroundColor: '#111827'
+            }}
           >
-            <div className="absolute inset-0 flex flex-col justify-center p-8 z-10">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-              >
-                <h3 className="text-3xl font-bold text-white mb-2">
-                  {categories[bannerIndex + 1] + ' Special'}
-                </h3>
-                <p className="text-gray-300 mb-4">
-                  {`Exclusive student deals on ${categories[bannerIndex + 1]}.`}
-                </p>
-                <Link href={`/categories/${categories[bannerIndex + 1].toLowerCase().replace(/\s/g, '-')}`}>
-                  <button className="px-6 py-2 bg-gradient-to-r from-orange-500 to-amber-600 rounded-full text-white text-sm font-medium hover:shadow-lg hover:shadow-orange-500/20 transition-all">
-                    View All
-                  </button>
-                </Link>
-              </motion.div>
-            </div>
-            {/* Rotating or static banner image for each segment */}
-            <motion.div
-              key={bannerIndex}
-              initial={{ opacity: 0, scale: 0.9, x: 40 }}
-              animate={inView ? { opacity: 1, scale: 1, x: 0 } : { opacity: 0, scale: 0.9, x: 40 }}
-              transition={{ duration: 0.7, delay: 0.5 }}
-              className="absolute inset-0 z-0"
-            >
-              <Image
-                src={bannerOrder[bannerIndex]}
-                alt={`${categories[bannerIndex + 1]} Banner`}
-                fill
-                style={{ objectFit: 'cover', objectPosition: 'center' }}
-                className="rounded-2xl"
-                priority
-              />
-            </motion.div>
           </motion.div>
 
-          {/* Products */}
+          {/* Enhanced Product Cards */}
           {filteredProducts.map((product, index) => (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, y: 50 }}
               animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-              transition={{ duration: 0.5, delay: 0.3 + (index * 0.1) }}
-              className={`rounded-2xl overflow-hidden bg-gray-900 ${product.size === 'large' ? 'col-span-1 md:col-span-2' : ''
+              transition={{ duration: 0.5, delay: 0.4 + (index * 0.1) }}
+              className={`group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 ${product.size === 'large' ? 'col-span-1 md:col-span-2' : ''
                 } ${product.size === 'medium' ? 'row-span-1' : ''}`}
             >
-              <div className="p-4 h-full flex flex-col">
-                <div className="flex justify-between items-start mb-2">
+              <div className="p-5 h-full flex flex-col relative">
+                {/* Badge */}
+                {product.badge && (
+                  <div className="absolute top-3 left-3 z-10">
+                    <span className="px-3 py-1 bg-gradient-to-r from-orange-500 to-amber-600 rounded-full text-xs font-medium text-white">
+                      {product.badge}
+                    </span>
+                  </div>
+                )}
+
+                {/* Brand Logo */}
+                {product.brandLogo && (
+                  <div className="absolute top-3 right-3 z-10">
+                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
+                      <Image
+                        src={product.brandLogo}
+                        alt={`${product.category} brand`}
+                        width={24}
+                        height={24}
+                        style={{ objectFit: 'contain' }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-between items-start mb-4 mt-8">
                   <div>
-                    <span className="text-sm text-gray-400">{product.category}</span>
-                    <h3 className="text-white font-medium">{product.name}</h3>
+                    <span className="text-xs text-orange-400 font-medium uppercase tracking-wide">
+                      {product.category}
+                    </span>
+                    <h3 className="text-white font-semibold text-lg leading-tight mt-1">
+                      {product.name}
+                    </h3>
                   </div>
                   <div className="flex space-x-1">
                     {product.color.map((color, idx) => (
-                      <div key={idx} className={`w-3 h-3 rounded-full ${color}`}></div>
+                      <div key={idx} className={`w-3 h-3 rounded-full ${color} border border-gray-600`}></div>
                     ))}
                   </div>
                 </div>
 
-                <div className="relative flex-grow flex items-center justify-center p-4 mb-3">
+                {/* Product Image */}
+                <div className="relative flex-grow flex items-center justify-center p-4 mb-4 bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl">
                   <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                    className={`relative w-full ${product.id === 1 ? 'h-72' : 'h-40'}`}
+                    whileHover={{ scale: 1.05, rotate: 2 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                    className={`relative w-full ${product.size === 'large' ? 'h-48' : 'h-32'}`}
                   >
                     <Image
                       src={product.image}
                       alt={product.name}
                       fill
                       style={{ objectFit: "contain" }}
+                      className="drop-shadow-lg group-hover:drop-shadow-2xl transition-all duration-300"
                     />
                   </motion.div>
                 </div>
 
-                <div className="flex justify-between items-center mt-auto">
-                  <span className="font-bold text-white">{product.price}</span>
-                  <Link href={`/product/${product.id}`}>
-                    <button className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-orange-500 transition-colors">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-white">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                      </svg>
-                    </button>
-                  </Link>
+                {/* Price and Discount */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-white text-lg">{product.price}</span>
+                    {product.originalPrice && (
+                      <span className="text-gray-500 line-through text-sm">{product.originalPrice}</span>
+                    )}
+                    {product.discount && (
+                      <span className="px-2 py-1 bg-green-500/20 border border-green-500/30 rounded text-green-400 text-xs font-medium">
+                        {product.discount}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      <div className="flex text-yellow-400">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                          </svg>
+                        ))}
+                      </div>
+                      <span className="text-gray-400 text-xs">(4.5)</span>
+                    </div>
+
+                    <Link href={`/product/${product.id}`}>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-amber-600 flex items-center justify-center hover:shadow-lg hover:shadow-orange-500/25 transition-all duration-300"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-white">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        </svg>
+                      </motion.button>
+                    </Link>
+                  </div>
                 </div>
               </div>
             </motion.div>
           ))}
 
-          {/* Second promo card */}
+          {/* Enhanced Secondary Promo Card */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-            transition={{ duration: 0.5, delay: 0.5 + (filteredProducts.length * 0.1) }}
-            className="relative col-span-1 rounded-2xl overflow-hidden h-[220px] bg-blue-500/20"
+            transition={{ duration: 0.5, delay: 0.6 + (filteredProducts.length * 0.1) }}
+            className="relative col-span-1 md:col-span-2 rounded-2xl overflow-hidden h-[280px] bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-pink-600/20 border border-blue-500/30"
           >
-            <div className="absolute inset-0 flex flex-col justify-center p-6">
-              <h3 className="text-2xl font-bold text-white mb-2">Summer Break Deal</h3>
-              <p className="text-blue-300 mb-4">Extra 10% off on accessories</p>
-              <Link href="/deals">
-                <button className="px-5 py-2 bg-blue-600 rounded-full text-white text-sm font-medium hover:bg-blue-700 transition-all">
-                  Shop Now
-                </button>
-              </Link>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent z-10" />
+
+            <div className="absolute inset-0 flex items-center justify-between p-6 z-20">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+                className="flex-1"
+              >
+                <div className="mb-3">
+                  <span className="inline-block px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full text-blue-400 text-sm font-medium">
+                    Limited Time
+                  </span>
+                </div>
+                <h3 className="text-3xl font-bold text-white mb-2">Laptop Special</h3>
+                <p className="text-blue-200 mb-4 max-w-sm">
+                  Premium laptops with student discounts. Dell, HP, Lenovo - all brands available!
+                </p>
+                <div className="flex gap-3">
+                  <Link href="/laptops">
+                    <button className="px-5 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full text-white text-sm font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300">
+                      Shop Laptops
+                    </button>
+                  </Link>
+                  <button className="px-5 py-2 border border-blue-500/50 rounded-full text-blue-300 hover:border-blue-400 hover:text-blue-200 transition-all">
+                    View All Deals
+                  </button>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.8 }}
+                animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.8 }}
+                transition={{ duration: 0.6, delay: 1.0 }}
+                className="hidden md:block absolute right-0 top-0 w-64 h-full"
+              >
+                <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                  <Image
+                    src="/assets/laptops/laptopbanner.png"
+                    alt="Laptop Promotion"
+                    fill
+                    style={{ objectFit: 'cover', objectPosition: 'center' }}
+                    className="drop-shadow-xl opacity-80"
+                  />
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-l from-transparent via-blue-900/30 to-blue-900/60" />
+                </div>
+              </motion.div>
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-              className="absolute right-2 bottom-0 h-32 w-32"
-            >
-              <div className="relative h-full w-full">
-                <Image
-                  src="/accessory-promo.png"
-                  alt="Accessory Promotion"
-                  fill
-                  style={{ objectFit: "contain", objectPosition: "right bottom" }}
-                />
-              </div>
-            </motion.div>
+            {/* Animated background elements */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute top-4 right-4 w-20 h-20 bg-blue-500 rounded-full blur-xl animate-pulse" />
+              <div className="absolute bottom-8 left-8 w-16 h-16 bg-purple-500 rounded-full blur-xl animate-pulse delay-1000" />
+              <div className="absolute top-1/2 right-1/3 w-12 h-12 bg-pink-500 rounded-full blur-xl animate-pulse delay-2000" />
+            </div>
           </motion.div>
 
           {/* View all button */}
