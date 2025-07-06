@@ -51,7 +51,7 @@ const Hero = () => {
     if (typedText.length < fullText.length) {
       const timeout = setTimeout(() => {
         setTypedText(fullText.substring(0, typedText.length + 1));
-      }, 75);
+      }, 50);
 
       return () => clearTimeout(timeout);
     } else {
@@ -209,9 +209,6 @@ const Hero = () => {
             style={{ boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}
           >
             <ModalAd
-              key={ads[adIndex].imageUrl}
-              imageUrl={ads[adIndex].imageUrl}
-              linkUrl={ads[adIndex].linkUrl}
               className="w-full h-full"
               onClose={() => {
                 setShowAd(false);
@@ -279,7 +276,7 @@ const Hero = () => {
       <div className="container mx-auto px-4 pb-20 relative z-10">
         <div className="flex flex-col lg:flex-row items-start lg:items-center">
           {/* Hero Text Content - WITH FIXED SPACING */}
-          <div className="w-full lg:w-1/2 mb-10 lg:mb-0 lg:sticky lg:top-32 mt-56">
+          <div className="w-full lg:w-1/2 mb-10 lg:mb-0 lg:sticky lg:top-32 mt-72">
             {/* Fixed height container for main heading */}
             <div className="h-[130px] md:h-[150px]">
               <motion.div
@@ -288,12 +285,12 @@ const Hero = () => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8 }}
               >
-                {/* Main heading with REDUCED font size */}
+                {/* Main heading with DECREASED font size */}
                 <div className="flex items-center">
-                  <h1 className="text-4xl md:text-6xl font-extrabold">
+                  <h1 className="text-3xl md:text-5xl font-extrabold">
                     <span className="bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 bg-clip-text text-transparent inline-block">
                       {typedText}
-                      <span className={`inline-block w-1 h-10 bg-orange-400 ml-1 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'}`}></span>
+                      <span className={`inline-block w-1 h-8 bg-orange-400 ml-1 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'}`}></span>
                     </span>
                   </h1>
                 </div>
@@ -305,7 +302,7 @@ const Hero = () => {
               <AnimatePresence mode="wait">
                 <motion.p
                   key={currentDealIndex}
-                  className="text-xl md:text-2xl text-gray-300 font-medium"
+                  className="text-lg md:text-xl text-gray-300 font-medium"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
@@ -321,22 +318,22 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="mt-10"
+              className="mt-8"
             >
-              <p className="text-xl text-gray-300 max-w-xl leading-relaxed">
+              <p className="text-base text-gray-300 max-w-xl leading-relaxed">
                 <span className="font-semibold text-orange-400">College is expensive enough.</span> We've partnered with top brands to bring you
                 exclusive student discounts that make a difference.
               </p>
 
               {/* Feature list */}
-              <ul className="mt-6 space-y-3">
+              <ul className="mt-4 space-y-2">
                 {[
                   "Verified with your student ID or .edu email",
                   "Exclusive deals not available to the public"
                 ].map((feature, index) => (
                   <motion.li
                     key={feature}
-                    className="flex items-center text-gray-300"
+                    className="flex items-center text-gray-300 text-sm"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: 0.8 + (index * 0.15) }}
@@ -354,14 +351,14 @@ const Hero = () => {
 
             {/* CTA Button */}
             <motion.div
-              className="mt-10"
+              className="mt-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.3 }}
             >
               <Link href="/auth/signup">
                 <motion.div
-                  className="relative inline-block bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 text-white font-bold text-lg py-4 px-8 rounded-full transition-all duration-300 overflow-hidden hover:shadow-lg hover:shadow-orange-600/20"
+                  className="relative inline-block bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 text-white font-bold text-base py-3 px-6 rounded-full transition-all duration-300 overflow-hidden hover:shadow-lg hover:shadow-orange-600/20"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

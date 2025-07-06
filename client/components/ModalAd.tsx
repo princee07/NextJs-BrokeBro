@@ -81,52 +81,51 @@ const ModalAd: React.FC<ModalAdProps> = ({ onClose, className = "fixed left-1/2 
                 {/* Close button */}
                 <button
                     onClick={handleClose}
-                    className="absolute top-3 right-3 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white z-20 transition-colors"
+                    className="absolute top-1 right-1 p-1 rounded-full bg-black/50 hover:bg-black/70 text-white z-20 transition-colors"
                     aria-label="Close modal ad"
                 >
-                    <MdClose className="text-xl" />
+                    <MdClose className="text-sm" />
                 </button>
-                
+
                 {/* Ad content */}
                 {currentAd.linkUrl ? (
                     <a href={currentAd.linkUrl} target="_blank" rel="noopener noreferrer" className="block">
                         <div className="relative">
-                            <img 
-                                src={currentAd.imageUrl} 
-                                alt={currentAd.title} 
-                                className="block w-full h-48 md:h-56 object-cover" 
+                            <img
+                                src={currentAd.imageUrl}
+                                alt={currentAd.title}
+                                className="block w-full h-24 md:h-28 object-cover"
                             />
                             {/* Overlay with title and description */}
-                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4">
-                                <h3 className="text-white font-bold text-lg mb-1">{currentAd.title}</h3>
-                                <p className="text-white/90 text-sm">{currentAd.description}</p>
+                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-2">
+                                <h3 className="text-white font-bold text-sm mb-0.5">{currentAd.title}</h3>
+                                <p className="text-white/90 text-xs">{currentAd.description}</p>
                             </div>
                         </div>
                     </a>
                 ) : (
                     <div className="relative">
-                        <img 
-                            src={currentAd.imageUrl} 
-                            alt={currentAd.title} 
-                            className="block w-full h-48 md:h-56 object-cover" 
+                        <img
+                            src={currentAd.imageUrl}
+                            alt={currentAd.title}
+                            className="block w-full h-24 md:h-28 object-cover"
                         />
                         {/* Overlay with title and description */}
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4">
-                            <h3 className="text-white font-bold text-lg mb-1">{currentAd.title}</h3>
-                            <p className="text-white/90 text-sm">{currentAd.description}</p>
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-2">
+                            <h3 className="text-white font-bold text-sm mb-0.5">{currentAd.title}</h3>
+                            <p className="text-white/90 text-xs">{currentAd.description}</p>
                         </div>
                     </div>
                 )}
-                
+
                 {/* Ad indicators */}
                 <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-1 z-10">
                     {modalAds.map((_, index) => (
                         <button
                             key={index}
                             onClick={() => setCurrentAdIndex(index)}
-                            className={`w-2 h-2 rounded-full transition-all ${
-                                index === currentAdIndex ? 'bg-white' : 'bg-white/50'
-                            }`}
+                            className={`w-2 h-2 rounded-full transition-all ${index === currentAdIndex ? 'bg-white' : 'bg-white/50'
+                                }`}
                             aria-label={`Go to ad ${index + 1}`}
                         />
                     ))}
