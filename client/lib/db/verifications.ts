@@ -28,6 +28,22 @@ async function ensureVerificationsFile() {
 // Get all verifications
 export async function getAllVerifications(): Promise<VerificationStatus[]> {
     try {
+        // Check if we're in a production environment
+        const isProduction = process.env.NODE_ENV === 'production';
+        const isVercel = process.env.VERCEL === '1';
+
+        if (isVercel || isProduction) {
+            // In production, return mock data or fetch from actual database
+            console.log('Production environment - returning mock verification data');
+
+            // TODO: Replace with actual database query
+            // Example: return await db.verifications.findMany();
+
+            // Return empty array for now in production
+            return [];
+        }
+
+        // Development/local environment - use file system
         await ensureVerificationsFile();
         const data = await fs.readFile(VERIFICATIONS_FILE, 'utf-8');
         const verifications = JSON.parse(data);
@@ -47,6 +63,29 @@ export async function getAllVerifications(): Promise<VerificationStatus[]> {
 // Save a new verification
 export async function saveVerification(verification: VerificationStatus): Promise<void> {
     try {
+        console.log('Attempting to save verification...');
+
+        // For production environments that don't support file system writes,
+        // you can implement alternative storage here:
+        // - Database (PostgreSQL, MongoDB, etc.)
+        // - Cloud storage (Firebase, Supabase, etc.)
+        // - External API
+
+        // Check if we're in a production environment with read-only filesystem
+        const isProduction = process.env.NODE_ENV === 'production';
+        const isVercel = process.env.VERCEL === '1';
+
+        if (isVercel || isProduction) {
+            // In production, log the verification instead of saving to file
+            console.log('Production environment detected - logging verification:');
+            console.log(JSON.stringify(verification, null, 2));
+
+            // TODO: Replace with actual database save
+            // Example: await db.verifications.create({ data: verification });
+            return;
+        }
+
+        // Development/local environment - use file system
         const verifications = await getAllVerifications();
         verifications.push(verification);
         await fs.writeFile(VERIFICATIONS_FILE, JSON.stringify(verifications, null, 2));

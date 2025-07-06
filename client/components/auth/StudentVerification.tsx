@@ -108,16 +108,19 @@ export default function StudentVerification({
                 body: formData,
             });
 
+            const result = await response.json();
+
             if (!response.ok) {
-                throw new Error('Failed to submit verification');
+                throw new Error(result.message || 'Failed to submit verification');
             }
 
-            const result = await response.json();
+            console.log('Verification submitted successfully:', result);
             setVerificationId(result.verificationId);
             setCurrentStage(3);
         } catch (error) {
             console.error('Verification submission failed:', error);
-            alert('Failed to submit verification. Please try again.');
+            const errorMessage = error instanceof Error ? error.message : 'Failed to submit verification. Please try again.';
+            alert(errorMessage);
         } finally {
             setIsSubmitting(false);
         }
