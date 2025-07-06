@@ -4,9 +4,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import ModalAd from '../ModalAd';
 import Modal from '../ui/Modal';
 import RevealCodeButton from '../ui/RevealCodeButton';
+import { useStudentVerification } from '@/hooks/useStudentVerification';
 
 // Pop sound path
 const popSoundPath = '/assets/sounds/pop.mp4';
@@ -20,6 +22,8 @@ const Hero = () => {
   const adTimeout = useRef<NodeJS.Timeout | null>(null);
   const [showBrandModal, setShowBrandModal] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState<any>(null);
+  const router = useRouter();
+  const { isVerified } = useStudentVerification();
 
   // Text to type out
   const fullText = "STUDENT DISCOUNTS UNLOCKED";
@@ -192,6 +196,19 @@ const Hero = () => {
   // Duplicate cards for smooth infinite scrolling
   const column1Cards = [...brandCards.slice(0, 2), ...brandCards.slice(0, 2)];
   const column2Cards = [...brandCards.slice(2), ...brandCards.slice(2)];
+
+  // Handle brand card click - check verification first
+  const handleBrandCardClick = (brand: any) => {
+    if (!isVerified) {
+      // Redirect to student verification page if not verified
+      // After verification, user can return and click again to see the modal
+      router.push('/student-verification');
+    } else {
+      // Open modal with discount code if user is verified
+      setSelectedBrand(brand);
+      setShowBrandModal(true);
+    }
+  };
 
   // Ensure only the animated right-side ModalAd is rendered. Remove all other modal ads.
   return (
@@ -393,7 +410,7 @@ const Hero = () => {
                   {column1Cards.map((brand, index) => (
                     <div
                       key={`col1-${index}`}
-                      onClick={() => { setSelectedBrand(brand); setShowBrandModal(true); }}
+                      onClick={() => handleBrandCardClick(brand)}
                       className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
@@ -413,6 +430,9 @@ const Hero = () => {
                           style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
                           className="transition-transform duration-700 group-hover:scale-110"
                         />
+                      </div>
+                      <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
+                        <p className="text-white font-semibold">{brand.name} Student Deals</p>
                       </div>
                       <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
                         <p className="text-white font-semibold">{brand.name} Student Deals</p>
@@ -438,7 +458,7 @@ const Hero = () => {
                   {column1Cards.map((brand, index) => (
                     <div
                       key={`col1-clone-${index}`}
-                      onClick={() => { setSelectedBrand(brand); setShowBrandModal(true); }}
+                      onClick={() => handleBrandCardClick(brand)}
                       className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
@@ -484,7 +504,7 @@ const Hero = () => {
                   {column2Cards.map((brand, index) => (
                     <div
                       key={`col2-${index}`}
-                      onClick={() => { setSelectedBrand(brand); setShowBrandModal(true); }}
+                      onClick={() => handleBrandCardClick(brand)}
                       className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
@@ -528,7 +548,7 @@ const Hero = () => {
                   {column2Cards.map((brand, index) => (
                     <div
                       key={`col2-clone-${index}`}
-                      onClick={() => { setSelectedBrand(brand); setShowBrandModal(true); }}
+                      onClick={() => { handleBrandCardClick(brand); }}
                       className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>

@@ -1,6 +1,7 @@
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Image from 'next/image';
 import ProfileClient from './profileClient';
+import ProfileVerificationBadge from '@/components/ui/ProfileVerificationBadge';
 
 export default async function ProfilePage() {
   const { getUser } = getKindeServerSession();
@@ -20,7 +21,7 @@ export default async function ProfilePage() {
         <div className="relative bg-gradient-to-r from-orange-500/80 via-pink-600/80 to-purple-700/80 rounded-3xl shadow-2xl p-8 mb-10 overflow-hidden group transition-transform duration-300 hover:scale-[1.02]">
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-pink-500/30 rounded-full blur-2xl z-0 animate-pulse" />
           <div className="flex flex-col md:flex-row items-center md:items-end gap-6 z-10 relative">
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 relative">
               {user?.picture ? (
                 <Image
                   src={user.picture}
@@ -34,6 +35,9 @@ export default async function ProfilePage() {
                   {user?.given_name?.charAt(0) || 'U'}
                 </div>
               )}
+
+              {/* Verification Badge Overlay - This will only show if user is verified */}
+              <ProfileVerificationBadge size="lg" variant="overlay" />
             </div>
             <div className="flex-1 text-center md:text-left">
               <h2 className="text-3xl md:text-4xl font-extrabold text-white drop-shadow mb-1 flex items-center justify-center md:justify-start gap-2">

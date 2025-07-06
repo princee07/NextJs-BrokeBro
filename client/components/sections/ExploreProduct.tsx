@@ -4,6 +4,8 @@ import { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import VerificationProtectedLink from '@/components/ui/VerificationProtectedLink';
+import VerificationGate from '@/components/ui/VerificationGate';
 
 // Category data based on available assets
 const categories = [
@@ -361,46 +363,47 @@ export default function ExploreProducts() {
             className="col-span-1 md:col-span-2 lg:col-span-3 rounded-2xl overflow-hidden h-[200px] md:h-[250px] lg:h-[300px] transition-all duration-1000 ease-in-out relative group"
           >
             {getCurrentBanners()[bannerIndex]?.url ? (
-              // Clickable banner with affiliate link
-              <a
+              // Clickable banner with affiliate link - Protected by verification
+              <VerificationProtectedLink
                 href={getCurrentBanners()[bannerIndex].url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full h-full cursor-pointer hover:scale-105 transition-transform duration-300 relative"
+                className="block w-full h-full"
+                requireVerification={true}
               >
-                <Image
-                  src={getCurrentBanners()[bannerIndex].image}
-                  alt={getCurrentBanners()[bannerIndex].brand || 'Product Banner'}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
-                  priority
-                />
-                {/* Gradient overlay for better readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                <div className="w-full h-full cursor-pointer hover:scale-105 transition-transform duration-300 relative">
+                  <Image
+                    src={getCurrentBanners()[bannerIndex].image}
+                    alt={getCurrentBanners()[bannerIndex].brand || 'Product Banner'}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
+                    priority
+                  />
+                  {/* Gradient overlay for better readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
 
-                {/* Brand info overlay */}
-                <div className="absolute bottom-6 left-6 z-10">
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                    <h3 className="text-white font-bold text-xl mb-1">
-                      {getCurrentBanners()[bannerIndex].brand || 'Premium Brand'}
-                    </h3>
-                    <p className="text-white/80 text-sm">Exclusive deals for students</p>
+                  {/* Brand info overlay */}
+                  <div className="absolute bottom-6 left-6 z-10">
+                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                      <h3 className="text-white font-bold text-xl mb-1">
+                        {getCurrentBanners()[bannerIndex].brand || 'Premium Brand'}
+                      </h3>
+                      <p className="text-white/80 text-sm">Exclusive deals for students</p>
+                    </div>
+                  </div>
+
+                  {/* Hover overlay for clickable banners */}
+                  <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div className="bg-white/90 px-6 py-3 rounded-full text-black font-medium text-lg backdrop-blur-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                      🛒 Shop {getCurrentBanners()[bannerIndex].brand || 'Now'}
+                    </div>
+                  </div>
+
+                  {/* Click indicator */}
+                  <div className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium opacity-90">
+                    Verify & Shop
                   </div>
                 </div>
-
-                {/* Hover overlay for clickable banners */}
-                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <div className="bg-white/90 px-6 py-3 rounded-full text-black font-medium text-lg backdrop-blur-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                    🛒 Shop {getCurrentBanners()[bannerIndex].brand || 'Now'}
-                  </div>
-                </div>
-
-                {/* Click indicator */}
-                <div className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium opacity-90">
-                  Click to Shop
-                </div>
-              </a>
+              </VerificationProtectedLink>
             ) : (
               // Non-clickable banner
               <div className="w-full h-full relative">
@@ -450,116 +453,117 @@ export default function ExploreProducts() {
 
           {/* Enhanced Product Cards with Better Layout */}
           {filteredProducts.map((product, index) => (
-            <motion.div
-              key={product.id}
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-              transition={{ duration: 0.5, delay: 0.4 + (index * 0.1) }}
-              className={`group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10 ${product.size === 'large' ? 'col-span-1 md:col-span-2 h-[400px]' : 'h-[350px]'
-                } ${product.size === 'medium' ? 'row-span-1' : ''}`}
-            >
-              <div className="p-6 h-full flex flex-col relative">
-                {/* Badge */}
-                {product.badge && (
-                  <div className="absolute top-4 left-4 z-10">
-                    <span className="px-3 py-1 bg-gradient-to-r from-orange-500 to-amber-600 rounded-full text-xs font-medium text-white shadow-lg">
-                      {product.badge}
-                    </span>
-                  </div>
-                )}
-
-                {/* Brand Logo */}
-                {product.brandLogo && (
-                  <div className="absolute top-4 right-4 z-10">
-                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
-                      <Image
-                        src={product.brandLogo}
-                        alt={`${product.category} brand`}
-                        width={28}
-                        height={28}
-                        style={{ objectFit: 'contain' }}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                <div className="flex justify-between items-start mb-6 mt-12">
-                  <div className="flex-1">
-                    <span className="text-xs text-orange-400 font-medium uppercase tracking-wide">
-                      {product.category}
-                    </span>
-                    <h3 className="text-white font-bold text-xl leading-tight mt-2">
-                      {product.name}
-                    </h3>
-                  </div>
-                  <div className="flex space-x-1 ml-4">
-                    {product.color.map((color, idx) => (
-                      <div key={idx} className={`w-4 h-4 rounded-full ${color} border-2 border-gray-600 shadow-sm`}></div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Product Image - Enhanced */}
-                <div className="relative flex-grow flex items-center justify-center mb-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl p-6 group-hover:bg-gradient-to-br group-hover:from-gray-700/50 group-hover:to-gray-800/50 transition-all duration-300">
-                  <motion.div
-                    whileHover={{ scale: 1.08, rotate: 1 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                    className={`relative w-full ${product.size === 'large' ? 'h-56' : 'h-40'}`}
-                  >
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      style={{ objectFit: "contain" }}
-                      className="drop-shadow-xl group-hover:drop-shadow-2xl transition-all duration-300"
-                    />
-                  </motion.div>
-
-                  {/* Subtle glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-orange-500/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-
-                {/* Price and Discount - Enhanced */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <span className="font-bold text-white text-2xl">{product.price}</span>
-                    {product.originalPrice && (
-                      <span className="text-gray-500 line-through text-lg">{product.originalPrice}</span>
-                    )}
-                    {product.discount && (
-                      <span className="px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full text-green-400 text-sm font-medium">
-                        {product.discount}
+            <VerificationGate key={product.id}>
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+                transition={{ duration: 0.5, delay: 0.4 + (index * 0.1) }}
+                className={`group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10 ${product.size === 'large' ? 'col-span-1 md:col-span-2 h-[400px]' : 'h-[350px]'
+                  } ${product.size === 'medium' ? 'row-span-1' : ''}`}
+              >
+                <div className="p-6 h-full flex flex-col relative">
+                  {/* Badge */}
+                  {product.badge && (
+                    <div className="absolute top-4 left-4 z-10">
+                      <span className="px-3 py-1 bg-gradient-to-r from-orange-500 to-amber-600 rounded-full text-xs font-medium text-white shadow-lg">
+                        {product.badge}
                       </span>
-                    )}
+                    </div>
+                  )}
+
+                  {/* Brand Logo */}
+                  {product.brandLogo && (
+                    <div className="absolute top-4 right-4 z-10">
+                      <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+                        <Image
+                          src={product.brandLogo}
+                          alt={`${product.category} brand`}
+                          width={28}
+                          height={28}
+                          style={{ objectFit: 'contain' }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between items-start mb-6 mt-12">
+                    <div className="flex-1">
+                      <span className="text-xs text-orange-400 font-medium uppercase tracking-wide">
+                        {product.category}
+                      </span>
+                      <h3 className="text-white font-bold text-xl leading-tight mt-2">
+                        {product.name}
+                      </h3>
+                    </div>
+                    <div className="flex space-x-1 ml-4">
+                      {product.color.map((color, idx) => (
+                        <div key={idx} className={`w-4 h-4 rounded-full ${color} border-2 border-gray-600 shadow-sm`}></div>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-2">
-                      <div className="flex text-yellow-400">
-                        {[...Array(5)].map((_, i) => (
-                          <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                          </svg>
-                        ))}
-                      </div>
-                      <span className="text-gray-400 text-sm font-medium">(4.5)</span>
+                  {/* Product Image - Enhanced */}
+                  <div className="relative flex-grow flex items-center justify-center mb-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl p-6 group-hover:bg-gradient-to-br group-hover:from-gray-700/50 group-hover:to-gray-800/50 transition-all duration-300">
+                    <motion.div
+                      whileHover={{ scale: 1.08, rotate: 1 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                      className={`relative w-full ${product.size === 'large' ? 'h-56' : 'h-40'}`}
+                    >
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        style={{ objectFit: "contain" }}
+                        className="drop-shadow-xl group-hover:drop-shadow-2xl transition-all duration-300"
+                      />
+                    </motion.div>
+
+                    {/* Subtle glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-orange-500/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+
+                  {/* Price and Discount - Enhanced */}
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <span className="font-bold text-white text-2xl">{product.price}</span>
+                      {product.originalPrice && (
+                        <span className="text-gray-500 line-through text-lg">{product.originalPrice}</span>
+                      )}
+                      {product.discount && (
+                        <span className="px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full text-green-400 text-sm font-medium">
+                          {product.discount}
+                        </span>
+                      )}
                     </div>
 
-                    <Link href={`/product/${product.id}`}>
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-amber-600 flex items-center justify-center hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-300"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                        </svg>
-                      </motion.button>
-                    </Link>
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-2">
+                        <div className="flex text-yellow-400">
+                          {[...Array(5)].map((_, i) => (
+                            <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                          ))}
+                        </div>
+                        <span className="text-gray-400 text-sm font-medium">(4.5)</span>
+                      </div>
+
+                      <Link href={`/product/${product.id}`}>
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-amber-600 flex items-center justify-center hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-300"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                          </svg>
+                        </motion.button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </VerificationGate>
           ))}
 
           {/* Enhanced Secondary Promo Card with Full Coverage */}
@@ -598,7 +602,10 @@ export default function ExploreProducts() {
                   Premium laptops with exclusive student discounts. Dell, HP, Lenovo & more brands available with extended warranty!
                 </p>
                 <div className="flex gap-4">
-                  <Link href="/laptops">
+                  <VerificationProtectedLink
+                    href="/laptops"
+                    requireVerification={true}
+                  >
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -606,14 +613,19 @@ export default function ExploreProducts() {
                     >
                       Shop Now
                     </motion.button>
-                  </Link>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-6 py-3 border border-blue-500/50 rounded-full text-blue-300 hover:border-blue-400 hover:text-blue-200 hover:bg-blue-500/10 transition-all duration-300"
+                  </VerificationProtectedLink>
+                  <VerificationProtectedLink
+                    href="/special-deals"
+                    requireVerification={true}
                   >
-                    View All Deals
-                  </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-6 py-3 border border-blue-500/50 rounded-full text-blue-300 hover:border-blue-400 hover:text-blue-200 hover:bg-blue-500/10 transition-all duration-300"
+                    >
+                      View All Deals
+                    </motion.button>
+                  </VerificationProtectedLink>
                 </div>
               </motion.div>
 
@@ -646,7 +658,10 @@ export default function ExploreProducts() {
             transition={{ duration: 0.5, delay: 0.7 + (filteredProducts.length * 0.1) }}
             className="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center mt-8"
           >
-            <Link href="/products">
+            <VerificationProtectedLink
+              href="/products"
+              requireVerification={true}
+            >
               <button className="group relative inline-flex items-center justify-center px-8 py-3 overflow-hidden font-medium text-orange-500 border border-orange-500 rounded-full hover:text-white">
                 <span className="absolute inset-0 w-full h-0 transition-all duration-300 ease-out bg-gradient-to-r from-orange-500 to-amber-500 group-hover:h-full"></span>
                 <span className="relative flex items-center">
@@ -656,7 +671,7 @@ export default function ExploreProducts() {
                   </svg>
                 </span>
               </button>
-            </Link>
+            </VerificationProtectedLink>
           </motion.div>
         </div>
       </div>

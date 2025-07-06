@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { FaHeart, FaRegHeart, FaTshirt, FaShoePrints, FaTags, FaRunning, FaFire } from 'react-icons/fa';
 import { MdOutlineCategory } from 'react-icons/md';
 import { motion, RepeatType } from 'framer-motion';
+import VerificationProtectedLink from '@/components/ui/VerificationProtectedLink';
+import VerificationGate from '@/components/ui/VerificationGate';
 
 const sidebarCategories = [
   { name: 'New in', icon: <FaFire className="text-orange-400" />, key: 'newin' },
@@ -516,25 +518,24 @@ const FashionPage = () => {
                 className={`rounded-3xl p-14 flex items-center gap-12 shadow-2xl bg-gradient-to-r from-slate-800/80 via-indigo-900/80 to-gray-900/80 relative min-h-[220px] group ${banner.url ? 'cursor-pointer hover:scale-105 transition-transform duration-300' : ''}`}
               >
                 {banner.url ? (
-                  <a
+                  <VerificationProtectedLink
                     href={banner.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="absolute inset-0 z-10 flex items-center"
+                    requireVerification={true}
+                    className="absolute inset-0 z-10"
                   >
-                    <div className="w-full flex items-center gap-12 px-14">
+                    <div className="w-full h-full flex items-center gap-12 px-14 cursor-pointer">
                       <div>
                         <h3 className="text-2xl font-bold text-indigo-100 mb-1 drop-shadow-lg">{banner.title}</h3>
                         {banner.subtitle && <p className="text-indigo-300 text-sm font-medium drop-shadow">{banner.subtitle}</p>}
                         <div className="mt-2 text-xs text-indigo-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          Click to shop →
+                          Verify & Shop →
                         </div>
                       </div>
                       <div className="flex-1 flex justify-end">
                         <Image src={banner.img} alt={banner.title} width={200} height={200} className="object-contain rounded-2xl drop-shadow-2xl scale-110 bg-gray-900/40 p-2 group-hover:scale-125 transition-transform duration-300" />
                       </div>
                     </div>
-                  </a>
+                  </VerificationProtectedLink>
                 ) : (
                   <>
                     <div>
@@ -581,25 +582,26 @@ const FashionPage = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {filteredProducts.length > 0 ? (
               filteredProducts.map((prod: any, i: number) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 + i * 0.1, duration: 0.7 }}
-                  className="bg-gradient-to-br from-slate-900/80 via-indigo-900/80 to-gray-900/80 rounded-2xl shadow-xl p-7 flex flex-col items-center relative group transition-all hover:scale-105 hover:shadow-2xl border border-indigo-900/40"
-                >
-                  <div className="absolute top-3 right-3 cursor-pointer z-10" onClick={() => toggleFav(prod.name)}>
-                    {favourites[prod.name] ? <FaHeart className="text-pink-400 text-xl drop-shadow" /> : <FaRegHeart className="text-gray-300 text-xl" />}
-                  </div>
-                  <Image src={prod.img} alt={prod.name} width={120} height={120} className="object-contain rounded-xl mb-2 drop-shadow-xl" />
-                  <div className="text-center">
-                    <h4 className="font-semibold text-indigo-100 text-base mb-1 drop-shadow">{prod.name}</h4>
-                    <div className="flex items-center justify-center gap-2">
-                      {prod.oldPrice && <span className="text-indigo-400/60 line-through text-sm">{prod.oldPrice}</span>}
-                      <span className="text-indigo-100 font-bold text-lg">{prod.price}</span>
+                <VerificationGate key={i}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 + i * 0.1, duration: 0.7 }}
+                    className="bg-gradient-to-br from-slate-900/80 via-indigo-900/80 to-gray-900/80 rounded-2xl shadow-xl p-7 flex flex-col items-center relative group transition-all hover:scale-105 hover:shadow-2xl border border-indigo-900/40"
+                  >
+                    <div className="absolute top-3 right-3 cursor-pointer z-10" onClick={() => toggleFav(prod.name)}>
+                      {favourites[prod.name] ? <FaHeart className="text-pink-400 text-xl drop-shadow" /> : <FaRegHeart className="text-gray-300 text-xl" />}
                     </div>
-                  </div>
-                </motion.div>
+                    <Image src={prod.img} alt={prod.name} width={120} height={120} className="object-contain rounded-xl mb-2 drop-shadow-xl" />
+                    <div className="text-center">
+                      <h4 className="font-semibold text-indigo-100 text-base mb-1 drop-shadow">{prod.name}</h4>
+                      <div className="flex items-center justify-center gap-2">
+                        {prod.oldPrice && <span className="text-indigo-400/60 line-through text-sm">{prod.oldPrice}</span>}
+                        <span className="text-indigo-100 font-bold text-lg">{prod.price}</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                </VerificationGate>
               ))
             ) : (
               <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">

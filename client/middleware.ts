@@ -5,6 +5,17 @@ export function middleware(request: NextRequest) {
   const response = NextResponse.next()
   const url = request.nextUrl.clone()
 
+  // Admin route protection
+  if (url.pathname.startsWith('/admin') && url.pathname !== '/admin/login') {
+    const adminAuth = request.cookies.get('admin-auth');
+
+    if (!adminAuth || adminAuth.value !== 'authenticated') {
+      // Redirect to admin login if not authenticated
+      url.pathname = '/admin/login';
+      return NextResponse.redirect(url);
+    }
+  }
+
   // If the user is visiting a referral link, store the code in a cookie.
   const referralCode = url.searchParams.get('ref')
   if (referralCode) {

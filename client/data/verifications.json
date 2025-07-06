@@ -1,0 +1,36 @@
+[
+  {
+    "id": "VER_1751833881937_si4o55n7e",
+    "userId": "user_1751833881937",
+    "status": "approved",
+    "submittedAt": "2025-07-06T20:31:21.937Z",
+    "studentData": {
+      "studentName": "prince",
+      "collegeName": "SDIET",
+      "rollNo": "230",
+      "state": "Haryana"
+    },
+    "documents": {
+      "studentEmail": "prince1.cse23@satyug.edu.in"
+    },
+    "reviewedAt": "2025-07-06T20:33:04.832Z",
+    "adminNotes": "congrtas"
+  },
+  {
+    "id": "VER_1751838968066_6zqas4r8k",
+    "userId": "user_1751838968066",
+    "status": "rejected",
+    "submittedAt": "2025-07-06T21:56:08.066Z",
+    "studentData": {
+      "studentName": "prachi",
+      "collegeName": "bpit",
+      "rollNo": "565",
+      "state": "Goa"
+    },
+    "documents": {
+      "idCardUrl": "uploads/id_cards/1751838968066_WhatsApp Image 2025-07-05 at 23.46.03_ff54c406.jpg"
+    },
+    "reviewedAt": "2025-07-06T22:08:59.126Z",
+    "adminNotes": ""
+  }
+]

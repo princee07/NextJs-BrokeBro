@@ -11,6 +11,9 @@ import Modal from '../ui/Modal';
 import VerificationModal from '../auth/VerificationModal';
 import BannerSection from '../sections/BannerSection';
 import DiscountBar from './DiscountBar';
+import NavbarUserMenu from './NavbarUserMenu';
+import VerifiedBadge from '../ui/VerifiedBadge';
+import { useStudentVerification } from '@/hooks/useStudentVerification';
 import { getUserReferralData } from "@/app/lib/actions/referral.actions";
 import {
   HiOutlineBriefcase,
@@ -43,6 +46,9 @@ export default function NavbarClient({ user }: { user: any }) {
   const navContainerRef = useRef<HTMLDivElement>(null);
   const navLinksRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+
+  // Student verification state
+  const { isVerified } = useStudentVerification();
 
   useEffect(() => {
     setIsHydrated(true);
@@ -497,26 +503,14 @@ export default function NavbarClient({ user }: { user: any }) {
                     <span className="text-amber-50">Hi, {user?.given_name}</span>
 
                     {/* Profile Avatar - Clickable */}
-                    <motion.button
+                    <NavbarUserMenu
+                      user={{
+                        name: `${user?.given_name || ''} ${user?.family_name || ''}`.trim() || 'User',
+                        email: user?.email || '',
+                        avatar: user?.picture
+                      }}
                       onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                      className="relative focus:outline-none"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {user?.picture ? (
-                        <Image
-                          src={user.picture}
-                          alt="User Avatar"
-                          width={40}
-                          height={40}
-                          className="rounded-full border-2 border-orange-500/50 hover:border-orange-500 transition-colors duration-300"
-                        />
-                      ) : (
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 flex items-center justify-center text-white font-semibold">
-                          {user?.given_name?.charAt(0) || 'U'}
-                        </div>
-                      )}
-                    </motion.button>
+                    />
 
                     {/* Dropdown Menu */}
                     <AnimatePresence>
@@ -531,19 +525,26 @@ export default function NavbarClient({ user }: { user: any }) {
                           {/* User Info Header */}
                           <div className="p-4 border-b border-orange-500/20">
                             <div className="flex items-center space-x-3">
-                              {user?.picture ? (
-                                <Image
-                                  src={user.picture}
-                                  alt="User Avatar"
-                                  width={50}
-                                  height={50}
-                                  className="rounded-full"
-                                />
-                              ) : (
-                                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 flex items-center justify-center text-white font-semibold text-lg">
-                                  {user?.given_name?.charAt(0) || 'U'}
-                                </div>
-                              )}
+                              <div className="relative">
+                                {user?.picture ? (
+                                  <Image
+                                    src={user.picture}
+                                    alt="User Avatar"
+                                    width={50}
+                                    height={50}
+                                    className="rounded-full"
+                                  />
+                                ) : (
+                                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 flex items-center justify-center text-white font-semibold text-lg">
+                                    {user?.given_name?.charAt(0) || 'U'}
+                                  </div>
+                                )}
+
+                                {/* Verified Badge in Dropdown */}
+                                {isVerified && (
+                                  <VerifiedBadge size="sm" />
+                                )}
+                              </div>
                               <div>
                                 <p className="text-white font-semibold">{user?.given_name} {user?.family_name}</p>
                                 <p className="text-gray-400 text-sm">{user?.email}</p>
@@ -622,6 +623,21 @@ export default function NavbarClient({ user }: { user: any }) {
                               </svg>
                               Settings
                             </Link>
+
+                            {/* Admin Panel Option - Only for authorized emails */}
+                            {user?.email === 'prince1362005@gmail.com' && (
+                              <Link
+                                href="/admin/login"
+                                className="flex items-center px-4 py-3 text-orange-400 hover:text-white hover:bg-orange-500/10 transition-colors duration-200 border-t border-orange-500/20"
+                                onClick={() => setProfileDropdownOpen(false)}
+                              >
+                                <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                <span className="font-semibold">Admin Panel</span>
+                              </Link>
+                            )}
+
                             <div className="border-t border-orange-500/20 mt-2 pt-2">
                               <LogoutLink>
                                 <div className="flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-red-500/10 transition-colors duration-200 w-full cursor-pointer">
