@@ -216,169 +216,64 @@ export default function ExploreProducts() {
     ? products
     : products.filter(product => product.category === selectedCategory);
 
-  // Enhanced banner images for different categories - All brand assets
+  // Banner images prioritizing /assets/banners/ folder for better rotation
   const categoryBanners: { [key: string]: Array<{ image: string, url?: string, brand?: string }> } = {
+    'All': [
+      // Primary banner images from banners folder
+      { image: '/assets/banners/Biba.png', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba Fashion' },
+      { image: '/assets/banners/samsung.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung Tech' },
+      { image: '/assets/banners/swissbeauty.png', url: 'https://track.vcommission.com/click?campaign_id=12372&pub_id=120422', brand: 'Swiss Beauty' },
+      { image: '/assets/banners/moglix.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix Tools' },
+      { image: '/assets/banners/clove.png', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove Health' },
+      { image: '/assets/banners/soxytoes.png', brand: 'Soxytoes' },
+      { image: '/assets/banners/jewelry.png', brand: 'Jewelry Collection' },
+      { image: '/assets/banners/glued.png', brand: 'Glued Gaming' },
+      { image: '/assets/banners/hkvitals.png', brand: 'HK Vitals' }
+    ],
     'Fashion': [
-      // Main Fashion Banners
       { image: '/assets/banners/Biba.png', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
       { image: '/assets/banners/soxytoes.png', brand: 'Soxytoes' },
       { image: '/assets/banners/jewelry.png', brand: 'Jewelry' },
-
-      // Biba Collection - All Images (Clickable)
-      { image: '/assets/biba/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
-      { image: '/assets/biba/300x2500.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
-      { image: '/assets/biba/250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
-      { image: '/assets/biba/200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
-
-      // Levis Collection - All Images (Clickable)
-      { image: '/assets/levis/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
-      { image: '/assets/levis/300x300.png', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
-      { image: '/assets/levis/300x300.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
-      { image: '/assets/levis/250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
-      { image: '/assets/levis/200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
-
-      // Fastrack Collection - All Images
-      { image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_300x250.jpeg', brand: 'Fastrack' },
-      { image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x250.jpeg', brand: 'Fastrack' },
-      { image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x200.jpeg', brand: 'Fastrack' },
-
-      // Legacy Fashion Items
-      { image: '/assets/images/myntra.png', brand: 'Myntra' },
-      { image: '/assets/images/nike1.jpg', brand: 'Nike' }
-    ], 'Tech': [
-      // Main Tech Banners (Clickable)
+      { image: '/assets/biba/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba Collection' },
+      { image: '/assets/levis/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' }
+    ],
+    'Tech': [
       { image: '/assets/banners/samsung.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
       { image: '/assets/banners/moglix.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix' },
       { image: '/assets/laptops/laptopbanner.png', brand: 'Laptops' },
-
-      // Samsung Collection - All Images (Clickable)
-      { image: '/assets/samsung/Samsung_CPS_Get_Galaxy_S23_FE_avil_benefits_upto_Rs.14399_300x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
-      { image: '/assets/samsung/Samsung_CPS_Get_Galaxy_S23_FE_avil_benefits_upto_Rs.14399_250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
-      { image: '/assets/samsung/Samsung_CPS_Get_Galaxy_S23_FE_avil_benefits_upto_Rs.14399_200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
-      { image: '/assets/samsung/24318_KV_Ultra_Banner_336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
-      { image: '/assets/samsung/24318_KV_Ultra_Banner_300x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
-      { image: '/assets/samsung/24318_KV_Ultra_Banner_300x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
-      { image: '/assets/samsung/24318_KV_Ultra_Banner_250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
-      { image: '/assets/samsung/24318_KV_Ultra_Banner_200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
-      { image: '/assets/samsung/24318_KV_Ultra_Banner_160x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
-      { image: '/assets/samsung/24318_KV_Ultra_Banner_120x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
-
-      // Moglix Collection - All Images (Clickable)
-      { image: '/assets/moglix/480x320.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix' },
-      { image: '/assets/moglix/360x240.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix' },
-      { image: '/assets/moglix/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix' },
-      { image: '/assets/moglix/300x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix' },
-      { image: '/assets/moglix/250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix' },
-      { image: '/assets/moglix/200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix' },
-
-      // Legacy Tech Items
-      { image: '/assets/images/msoffice.jpg', brand: 'Microsoft Office' },
-      { image: '/assets/images/realme.jpg', brand: 'Realme' }
-    ], 'Beauty': [
-      // Main Beauty Banners (Clickable)
+      { image: '/assets/samsung/24318_KV_Ultra_Banner_336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung Galaxy' },
+      { image: '/assets/moglix/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix Tools' }
+    ],
+    'Beauty': [
       { image: '/assets/banners/swissbeauty.png', url: 'https://track.vcommission.com/click?campaign_id=12372&pub_id=120422', brand: 'Swiss Beauty' },
-
-      // Lakme Collection - All Images
       { image: '/assets/lakme/image.png', brand: 'Lakme' },
-      { image: '/assets/lakme/image2.png', brand: 'Lakme' },
-
-      // Legacy Beauty Items
-      { image: '/assets/images/lakme.png', brand: 'Lakme' },
+      { image: '/assets/lakme/image2.png', brand: 'Lakme Collection' },
       { image: '/assets/images/MARScosmetics.png', brand: 'MARS Cosmetics' }
-    ], 'Gaming': [
-      // Main Gaming Banners
-      { image: '/assets/banners/glued.png', brand: 'Glued' },
+    ],
+    'Gaming': [
+      { image: '/assets/banners/glued.png', brand: 'Glued Gaming' },
+      { image: '/assets/banners/samsung.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung Gaming' },
       { image: '/assets/laptops/laptopbanner.png', brand: 'Gaming Laptops' },
-
-      // Samsung Gaming Devices - Multiple Formats (Clickable)
-      { image: '/assets/samsung/24318_KV_Ultra_Banner_300x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung Gaming' },
-      { image: '/assets/samsung/24318_KV_Ultra_Banner_300x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung Gaming' },
-      { image: '/assets/samsung/24318_KV_Ultra_Banner_160x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung Gaming' },
-      { image: '/assets/samsung/24318_KV_Ultra_Banner_120x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung Gaming' },
-
-      // Legacy Gaming Items
-      { image: '/assets/images/gamepalacio.png', brand: 'Game Palacio' }
+      { image: '/assets/samsung/24318_KV_Ultra_Banner_300x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung Gaming Devices' }
     ],
     'Accessories': [
-      // Main Accessories Banners
       { image: '/assets/banners/soxytoes.png', brand: 'Soxytoes' },
       { image: '/assets/banners/jewelry.png', brand: 'Jewelry' },
-
-      // Fastrack Accessories - All Images
-      { image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_300x250.jpeg', brand: 'Fastrack' },
-      { image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x250.jpeg', brand: 'Fastrack' },
-      { image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x200.jpeg', brand: 'Fastrack' },
-
-      // Salty Collection - All Images (Clickable)
-      { image: '/assets/salty/468x60.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
       { image: '/assets/salty/300x300.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
-      { image: '/assets/salty/250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
-      { image: '/assets/salty/200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
-      { image: '/assets/salty/160x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
-
-      // Legacy Accessories
-      { image: '/assets/images/justlilthings.png', brand: 'Just Lil Things' }
-    ], 'Health': [
-      // Main Health Banners (Clickable)
+      { image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_300x250.jpeg', brand: 'Fastrack' }
+    ],
+    'Health': [
       { image: '/assets/banners/hkvitals.png', brand: 'HK Vitals' },
       { image: '/assets/banners/clove.png', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-
-      // Clove Collection - All Images (Premium Healthcare - Clickable)
-      { image: '/assets/clove/336x280d.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/336x280b.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/336x280-h.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/336x280-a.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/336X280.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/300x300-t.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/300x300-g.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/300x300-c.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/300x300-b.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/300x300-a.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/300X300.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/300x250b.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/300x250-h.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/300x250-d.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/300X250-1.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/300X250.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/250x250c.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/250x250-h.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/250x250-a.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/250-x250-b.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/250X250.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/200x200s.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/200x200b.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/200x200-h.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/200x200-a.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' },
-      { image: '/assets/clove/200X200.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove' }
+      { image: '/assets/clove/336x280d.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove Healthcare' },
+      { image: '/assets/clove/300x300-t.jpg', url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422', brand: 'Clove Premium' }
     ],
     'Lifestyle': [
-      // Biba Lifestyle (Clickable)
-      { image: '/assets/banners/Biba.png', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
-      { image: '/assets/biba/200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
-      { image: '/assets/biba/250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
-      { image: '/assets/biba/300x2500.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
-      { image: '/assets/biba/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },      // Levis Lifestyle - All Images (Clickable)
+      { image: '/assets/banners/Biba.png', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba Lifestyle' },
+      { image: '/assets/banners/jewelry.png', brand: 'Jewelry Lifestyle' },
+      { image: '/assets/banners/soxytoes.png', brand: 'Soxytoes Lifestyle' },
       { image: '/assets/levis/300x300.png', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
-      { image: '/assets/levis/300x300.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
-      { image: '/assets/levis/250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
-      { image: '/assets/levis/200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
-      { image: '/assets/levis/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
-
-      // Salty Lifestyle Products - All Images (Clickable)
-      { image: '/assets/salty/468x60.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
-      { image: '/assets/salty/300x300.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
-      { image: '/assets/salty/250x250.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
-      { image: '/assets/salty/200x200.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
-      { image: '/assets/salty/160x600.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
-
-      // Other Lifestyle Brands
-      { image: '/assets/banners/jewelry.png', brand: 'Jewelry' },
-      { image: '/assets/banners/soxytoes.png', brand: 'Soxytoes' },
-
-      // Legacy Lifestyle Items
-      { image: '/assets/images/kfc.png', brand: 'KFC' },
-      { image: '/assets/images/goibibo.png', brand: 'Goibibo' },
-      { image: '/assets/images/spicejet.jpg', brand: 'SpiceJet' }
+      { image: '/assets/salty/300x300.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty Lifestyle' }
     ]
   };
 
@@ -392,18 +287,22 @@ export default function ExploreProducts() {
   const [bannerIndex, setBannerIndex] = useState(0);
   const [isManual, setIsManual] = useState(false);
 
-  // Auto-rotate banner every 4 seconds
+  // Auto-rotate banner every 3 seconds with proper cleanup
   useEffect(() => {
     const currentBanners = getCurrentBanners();
+    if (currentBanners.length <= 1) return; // Don't rotate if only one banner
+
     const interval = setInterval(() => {
       setBannerIndex((prev) => (prev + 1) % currentBanners.length);
-    }, 4000);
+    }, 3000); // Reduced to 3 seconds for better visibility of rotation
+
     return () => clearInterval(interval);
-  }, [selectedCategory]);
+  }, [selectedCategory, getCurrentBanners().length]);
 
   // Reset banner index when category changes
   useEffect(() => {
     setBannerIndex(0);
+    setIsManual(false);
   }, [selectedCategory]);
 
   return (
@@ -459,7 +358,7 @@ export default function ExploreProducts() {
             initial={{ opacity: 0, y: 50 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="col-span-1 md:col-span-2 lg:col-span-3 rounded-2xl overflow-hidden h-[350px] md:h-[400px] lg:h-[450px] transition-all duration-1000 ease-in-out relative group"
+            className="col-span-1 md:col-span-2 lg:col-span-3 rounded-2xl overflow-hidden h-[200px] md:h-[250px] lg:h-[300px] transition-all duration-1000 ease-in-out relative group"
           >
             {getCurrentBanners()[bannerIndex]?.url ? (
               // Clickable banner with affiliate link
@@ -526,20 +425,26 @@ export default function ExploreProducts() {
                   </div>
                 </div>
               </div>
-            )}
-
-            {/* Banner navigation dots */}
+            )}            {/* Banner navigation dots - Show current position */}
             <div className="absolute bottom-4 right-6 flex gap-2">
-              {getCurrentBanners().slice(0, 5).map((_, index) => (
+              {getCurrentBanners().slice(0, Math.min(getCurrentBanners().length, 8)).map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => setBannerIndex(index)}
+                  onClick={() => {
+                    setBannerIndex(index);
+                    setIsManual(true);
+                  }}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${index === bannerIndex % getCurrentBanners().length
-                      ? 'bg-orange-500 w-6'
-                      : 'bg-white/50 hover:bg-white/70'
+                    ? 'bg-orange-500 w-6'
+                    : 'bg-white/50 hover:bg-white/70'
                     }`}
                 />
               ))}
+              {getCurrentBanners().length > 8 && (
+                <div className="text-white/60 text-xs ml-2 flex items-center">
+                  +{getCurrentBanners().length - 8}
+                </div>
+              )}
             </div>
           </motion.div>
 
