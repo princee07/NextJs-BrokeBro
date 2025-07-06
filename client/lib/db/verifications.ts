@@ -123,20 +123,24 @@ export async function saveVerification(verification: VerificationStatus): Promis
 // Update verification status
 export async function updateVerificationStatus(
     verificationId: string,
-    status: 'approved' | 'rejected',
+    status: 'approved' | 'rejected' | 'under_review',
     adminNotes?: string
 ): Promise<boolean> {
     try {
+        console.log('🟣 Updating verification status:', { verificationId, status, adminNotes });
+
         const isProduction = process.env.NODE_ENV === 'production';
         const isVercel = process.env.VERCEL === '1';
         const isReadOnlyFS = process.env.VERCEL_ENV || process.env.RENDER || process.env.NETLIFY;
 
         if (isVercel || isProduction || isReadOnlyFS) {
             // In production, update in memory storage
+            console.log('🟣 Production mode - updating in memory storage');
             const verifications = getVerificationsFromMemory();
             const index = verifications.findIndex(v => v.id === verificationId);
 
             if (index === -1) {
+                console.log('🟣 Verification not found in memory:', verificationId);
                 return false;
             }
 
@@ -147,7 +151,7 @@ export async function updateVerificationStatus(
                 adminNotes,
             };
 
-            console.log('Updated verification in memory storage:', verificationId);
+            console.log('🟣 Updated verification in memory storage:', verificationId, 'to status:', status);
             return true;
         }
 
