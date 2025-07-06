@@ -19,7 +19,7 @@ export default function Home() {
       <TopBrands />
       <ExploreProducts />
       <OrbitTestimonials />
-    
+
     </>
   );
 }
