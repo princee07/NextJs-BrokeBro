@@ -434,7 +434,7 @@ const Hero = () => {
                           alt={brand.name}
                           width={300}
                           height={400}
-                          style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
+                          style={{ objectFit: 'contain', maxWidth: '90%', maxHeight: '85%', marginTop: '20px' }}
                           className="transition-transform duration-700 group-hover:scale-110"
                         />
                       </div>
@@ -482,7 +482,7 @@ const Hero = () => {
                           alt={brand.name}
                           width={300}
                           height={400}
-                          style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
+                          style={{ objectFit: 'contain', maxWidth: '90%', maxHeight: '85%', marginTop: '20px' }}
                           className="transition-transform duration-700 group-hover:scale-110"
                         />
                       </div>
@@ -527,7 +527,7 @@ const Hero = () => {
                           alt={brand.name}
                           width={300}
                           height={400}
-                          style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
+                          style={{ objectFit: 'contain', maxWidth: '90%', maxHeight: '85%', marginTop: '20px' }}
                           className="transition-transform duration-700 group-hover:scale-110"
                         />
                       </div>
@@ -571,7 +571,7 @@ const Hero = () => {
                           alt={brand.name}
                           width={300}
                           height={400}
-                          style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
+                          style={{ objectFit: 'contain', maxWidth: '90%', maxHeight: '85%', marginTop: '20px' }}
                           className="transition-transform duration-700 group-hover:scale-110"
                         />
                       </div>
