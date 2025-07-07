@@ -298,7 +298,7 @@ export default function ExploreProducts() {
     'Accessories': [
       { image: '/assets/banners/soxytoes.png', brand: 'Soxytoes' },
       { image: '/assets/banners/jewelry.png', brand: 'Jewelry' },
-      { image: '/assets/salty/300x300.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
+      { image: '/assets/salty/image.png', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
       { image: '/assets/banners/fastrack.png', brand: 'Fastrack' }
     ],
     'Health': [
@@ -312,7 +312,7 @@ export default function ExploreProducts() {
       { image: '/assets/banners/jewelry.png', brand: 'Jewelry Lifestyle' },
       { image: '/assets/banners/soxytoes.png', brand: 'Soxytoes Lifestyle' },
       { image: '/assets/banners/levis.png', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
-      { image: '/assets/salty/300x300.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty Lifestyle' }
+      { image: '/assets/salty/image.png', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty Lifestyle' }
     ]
   };
 
