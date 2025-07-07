@@ -28,7 +28,7 @@ const products = [
     price: '₹999 - ₹4,999',
     originalPrice: '₹2,999 - ₹7,999',
     discount: '30% OFF',
-    image: '/assets/jiva/jiva.png', // updated to use new image
+    image: '/assets/jiva/image.png', // updated to use new image
     brandLogo: '/assets/logos/jiva.png',
     color: ['bg-pink-200', 'bg-white', 'bg-gray-200'],
     size: 'large',
@@ -170,8 +170,8 @@ const products = [
     price: '₹999 - ₹3,499',
     originalPrice: '₹1,499 - ₹4,999',
     discount: '30% OFF',
-    image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_300x250.jpeg',
-    brandLogo: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_300x250.jpeg',
+    image: '/assets/fastrack/image.png',
+    brandLogo: '/assets/fastrack/logo.png',
     color: ['bg-gray-900', 'bg-yellow-200', 'bg-white'],
     size: 'small',
     badge: 'Trendy Picks'
@@ -274,7 +274,7 @@ export default function ExploreProducts() {
       { image: '/assets/banners/soxytoes.png', brand: 'Soxytoes' },
       { image: '/assets/banners/jewelry.png', brand: 'Jewelry' },
       { image: '/assets/biba/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba Collection' },
-      { image: '/assets/levis/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' }
+      { image: '/assets/banners/fastrack.png', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' }
     ],
     'Tech': [
       { image: '/assets/banners/samsung.png', brand: 'Samsung' }, // updated Samsung banner
@@ -299,7 +299,7 @@ export default function ExploreProducts() {
       { image: '/assets/banners/soxytoes.png', brand: 'Soxytoes' },
       { image: '/assets/banners/jewelry.png', brand: 'Jewelry' },
       { image: '/assets/salty/300x300.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty' },
-      { image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_300x250.jpeg', brand: 'Fastrack' }
+      { image: '/assets/banners/fastrack.png', brand: 'Fastrack' }
     ],
     'Health': [
       { image: '/assets/banners/hkvitals.png', brand: 'HK Vitals' },
@@ -311,7 +311,7 @@ export default function ExploreProducts() {
       { image: '/assets/banners/Biba.png', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba Lifestyle' },
       { image: '/assets/banners/jewelry.png', brand: 'Jewelry Lifestyle' },
       { image: '/assets/banners/soxytoes.png', brand: 'Soxytoes Lifestyle' },
-      { image: '/assets/levis/300x300.png', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
+      { image: '/assets/banners/levis.png', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' },
       { image: '/assets/salty/300x300.jpg', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422', brand: 'Salty Lifestyle' }
     ]
   };
