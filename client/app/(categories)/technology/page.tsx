@@ -127,7 +127,7 @@ const EcommerceHero: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
+    <div className="min-h-screen  mt-35 bg-gradient-to-br from-gray-900 via-black to-gray-800">
       {/* Hero Section */}
       <div className="relative h-screen overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black">
         {/* Background Slider */}
