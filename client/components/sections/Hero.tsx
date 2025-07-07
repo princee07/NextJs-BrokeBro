@@ -119,6 +119,13 @@ const Hero = () => {
       slug: 'akina',
     
     },
+      {
+      name: 'BIBA',
+      logo: '/assets/biba/250*250.jpg',
+      gradient: 'from-white-500 to-teal-300',
+      slug: 'biba',
+    
+    },
     {
       name: 'just lil things',
       logo: '/assets/images/justlilthings.png',
