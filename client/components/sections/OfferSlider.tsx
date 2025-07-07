@@ -15,6 +15,7 @@ const OfferSlider = () => {
   const [isHovering, setIsHovering] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // For drag functionality
@@ -36,82 +37,51 @@ const OfferSlider = () => {
   }, []);
 
 
-  // Array of offers - each with unique styling and enhanced content
+  // Replace offers with BrokeBro events, hackathons, webinars
   const offers = [
     {
-      icon: <BiSolidOffer className="text-yellow-200 text-3xl" />,
-      preTitle: "NEW USERS",
-      title: "₹500 CASHBACK",
-      subtitle: "ON YOUR FIRST ORDER",
-      detailText: "Valid until June 30, 2025",
-      buttonText: "REGISTER NOW",
-      bgColorClass: "from-orange-500 via-red-500 to-pink-600",
+      icon: <MdNewReleases className="text-orange-200 text-3xl" />,
+      preTitle: "HACKATHON",
+      title: "BrokeBro Hackathon 2025",
+      subtitle: "Win prizes, internships & swag!",
+      detailText: "Registration opens Aug 10, 2025",
+      buttonText: "ENROLLMENT",
+      bgColorClass: "from-orange-600 via-pink-600 to-purple-700",
       bgStyle: "ripple",
-      link: "/auth/signup",
-      cornerBadge: {
-        text: "HOT",
-        color: "bg-yellow-500"
-      }
-    },
-    {
-      icon: <HiClock className="text-cyan-200 text-3xl" />,
-      preTitle: "LIMITED OFFER",
-      title: "30% EXTRA OFF",
-      subtitle: "ON PREMIUM SOFTWARE SUBSCRIPTIONS",
-      detailText: "Only 24 hours remaining",
-      buttonText: "CLAIM NOW",
-      bgColorClass: "from-blue-600 via-indigo-600 to-violet-700",
-      bgStyle: "wave",
-      link: "/categories/software",
-      cornerBadge: {
-        text: "ENDING",
-        color: "bg-red-500"
-      }
+      type: "hackathon"
     },
     {
       icon: <FaUserGraduate className="text-emerald-200 text-3xl" />,
-      preTitle: "EDUCATION BOOST",
-      title: "FREE COURSES",
-      subtitle: "WITH ANY TECH PURCHASE ABOVE ₹5000",
-      detailText: "200+ courses available",
-      buttonText: "LEARN MORE",
+      preTitle: "EVENT",
+      title: "Campus Ambassador Program",
+      subtitle: "Lead your college, get exclusive perks!",
+      detailText: "Apply by July 20, 2025",
+      buttonText: "ENROLLMENT",
       bgColorClass: "from-emerald-600 via-teal-500 to-cyan-500",
       bgStyle: "dots",
-      link: "/education-offers",
-      cornerBadge: {
-        text: "POPULAR",
-        color: "bg-emerald-500"
-      }
+      type: "event"
+    },
+    {
+      icon: <HiLightningBolt className="text-yellow-200 text-3xl" />,
+      preTitle: "WEBINAR",
+      title: "BrokeBro Tech Fest Webinar",
+      subtitle: "Workshops, talks, networking & more!",
+      detailText: "Sept 5-12, 2025",
+      buttonText: "ENROLLMENT",
+      bgColorClass: "from-blue-600 via-indigo-600 to-violet-700",
+      bgStyle: "wave",
+      type: "webinar"
     },
     {
       icon: <FaGift className="text-purple-200 text-3xl" />,
-      preTitle: "REFER & EARN",
-      title: "₹1000 BONUS",
-      subtitle: "FOR EACH FRIEND WHO JOINS",
-      detailText: "No limit on referrals",
-      buttonText: "INVITE FRIENDS",
+      preTitle: "EVENT",
+      title: "Internship Fair",
+      subtitle: "Meet recruiters, land your dream internship!",
+      detailText: "Aug 25, 2025",
+      buttonText: "ENROLLMENT",
       bgColorClass: "from-purple-600 via-violet-600 to-indigo-600",
       bgStyle: "shine",
-      link: "/refer",
-      cornerBadge: {
-        text: "UNLIMITED",
-        color: "bg-violet-500"
-      }
-    },
-    {
-      icon: <HiStar className="text-amber-200 text-3xl" />,
-      preTitle: "WEEKEND SPECIAL",
-      title: "BUY 1 GET 1",
-      subtitle: "ON SELECTED FOOD & BEVERAGES",
-      detailText: "Valid every weekend",
-      buttonText: "VIEW OFFERS",
-      bgColorClass: "from-amber-500 via-orange-600 to-red-600",
-      bgStyle: "pulse",
-      link: "/categories/food",
-      cornerBadge: {
-        text: "WEEKEND",
-        color: "bg-amber-500"
-      }
+      type: "event"
     },
   ];
 
@@ -471,15 +441,6 @@ const OfferSlider = () => {
                     {/* Background patterns */}
                     {getBackgroundPattern(offer.bgStyle)}
                     
-                    {/* Corner badge */}
-                    {offer.cornerBadge && (
-                      <div className={`absolute top-0 right-0`}>
-                        <div className={`${offer.cornerBadge.color} text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg text-white shadow-lg`}>
-                          {offer.cornerBadge.text}
-                        </div>
-                      </div>
-                    )}
-                    
                     {/* Offer content with enhanced layout */}
                     <div className="flex items-center space-x-4 z-10">
                       <div className="hidden md:flex flex-shrink-0 items-center justify-center w-16 h-16 rounded-full bg-black/30 backdrop-blur-md shadow-lg border border-white/20">
@@ -510,43 +471,36 @@ const OfferSlider = () => {
                     
                     {/* CTA Button with enhanced effects */}
                     <div className="flex-shrink-0 z-10">
-                      <Link href={offer.link}>
-                        <motion.button
-                          className="relative bg-white text-gray-900 px-4 py-2 md:px-6 md:py-3 rounded-lg font-bold text-sm md:text-base flex items-center space-x-1 shadow-lg overflow-hidden group"
-                          whileHover={{ 
-                            scale: 1.05,
-                            boxShadow: "0 0 20px 5px rgba(255, 255, 255, 0.3)"
+                      <button
+                        className="relative bg-white text-gray-900 px-4 py-2 md:px-6 md:py-3 rounded-lg font-bold text-sm md:text-base flex items-center space-x-1 shadow-lg overflow-hidden group"
+                        onClick={() => setShowToast(true)}
+                      >
+                        {/* Button background animation */}
+                        <motion.div 
+                          className="absolute inset-0 bg-gradient-to-r from-white via-gray-100 to-white opacity-0 group-hover:opacity-100"
+                          animate={{
+                            x: ['-100%', '100%'],
                           }}
-                          whileTap={{ scale: 0.98 }}
+                          transition={{
+                            repeat: Infinity,
+                            repeatType: "loop",
+                            duration: 1.5,
+                            ease: "easeInOut"
+                          }}
+                        />
+                        <span className="relative z-10">{offer.buttonText}</span>
+                        <motion.span 
+                          className="relative z-10"
+                          animate={{ x: [0, 5, 0] }}
+                          transition={{ 
+                            repeat: Infinity, 
+                            duration: 1.5,
+                            repeatType: "loop"
+                          }}
                         >
-                          {/* Button background animation */}
-                          <motion.div 
-                            className="absolute inset-0 bg-gradient-to-r from-white via-gray-100 to-white opacity-0 group-hover:opacity-100"
-                            animate={{
-                              x: ['-100%', '100%'],
-                            }}
-                            transition={{
-                              repeat: Infinity,
-                              repeatType: "loop",
-                              duration: 1.5,
-                              ease: "easeInOut"
-                            }}
-                          />
-
-                          <span className="relative z-10">{offer.buttonText}</span>
-                          <motion.span 
-                            className="relative z-10"
-                            animate={{ x: [0, 5, 0] }}
-                            transition={{ 
-                              repeat: Infinity, 
-                              duration: 1.5,
-                              repeatType: "loop"
-                            }}
-                          >
-                            <MdArrowForward className="ml-2" />
-                          </motion.span>
-                        </motion.button>
-                      </Link>
+                          <MdArrowForward className="ml-2" />
+                        </motion.span>
+                      </button>
                     </div>
                     
                     {/* Success icon with enhanced animation */}
@@ -600,6 +554,13 @@ const OfferSlider = () => {
             Swipe or use arrow keys to navigate offers
           </p>
         </div>
+        
+        {/* Toast for ENROLLMENT button */}
+        {showToast && (
+          <div className="fixed top-8 left-1/2 -translate-x-1/2 z-50 bg-black/90 text-white px-6 py-3 rounded-full shadow-lg border border-orange-500 animate-fade-in-out">
+            Wait, coming soon!
+          </div>
+        )}
       </div>
     </div>
   );
