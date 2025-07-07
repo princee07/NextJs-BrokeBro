@@ -23,13 +23,13 @@ const categories = [
 const products = [
   {
     id: 1,
-    name: 'Myntra Fashion Collection',
+    name: 'Jiva Fashion Collection',
     category: 'Fashion',
     price: '₹999 - ₹4,999',
     originalPrice: '₹2,999 - ₹7,999',
     discount: '30% OFF',
-    image: '/assets/images/myntra.png',
-    brandLogo: '/assets/logos/myntra.png',
+    image: '/assets/jiva/jiva.png', // updated to use new image
+    brandLogo: '/assets/logos/jiva.png',
     color: ['bg-pink-200', 'bg-white', 'bg-gray-200'],
     size: 'large',
     featured: true,
@@ -81,7 +81,7 @@ const products = [
     price: '₹2,499',
     originalPrice: '₹3,999',
     discount: '37% OFF',
-    image: '/assets/images/nike1.jpg',
+    image: '/assets/nike/image.png', // updated to use new nike product image
     brandLogo: '/assets/logos/nike.png',
     color: ['bg-orange-200', 'bg-black', 'bg-white'],
     size: 'medium',
@@ -149,6 +149,32 @@ const products = [
     color: ['bg-red-200', 'bg-black'],
     size: 'medium',
     badge: 'Professional'
+  },
+  {
+    id: 11,
+    name: 'Levis Denim Collection',
+    category: 'Fashion',
+    price: '₹1,799 - ₹5,999',
+    originalPrice: '₹2,499 - ₹7,999',
+    discount: '28% OFF',
+    image: '/assets/levis/336x280.jpg',
+    brandLogo: '/assets/levis/300x300.png',
+    color: ['bg-blue-200', 'bg-white', 'bg-indigo-200'],
+    size: 'medium',
+    badge: 'Classic Denim'
+  },
+  {
+    id: 12,
+    name: 'Fastrack Watches',
+    category: 'Fashion',
+    price: '₹999 - ₹3,499',
+    originalPrice: '₹1,499 - ₹4,999',
+    discount: '30% OFF',
+    image: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_300x250.jpeg',
+    brandLogo: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_300x250.jpeg',
+    color: ['bg-gray-900', 'bg-yellow-200', 'bg-white'],
+    size: 'small',
+    badge: 'Trendy Picks'
   }
 ];
 
@@ -157,11 +183,11 @@ const promotions = [
   {
     id: 'promo1',
     title: 'Fashion Week Sale',
-    subtitle: 'Up to 50% off on fashion brands like Myntra & Nike.',
+    subtitle: 'Up to 50% off on fashion brands like Jiva & Nike.',
     color: 'bg-gradient-to-r from-purple-600/20 to-pink-600/20',
     textColor: 'text-purple-400',
     size: 'large',
-    image: '/assets/images/myntra.png',
+    image: '/assets/jiva/jivaposter.png', // updated to use jivaposter for banner
     category: 'Fashion'
   },
   {
@@ -221,6 +247,12 @@ export default function ExploreProducts() {
   // Banner images prioritizing /assets/banners/ folder for better rotation
   const categoryBanners: { [key: string]: Array<{ image: string, url?: string, brand?: string }> } = {
     'All': [
+      { image: '/assets/banners/jiva.png', brand: 'Jiva Fashion' },
+      { image: '/assets/jiva/jivaposter.png', brand: 'Jiva Fashion' },
+      { image: '/assets/jiva/jiva.png', brand: 'Jiva Fashion' },
+      { image: '/assets/banners/nike.png', brand: 'Nike' },
+      { image: '/assets/banners/nike2.png', brand: 'Nike' },
+      { image: '/assets/banners/samsung.png', brand: 'Samsung Tech' }, // updated Samsung banner
       // Primary banner images from banners folder
       { image: '/assets/banners/Biba.png', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba Fashion' },
       { image: '/assets/banners/samsung.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung Tech' },
@@ -233,6 +265,11 @@ export default function ExploreProducts() {
       { image: '/assets/banners/hkvitals.png', brand: 'HK Vitals' }
     ],
     'Fashion': [
+      { image: '/assets/banners/jiva.png', brand: 'Jiva Fashion' },
+      { image: '/assets/jiva/jivaposter.png', brand: 'Jiva Fashion' },
+      { image: '/assets/jiva/jiva.png', brand: 'Jiva Fashion' },
+      { image: '/assets/banners/nike.png', brand: 'Nike' },
+      { image: '/assets/banners/nike2.png', brand: 'Nike' },
       { image: '/assets/banners/Biba.png', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422', brand: 'Biba' },
       { image: '/assets/banners/soxytoes.png', brand: 'Soxytoes' },
       { image: '/assets/banners/jewelry.png', brand: 'Jewelry' },
@@ -240,7 +277,7 @@ export default function ExploreProducts() {
       { image: '/assets/levis/336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422', brand: 'Levis' }
     ],
     'Tech': [
-      { image: '/assets/banners/samsung.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung' },
+      { image: '/assets/banners/samsung.png', brand: 'Samsung' }, // updated Samsung banner
       { image: '/assets/banners/moglix.jpg', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422', brand: 'Moglix' },
       { image: '/assets/laptops/laptopbanner.png', brand: 'Laptops' },
       { image: '/assets/samsung/24318_KV_Ultra_Banner_336x280.jpg', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422', brand: 'Samsung Galaxy' },
@@ -360,7 +397,7 @@ export default function ExploreProducts() {
             initial={{ opacity: 0, y: 50 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="col-span-1 md:col-span-2 lg:col-span-3 rounded-2xl overflow-hidden h-[150px] md:h-[180px] lg:h-[220px] transition-all duration-1000 ease-in-out relative group"
+            className="col-span-1 md:col-span-2 lg:col-span-3 rounded-2xl overflow-hidden h-[260px] md:h-[340px] lg:h-[420px] transition-all duration-1000 ease-in-out relative group"
           >
             {getCurrentBanners()[bannerIndex]?.url ? (
               // Clickable banner with affiliate link - Protected by verification
@@ -503,63 +540,48 @@ export default function ExploreProducts() {
                   </div>
 
                   {/* Product Image - Enhanced */}
-                  <div className="relative flex-grow flex items-center justify-center mb-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl p-6 group-hover:bg-gradient-to-br group-hover:from-gray-700/50 group-hover:to-gray-800/50 transition-all duration-300">
+                  <div className="relative flex-grow flex items-center justify-center mb-6 bg-white rounded-xl p-0 group-hover:bg-gray-100 transition-all duration-300 h-full w-full">
                     <motion.div
                       whileHover={{ scale: 1.08, rotate: 1 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                      className={`relative w-full ${product.size === 'large' ? 'h-56' : 'h-40'}`}
+                      transition={{ type: 'spring', stiffness: 300, damping: 10 }}
+                      className={`relative w-full h-full`}
                     >
                       <Image
                         src={product.image}
                         alt={product.name}
                         fill
-                        style={{ objectFit: "contain" }}
-                        className="drop-shadow-xl group-hover:drop-shadow-2xl transition-all duration-300"
+                        style={{ objectFit: 'contain', background: '#fff' }}
+                        className="drop-shadow-xl group-hover:drop-shadow-2xl transition-all duration-300 rounded-xl"
                       />
                     </motion.div>
-
-                    {/* Subtle glow effect */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-orange-500/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
 
                   {/* Price and Discount - Enhanced */}
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3 flex-wrap">
-                      <span className="font-bold text-white text-2xl">{product.price}</span>
-                      {product.originalPrice && (
-                        <span className="text-gray-500 line-through text-lg">{product.originalPrice}</span>
-                      )}
-                      {product.discount && (
-                        <span className="px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full text-green-400 text-sm font-medium">
-                          {product.discount}
-                        </span>
-                      )}
-                    </div>
+                  {/* Removed price, originalPrice, and discount display for all product cards as requested */}
 
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-2">
-                        <div className="flex text-yellow-400">
-                          {[...Array(5)].map((_, i) => (
-                            <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                            </svg>
-                          ))}
-                        </div>
-                        <span className="text-gray-400 text-sm font-medium">(4.5)</span>
-                      </div>
-
-                      <Link href={`/product/${product.id}`}>
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-amber-600 flex items-center justify-center hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-300"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      <div className="flex text-yellow-400">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                           </svg>
-                        </motion.button>
-                      </Link>
+                        ))}
+                      </div>
+                      <span className="text-gray-400 text-sm font-medium">(4.5)</span>
                     </div>
+
+                    <Link href={`/product/${product.id}`}>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-amber-600 flex items-center justify-center hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-300"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        </svg>
+                      </motion.button>
+                    </Link>
                   </div>
                 </div>
               </motion.div>
