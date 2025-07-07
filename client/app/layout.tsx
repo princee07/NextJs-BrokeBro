@@ -40,6 +40,8 @@ export default function RootLayout({
         <NavbarWrapper />
         <main>{children}</main>
         <Footer />
+        <Analytics />
+        {/* Development Test Controls */}
       </body>
     </html>
   );
