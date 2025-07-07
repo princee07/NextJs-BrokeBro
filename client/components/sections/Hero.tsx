@@ -117,14 +117,14 @@ const Hero = () => {
       logo: '/assets/images/akina.png',
       gradient: 'from-white-500 to-teal-300',
       slug: 'akina',
-    
+
     },
-      {
+    {
       name: 'BIBA',
-      logo: '/assets/biba/250*250.jpg',
-      gradient: 'from-white-500 to-teal-300',
+      logo: '/assets/images/biba.png',
+      gradient: 'from-red-500 to-teal-300',
       slug: 'biba',
-    
+
     },
     {
       name: 'just lil things',
@@ -138,7 +138,7 @@ const Hero = () => {
       logo: '/assets/images/lakme.png',
       gradient: 'from-purple-400 to-teal-300',
       slug: 'lakme',
-   
+
     },
     {
       name: 'soxytoes',
@@ -166,7 +166,7 @@ const Hero = () => {
       logo: '/assets/images/glued.png',
       gradient: 'from-orange-500 to-red-400',
       slug: 'glued',
-    
+
     },
     {
       name: 'just lil things',
@@ -180,7 +180,7 @@ const Hero = () => {
       logo: '/assets/images/gamepalacio.png',
       gradient: 'from-black to-yellow-600',
       slug: 'gamepalacio',
-     
+
     },
     {
       name: 'Unity',
@@ -188,7 +188,7 @@ const Hero = () => {
       gradient: 'from-gray-700 to-gray-900',
       slug: 'unity',
       discount: '20% OFF',
-     
+
     },
     {
       name: 'Bhootiya store',
@@ -196,7 +196,7 @@ const Hero = () => {
       gradient: 'from-red-600 to-red-700',
       slug: 'Bhootiya store',
       discount: '20% OFF',
-     
+
     }
   ];
 

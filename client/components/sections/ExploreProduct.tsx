@@ -360,7 +360,7 @@ export default function ExploreProducts() {
             initial={{ opacity: 0, y: 50 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="col-span-1 md:col-span-2 lg:col-span-3 rounded-2xl overflow-hidden h-[200px] md:h-[250px] lg:h-[300px] transition-all duration-1000 ease-in-out relative group"
+            className="col-span-1 md:col-span-2 lg:col-span-3 rounded-2xl overflow-hidden h-[150px] md:h-[180px] lg:h-[220px] transition-all duration-1000 ease-in-out relative group"
           >
             {getCurrentBanners()[bannerIndex]?.url ? (
               // Clickable banner with affiliate link - Protected by verification
