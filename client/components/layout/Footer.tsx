@@ -386,17 +386,23 @@ const Footer = () => {
               ></motion.div>
             </motion.h4>
             <ul className="space-y-3">
-              {['About Us', 'Careers', 'Blog', 'Student Verification', 'Press'].map((item) => (
-                <motion.li key={item}>
+              {[
+                { name: 'About Us', href: '/about' },
+                { name: 'Careers', href: '/careers' },
+                { name: 'Blog', href: '/blog' },
+                { name: 'Student Verification', href: '/student-verification' },
+                { name: 'Press', href: '/press' }
+              ].map((item) => (
+                <motion.li key={item.name}>
                   <Link
-                    href={`/${item.toLowerCase().replace(' ', '-')}`}
+                    href={item.href}
                     className="text-gray-400 hover:text-orange-500 transition-all duration-300 flex items-center group"
                   >
                     <motion.span
                       whileHover={{ x: 5 }}
                       className="group-hover:text-orange-400"
                     >
-                      {item}
+                      {item.name}
                     </motion.span>
                     <motion.span
                       className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity"
