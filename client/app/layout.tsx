@@ -3,6 +3,8 @@ import "./styles/global.css";
 import NavbarWrapper from "@/components/layout/NavbarWrapper";
 import Footer from "@/components/layout/Footer";
 import ReferralProcessor from "@/components/auth/ReferralProcessor";
+
+import { Analytics } from "@vercel/analytics/next"
 import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
