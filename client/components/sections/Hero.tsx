@@ -38,11 +38,11 @@ const Hero = () => {
   const ads = [
     {
       imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_1A_Website.png?v=1697116566&width=2000",
-      linkUrl: "https://www.myunidays.com/IN/en-IN"
+      linkUrl: "https://soxytoes.com/"
     },
     {
       imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_3_Website.png?v=1697116591&width=2000",
-      linkUrl: "https://www.udemy.com/"
+      linkUrl: "https://soxytoes.com/"
     },
     {
       imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_2A_Website.png?v=1697116587&width=2000",
@@ -117,21 +117,21 @@ const Hero = () => {
       logo: '/assets/images/akina.png',
       gradient: 'from-white-500 to-teal-300',
       slug: 'akina',
-      discount: '60% OFF'
+    
     },
     {
       name: 'just lil things',
       logo: '/assets/images/justlilthings.png',
       gradient: 'from-pink-400 to-teal-100',
       slug: 'just lil things',
-      discount: '60% OFF'
+      discount: '15% OFF'
     },
     {
       name: 'lakme',
       logo: '/assets/images/lakme.png',
       gradient: 'from-purple-400 to-teal-300',
       slug: 'lakme',
-      discount: '60% OFF'
+   
     },
     {
       name: 'soxytoes',
@@ -145,51 +145,51 @@ const Hero = () => {
       logo: '/assets/images/justlilthings.png',
       gradient: 'from-pink-400 to-teal-100',
       slug: 'just lil things',
-      discount: '60% OFF'
+      discount: '15% OFF'
     },
     {
-      name: 'Ultimate Rides',
-      logo: '/assets/images/UltimateRC.png',
+      name: 'the Ultimate RC',
+      logo: '/assets/images/ultimateRC.png',
       gradient: 'from-orange-500 to-red-400',
       slug: 'Ultimate Rides',
-      discount: '₹1000 OFF'
+      discount: '1 + 1 free'
     },
     {
       name: 'glued',
       logo: '/assets/images/glued.png',
       gradient: 'from-orange-500 to-red-400',
       slug: 'glued',
-      discount: '₹1000 OFF'
+    
     },
     {
       name: 'just lil things',
       logo: '/assets/images/justlilthings.png',
       gradient: 'from-pink-400 to-teal-100',
       slug: 'just lil things',
-      discount: '60% OFF'
+      discount: '15% OFF'
     },
     {
       name: 'gamepalacio',
       logo: '/assets/images/gamepalacio.png',
       gradient: 'from-black to-yellow-600',
       slug: 'gamepalacio',
-      discount: '₹1000 OFF'
+     
     },
     {
       name: 'Unity',
       logo: '/assets/images/unity.png',
       gradient: 'from-gray-700 to-gray-900',
       slug: 'unity',
-      discount: '50% OFF',
-      code: 'UNITY50',
+      discount: '20% OFF',
+     
     },
     {
-      name: 'KFC',
-      logo: '/assets/images/kfc.png',
+      name: 'Bhootiya store',
+      logo: '/assets/images/bhootiyastore_logo.png',
       gradient: 'from-red-600 to-red-700',
-      slug: 'kfc',
-      discount: '30% OFF',
-      code: 'KFC30',
+      slug: 'Bhootiya store',
+      discount: '20% OFF',
+     
     }
   ];
 
