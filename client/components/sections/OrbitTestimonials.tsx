@@ -5,62 +5,58 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const AVATARS = [
   {
-    name: 'Alice',
-    img: 'https://randomuser.me/api/portraits/women/44.jpg',
+    name: 'Lavanya',
+    img: '/assets/people/Lavanya.jpeg',
   },
   {
-    name: 'Bob',
-    img: 'https://randomuser.me/api/portraits/men/32.jpg',
+    name: 'Mohit',
+    img: '/assets/people/mohit .jpg',
   },
   {
-    name: 'Carol',
-    img: 'https://randomuser.me/api/portraits/women/68.jpg',
-  },
-  {
-    name: 'Dave',
-    img: 'https://randomuser.me/api/portraits/men/85.jpg',
-  },
-  {
-    name: 'Eve',
-    img: 'https://randomuser.me/api/portraits/women/65.jpg',
-  },
-  {
-    name: 'Frank',
-    img: 'https://randomuser.me/api/portraits/men/41.jpg',
+    name: 'Prince',
+    img: '/assets/people/prince.jpg',
   },
 ];
 
 const TESTIMONIALS = [
   {
     avatar: AVATARS[0].img,
-    text: 'Was your first day welcoming?',
+    text: 'BrokeBro saved me ₹15,000 this semester! Perfect for student budgets with amazing deals.',
   },
   {
     avatar: AVATARS[1].img,
-    text: 'Are your role expectations clear?',
+    text: 'Found my laptop 40% cheaper here! Great variety of tech products and brands.',
   },
   {
     avatar: AVATARS[2].img,
-    text: 'Do you have the tools you need to do your job?',
-  },
-  {
-    avatar: AVATARS[3].img,
-    text: 'Do you feel comfortable asking questions?',
-  },
-  {
-    avatar: AVATARS[4].img,
-    text: 'How would you rate your onboarding?',
+    text: 'Great deals and instant discounts! The UI is super clean and easy to navigate.',
   },
 ];
 
 const ORBIT_DURATION = 3; // seconds
+const TESTIMONIALS_DISPLAY_DURATION = 4; // seconds
 
 export default function OrbitTestimonials() {
   const [showTestimonials, setShowTestimonials] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowTestimonials(true), ORBIT_DURATION * 1000);
-    return () => clearTimeout(timer);
+    const cycleBetweenStates = () => {
+      // Show orbit animation first
+      setShowTestimonials(false);
+
+      // After orbit duration, show testimonials
+      setTimeout(() => {
+        setShowTestimonials(true);
+
+        // After testimonials display duration, restart the cycle
+        setTimeout(() => {
+          cycleBetweenStates();
+        }, TESTIMONIALS_DISPLAY_DURATION * 1000);
+      }, ORBIT_DURATION * 1000);
+    };
+
+    // Start the cycle
+    cycleBetweenStates();
   }, []);
 
   return (
@@ -77,8 +73,8 @@ export default function OrbitTestimonials() {
           >
             {/* Central Circle */}
             <div className="absolute z-10 flex items-center justify-center">
-              <div className="bg-gradient-to-br from-purple-500 to-pink-500 text-white font-bold text-xl md:text-2xl rounded-full w-40 h-40 flex items-center justify-center shadow-xl backdrop-blur-md">
-                Onboarding<br />Survey
+              <div className="bg-gradient-to-br from-orange-500 to-pink-500 text-white font-bold text-xl md:text-2xl rounded-full w-40 h-40 flex items-center justify-center shadow-xl backdrop-blur-md">
+                BrokeBro<br />Reviews
               </div>
             </div>
             {/* Orbiting Avatars */}
@@ -122,7 +118,7 @@ export default function OrbitTestimonials() {
             transition={{ duration: 0.8 }}
             className="w-full flex flex-col items-center"
           >
-            <h2 className="text-white text-2xl md:text-3xl font-bold mb-8 drop-shadow-lg">Analyze key themes</h2>
+            <h2 className="text-white text-2xl md:text-3xl font-bold mb-8 drop-shadow-lg">What Our Users Say</h2>
             <div className="flex flex-wrap justify-center gap-6 w-full max-w-4xl">
               {TESTIMONIALS.map((t, i) => (
                 <motion.div

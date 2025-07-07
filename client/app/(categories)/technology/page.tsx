@@ -2,6 +2,7 @@
 import type React from "react"
 import { useState, useEffect } from "react"
 import { ShoppingCart, Heart, Star, Eye, ArrowRight, Zap, Shield, Truck } from "lucide-react"
+import VerificationGate from '@/components/ui/VerificationGate';
 
 interface Product {
   id: number
@@ -135,9 +136,8 @@ const EcommerceHero: React.FC = () => {
           {heroSlides.map((slide, index) => (
             <div
               key={index}
-              className={`absolute inset-0 bg-gradient-to-r ${slide.background} opacity-5 transition-opacity duration-1000 ${
-                index === currentSlide ? "opacity-10" : "opacity-5"
-              }`}
+              className={`absolute inset-0 bg-gradient-to-r ${slide.background} opacity-5 transition-opacity duration-1000 ${index === currentSlide ? "opacity-10" : "opacity-5"
+                }`}
             />
           ))}
         </div>
@@ -212,9 +212,8 @@ const EcommerceHero: React.FC = () => {
                   {featuredProducts.slice(0, 4).map((product, index) => (
                     <div
                       key={product.id}
-                      className={`bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-3xl hover:border-orange-500/50 backdrop-blur-sm ${
-                        index % 2 === 0 ? "translate-y-4" : "-translate-y-4"
-                      }`}
+                      className={`bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-3xl hover:border-orange-500/50 backdrop-blur-sm ${index % 2 === 0 ? "translate-y-4" : "-translate-y-4"
+                        }`}
                       style={{
                         animationDelay: `${index * 0.1}s`,
                       }}
@@ -294,9 +293,8 @@ const EcommerceHero: React.FC = () => {
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-colors duration-300 ${
-                index === currentSlide ? "bg-gradient-to-r from-orange-500 to-pink-600" : "bg-gray-600"
-              }`}
+              className={`w-3 h-3 rounded-full transition-colors duration-300 ${index === currentSlide ? "bg-gradient-to-r from-orange-500 to-pink-600" : "bg-gray-600"
+                }`}
             />
           ))}
         </div>
@@ -316,86 +314,85 @@ const EcommerceHero: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl shadow-lg overflow-hidden group hover:shadow-2xl hover:border-orange-500/50 transition-all duration-300 transform hover:-translate-y-2 backdrop-blur-sm"
-                onMouseEnter={() => setHoveredCard(product.id)}
-                onMouseLeave={() => setHoveredCard(null)}
-              >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={product.image || "/placeholder.svg"}
-                    alt={product.name}
-                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
+              <VerificationGate key={product.id}>
+                <div
+                  className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl shadow-lg overflow-hidden group hover:shadow-2xl hover:border-orange-500/50 transition-all duration-300 transform hover:-translate-y-2 backdrop-blur-sm"
+                  onMouseEnter={() => setHoveredCard(product.id)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                >
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={product.image || "/placeholder.svg"}
+                      alt={product.name}
+                      className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
 
-                  {/* Badges */}
-                  <div className="absolute top-4 left-4 flex flex-col gap-2">
-                    {product.isNew && (
-                      <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm px-3 py-1 rounded-full font-medium">
-                        NEW
-                      </span>
-                    )}
-                    {product.isSale && (
-                      <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm px-3 py-1 rounded-full font-medium">
-                        -{product.discount}% OFF
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Quick Actions */}
-                  <div className="absolute top-4 right-4 flex flex-col gap-2">
-                    <button className="p-3 bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-gradient-to-r hover:from-orange-500 hover:to-pink-600 transition-all opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
-                      <Heart className="w-5 h-5 text-gray-300 hover:text-white" />
-                    </button>
-                    <button className="p-3 bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-gradient-to-r hover:from-orange-500 hover:to-pink-600 transition-all opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300 delay-75">
-                      <Eye className="w-5 h-5 text-gray-300 hover:text-white" />
-                    </button>
-                  </div>
-
-                  {/* Overlay CTA */}
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-                    <button className="bg-gradient-to-r from-orange-500 to-pink-600 text-white px-6 py-3 rounded-full font-semibold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center space-x-2 shadow-lg">
-                      <ShoppingCart className="w-5 h-5" />
-                      <span>Quick Add</span>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent mb-2 group-hover:from-orange-300 group-hover:to-pink-400 transition-all">
-                    {product.name}
-                  </h3>
-
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="flex items-center">{renderStars(product.rating)}</div>
-                    <span className="text-sm text-gray-400">
-                      {product.rating} ({product.reviews} reviews)
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">
-                        ${product.price}
-                      </span>
-                      {product.originalPrice && (
-                        <span className="text-lg text-gray-500 line-through">${product.originalPrice}</span>
+                    {/* Badges */}
+                    <div className="absolute top-4 left-4 flex flex-col gap-2">
+                      {product.isNew && (
+                        <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm px-3 py-1 rounded-full font-medium">
+                          NEW
+                        </span>
+                      )}
+                      {product.isSale && (
+                        <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm px-3 py-1 rounded-full font-medium">
+                          -{product.discount}% OFF
+                        </span>
                       )}
                     </div>
-                    {product.isSale && (
-                      <span className="text-green-400 text-sm font-medium">
-                        Save ${(product.originalPrice! - product.price).toFixed(2)}
-                      </span>
-                    )}
+
+                    {/* Quick Actions */}
+                    <div className="absolute top-4 right-4 flex flex-col gap-2">
+                      <button className="p-3 bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-gradient-to-r hover:from-orange-500 hover:to-pink-600 transition-all opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
+                        <Heart className="w-5 h-5 text-gray-300 hover:text-white" />
+                      </button>
+                      <button className="p-3 bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-gradient-to-r hover:from-orange-500 hover:to-pink-600 transition-all opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300 delay-75">
+                        <Eye className="w-5 h-5 text-gray-300 hover:text-white" />
+                      </button>
+                    </div>
+
+                    {/* Overlay CTA */}
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                      <button className="bg-gradient-to-r from-orange-500 to-pink-600 text-white px-6 py-3 rounded-full font-semibold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center space-x-2 shadow-lg">
+                        <ShoppingCart className="w-5 h-5" />
+                        <span>Quick Add</span>
+                      </button>
+                    </div>
                   </div>
 
-                  <button className="w-full bg-gradient-to-r from-orange-500 to-pink-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25">
-                    <ShoppingCart className="w-5 h-5" />
-                    <span>Add to Cart</span>
-                  </button>
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent mb-2 group-hover:from-orange-300 group-hover:to-pink-400 transition-all">
+                      {product.name}
+                    </h3>
+
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="flex items-center">{renderStars(product.rating)}</div>
+                      <span className="text-sm text-gray-400">
+                        {product.rating} ({product.reviews} reviews)
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">
+                          ${product.price}
+                        </span>
+                        {product.originalPrice && (
+                          <span className="text-lg text-gray-500 line-through">${product.originalPrice}</span>
+                        )}
+                      </div>
+                      {product.isSale && (
+                        <span className="text-green-400 text-sm font-medium">
+                          Save ${(product.originalPrice! - product.price).toFixed(2)}
+                        </span>
+                      )}
+                    </div>                  <button className="w-full bg-gradient-to-r from-orange-500 to-pink-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25">
+                      <ShoppingCart className="w-5 h-5" />
+                      <span>Add to Cart</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </VerificationGate>
             ))}
           </div>
         </div>

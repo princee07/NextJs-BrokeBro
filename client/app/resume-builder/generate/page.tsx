@@ -1,6 +1,8 @@
 'use client';
 import React, { useState, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { CheckCircle, Upload, Download, AlertCircle } from 'lucide-react';
 
 const templates = [
   { id: 'modern', name: 'Modern' },
@@ -51,6 +53,7 @@ const defaultFieldStyles = {
 };
 
 export default function ResumeBuilder() {
+  const { user, isAuthenticated } = useKindeBrowserClient();
   const [resume, setResume] = useState(initialResume);
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
   const [font, setFont] = useState('sans-serif');
@@ -63,6 +66,9 @@ export default function ResumeBuilder() {
   const [fieldStyles, setFieldStyles] = useState<Record<string, any>>({});
   const [uploadedResume, setUploadedResume] = useState<File | null>(null);
   const [showUploadInput, setShowUploadInput] = useState(false);
+  const [uploadLoading, setUploadLoading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const resumeRef = useRef<HTMLDivElement>(null);
 
   // Download PDF handler
@@ -90,12 +96,68 @@ export default function ResumeBuilder() {
   };
 
   // Upload Resume handler
-  const handleResumeUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleResumeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setUploadedResume(file);
-      setShowUploadInput(false);
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!allowedTypes.includes(file.type)) {
+      setUploadError('Please upload a PDF or Word document');
+      return;
     }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError('File size must be less than 5MB');
+      return;
+    }
+
+    if (!isAuthenticated) {
+      setUploadError('Please log in to upload your resume');
+      return;
+    }
+
+    setUploadLoading(true);
+    setUploadError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('resume', file);
+
+      const response = await fetch('/api/upload-resume', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Upload failed');
+      }
+
+      const result = await response.json();
+      setUploadedResume(file);
+      setUploadSuccess(true);
+      setShowUploadInput(false);
+
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        setUploadSuccess(false);
+      }, 3000);
+
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to upload resume';
+      setUploadError(errorMessage);
+    } finally {
+      setUploadLoading(false);
+    }
+  };
+
+  // Clear error messages when user starts a new upload
+  const handleUploadButtonClick = () => {
+    setUploadError(null);
+    setUploadSuccess(false);
+    setShowUploadInput(true);
   };
 
   // Text editing handlers
@@ -348,30 +410,97 @@ export default function ResumeBuilder() {
             <button type="button" className={`px-2 py-1 rounded ${selectedField && fieldStyles[selectedField]?.textDecoration === 'underline' ? 'bg-orange-500 text-white' : 'bg-gray-700 text-gray-200'}`} onClick={() => toggleStyle('textDecoration', 'underline')} disabled={!selectedField}>U</button>
           </div>
         </div>
-        <div className="mt-8">
+
+        {/* Actions Section */}
+        <div className="mt-8 space-y-4">
+          <h2 className="text-lg font-bold text-white mb-4">Actions</h2>
+
+          {/* Download PDF Button */}
           <button
-            className="w-full bg-green-600 text-white font-bold py-2 rounded-lg mb-4 cursor-pointer"
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
             onClick={handlePrint}
           >
+            <Download className="w-5 h-5" />
             Download PDF
           </button>
-          <button
-            className="w-full bg-gray-700 text-white font-bold py-2 rounded-lg cursor-pointer"
-            onClick={() => setShowUploadInput(true)}
-          >
-            Upload Resume
-          </button>
-          {showUploadInput && (
-            <input
-              type="file"
-              accept=".pdf,.doc,.docx"
-              className="mt-2 text-white"
-              onChange={handleResumeUpload}
-            />
-          )}
-          {uploadedResume && (
-            <div className="mt-2 text-sm text-gray-300">Uploaded: {uploadedResume.name}</div>
-          )}
+
+          {/* Upload Resume Section */}
+          <div className="space-y-2">
+            {!showUploadInput ? (
+              <button
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                onClick={handleUploadButtonClick}
+                disabled={!isAuthenticated}
+              >
+                <Upload className="w-5 h-5" />
+                Upload Resume
+              </button>
+            ) : (
+              <div className="space-y-2">
+                <input
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  onChange={handleResumeUpload}
+                  disabled={uploadLoading}
+                  className="w-full text-white text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 file:cursor-pointer"
+                />
+                <button
+                  onClick={() => {
+                    setShowUploadInput(false);
+                    setUploadError(null);
+                    setUploadSuccess(false);
+                  }}
+                  className="w-full bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg text-sm"
+                  disabled={uploadLoading}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+
+            {/* Upload Loading State */}
+            {uploadLoading && (
+              <div className="flex items-center gap-2 p-2 bg-blue-900/30 border border-blue-600 rounded-lg">
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-400 border-t-transparent"></div>
+                <span className="text-blue-300 text-sm">Uploading...</span>
+              </div>
+            )}
+
+            {/* Upload Success Message */}
+            {uploadSuccess && (
+              <div className="flex items-center gap-2 p-2 bg-green-900/30 border border-green-600 rounded-lg">
+                <CheckCircle className="w-4 h-4 text-green-400" />
+                <span className="text-green-300 text-sm">Resume uploaded successfully!</span>
+              </div>
+            )}
+
+            {/* Upload Error Message */}
+            {uploadError && (
+              <div className="flex items-center gap-2 p-2 bg-red-900/30 border border-red-600 rounded-lg">
+                <AlertCircle className="w-4 h-4 text-red-400" />
+                <span className="text-red-300 text-sm">{uploadError}</span>
+              </div>
+            )}
+
+            {/* Uploaded File Info */}
+            {uploadedResume && !uploadLoading && (
+              <div className="p-2 bg-gray-800/50 border border-gray-600 rounded-lg">
+                <div className="text-gray-300 text-sm">
+                  <strong>Uploaded:</strong> {uploadedResume.name}
+                </div>
+                <div className="text-gray-400 text-xs">
+                  Size: {(uploadedResume.size / 1024 / 1024).toFixed(2)} MB
+                </div>
+              </div>
+            )}
+
+            {/* Authentication Warning */}
+            {!isAuthenticated && (
+              <div className="p-2 bg-yellow-900/30 border border-yellow-600 rounded-lg">
+                <span className="text-yellow-300 text-sm">Please log in to upload your resume</span>
+              </div>
+            )}
+          </div>
         </div>
       </aside>
 

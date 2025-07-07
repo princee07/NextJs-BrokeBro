@@ -7,6 +7,7 @@ const nextConfig = {
       'i.pravatar.cc', 
       'randomuser.me',
       'm.media-amazon.com',
+      'images.unsplash.com',
       // allow pravatar for next/image
       // add more domains as needed
     ],

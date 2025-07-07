@@ -5,28 +5,53 @@ import BannerAd from "../BannerAd";
 
 const bannerAds = [
 	{
-		imageUrl:
-			"https://soxytoes.com/cdn/shop/files/Theme_1A_Website.png?v=1697116566&width=2000",
-		title: "Student Discounts",
-		description: "Unlock exclusive student offers on top brands.",
-		ctaText: "Get Started",
-		ctaLink: "https://www.myunidays.com/IN/en-IN",
-	},
-	{
-		imageUrl:
-			"https://soxytoes.com/cdn/shop/files/Theme_3_Website.png?v=1697116591&width=2000",
-		title: "Big Sale on Laptops!",
-		description: "Up to 40% off for students. Limited time only.",
+		imageUrl: "/assets/banners/Biba.png",
+		title: "Biba Fashion Sale",
+		description: "Trendy ethnic wear with exclusive student discounts up to 40% off.",
 		ctaText: "Shop Now",
-		ctaLink: "/categories/technology",
+		ctaLink: "https://www.biba.in",
 	},
 	{
-		imageUrl:
-			"https://soxytoes.com/cdn/shop/files/Theme_2A_Website.png?v=1697116587&width=2000",
-		title: "Refer & Earn",
-		description: "Invite friends and earn exclusive rewards.",
-		ctaText: "Invite Now",
-		ctaLink: "/refer",
+		imageUrl: "/assets/banners/soxytoes.png",
+		title: "Soxytoes Comfort",
+		description: "Premium socks and comfort wear with 20% student discount.",
+		ctaText: "Get Discount",
+		ctaLink: "https://soxytoes.com",
+	},
+	{
+		imageUrl: "/assets/banners/swissbeauty.png",
+		title: "Swiss Beauty",
+		description: "Professional makeup and beauty products at student-friendly prices.",
+		ctaText: "Explore",
+		ctaLink: "https://www.swissbeauty.in",
+	},
+	{
+		imageUrl: "/assets/banners/clove.png",
+		title: "Clove Dental",
+		description: "Affordable dental care and oral health solutions for students.",
+		ctaText: "Book Now",
+		ctaLink: "https://clove.co.in",
+	},
+	{
+		imageUrl: "/assets/banners/hkvitals.png",
+		title: "HK Vitals Wellness",
+		description: "Health supplements and wellness products with student offers.",
+		ctaText: "Shop Health",
+		ctaLink: "https://www.hkvitals.com",
+	},
+	{
+		imageUrl: "/assets/banners/jewelry.png",
+		title: "Premium Jewelry",
+		description: "Elegant jewelry collection with special student pricing and deals.",
+		ctaText: "View Collection",
+		ctaLink: "#",
+	},
+	{
+		imageUrl: "/assets/banners/glued.png",
+		title: "Glued Tech",
+		description: "Latest tech gadgets and accessories with exclusive student discounts.",
+		ctaText: "Discover",
+		ctaLink: "https://glued.in",
 	},
 ];
 

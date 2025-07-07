@@ -4,9 +4,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import ModalAd from '../ModalAd';
 import Modal from '../ui/Modal';
 import RevealCodeButton from '../ui/RevealCodeButton';
+import { useStudentVerification } from '@/hooks/useStudentVerification';
 
 // Pop sound path
 const popSoundPath = '/assets/sounds/pop.mp4';
@@ -20,6 +22,8 @@ const Hero = () => {
   const adTimeout = useRef<NodeJS.Timeout | null>(null);
   const [showBrandModal, setShowBrandModal] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState<any>(null);
+  const router = useRouter();
+  const { isVerified } = useStudentVerification();
 
   // Text to type out
   const fullText = "STUDENT DISCOUNTS UNLOCKED";
@@ -34,11 +38,11 @@ const Hero = () => {
   const ads = [
     {
       imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_1A_Website.png?v=1697116566&width=2000",
-      linkUrl: "https://www.myunidays.com/IN/en-IN"
+      linkUrl: "https://soxytoes.com/"
     },
     {
       imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_3_Website.png?v=1697116591&width=2000",
-      linkUrl: "https://www.udemy.com/"
+      linkUrl: "https://soxytoes.com/"
     },
     {
       imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_2A_Website.png?v=1697116587&width=2000",
@@ -51,7 +55,7 @@ const Hero = () => {
     if (typedText.length < fullText.length) {
       const timeout = setTimeout(() => {
         setTypedText(fullText.substring(0, typedText.length + 1));
-      }, 75);
+      }, 50);
 
       return () => clearTimeout(timeout);
     } else {
@@ -113,21 +117,28 @@ const Hero = () => {
       logo: '/assets/images/akina.png',
       gradient: 'from-white-500 to-teal-300',
       slug: 'akina',
-      discount: '60% OFF'
+    
+    },
+      {
+      name: 'BIBA',
+      logo: '/assets/biba/250*250.jpg',
+      gradient: 'from-white-500 to-teal-300',
+      slug: 'biba',
+    
     },
     {
       name: 'just lil things',
       logo: '/assets/images/justlilthings.png',
       gradient: 'from-pink-400 to-teal-100',
       slug: 'just lil things',
-      discount: '60% OFF'
+      discount: '15% OFF'
     },
     {
       name: 'lakme',
       logo: '/assets/images/lakme.png',
       gradient: 'from-purple-400 to-teal-300',
       slug: 'lakme',
-      discount: '60% OFF'
+   
     },
     {
       name: 'soxytoes',
@@ -141,57 +152,70 @@ const Hero = () => {
       logo: '/assets/images/justlilthings.png',
       gradient: 'from-pink-400 to-teal-100',
       slug: 'just lil things',
-      discount: '60% OFF'
+      discount: '15% OFF'
     },
     {
-      name: 'Ultimate Rides',
-      logo: '/assets/images/UltimateRC.png',
+      name: 'the Ultimate RC',
+      logo: '/assets/images/ultimateRC.png',
       gradient: 'from-orange-500 to-red-400',
       slug: 'Ultimate Rides',
-      discount: '₹1000 OFF'
+      discount: '1 + 1 free'
     },
     {
       name: 'glued',
       logo: '/assets/images/glued.png',
       gradient: 'from-orange-500 to-red-400',
       slug: 'glued',
-      discount: '₹1000 OFF'
+    
     },
     {
       name: 'just lil things',
       logo: '/assets/images/justlilthings.png',
       gradient: 'from-pink-400 to-teal-100',
       slug: 'just lil things',
-      discount: '60% OFF'
+      discount: '15% OFF'
     },
     {
       name: 'gamepalacio',
       logo: '/assets/images/gamepalacio.png',
       gradient: 'from-black to-yellow-600',
       slug: 'gamepalacio',
-      discount: '₹1000 OFF'
+     
     },
     {
       name: 'Unity',
       logo: '/assets/images/unity.png',
       gradient: 'from-gray-700 to-gray-900',
       slug: 'unity',
-      discount: '50% OFF',
-      code: 'UNITY50',
+      discount: '20% OFF',
+     
     },
     {
-      name: 'KFC',
-      logo: '/assets/images/kfc.png',
+      name: 'Bhootiya store',
+      logo: '/assets/images/bhootiyastore_logo.png',
       gradient: 'from-red-600 to-red-700',
-      slug: 'kfc',
-      discount: '30% OFF',
-      code: 'KFC30',
+      slug: 'Bhootiya store',
+      discount: '20% OFF',
+     
     }
   ];
 
   // Duplicate cards for smooth infinite scrolling
   const column1Cards = [...brandCards.slice(0, 2), ...brandCards.slice(0, 2)];
   const column2Cards = [...brandCards.slice(2), ...brandCards.slice(2)];
+
+  // Handle brand card click - check verification first
+  const handleBrandCardClick = (brand: any) => {
+    if (!isVerified) {
+      // Redirect to student verification page if not verified
+      // After verification, user can return and click again to see the modal
+      router.push('/student-verification');
+    } else {
+      // Open modal with discount code if user is verified
+      setSelectedBrand(brand);
+      setShowBrandModal(true);
+    }
+  };
 
   // Ensure only the animated right-side ModalAd is rendered. Remove all other modal ads.
   return (
@@ -209,9 +233,6 @@ const Hero = () => {
             style={{ boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}
           >
             <ModalAd
-              key={ads[adIndex].imageUrl}
-              imageUrl={ads[adIndex].imageUrl}
-              linkUrl={ads[adIndex].linkUrl}
               className="w-full h-full"
               onClose={() => {
                 setShowAd(false);
@@ -279,7 +300,7 @@ const Hero = () => {
       <div className="container mx-auto px-4 pb-20 relative z-10">
         <div className="flex flex-col lg:flex-row items-start lg:items-center">
           {/* Hero Text Content - WITH FIXED SPACING */}
-          <div className="w-full lg:w-1/2 mb-10 lg:mb-0 lg:sticky lg:top-32 mt-56">
+          <div className="w-full lg:w-1/2 mb-10 lg:mb-0 lg:sticky lg:top-32 mt-72">
             {/* Fixed height container for main heading */}
             <div className="h-[130px] md:h-[150px]">
               <motion.div
@@ -288,12 +309,12 @@ const Hero = () => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8 }}
               >
-                {/* Main heading with REDUCED font size */}
+                {/* Main heading with DECREASED font size */}
                 <div className="flex items-center">
-                  <h1 className="text-4xl md:text-6xl font-extrabold">
+                  <h1 className="text-3xl md:text-5xl font-extrabold">
                     <span className="bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 bg-clip-text text-transparent inline-block">
                       {typedText}
-                      <span className={`inline-block w-1 h-10 bg-orange-400 ml-1 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'}`}></span>
+                      <span className={`inline-block w-1 h-8 bg-orange-400 ml-1 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'}`}></span>
                     </span>
                   </h1>
                 </div>
@@ -305,7 +326,7 @@ const Hero = () => {
               <AnimatePresence mode="wait">
                 <motion.p
                   key={currentDealIndex}
-                  className="text-xl md:text-2xl text-gray-300 font-medium"
+                  className="text-lg md:text-xl text-gray-300 font-medium"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
@@ -321,22 +342,22 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="mt-10"
+              className="mt-8"
             >
-              <p className="text-xl text-gray-300 max-w-xl leading-relaxed">
+              <p className="text-base text-gray-300 max-w-xl leading-relaxed">
                 <span className="font-semibold text-orange-400">College is expensive enough.</span> We've partnered with top brands to bring you
                 exclusive student discounts that make a difference.
               </p>
 
               {/* Feature list */}
-              <ul className="mt-6 space-y-3">
+              <ul className="mt-4 space-y-2">
                 {[
                   "Verified with your student ID or .edu email",
                   "Exclusive deals not available to the public"
                 ].map((feature, index) => (
                   <motion.li
                     key={feature}
-                    className="flex items-center text-gray-300"
+                    className="flex items-center text-gray-300 text-sm"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: 0.8 + (index * 0.15) }}
@@ -354,14 +375,14 @@ const Hero = () => {
 
             {/* CTA Button */}
             <motion.div
-              className="mt-10"
+              className="mt-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.3 }}
             >
               <Link href="/auth/signup">
                 <motion.div
-                  className="relative inline-block bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 text-white font-bold text-lg py-4 px-8 rounded-full transition-all duration-300 overflow-hidden hover:shadow-lg hover:shadow-orange-600/20"
+                  className="relative inline-block bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 text-white font-bold text-base py-3 px-6 rounded-full transition-all duration-300 overflow-hidden hover:shadow-lg hover:shadow-orange-600/20"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -396,7 +417,7 @@ const Hero = () => {
                   {column1Cards.map((brand, index) => (
                     <div
                       key={`col1-${index}`}
-                      onClick={() => { setSelectedBrand(brand); setShowBrandModal(true); }}
+                      onClick={() => handleBrandCardClick(brand)}
                       className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
@@ -416,6 +437,9 @@ const Hero = () => {
                           style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '65%', marginTop: '32px' }}
                           className="transition-transform duration-700 group-hover:scale-110"
                         />
+                      </div>
+                      <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
+                        <p className="text-white font-semibold">{brand.name} Student Deals</p>
                       </div>
                       <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
                         <p className="text-white font-semibold">{brand.name} Student Deals</p>
@@ -441,7 +465,7 @@ const Hero = () => {
                   {column1Cards.map((brand, index) => (
                     <div
                       key={`col1-clone-${index}`}
-                      onClick={() => { setSelectedBrand(brand); setShowBrandModal(true); }}
+                      onClick={() => handleBrandCardClick(brand)}
                       className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
@@ -487,7 +511,7 @@ const Hero = () => {
                   {column2Cards.map((brand, index) => (
                     <div
                       key={`col2-${index}`}
-                      onClick={() => { setSelectedBrand(brand); setShowBrandModal(true); }}
+                      onClick={() => handleBrandCardClick(brand)}
                       className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
@@ -531,7 +555,7 @@ const Hero = () => {
                   {column2Cards.map((brand, index) => (
                     <div
                       key={`col2-clone-${index}`}
-                      onClick={() => { setSelectedBrand(brand); setShowBrandModal(true); }}
+                      onClick={() => { handleBrandCardClick(brand); }}
                       className={`relative ${index === 0 ? '' : 'mt-3'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>

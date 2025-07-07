@@ -3,6 +3,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Search, ShoppingCart, Heart, Eye, ArrowRight, Zap, Shield, Truck } from "lucide-react";
+import VerificationGate from '@/components/ui/VerificationGate';
 
 type Product = {
   id: string;
@@ -113,7 +114,7 @@ const HeroSection: React.FC = () => (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div className="space-y-6">
-          
+
           <h1 className="text-5xl lg:text-7xl font-bold leading-tight bg-gradient-to-r from-orange-400 via-pink-500 to-orange-400 bg-clip-text text-transparent">
             EXPLORE <span className="bg-gradient-to-r from-orange-400 via-pink-500 to-orange-400 bg-clip-text text-transparent">THE WORLD WITH US</span>
           </h1>
@@ -241,9 +242,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
         <button
           onClick={() => handleAddToCart(product.id)}
-          className={`bg-gradient-to-r ${
-            added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"
-          } text-white px-6 py-3 rounded-full font-semibold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center space-x-2 shadow-lg`}
+          className={`bg-gradient-to-r ${added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"
+            } text-white px-6 py-3 rounded-full font-semibold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center space-x-2 shadow-lg`}
         >
           <ShoppingCart className="w-5 h-5" />
           <span>{added ? "Added! ✓" : "Book Deal"}</span>
@@ -268,9 +268,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </div>
       <button
         onClick={() => handleAddToCart(product.id)}
-        className={`w-full bg-gradient-to-r ${
-          added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"
-        } text-white py-3 px-4 rounded-xl font-semibold hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25`}
+        className={`w-full bg-gradient-to-r ${added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"
+          } text-white py-3 px-4 rounded-xl font-semibold hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25`}
       >
         <ShoppingCart className="w-5 h-5" />
         <span>{added ? "Added! ✓" : "Book Deal"}</span>
@@ -304,39 +303,40 @@ const ProductsSection: React.FC<{
   filterProducts,
   productCount,
 }) => (
-  <section className="py-16 bg-gradient-to-b from-black via-gray-900 to-black" id="products">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold bg-gradient-to-r from-orange-400 via-pink-500 to-orange-400 bg-clip-text text-transparent mb-4">
-          Featured Travel Deals
-        </h2>
-        <p className="text-xl bg-gradient-to-r from-orange-300 to-pink-400 bg-clip-text text-transparent max-w-2xl mx-auto">
-          Discover our hand-picked selection of premium travel experiences
-        </p>
+    <section className="py-16 bg-gradient-to-b from-black via-gray-900 to-black" id="products">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-orange-400 via-pink-500 to-orange-400 bg-clip-text text-transparent mb-4">
+            Featured Travel Deals
+          </h2>
+          <p className="text-xl bg-gradient-to-r from-orange-300 to-pink-400 bg-clip-text text-transparent max-w-2xl mx-auto">
+            Discover our hand-picked selection of premium travel experiences
+          </p>
+        </div>
+        <FilterBar
+          category={category}
+          setCategory={setCategory}
+          price={price}
+          setPrice={setPrice}
+          duration={duration}
+          setDuration={setDuration}
+          filterProducts={filterProducts}
+          productCount={productCount}
+        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {products.map((p) => (
+            <VerificationGate key={p.id}>
+              <ProductCard
+                product={p}
+                added={!!added[p.id]}
+                handleAddToCart={handleAddToCart}
+              />
+            </VerificationGate>
+          ))}
+        </div>
       </div>
-      <FilterBar
-        category={category}
-        setCategory={setCategory}
-        price={price}
-        setPrice={setPrice}
-        duration={duration}
-        setDuration={setDuration}
-        filterProducts={filterProducts}
-        productCount={productCount}
-      />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {products.map((p) => (
-          <ProductCard
-            key={p.id}
-            product={p}
-            added={!!added[p.id]}
-            handleAddToCart={handleAddToCart}
-          />
-        ))}
-      </div>
-    </div>
-  </section>
-);
+    </section>
+  );
 
 export default function LifestylePage() {
   const [products, setProducts] = useState<Product[]>(initialProducts);

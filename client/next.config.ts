@@ -8,12 +8,27 @@ const nextConfig: NextConfig = {
       "lh3.googleusercontent.com", "i.pravatar.cc",
       'randomuser.me',
       'm.media-amazon.com',
-   ],
-  
+      'brokebro.in', // Add production domain
+      'www.brokebro.in', // Add www subdomain
+    ],
+
   },
   transpilePackages: ["framer-motion"],
   experimental: {
     esmExternals: false,
+  },
+  // Production-specific configurations
+  async headers() {
+    return [
+      {
+        source: '/api/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: process.env.NODE_ENV === 'production' ? 'https://brokebro.in' : '*' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE,OPTIONS' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
+        ],
+      },
+    ];
   },
 };
 

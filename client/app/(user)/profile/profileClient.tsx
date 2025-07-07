@@ -3,11 +3,17 @@
 import { useState } from "react";
 import QRCode from "react-qr-code";
 import ReferralSection from "@/components/ReferralSection";
+import ProfileVerificationBadge from '@/components/ui/ProfileVerificationBadge';
+import { useStudentVerification } from '@/hooks/useStudentVerification';
 
 export default function ProfileClient({ user }: { user: any }) {
   const [uploadedResume, setUploadedResume] = useState<File | null>(null);
   const [resumeUrl, setResumeUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+
+  // Get verification status
+  const { isVerified } = useStudentVerification();
+
   // Create a JSON object with all the user details
   const qrCodeData = JSON.stringify({
     source: "BrokeBro",
@@ -320,8 +326,8 @@ export default function ProfileClient({ user }: { user: any }) {
 
                   {/* QR Code */}
                   <div className="bg-white p-3 rounded-md">
-                
-<QRCode value={qrCodeData} size={110} title="QR Code" />
+
+                    <QRCode value={qrCodeData} size={110} title="QR Code" />
 
                   </div>
                 </div>
