@@ -122,7 +122,7 @@ const Hero = () => {
     },
     {
       name: 'glued',
-      logo: '/assets/images/gluednew.png',
+      logo: '/assets/logos/gluednew.png',
       gradient: 'from-orange-500 to-red-400',
       slug: 'glued',
 
@@ -151,7 +151,7 @@ const Hero = () => {
     },
     {
       name: 'Bhootiya store',
-      logo: '/assets/logos/bhootiya.png',
+      logo: '/assets/logos/bhutiya.png',
       gradient: 'from-white-600 to-red-700',
       slug: 'Bhootiya store',
       discount: '20% OFF',
