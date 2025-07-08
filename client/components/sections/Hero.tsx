@@ -5,7 +5,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import ModalAd from '../ModalAd';
 import Modal from '../ui/Modal';
 import RevealCodeButton from '../ui/RevealCodeButton';
 import { useStudentVerification } from '@/hooks/useStudentVerification';
@@ -17,9 +16,7 @@ const Hero = () => {
   const [typedText, setTypedText] = useState('');
   const [currentDealIndex, setCurrentDealIndex] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
-  const [showAd, setShowAd] = useState(false);
-  const [adIndex, setAdIndex] = useState(0);
-  const adTimeout = useRef<NodeJS.Timeout | null>(null);
+
   const [showBrandModal, setShowBrandModal] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState<any>(null);
   const router = useRouter();
@@ -34,21 +31,7 @@ const Hero = () => {
     "Get 30% Off Tech Purchases"
   ];
 
-  // Ad data
-  const ads = [
-    {
-      imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_1A_Website.png?v=1697116566&width=2000",
-      linkUrl: "https://soxytoes.com/"
-    },
-    {
-      imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_3_Website.png?v=1697116591&width=2000",
-      linkUrl: "https://soxytoes.com/"
-    },
-    {
-      imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_2A_Website.png?v=1697116587&width=2000",
-      linkUrl: "https://www.adidas.com/"
-    }
-  ];
+
 
   // Typing effect
   useEffect(() => {
@@ -85,31 +68,7 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Show ad with sound after full page load
-  useEffect(() => {
-    const handleLoad = () => {
-      setShowAd(true);
-      const audio = new Audio(popSoundPath);
-      audio.play();
-    };
-    if (document.readyState === 'complete') {
-      handleLoad();
-    } else {
-      window.addEventListener('load', handleLoad);
-    }
-    return () => window.removeEventListener('load', handleLoad);
-  }, []);
 
-  // Auto-advance ads every 4 seconds
-  useEffect(() => {
-    if (!showAd) return;
-    adTimeout.current = setTimeout(() => {
-      setAdIndex((prev) => (prev + 1) % ads.length);
-      const audio = new Audio(popSoundPath);
-      audio.play();
-    }, 4000);
-    return () => { if (adTimeout.current) clearTimeout(adTimeout.current); };
-  }, [adIndex, showAd]);
 
   const brandCards = [
     {
@@ -218,53 +177,8 @@ const Hero = () => {
     }
   };
 
-  // Ensure only the animated right-side ModalAd is rendered. Remove all other modal ads.
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
-      {/* Only the animated ModalAd at right side, large, swipe/fade animation. No other modal ads anywhere. */}
-      <AnimatePresence mode="wait">
-        {showAd && (
-          <motion.div
-            key={adIndex}
-            initial={{ x: 400, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: 400, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30, opacity: { duration: 0.3 } }}
-            className="fixed top-24 right-0 z-50 w-[420px] h-[180px] max-w-full flex items-center"
-            style={{ boxShadow: '0 8px 32px 0 rgba(0,0,0,0.25)' }}
-          >
-            <ModalAd
-              className="w-full h-full"
-              onClose={() => {
-                setShowAd(false);
-                const audio = new Audio(popSoundPath);
-                audio.play();
-              }}
-            />
-            {/* Next/Prev controls */}
-            <button
-              onClick={() => {
-                setAdIndex((adIndex - 1 + ads.length) % ads.length);
-                const audio = new Audio(popSoundPath); audio.play();
-              }}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white rounded-full p-1 z-10"
-              aria-label="Previous ad"
-            >
-              &#8592;
-            </button>
-            <button
-              onClick={() => {
-                setAdIndex((adIndex + 1) % ads.length);
-                const audio = new Audio(popSoundPath); audio.play();
-              }}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white rounded-full p-1 z-10"
-              aria-label="Next ad"
-            >
-              &#8594;
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-violet-900/20 via-black to-black"></div>
