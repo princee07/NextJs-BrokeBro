@@ -10,25 +10,36 @@ const TopBrands = () => {
   const topBrands = [
     // Row 1
     [
-      { id: 1, name: 'Amazon', logo: '/assets/logos/amazon.png', discount: '15% Off', url: 'https://www.amazon.in' },
-      { id: 2, name: 'Apple', logo: '/assets/logos/apple.png', discount: '8% Off', url: 'https://www.apple.com/in' },
-      { id: 3, name: 'HP', logo: '/assets/logos/hp.png', discount: '22% Off', url: 'https://www.hp.com/in-en' },
-      { id: 4, name: 'Microsoft', logo: '/assets/logos/microsoft.png', discount: '10% Off', url: 'https://www.microsoft.com/en-in' },
-      { id: 5, name: 'Snapdeal', logo: '/assets/logos/snapdeal.png', discount: '18% Off', url: 'https://www.snapdeal.com' },
-      { id: 6, name: 'Dell', logo: '/assets/logos/dell.png', discount: '25% Off', url: 'https://www.dell.com/en-in' },
-      { id: 7, name: 'Lenovo', logo: '/assets/logos/lenovo.png', discount: '20% Off', url: 'https://www.lenovo.com/in/en' },
-      { id: 8, name: 'Asus', logo: '/assets/logos/asus.png', discount: '17% Off', url: 'https://www.asus.com/in' },
+      { id: 1, name: 'TIMEX INDIA', logo: '/assets/afiliate/timex.png', discount: '20% Off', url: 'https://track.vcommission.com/click?campaign_id=10746&pub_id=120422' },
+      { id: 2, name: 'SONATA WATCHES', logo: '/assets/afiliate/sonata.png', discount: '25% Off', url: 'https://track.vcommission.com/click?campaign_id=10743&pub_id=120422' },
+      { id: 3, name: 'FASTRACK', logo: '/assets/afiliate/fastrack.png', discount: '30% Off', url: 'https://track.vcommission.com/click?campaign_id=10742&pub_id=120422' },
+      { id: 4, name: 'TITAN', logo: '/assets/afiliate/titan.png', discount: '15% Off', url: 'https://track.vcommission.com/click?campaign_id=10741&pub_id=120422' },
+      { id: 5, name: 'AJIO', logo: '/assets/afiliate/ajio.png', discount: '40% Off', url: 'https://track.vcommission.com/click?campaign_id=10364&pub_id=120422' },
+      { id: 6, name: 'MOGLIX', logo: '/assets/afiliate/moglix.png', discount: '35% Off', url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422' },
+      { id: 7, name: 'GONOISE', logo: '/assets/afiliate/gonoise.png', discount: '45% Off', url: 'https://track.vcommission.com/click?campaign_id=10320&pub_id=120422' },
+      { id: 8, name: 'UNIQLO', logo: '/assets/afiliate/uniqlo.png', discount: '20% Off', url: 'https://track.vcommission.com/click?campaign_id=10258&pub_id=120422' },
+      { id: 9, name: 'SAMSUNG', logo: '/assets/afiliate/samsung.png', discount: '25% Off', url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422' },
+      { id: 10, name: 'MUSCLEBLAZE', logo: '/assets/afiliate/muscleblaze.png', discount: '30% Off', url: 'https://track.vcommission.com/click?campaign_id=10169&pub_id=120422' },
+      { id: 11, name: 'MCAFFEINE', logo: '/assets/afiliate/mcaffeine.png', discount: '35% Off', url: 'https://track.vcommission.com/click?campaign_id=10163&pub_id=120422' },
+      { id: 12, name: 'KAPIVA', logo: '/assets/afiliate/kapiva.png', discount: '25% Off', url: 'https://track.vcommission.com/click?campaign_id=10126&pub_id=120422' },
+      { id: 13, name: 'HEALTH KART', logo: '/assets/afiliate/hk.png', discount: '20% Off', url: 'https://track.vcommission.com/click?campaign_id=10109&pub_id=120422' },
+      { id: 14, name: 'GIVA', logo: '/assets/afiliate/giva.png', discount: '40% Off', url: 'https://track.vcommission.com/click?campaign_id=10097&pub_id=120422' },
     ],
     // Row 2
     [
-      { id: 9, name: 'Myntra', logo: '/assets/logos/myntra.png', discount: '30% Off', url: 'https://www.myntra.com' },
-      { id: 10, name: 'Flipkart', logo: '/assets/logos/flipkart.png', discount: '12% Off', url: 'https://www.flipkart.com' },
-      { id: 11, name: 'Ajio', logo: '/assets/logos/ajio.png', discount: '35% Off', url: 'https://www.ajio.com' },
-      { id: 12, name: 'Soxytoes', logo: '/assets/logos/soxytoes.png', discount: '10% Off', url: 'https://soxytoes.com' },
-      { id: 13, name: 'Nike', logo: '/assets/logos/nike.png', discount: '25% Off', url: 'https://www.nike.com/in' },
-      { id: 14, name: 'Myntra', logo: '/assets/logos/myntra.png', discount: '40% Off', url: 'https://www.myntra.com' },
-      { id: 15, name: 'Autodesk', logo: '/assets/logos/autodesk.png', discount: '15% Off', url: 'https://www.autodesk.in' },
-      { id: 16, name: 'KFC', logo: '/assets/logos/kfc.png', discount: '22% Off', url: 'https://online.kfc.co.in' },
+      { id: 15, name: 'CLEARTRIP', logo: '/assets/afiliate/cleartrip.png', discount: '15% Off', url: 'https://track.vcommission.com/click?campaign_id=10046&pub_id=120422' },
+      { id: 16, name: 'BIBA', logo: '/assets/afiliate/biba.png', discount: '50% Off', url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422' },
+      { id: 17, name: 'SWISS BEAUTY', logo: '/assets/afiliate/swissbeauty.png', discount: '45% Off', url: 'https://track.vcommission.com/click?campaign_id=12372&pub_id=120422' },
+      { id: 18, name: 'LEVIS', logo: '/assets/afiliate/levis.png', discount: '30% Off', url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422' },
+      { id: 19, name: 'ADIDAS', logo: '/assets/afiliate/adidas.png', discount: '25% Off', url: 'https://track.vcommission.com/click?campaign_id=11355&pub_id=120422' },
+      { id: 20, name: 'SALTY', logo: '/assets/afiliate/salty.png', discount: '35% Off', url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422' },
+      { id: 21, name: 'FOXTALE', logo: '/assets/afiliate/foxtale.png', discount: '40% Off', url: 'https://track.vcommission.com/click?campaign_id=10994&pub_id=120422' },
+      { id: 22, name: 'MINIMALIST', logo: '/assets/afiliate/minimalist.png', discount: '30% Off', url: 'https://track.vcommission.com/click?campaign_id=10971&pub_id=120422' },
+      { id: 23, name: 'THE BODY SHOP', logo: '/assets/afiliate/thebodyshop.png', discount: '45% Off', url: 'https://track.vcommission.com/click?campaign_id=10932&pub_id=120422' },
+      { id: 24, name: 'SUPERBOTTOMS', logo: '/assets/afiliate/superbottom.png', discount: '35% Off', url: 'https://track.vcommission.com/click?campaign_id=10930&pub_id=120422' },
+      { id: 25, name: 'NILKAMAL', logo: '/assets/afiliate/nilkamal.png', discount: '25% Off', url: 'https://track.vcommission.com/click?campaign_id=11875&pub_id=120422' },
+      { id: 26, name: 'IGP', logo: '/assets/afiliate/igp.png', discount: '20% Off', url: 'https://track.vcommission.com/click?campaign_id=11874&pub_id=120422' },
+      { id: 27, name: 'BACCA BUCCI', logo: '/assets/afiliate/baccabucci.png', discount: '40% Off', url: 'https://track.vcommission.com/click?campaign_id=11641&pub_id=120422' },
     ]
   ];
 
@@ -84,12 +95,12 @@ const TopBrands = () => {
 
             <motion.div
               className="flex space-x-6 py-2"
-              animate={{ x: [0, -1920] }}
+              animate={{ x: [0, -2000] }}
               transition={{
                 x: {
                   repeat: Infinity,
                   repeatType: "loop",
-                  duration: 50,
+                  duration: 60,
                   ease: "linear",
                 }
               }}
@@ -102,20 +113,21 @@ const TopBrands = () => {
                       y: -10,
                       boxShadow: "0 10px 30px -10px rgba(249, 115, 22, 0.4)"
                     }}
-                    className="w-44 h-24 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative"
+                    className="w-44 h-32 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative p-3"
                   >
                     {/* Brand logo */}
-                    <div className="relative w-32 h-20 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200">
+                    <div className="relative w-28 h-16 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200 mb-2">
                       <Image
                         src={brand.logo}
                         alt={brand.name}
                         fill
                         style={{ objectFit: "contain" }}
+                        className="p-1"
                       />
                     </div>
 
                     {/* Brand name */}
-                    <p className="text-white font-medium mt-2">{brand.name}</p>
+                    <p className="text-white font-medium text-xs text-center">{brand.name}</p>
 
                     {/* Discount badge */}
                     <motion.div
@@ -143,12 +155,12 @@ const TopBrands = () => {
 
             <motion.div
               className="flex space-x-6 py-2"
-              animate={{ x: [-1920, 0] }}
+              animate={{ x: [-2000, 0] }}
               transition={{
                 x: {
                   repeat: Infinity,
                   repeatType: "loop",
-                  duration: 50,
+                  duration: 60,
                   ease: "linear",
                 }
               }}
@@ -161,20 +173,21 @@ const TopBrands = () => {
                       y: -10,
                       boxShadow: "0 10px 30px -10px rgba(249, 115, 22, 0.4)"
                     }}
-                    className="w-44 h-24 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative"
+                    className="w-44 h-32 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative p-3"
                   >
                     {/* Brand logo */}
-                    <div className="relative w-32 h-20 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200">
+                    <div className="relative w-28 h-16 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200 mb-2">
                       <Image
                         src={brand.logo}
                         alt={brand.name}
                         fill
                         style={{ objectFit: "contain" }}
+                        className="p-1"
                       />
                     </div>
 
                     {/* Brand name */}
-                    <p className="text-white font-medium mt-2">{brand.name}</p>
+                    <p className="text-white font-medium text-xs text-center">{brand.name}</p>
 
                     {/* Discount badge */}
                     <motion.div
