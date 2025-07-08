@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -12,83 +11,64 @@ type Product = {
   originalPrice: number;
   currentPrice: number;
   discount: string;
+  image: string;
   imageClass: string;
-  category: string; // Added for filtering
-  duration: string; // Added for filtering
+  category: string;
+  duration: string;
 };
 
 const initialProducts: Product[] = [
   {
-    id: "snorkeling",
-    title: "Snorkeling Canyon",
+    id: "1",
+    title: "Go Ibibo",
     description:
-      "Explore underwater paradise with crystal clear waters and vibrant marine life in this tropical destination.",
+      "Students are eligible to avail 10% discount on base fares for all Economy Class and Economy Flexi bookings.",
     originalPrice: 899,
     currentPrice: 494,
     discount: "45% OFF",
-    imageClass: "bg-gradient-to-br from-blue-400 to-blue-600",
+    imageClass: "",
+    image: "https://vectorseek.com/wp-content/uploads/2023/09/Goibibo-Logo-Vector.svg-.png",
     category: "Beach Destinations",
     duration: "Week (4-7 days)",
   },
   {
-    id: "crimson",
-    title: "Crimson Cliff",
+    id: "2",
+    title: "IndiGo Airlines",
     description:
-      "Breathtaking mountain views and hiking trails through dramatic red rock formations and scenic overlooks.",
+      "10% off + 10kg extra baggage",
     originalPrice: 1299,
     currentPrice: 584,
     discount: "55% OFF",
     imageClass: "bg-gradient-to-br from-green-400 to-teal-600",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQ-kLKzM2sjd7pKVOjmaETC2tEDkZjlokSigLroQYAoW0PiHlQ-8wwvfDrB7KEprB2tvg&usqp=CAU",
     category: "Mountain Retreats",
     duration: "Extended (8+ days)",
   },
   {
-    id: "dunes",
-    title: "Whispering Dunes",
+    id: "3",
+    title: "SpiceJet Airlines",
     description:
-      "Experience the magic of golden sand dunes and desert sunsets in this unique cultural adventure.",
+      "Students belonging to a recognized university will get up to 10% discount on base fare",
     originalPrice: 799,
     currentPrice: 519,
     discount: "35% OFF",
     imageClass: "bg-gradient-to-br from-yellow-400 to-orange-600",
+    image: "/assets/logos/SpiceJet_logo.png",
     category: "City Breaks",
     duration: "Weekend (2-3 days)",
   },
   {
-    id: "frostwall",
-    title: "Frostwall Summit",
+    id: "4",
+    title: "Air India",
     description:
-      "Luxury mountain retreat with spa services and gourmet dining experiences.",
+    "Students can enjoy up to 25%* off on Air India flights!",
     originalPrice: 1899,
     currentPrice: 759,
     discount: "60% OFF",
     imageClass: "bg-gradient-to-br from-purple-400 to-indigo-600",
+    image: "https://upload.wikimedia.org/wikipedia/commons/f/f7/Air_India.svg",
     category: "Luxury Travel",
     duration: "Extended (8+ days)",
-  },
-  {
-    id: "obsidian",
-    title: "The Obsidian Hollow",
-    description:
-      "Thrilling adventure through volcanic landscapes and underground cave systems.",
-    originalPrice: 1199,
-    currentPrice: 719,
-    discount: "40% OFF",
-    imageClass: "bg-gradient-to-br from-pink-400 to-red-600",
-    category: "Adventure Tours",
-    duration: "Week (4-7 days)",
-  },
-  {
-    id: "stormbreaker",
-    title: "Stormbreaker Isles",
-    description:
-      "Island hopping adventure with cultural immersion and pristine beaches.",
-    originalPrice: 1499,
-    currentPrice: 749,
-    discount: "50% OFF",
-    imageClass: "bg-gradient-to-br from-red-400 to-orange-600",
-    category: "Beach Destinations",
-    duration: "Week (4-7 days)",
   },
 ];
 
@@ -110,11 +90,10 @@ const durations = [
 ];
 
 const HeroSection: React.FC = () => (
- <section className="py-16 mt-40 bg-gradient-to-br from-gray-900 via-black to-gray-800">
+  <section className="py-16 mt-40 bg-gradient-to-br from-gray-900 via-black to-gray-800">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div className="space-y-6">
-
           <h1 className="text-5xl lg:text-7xl font-bold leading-tight bg-gradient-to-r from-orange-400 via-pink-500 to-orange-400 bg-clip-text text-transparent">
             EXPLORE <span className="bg-gradient-to-r from-orange-400 via-pink-500 to-orange-400 bg-clip-text text-transparent">THE WORLD WITH US</span>
           </h1>
@@ -227,7 +206,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
   handleAddToCart,
 }) => (
   <div className="product-card bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl shadow-lg overflow-hidden group hover:shadow-2xl hover:border-orange-500/50 transition-all duration-300 transform hover:-translate-y-2">
-    <div className={`relative h-48 ${product.imageClass}`}>
+    <div className="relative h-48 overflow-hidden">
+      <img
+        src={product.image || "/placeholder.svg"}
+        alt={product.title}
+        className="w-full h-48 object-contain"
+      />
       <div className="absolute top-4 right-4 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm px-3 py-1 rounded-full font-medium">
         {product.discount}
       </div>
@@ -239,11 +223,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <Eye className="w-5 h-5 text-gray-300 hover:text-white" />
         </button>
       </div>
-      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+      <div className="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
         <button
           onClick={() => handleAddToCart(product.id)}
-          className={`bg-gradient-to-r ${added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"
-            } text-white px-6 py-3 rounded-full font-semibold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center space-x-2 shadow-lg`}
+          className={`bg-gradient-to-r ${added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"} text-white px-6 py-3 rounded-full font-semibold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center space-x-2 shadow-lg`}
         >
           <ShoppingCart className="w-5 h-5" />
           <span>{added ? "Added! ✓" : "Book Deal"}</span>
@@ -257,19 +240,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <p className="text-sm text-gray-400 mb-4 line-clamp-2">{product.description}</p>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <span className="text-xl font-bold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">
-            ${product.currentPrice}
-          </span>
-          <span className="text-sm text-gray-500 line-through">${product.originalPrice}</span>
         </div>
-        <span className="text-green-400 text-sm font-medium">
-          Save ${(product.originalPrice - product.currentPrice).toFixed(2)}
-        </span>
+       
       </div>
       <button
         onClick={() => handleAddToCart(product.id)}
-        className={`w-full bg-gradient-to-r ${added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"
-          } text-white py-3 px-4 rounded-xl font-semibold hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25`}
+        className={`w-full bg-gradient-to-r ${added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"} text-white py-3 px-4 rounded-xl font-semibold hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25`}
       >
         <ShoppingCart className="w-5 h-5" />
         <span>{added ? "Added! ✓" : "Book Deal"}</span>
@@ -303,40 +279,40 @@ const ProductsSection: React.FC<{
   filterProducts,
   productCount,
 }) => (
-    <section className="py-16 bg-gradient-to-b from-black via-gray-900 to-black" id="products">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-orange-400 via-pink-500 to-orange-400 bg-clip-text text-transparent mb-4">
-            Featured Travel Deals
-          </h2>
-          <p className="text-xl bg-gradient-to-r from-orange-300 to-pink-400 bg-clip-text text-transparent max-w-2xl mx-auto">
-            Discover our hand-picked selection of premium travel experiences
-          </p>
-        </div>
-        <FilterBar
-          category={category}
-          setCategory={setCategory}
-          price={price}
-          setPrice={setPrice}
-          duration={duration}
-          setDuration={setDuration}
-          filterProducts={filterProducts}
-          productCount={productCount}
-        />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((p) => (
-            <VerificationGate key={p.id}>
-              <ProductCard
-                product={p}
-                added={!!added[p.id]}
-                handleAddToCart={handleAddToCart}
-              />
-            </VerificationGate>
-          ))}
-        </div>
+  <section className="py-16 bg-gradient-to-b from-black via-gray-900 to-black" id="products">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="text-center mb-12">
+        <h2 className="text-4xl font-bold bg-gradient-to-r from-orange-400 via-pink-500 to-orange-400 bg-clip-text text-transparent mb-4">
+          Featured Travel Deals
+        </h2>
+        <p className="text-xl bg-gradient-to-r from-orange-300 to-pink-400 bg-clip-text text-transparent max-w-2xl mx-auto">
+          Discover our hand-picked selection of premium travel experiences
+        </p>
       </div>
-    </section>
-  );
+      <FilterBar
+        category={category}
+        setCategory={setCategory}
+        price={price}
+        setPrice={setPrice}
+        duration={duration}
+        setDuration={setDuration}
+        filterProducts={filterProducts}
+        productCount={productCount}
+      />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 justify-items-center">
+        {products.map((p) => (
+          <VerificationGate key={p.id}>
+            <ProductCard
+              product={p}
+              added={!!added[p.id]}
+              handleAddToCart={handleAddToCart}
+            />
+          </VerificationGate>
+        ))}
+      </div>
+    </div>
+  </section>
+);
 
 export default function LifestylePage() {
   const [products, setProducts] = useState<Product[]>(initialProducts);
@@ -420,7 +396,6 @@ export default function LifestylePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
-      {/* Navbar */}
       <nav className="bg-gradient-to-r from-gray-900 to-black py-4 px-4 sm:px-6 lg:px-8 shadow-lg">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2 text-xl font-bold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">
@@ -448,7 +423,6 @@ export default function LifestylePage() {
           </div>
         </div>
       </nav>
-
       <HeroSection />
       <ProductsSection
         products={products}

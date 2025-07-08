@@ -15,6 +15,7 @@ interface Product {
   isNew?: boolean
   isSale?: boolean
   discount?: number
+  description?: string
 }
 
 const EcommerceHero: React.FC = () => {
@@ -24,68 +25,104 @@ const EcommerceHero: React.FC = () => {
   const featuredProducts: Product[] = [
     {
       id: 1,
-      name: "Wireless Bluetooth Headphones",
+      name: "Canva Pro Subscription",
       price: 89.99,
       originalPrice: 129.99,
-      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80",
+      image: '/assets/logos/canva-logo.png',
       rating: 4.8,
       reviews: 2847,
       isNew: true,
       isSale: true,
       discount: 31,
+      description: "Unlock premium features with Canva Pro for stunning designs.",
     },
     {
       id: 2,
-      name: "Smart Fitness Watch",
+      name: "Grammarly Premium",
       price: 199.99,
       originalPrice: 249.99,
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80",
+      image: "/assets/logos/grammarly.png",
       rating: 4.6,
       reviews: 1923,
       isSale: true,
       discount: 20,
+      description: "25% off Grammarly premium for students",
     },
     {
       id: 3,
-      name: "Premium Laptop Backpack",
+      name: "Notion Pro Plan",
       price: 59.99,
-      image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80",
+      image: "/assets/logos/notion (1).png",
       rating: 4.9,
       reviews: 956,
       isNew: true,
+      description: "Unlock 100% off on your Notion's workspace.",
     },
     {
       id: 4,
-      name: "Wireless Charging Pad",
+      name: "Microsoft Office 365",
       price: 34.99,
       originalPrice: 49.99,
-      image: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400&q=80",
+      image: "/assets/logos/microsoft.png",
       rating: 4.5,
       reviews: 743,
       isSale: true,
       discount: 30,
+      description: "Get a 3-month free trial on Microsoft 365 Personal, then 50% off.",
     },
     {
       id: 5,
-      name: "Bluetooth Speaker",
+      name: "HP Laptops",
       price: 79.99,
       originalPrice: 99.99,
-      image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&q=80",
+      image: "https://logos-world.net/wp-content/uploads/2020/12/Hewlett-Packard-Logo-2009.png",
       rating: 4.7,
       reviews: 1456,
       isSale: true,
       discount: 20,
+      description: "Get exclusive student offers on hp laptops",
     },
     {
       id: 6,
-      name: "Gaming Mouse",
+      name: "Figma Professional",
       price: 49.99,
-      image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&q=80",
+      image: "/assets/logos/figma.png",
       rating: 4.8,
       reviews: 892,
       isNew: true,
+      description: "Free figma Education plan to students and educators",
     },
-  ]
+    {
+      id: 7,
+      name: "Dell",
+      price: 49.99,
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTV6j9ncPmKx_M7HFjWoRe5xp_IhRm4Fdyw7w&s",
+      rating: 4.8,
+      reviews: 892,
+      isNew: true,
+      description: "Unlock special deals for students, parents, and education staff with exclusive vouchers",
+    },
+    {
+      id: 8,
+      name: "Lenovo",
+      price: 49.99,
+      image: "https://w7.pngwing.com/pngs/631/322/png-transparent-lenovo-logo-laptop-lenovo-thinkpad-thinkpad-x1-carbon-intel-dell-lenovo-logo-electronics-text-rectangle.png",
+      rating: 4.8,
+      reviews: 892,
+      isNew: true,
+      description: "Upto 55% off on student laptop",
+    },
+     {
+      id: 8,
+      name: "Apple MacBook Pro",
+      price: 49.99,
+      image: "https://images.seeklogo.com/logo-png/42/1/apple-logo-png_seeklogo-427436.png",
+      rating: 4.8,
+      reviews: 892,
+      isNew: true,
+      description: "Save up to ₹10000 on select Mac or iPad with education pricing.",
+    }    
+    ]
 
   const heroSlides = [
     {
@@ -222,21 +259,13 @@ const EcommerceHero: React.FC = () => {
                         <img
                           src={product.image || "/placeholder.svg"}
                           alt={product.name}
-                          className="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-300"
+                        className="w-full h-auto" // Remove fixed height and other classes
                         />
 
                         {/* Badges */}
                         <div className="absolute top-2 left-2 flex flex-col gap-1">
-                          {product.isNew && (
-                            <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                              NEW
-                            </span>
-                          )}
-                          {product.isSale && (
-                            <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                              -{product.discount}%
-                            </span>
-                          )}
+                        
+                       
                         </div>
 
                         {/* Quick Actions */}
@@ -263,20 +292,10 @@ const EcommerceHero: React.FC = () => {
                           {product.name}
                         </h3>
 
-                        <div className="flex items-center gap-1 mb-2">
-                          {renderStars(product.rating)}
-                          <span className="text-xs text-gray-400 ml-1">({product.reviews})</span>
-                        </div>
+                        <div>{product.description}</div>
 
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <span className="text-lg font-bold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">
-                              ${product.price}
-                            </span>
-                            {product.originalPrice && (
-                              <span className="text-sm text-gray-500 line-through">${product.originalPrice}</span>
-                            )}
-                          </div>
+                        
                         </div>
                       </div>
                     </div>
@@ -352,7 +371,7 @@ const EcommerceHero: React.FC = () => {
                     </div>
 
                     {/* Overlay CTA */}
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
                       <button className="bg-gradient-to-r from-orange-500 to-pink-600 text-white px-6 py-3 rounded-full font-semibold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center space-x-2 shadow-lg">
                         <ShoppingCart className="w-5 h-5" />
                         <span>Quick Add</span>
@@ -366,27 +385,20 @@ const EcommerceHero: React.FC = () => {
                     </h3>
 
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="flex items-center">{renderStars(product.rating)}</div>
-                      <span className="text-sm text-gray-400">
-                        {product.rating} ({product.reviews} reviews)
-                      </span>
+                   
+                   
                     </div>
 
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        <span className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">
-                          ${product.price}
-                        </span>
-                        {product.originalPrice && (
-                          <span className="text-lg text-gray-500 line-through">${product.originalPrice}</span>
-                        )}
+                       
                       </div>
-                      {product.isSale && (
-                        <span className="text-green-400 text-sm font-medium">
-                          Save ${(product.originalPrice! - product.price).toFixed(2)}
-                        </span>
-                      )}
-                    </div>                  <button className="w-full bg-gradient-to-r from-orange-500 to-pink-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25">
+
+                    </div> 
+                     <p className="text-base text-gray-300 mb-4 line-clamp-2 leading-relaxed">
+                      {product.description}
+                    </p>            
+                        <button className="w-full bg-gradient-to-r from-orange-500 to-pink-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25">
                       <ShoppingCart className="w-5 h-5" />
                       <span>Add to Cart</span>
                     </button>
