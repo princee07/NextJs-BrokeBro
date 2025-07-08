@@ -122,7 +122,7 @@ const Hero = () => {
     },
     {
       name: 'glued',
-      logo: '/assets/images/glued.png',
+      logo: '/assets/images/gluednew.png',
       gradient: 'from-orange-500 to-red-400',
       slug: 'glued',
 
