@@ -116,7 +116,7 @@ const Hero = () => {
     {
       name: 'the Ultimate RC',
       logo: '/assets/images/ultimateRC.png',
-      gradient: 'from-orange-500 to-red-400',
+      gradient: 'from-black-500 to-red-200',
       slug: 'Ultimate Rides',
       discount: '1 + 1 free'
     },
@@ -151,8 +151,8 @@ const Hero = () => {
     },
     {
       name: 'Bhootiya store',
-      logo: '/assets/images/bhootiyastore_logo.png',
-      gradient: 'from-red-600 to-red-700',
+      logo: '/assets/logos/bhootiya.png',
+      gradient: 'from-white-600 to-red-700',
       slug: 'Bhootiya store',
       discount: '20% OFF',
 
@@ -161,6 +161,10 @@ const Hero = () => {
   ];
 
   // Duplicate cards for smooth infinite scrolling - ensure enough cards to fill viewport + buffer
+  const CARD_HEIGHT = 250;
+  const CARD_MARGIN = 40;
+  const NUM_CARDS = 12;
+  const TOTAL_HEIGHT = CARD_HEIGHT * NUM_CARDS + CARD_MARGIN * (NUM_CARDS - 1); // 3440px
   const column1Cards = [...brandCards.slice(0, 6), ...brandCards.slice(0, 6)]; // 12 total cards
   const column2Cards = [...brandCards.slice(6), ...brandCards.slice(6)]; // 12 total cards
 
@@ -320,10 +324,10 @@ const Hero = () => {
                 <motion.div
                   className="absolute top-0 left-0 w-full"
                   animate={{
-                    y: [0, -2400] // Move upward - 6 cards * (250px + 60px gap) = 1860px, increased for better spacing
+                    y: [0, -TOTAL_HEIGHT]
                   }}
                   transition={{
-                    duration: 25,
+                    duration: 40,
                     repeat: Infinity,
                     repeatType: "loop",
                     ease: "linear"
@@ -364,10 +368,10 @@ const Hero = () => {
                 <motion.div
                   className="absolute top-0 left-0 w-full"
                   animate={{
-                    y: [2000, 0] // Start from bottom, move to top - perfect sync with main animation
+                    y: [TOTAL_HEIGHT, 0]
                   }}
                   transition={{
-                    duration: 25,
+                    duration: 40,
                     repeat: Infinity,
                     repeatType: "loop",
                     ease: "linear"
@@ -410,10 +414,10 @@ const Hero = () => {
                 <motion.div
                   className="absolute top-0 left-0 w-full"
                   animate={{
-                    y: [0, 2000] // Move downward - 6 cards * (250px + 40px gap) = 1740px, adjusted for better spacing
+                    y: [0, TOTAL_HEIGHT]
                   }}
                   transition={{
-                    duration: 25, // Match duration with left column
+                    duration: 40, // Match duration with left column
                     repeat: Infinity,
                     repeatType: "loop",
                     ease: "linear"
@@ -453,10 +457,10 @@ const Hero = () => {
                 <motion.div
                   className="absolute top-0 left-0 w-full"
                   animate={{
-                    y: [-2000, 0] // Start from top, move to bottom - perfect sync with main animation
+                    y: [-TOTAL_HEIGHT, 0]
                   }}
                   transition={{
-                    duration: 25, // Match duration with main animation
+                    duration: 40, // Match duration with main animation
                     repeat: Infinity,
                     repeatType: "loop",
                     ease: "linear"
