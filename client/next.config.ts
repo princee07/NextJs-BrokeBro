@@ -13,9 +13,8 @@ const nextConfig: NextConfig = {
     ],
 
   },
-  transpilePackages: ["framer-motion"],
   experimental: {
-    esmExternals: false,
+    esmExternals: "loose",
   },
   // Production-specific configurations
   async headers() {

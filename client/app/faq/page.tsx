@@ -12,6 +12,7 @@ export default function FAQPage() {
         subject: "",
         message: ""
     });
+    const [formStatus, setFormStatus] = useState<"idle"|"loading"|"success"|"error">("idle");
 
     const faqs = [
         {
@@ -61,35 +62,40 @@ export default function FAQPage() {
             icon: Mail,
             title: "Email Support",
             description: "Get help via email",
-            contact: "support@brokebro.com",
+            contact: "connect@brokebro.in",
             hours: "24/7 response within 6 hours"
-        },
-        {
-            icon: MessageCircle,
-            title: "Live Chat",
-            description: "Instant support via chat",
-            contact: "Start Chat",
-            hours: "Mon-Fri, 9 AM - 6 PM PST"
         },
         {
             icon: Phone,
             title: "Phone Support",
             description: "Talk to our team",
-            contact: "+1 (800) 123-4567",
-            hours: "Mon-Fri, 9 AM - 6 PM PST"
+            contact: "+91 76699 55109",
+            hours: "Mon-Fri, 9 AM - 6 PM IST"
         }
     ];
 
-    const handleContactSubmit = (e: React.FormEvent) => {
+    const handleContactSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle form submission
-        console.log("Contact form submitted:", contactForm);
-        // Reset form
-        setContactForm({ name: "", email: "", subject: "", message: "" });
+        setFormStatus("loading");
+        try {
+            const res = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(contactForm),
+            });
+            if (res.ok) {
+                setFormStatus("success");
+                setContactForm({ name: "", email: "", subject: "", message: "" });
+            } else {
+                setFormStatus("error");
+            }
+        } catch {
+            setFormStatus("error");
+        }
     };
 
     return (
-        <main className="bg-gradient-to-b from-[#0d1117] to-[#010409] min-h-screen pt-32">
+        <main className="min-h-screen pt-32 pb-10 px-4 max-w-3xl mx-auto">
             {/* Hero Section */}
             <section className="py-20 px-4">
                 <div className="max-w-6xl mx-auto text-center">
@@ -263,6 +269,12 @@ export default function FAQPage() {
                                 <Send className="w-5 h-5" />
                                 Send Message
                             </motion.button>
+                            {formStatus === "success" && (
+                                <div className="text-green-400 font-semibold text-center">Thank you! Your message has been sent to connect@brokebro.in.</div>
+                            )}
+                            {formStatus === "error" && (
+                                <div className="text-red-400 font-semibold text-center">Sorry, there was a problem sending your message. Please try again later.</div>
+                            )}
                         </form>
                     </motion.div>
                 </div>

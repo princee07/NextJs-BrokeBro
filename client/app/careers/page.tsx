@@ -85,7 +85,13 @@ export default function CareersPage() {
     ];
 
     return (
-        <main className="bg-gradient-to-b from-[#0d1117] to-[#010409] min-h-screen pt-20">
+        <main className="min-h-screen pt-32 pb-10 px-4 max-w-3xl mx-auto">
+            <h1 className="text-4xl font-extrabold text-orange-400 mb-6">Careers</h1>
+            <p className="text-lg text-gray-200 mb-4">
+                Want to join the BrokeBro team? We’re always looking for passionate, creative, and driven people to help us build the future of student savings. Check back soon for open positions or email us at{" "}
+                <a href="mailto:careers@brokebro.com" className="text-orange-300 underline">careers@brokebro.com</a>.
+            </p>
+
             {/* Hero Section */}
             <section className="py-20 px-4">
                 <div className="max-w-6xl mx-auto text-center">

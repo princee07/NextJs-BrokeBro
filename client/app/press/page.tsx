@@ -41,48 +41,10 @@ const PressPage = () => {
             category: "Campaign Launch",
             readTime: "2 min read"
         },
-        {
-            date: "December 2024",
-            title: "Student Fun Week Activities Announced",
-            excerpt: "Interactive workshops, gaming tournaments, and exclusive discount reveals planned for verified students across major cities in India.",
-            category: "Fun Activities",
-            readTime: "4 min read"
-        },
-        {
-            date: "December 2024",
-            title: "BrokeBro: India's Pioneer in Seamless Student Discounts",
-            excerpt: "Founded in 2025, BrokeBro becomes the first Indian company to create a trusted, seamless platform exclusively for verified student discounts.",
-            category: "Company Milestone",
-            readTime: "3 min read"
-        }
+      
     ];
 
-    const mediaKit = [
-        {
-            title: "Brand Guidelines",
-            description: "Official logos, colors, and brand usage guidelines",
-            icon: "🎨",
-            downloadSize: "2.4 MB"
-        },
-        {
-            title: "High-Resolution Logos",
-            description: "Vector and raster formats in various configurations",
-            icon: "📸",
-            downloadSize: "1.8 MB"
-        },
-        {
-            title: "Product Screenshots",
-            description: "High-quality screenshots of our platform and mobile app",
-            icon: "📱",
-            downloadSize: "5.2 MB"
-        },
-        {
-            title: "Executive Photos",
-            description: "Professional headshots of key team members",
-            icon: "👥",
-            downloadSize: "3.1 MB"
-        }
-    ];
+   
 
     const stats = [
         { number: "1K+", label: "Verified Students" },
@@ -244,36 +206,6 @@ const PressPage = () => {
                         Media Kit & Resources
                     </motion.h2>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {mediaKit.map((item, index) => (
-                            <motion.div
-                                key={item.title}
-                                variants={itemVariants}
-                                whileHover={{ scale: 1.05, y: -5 }}
-                                className="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all group text-center"
-                            >
-                                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">
-                                    {item.icon}
-                                </div>
-                                <h3 className="text-lg font-bold mb-2 text-white group-hover:text-purple-400 transition-colors">
-                                    {item.title}
-                                </h3>
-                                <p className="text-gray-400 text-sm mb-4">
-                                    {item.description}
-                                </p>
-                                <div className="text-xs text-gray-500 mb-4">
-                                    {item.downloadSize}
-                                </div>
-                                <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    className="w-full py-2 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-semibold rounded-xl transition-all text-sm"
-                                >
-                                    Download
-                                </motion.button>
-                            </motion.div>
-                        ))}
-                    </div>
                 </motion.div>
 
                 {/* Media Contact */}
@@ -344,6 +276,7 @@ const PressPage = () => {
                     </div>
                 </motion.div>
             </div>
+
         </div>
     );
 };

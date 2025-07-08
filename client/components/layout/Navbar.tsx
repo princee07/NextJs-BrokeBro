@@ -237,11 +237,7 @@ export default function NavbarClient({ user }: { user: any }) {
       path: '/technology',
       icon: <HiOutlineDesktopComputer className="w-5 h-5" />
     },
-    {
-      name: 'FREEBIES FOR ALL',
-      path: '/freebies',
-      icon: <HiOutlineGift className="w-5 h-5" />
-    },
+
     {
       name: 'EVENTS',
       path: '/events',

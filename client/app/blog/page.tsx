@@ -77,10 +77,10 @@ export default function BlogPage() {
     const categories = ["All", "Money Tips", "Technology", "Food & Dining", "Fashion", "Health & Wellness", "Career"];
 
     return (
-        <main className="bg-gradient-to-b from-[#0d1117] to-[#010409] min-h-screen pt-32">
+        <main className="min-h-screen pt-32 pb-10 px-4 md:px-10 lg:px-20 max-w-7xl mx-auto bg-gradient-to-b from-[#0d1117] to-[#010409]">
             {/* Hero Section */}
-            <section className="py-20 px-4">
-                <div className="max-w-6xl mx-auto text-center">
+            <section className="py-20">
+                <div className="text-center">
                     <motion.h1
                         className="text-5xl md:text-6xl font-bold text-white mb-6"
                         initial={{ opacity: 0, y: -20 }}
@@ -105,8 +105,8 @@ export default function BlogPage() {
 
             {/* Featured Post */}
             {blogPosts.filter(post => post.featured).map(post => (
-                <section key={post.id} className="py-16 px-4">
-                    <div className="max-w-6xl mx-auto">
+                <section key={post.id} className="py-16">
+                    <div className="">
                         <motion.div
                             className="bg-[#161b22] rounded-2xl border border-gray-800 overflow-hidden hover:border-orange-500/50 transition-all"
                             initial={{ opacity: 0, y: 40 }}
@@ -131,7 +131,7 @@ export default function BlogPage() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="md:w-1/2 p-8">
+                                <div className="md:w-1/2 p-8 flex flex-col justify-center">
                                     <div className="flex items-center gap-4 mb-4">
                                         <span className="px-3 py-1 bg-orange-500/20 text-orange-400 rounded-full text-sm font-semibold">
                                             {post.category}
@@ -170,8 +170,8 @@ export default function BlogPage() {
             ))}
 
             {/* Category Filter */}
-            <section className="py-8 px-4">
-                <div className="max-w-6xl mx-auto">
+            <section className="py-8">
+                <div className="">
                     <div className="flex flex-wrap justify-center gap-4">
                         {categories.map((category, index) => (
                             <motion.button
@@ -190,20 +190,20 @@ export default function BlogPage() {
             </section>
 
             {/* Blog Posts Grid */}
-            <section className="py-16 px-4">
-                <div className="max-w-6xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <section className="py-16">
+                <div className="">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                         {blogPosts.filter(post => !post.featured).map((post, index) => (
                             <motion.article
                                 key={post.id}
-                                className="bg-[#161b22] rounded-xl border border-gray-800 overflow-hidden hover:border-orange-500/50 transition-all"
+                                className="bg-[#161b22] rounded-2xl border border-gray-800 overflow-hidden hover:border-orange-500/50 transition-all flex flex-col h-full"
                                 initial={{ opacity: 0, y: 40 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: index * 0.1 }}
                                 whileHover={{ scale: 1.05 }}
                             >
-                                <div className="relative h-48">
+                                <div className="relative h-56">
                                     <Image
                                         src={post.image}
                                         alt={post.title}
@@ -216,14 +216,14 @@ export default function BlogPage() {
                                         </span>
                                     </div>
                                 </div>
-                                <div className="p-6">
+                                <div className="p-7 flex flex-col flex-1">
                                     <div className="flex items-center gap-2 text-gray-400 text-sm mb-3">
                                         <Clock className="w-4 h-4" />
                                         {post.readTime}
                                     </div>
-                                    <h3 className="text-xl font-bold text-white mb-3 line-clamp-2">{post.title}</h3>
+                                    <h3 className="text-2xl font-bold text-white mb-3 line-clamp-2">{post.title}</h3>
                                     <p className="text-gray-300 mb-4 line-clamp-3">{post.excerpt}</p>
-                                    <div className="flex items-center justify-between text-sm text-gray-400">
+                                    <div className="flex items-center justify-between text-sm text-gray-400 mt-auto">
                                         <div className="flex items-center gap-2">
                                             <User className="w-4 h-4" />
                                             {post.author}
@@ -241,7 +241,7 @@ export default function BlogPage() {
             </section>
 
             {/* Newsletter Signup */}
-            <section className="py-16 px-4">
+            <section className="py-16">
                 <div className="max-w-4xl mx-auto text-center">
                     <motion.div
                         className="bg-[#161b22] p-8 rounded-2xl border border-gray-800"

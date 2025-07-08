@@ -16,6 +16,10 @@ const AVATARS = [
     name: 'Prince',
     img: '/assets/people/prince.jpg',
   },
+  {
+    name: 'Prachi',
+    img: '/assets/people/prachi.jpg',
+  },
 ];
 
 const TESTIMONIALS = [
@@ -30,6 +34,10 @@ const TESTIMONIALS = [
   {
     avatar: AVATARS[2].img,
     text: 'Great deals and instant discounts! The UI is super clean and easy to navigate.',
+  },
+    {
+    avatar: AVATARS[3].img,
+    text: 'Great experience , more usefull to safe money.',
   },
 ];
 
