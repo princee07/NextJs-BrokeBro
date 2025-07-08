@@ -41,8 +41,8 @@ export default function AboutPage() {
             image: "/assets/people/prince.jpg",
             bio: "Core developer and builder at BrokeBro. Passionate about code, design, and making student life easier.",
             socials: {
-                linkedin: "https://www.linkedin.com/in/prince-brokebro/",
-                github: "https://github.com/prince-brokebro",
+                linkedin: "https://www.linkedin.com/in/princee07/",
+                github: "https://github.com/princee07",
                 instagram: "https://instagram.com/prince.brokebro"
             }
         },
