@@ -406,7 +406,7 @@ const Hero = () => {
                 <motion.div
                   className="absolute top-0 left-0 w-full"
                   animate={{
-                    y: [0, -1800] // Move upward - 6 cards * (250px + 24px gap) = 1644px, adjusted for better spacing
+                    y: [0, -2400] // Move upward - 6 cards * (250px + 60px gap) = 1860px, increased for better spacing
                   }}
                   transition={{
                     duration: 25,
@@ -419,7 +419,7 @@ const Hero = () => {
                     <div
                       key={`col1-${index}`}
                       onClick={() => handleBrandCardClick(brand)}
-                      className={`relative ${index === 0 ? '' : 'mt-6'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
+                      className={`relative ${index === 0 ? '' : 'mt-10'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
                       {/* Student Discount Badge */}
@@ -450,7 +450,7 @@ const Hero = () => {
                 <motion.div
                   className="absolute top-0 left-0 w-full"
                   animate={{
-                    y: [1800, 0] // Start from bottom, move to top - perfect sync with main animation
+                    y: [2000, 0] // Start from bottom, move to top - perfect sync with main animation
                   }}
                   transition={{
                     duration: 25,
@@ -463,7 +463,7 @@ const Hero = () => {
                     <div
                       key={`col1-clone-${index}`}
                       onClick={() => handleBrandCardClick(brand)}
-                      className={`relative ${index === 0 ? '' : 'mt-6'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
+                      className={`relative ${index === 0 ? '' : 'mt-10'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
                       {/* Student Discount Badge */}
@@ -496,7 +496,7 @@ const Hero = () => {
                 <motion.div
                   className="absolute top-0 left-0 w-full"
                   animate={{
-                    y: [0, 1800] // Move downward - 6 cards * (250px + 24px gap) = 1644px, adjusted for better spacing
+                    y: [0, 2000] // Move downward - 6 cards * (250px + 40px gap) = 1740px, adjusted for better spacing
                   }}
                   transition={{
                     duration: 25, // Match duration with left column
@@ -509,7 +509,7 @@ const Hero = () => {
                     <div
                       key={`col2-${index}`}
                       onClick={() => handleBrandCardClick(brand)}
-                      className={`relative ${index === 0 ? '' : 'mt-6'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
+                      className={`relative ${index === 0 ? '' : 'mt-10'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
                       <div className="absolute top-4 left-0 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-lg transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300">
@@ -539,7 +539,7 @@ const Hero = () => {
                 <motion.div
                   className="absolute top-0 left-0 w-full"
                   animate={{
-                    y: [-1800, 0] // Start from top, move to bottom - perfect sync with main animation
+                    y: [-2000, 0] // Start from top, move to bottom - perfect sync with main animation
                   }}
                   transition={{
                     duration: 25, // Match duration with main animation
@@ -552,7 +552,7 @@ const Hero = () => {
                     <div
                       key={`col2-clone-${index}`}
                       onClick={() => { handleBrandCardClick(brand); }}
-                      className={`relative ${index === 0 ? '' : 'mt-6'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
+                      className={`relative ${index === 0 ? '' : 'mt-10'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
                       <div className="absolute top-4 left-0 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-lg transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300">
