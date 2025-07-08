@@ -72,7 +72,7 @@ const EcommerceHero: React.FC = () => {
     },
     {
       id: 5,
-      name: "HP Laptops",
+      name: "HP Laptop",
       price: 79.99,
       originalPrice: 99.99,
       image: "https://logos-world.net/wp-content/uploads/2020/12/Hewlett-Packard-Logo-2009.png",
