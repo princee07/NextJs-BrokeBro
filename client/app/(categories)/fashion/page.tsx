@@ -1,627 +1,1001 @@
 "use client";
+
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useAnimation, useInView, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
-import { FaHeart, FaRegHeart, FaTshirt, FaShoePrints, FaTags, FaRunning, FaFire } from 'react-icons/fa';
-import { MdOutlineCategory } from 'react-icons/md';
-import { motion, RepeatType } from 'framer-motion';
+import Link from 'next/link';
+import {
+  FaHeart,
+  FaRegHeart,
+  FaShoppingBag,
+  FaStar,
+  FaFilter,
+  FaSearch,
+  FaTags,
+  FaFire,
+  FaArrowRight,
+  FaPlay,
+  FaGem,
+  FaCrown,
+  FaGift,
+  FaEye
+} from 'react-icons/fa';
+import { HiSparkles } from 'react-icons/hi';
+import { MdOutlineGridView, MdOutlineViewList, MdTrendingUp } from 'react-icons/md';
+import { HiOutlineHeart, HiHeart } from 'react-icons/hi';
 import VerificationProtectedLink from '@/components/ui/VerificationProtectedLink';
-import VerificationGate from '@/components/ui/VerificationGate';
+import { GiClothes, GiArmoredPants, GiWatch, GiLipstick, GiHoodie } from 'react-icons/gi';
 
-const sidebarCategories = [
-  { name: 'New in', icon: <FaFire className="text-orange-400" />, key: 'newin' },
-  { name: 'Clothing', icon: <FaTshirt className="text-blue-400" />, key: 'clothing' },
-  { name: 'Shoes', icon: <FaShoePrints className="text-pink-400" />, key: 'shoes' },
-  { name: 'Accessories', icon: <FaTags className="text-green-400" />, key: 'accessories' },
-  { name: 'ActiveWear', icon: <FaRunning className="text-purple-400" />, key: 'activewear' },
-  { name: 'Outlet', icon: <MdOutlineCategory className="text-gray-400" />, key: 'outlet' },
-];
-
-const banners = [
+// Full static data from JSON files
+const staticFashionCategories = [
   {
-    title: 'BIBA FASHION',
-    subtitle: 'Exclusive ethnic wear collection',
-    img: '/assets/banners/Biba.png',
-    bg: 'bg-yellow-100',
-    url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422'
+    id: "ethnic",
+    name: "Ethnic Elegance",
+    description: "Traditional meets contemporary",
+    image: "/assets/biba/336x280.jpg",
+    url: "#",
+    brand: "Biba",
+    brandLogo: "/assets/afiliate/biba.png",
+    gradient: "from-amber-600 via-orange-500 to-red-500",
+    icon: "FaCrown",
+    products: 150,
+    discount: "Up to 60% OFF",
+    tag: "Festive Special"
   },
   {
-    title: 'LEVIS PREMIUM',
-    subtitle: 'Classic denim & casual wear',
-    img: '/assets/levis/336x280.jpg',
-    bg: 'bg-blue-100',
-    url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422'
+    id: "denim",
+    name: "Premium Denim",
+    description: "Iconic American style",
+    image: "/assets/levis/300x300.png",
+    url: "#",
+    brand: "Levis",
+    brandLogo: "/assets/afiliate/levis.png",
+    gradient: "from-blue-600 via-indigo-500 to-purple-600",
+    icon: "FaGem",
+    products: 89,
+    discount: "Up to 40% OFF",
+    tag: "Classic Fit"
   },
   {
-    title: 'FASTRACK WATCHES',
-    subtitle: 'Style that speaks volumes',
-    img: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_300x250.jpeg',
-    bg: 'bg-red-100',
+    id: "accessories",
+    name: "Luxury Accessories",
+    description: "Complete your perfect look",
+    image: "/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x250.jpeg",
+    url: "#",
+    brand: "Fastrack",
+    brandLogo: "/assets/afiliate/fastrack.png",
+    gradient: "from-pink-600 via-rose-500 to-red-500",
+    icon: "HiSparkles",
+    products: 76,
+    discount: "Up to 50% OFF",
+    tag: "Limited Edition"
   },
   {
-    title: 'SAMSUNG DEVICES',
-    subtitle: 'Latest technology at your fingertips',
-    img: '/assets/samsung/Samsung_CPS_Get_Galaxy_S23_FE_avil_benefits_upto_Rs.14399_300x250.jpg',
-    bg: 'bg-gray-100',
-    url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422'
+    id: "beauty",
+    name: "Beauty Essentials",
+    description: "Professional makeup collection",
+    image: "/assets/banners/swissbeauty.png",
+    url: "#",
+    brand: "Swiss Beauty",
+    brandLogo: "/assets/afiliate/swissbeauty.png",
+    gradient: "from-purple-600 via-pink-500 to-rose-500",
+    icon: "FaGift",
+    products: 120,
+    discount: "Up to 55% OFF",
+    tag: "Pro Collection"
   },
   {
-    title: 'SALTY LIFESTYLE',
-    subtitle: 'Trendy accessories for modern living',
-    img: '/assets/salty/300x300.jpg',
-    bg: 'bg-green-100',
-    url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422'
+    id: "lifestyle",
+    name: "Lifestyle Hub",
+    description: "Curated modern essentials",
+    image: "/assets/salty/250x250.jpg",
+    url: "#",
+    brand: "Salty",
+    brandLogo: "/assets/afiliate/salty.png",
+    gradient: "from-green-600 via-teal-500 to-cyan-500",
+    icon: "FaFire",
+    products: 95,
+    discount: "Up to 45% OFF",
+    tag: "Trendy"
   },
   {
-    title: 'CLOVE HEALTHCARE',
-    subtitle: 'Premium health & wellness products',
-    img: '/assets/clove/336x280d.jpg',
-    bg: 'bg-purple-100',
-    url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422'
+    id: "premium",
+    name: "Premium Selection",
+    description: "Luxury brands, exclusive deals",
+    image: "/assets/lakme/image2.png",
+    url: "#",
+    brand: "Lakme",
+    brandLogo: "/assets/lakme/logo.png",
+    gradient: "from-gray-800 via-gray-600 to-gray-900",
+    icon: "FaEye",
+    products: 67,
+    discount: "Up to 70% OFF",
+    tag: "Exclusive"
   },
   {
-    title: 'SWISS BEAUTY',
-    subtitle: 'Beauty products at best prices',
-    img: '/assets/banners/swissbeauty.png',
-    bg: 'bg-pink-100',
-    url: 'https://track.vcommission.com/click?campaign_id=12372&pub_id=120422'
-  },
-  {
-    title: 'LAKME COSMETICS',
-    subtitle: 'Professional beauty essentials',
-    img: '/assets/lakme/image.png',
-    bg: 'bg-rose-100',
-  },
-  {
-    title: 'MOGLIX TOOLS',
-    subtitle: 'Professional tools & equipment',
-    img: '/assets/moglix/480x320.jpg',
-    bg: 'bg-orange-100',
-    url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422'
-  },
-  {
-    title: 'SOXYTOES FASHION',
-    subtitle: 'Comfort meets style',
-    img: '/assets/banners/soxytoes.png',
-    bg: 'bg-indigo-100',
-  },
-];
-
-const newInProducts = [
-  { name: 'Biba Ethnic Collection', price: '$99', oldPrice: '$150', img: '/assets/biba/336x280.jpg' },
-  { name: 'Levis Premium Denim', price: '$89', oldPrice: '$120', img: '/assets/levis/300x300.png' },
-  { name: 'Fastrack Trendy Watches', price: '$65', oldPrice: '$90', img: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x250.jpeg' },
-  { name: 'Samsung Latest Devices', price: '$299', oldPrice: '$399', img: '/assets/samsung/Samsung_CPS_Get_Galaxy_S23_FE_avil_benefits_upto_Rs.14399_250x250.jpg' },
-  { name: 'Salty Lifestyle Accessories', price: '$35', oldPrice: '$50', img: '/assets/salty/250x250.jpg' },
-  { name: 'Swiss Beauty Essentials', price: '$49', oldPrice: '$70', img: '/assets/banners/swissbeauty.png' },
-  { name: 'Lakme Beauty Kit', price: '$65', oldPrice: '$90', img: '/assets/lakme/image2.png' },
-  { name: 'Clove Healthcare Products', price: '$55', oldPrice: '$75', img: '/assets/clove/300x250-h.jpg' },
-];
-
-const sportsWear = [
-  { name: 'Dri-FIT Get Fit', img: '/assets/images/sportswear-1.png', price: '$45' },
-  { name: 'Indy-Sports Bra', img: '/assets/images/sportswear-2.png', price: '$30' },
-  { name: 'Sportswear Essential', img: '/assets/images/sportswear-3.png', price: '$38' },
-  { name: 'Jordan Court-To-Runway', img: '/assets/images/sportswear-4.png', price: '$60' },
-];
-
-const genderTabs = [
-  { label: 'Women', key: 'women' },
-  { label: 'Men', key: 'men' },
-];
-
-const blobVariants = {
-  animate: {
-    scale: [1, 1.1, 1],
-    y: [0, 30, 0],
-    x: [0, -20, 0],
-    transition: { duration: 12, repeat: Infinity, repeatType: 'reverse' as RepeatType }
+    id: "shoes",
+    name: "Sneaker Street",
+    description: "Latest sneaker drops and classics",
+    image: "/assets/nike/image.png",
+    url: "#",
+    brand: "Nike",
+    brandLogo: "/assets/afiliate/nike.png",
+    gradient: "from-gray-700 via-gray-900 to-black",
+    icon: "FaGem",
+    products: 60,
+    discount: "Up to 25% OFF",
+    tag: "Sports"
   }
+];
+
+const staticFeaturedCollections = [
+  {
+    id: 1,
+    title: "Biba Festive Collection",
+    subtitle: "Celebrate in style",
+    description: "Handcrafted ethnic wear for special occasions",
+    image: "/assets/biba/336x280.jpg",
+    url: "https://track.vcommission.com/click?campaign_id=12553&pub_id=120422",
+    price: "Starting at ₹1,299",
+    originalPrice: "₹2,999",
+    badge: "Festive Special",
+    rating: 4.8,
+    reviews: 2845
+  },
+  {
+    id: 2,
+    title: "Levis Premium Denim",
+    subtitle: "Iconic American style",
+    description: "Classic fits reimagined for modern wardrobes",
+    image: "/assets/levis/336x280.jpg",
+    url: "https://track.vcommission.com/click?campaign_id=11501&pub_id=120422",
+    price: "Starting at ₹2,499",
+    originalPrice: "₹4,999",
+    badge: "Classic Collection",
+    rating: 4.7,
+    reviews: 1892
+  },
+  {
+    id: 3,
+    title: "Swiss Beauty Pro",
+    subtitle: "Professional makeup",
+    description: "Studio-quality cosmetics for everyday glamour",
+    image: "/assets/banners/swissbeauty.png",
+    url: "https://track.vcommission.com/click?campaign_id=12372&pub_id=120422",
+    price: "Starting at ₹599",
+    originalPrice: "₹1,299",
+    badge: "Beauty Expert",
+    rating: 4.9,
+    reviews: 3247
+  }
+];
+
+const staticTrendingProducts = [
+  {
+    id: 1,
+    name: "Biba Embroidered Kurta",
+    brand: "Biba",
+    price: "₹1,899",
+    originalPrice: "₹3,499",
+    image: "/assets/biba/250x250.jpg",
+    url: "https://track.vcommission.com/click?campaign_id=12553&pub_id=120422",
+    rating: 4.6,
+    reviews: 234,
+    discount: "46% OFF",
+    badge: "Bestseller",
+    colors: ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4"],
+    sizes: ["S", "M", "L", "XL"],
+    category: "ethnic"
+  },
+  {
+    id: 2,
+    name: "Levis 511 Slim Fit Jeans",
+    brand: "Levis",
+    price: "₹2,999",
+    originalPrice: "₹4,999",
+    image: "/assets/levis/250x250.jpg",
+    url: "https://track.vcommission.com/click?campaign_id=11501&pub_id=120422",
+    rating: 4.8,
+    reviews: 567,
+    discount: "40% OFF",
+    badge: "Premium",
+    colors: ["#1a1a1a", "#4a4a4a", "#6a6a6a"],
+    sizes: ["28", "30", "32", "34", "36"],
+    category: "denim"
+  },
+  {
+    id: 3,
+    name: "Fastrack Analog Watch",
+    brand: "Fastrack",
+    price: "₹1,299",
+    originalPrice: "₹2,599",
+    image: "/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x250.jpeg",
+    url: "https://track.vcommission.com/click?campaign_id=10742&pub_id=120422",
+    rating: 4.5,
+    reviews: 892,
+    discount: "50% OFF",
+    badge: "Limited Edition",
+    colors: ["#C0392B", "#8E44AD", "#2980B9"],
+    sizes: ["Free Size"],
+    category: "accessories"
+  },
+  {
+    id: 4,
+    name: "Swiss Beauty Lipstick Set",
+    brand: "Swiss Beauty",
+    price: "₹899",
+    originalPrice: "₹1,799",
+    image: "/assets/banners/swissbeauty.png",
+    url: "https://track.vcommission.com/click?campaign_id=12372&pub_id=120422",
+    rating: 4.7,
+    reviews: 445,
+    discount: "50% OFF",
+    badge: "New Arrival",
+    colors: ["#E74C3C", "#F39C12", "#8E44AD", "#C0392B"],
+    sizes: ["Standard"],
+    category: "beauty"
+  },
+  {
+    id: 5,
+    name: "Salty Lifestyle Bag",
+    brand: "Salty",
+    price: "₹1,499",
+    originalPrice: "₹2,299",
+    image: "/assets/salty/250x250.jpg",
+    url: "https://track.vcommission.com/click?campaign_id=11241&pub_id=120422",
+    rating: 4.4,
+    reviews: 178,
+    discount: "35% OFF",
+    badge: "Trendy",
+    colors: ["#2C3E50", "#E67E22", "#27AE60"],
+    sizes: ["One Size"],
+    category: "lifestyle"
+  },
+  {
+    id: 6,
+    name: "Lakme Perfect Radiance",
+    brand: "Lakme",
+    price: "₹649",
+    originalPrice: "₹999",
+    image: "/assets/lakme/image2.png",
+    url: "#",
+    rating: 4.3,
+    reviews: 567,
+    discount: "35% OFF",
+    badge: "Premium",
+    colors: ["#F39C12", "#E74C3C", "#8E44AD"],
+    sizes: ["Standard"],
+    category: "beauty"
+  },
+  {
+    id: 7,
+    name: "Biba Silk Saree",
+    brand: "Biba",
+    price: "₹3,299",
+    originalPrice: "₹5,999",
+    image: "/assets/biba/saree-250x250.jpg",
+    url: "https://track.vcommission.com/click?campaign_id=12553&pub_id=120422",
+    rating: 4.9,
+    reviews: 156,
+    discount: "45% OFF",
+    badge: "Premium",
+    colors: ["#D4AF37", "#800080", "#DC143C", "#228B22"],
+    sizes: ["Free Size"],
+    category: "ethnic"
+  },
+  {
+    id: 8,
+    name: "Levis Denim Jacket",
+    brand: "Levis",
+    price: "₹3,599",
+    originalPrice: "₹5,999",
+    image: "/assets/levis/jacket-250x250.jpg",
+    url: "https://track.vcommission.com/click?campaign_id=11501&pub_id=120422",
+    rating: 4.7,
+    reviews: 289,
+    discount: "40% OFF",
+    badge: "Classic",
+    colors: ["#1e3a8a", "#000000", "#6b7280"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    category: "denim"
+  },
+  {
+    id: 9,
+    name: "Fastrack Smart Watch",
+    brand: "Fastrack",
+    price: "₹2,799",
+    originalPrice: "₹4,499",
+    image: "/assets/fastrack/smartwatch-250x250.jpg",
+    url: "https://track.vcommission.com/click?campaign_id=10742&pub_id=120422",
+    rating: 4.4,
+    reviews: 423,
+    discount: "38% OFF",
+    badge: "Tech",
+    colors: ["#000000", "#C0392B", "#2980B9"],
+    sizes: ["Free Size"],
+    category: "accessories"
+  },
+  {
+    id: 10,
+    name: "Swiss Beauty Eye Shadow Palette",
+    brand: "Swiss Beauty",
+    price: "₹599",
+    originalPrice: "₹999",
+    image: "/assets/banners/eyeshadow-250x250.jpg",
+    url: "https://track.vcommission.com/click?campaign_id=12372&pub_id=120422",
+    rating: 4.6,
+    reviews: 678,
+    discount: "40% OFF",
+    badge: "Makeup",
+    colors: ["#8B4513", "#FF69B4", "#9370DB", "#32CD32"],
+    sizes: ["Standard"],
+    category: "beauty"
+  },
+  {
+    id: 11,
+    name: "Salty Urban Backpack",
+    brand: "Salty",
+    price: "₹1,899",
+    originalPrice: "₹2,999",
+    image: "/assets/salty/backpack-250x250.jpg",
+    url: "https://track.vcommission.com/click?campaign_id=11241&pub_id=120422",
+    rating: 4.5,
+    reviews: 234,
+    discount: "37% OFF",
+    badge: "Urban",
+    colors: ["#2C3E50", "#E67E22", "#27AE60", "#8E44AD"],
+    sizes: ["One Size"],
+    category: "lifestyle"
+  },
+  {
+    id: 12,
+    name: "Lakme Foundation",
+    brand: "Lakme",
+    price: "₹799",
+    originalPrice: "₹1,199",
+    image: "/assets/lakme/foundation-250x250.jpg",
+    url: "#",
+    rating: 4.2,
+    reviews: 345,
+    discount: "33% OFF",
+    badge: "Base",
+    colors: ["#F5DEB3", "#DEB887", "#CD853F", "#8B4513"],
+    sizes: ["30ml"],
+    category: "beauty"
+  }
+];
+
+// Icon mapping for category icons
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  GiClothes,
+  GiArmoredPants,
+  GiWatch,
+  GiLipstick,
+  GiHoodie,
 };
+function getIconComponent(iconName: string) {
+  return iconMap[iconName] || GiClothes;
+}
 
-// Add category-specific data
-const categoryLayouts: Record<string, {
-  banners: { title: string; subtitle: string; img: string; bg: string; url?: string }[];
-  gallery?: { img: string; alt: string }[];
-  products: { name: string; price: string; oldPrice?: string; img: string }[];
-}> = {
-  newin: {
-    banners: [
-      {
-        title: 'Biba New Arrivals',
-        subtitle: 'Latest ethnic fashion collection',
-        img: '/assets/biba/300x2500.jpg',
-        bg: 'bg-yellow-100',
-        url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422'
-      },
-      {
-        title: 'Fresh Tech Styles',
-        subtitle: 'Samsung latest releases',
-        img: '/assets/samsung/24318_KV_Ultra_Banner_300x250.jpg',
-        bg: 'bg-blue-100',
-        url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422'
-      },
-    ],
-    gallery: [
-      { img: '/assets/biba/250x250.jpg', alt: 'Biba Fashion' },
-      { img: '/assets/levis/300x300.jpg', alt: 'Levis Collection' },
-      { img: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x200.jpeg', alt: 'Fastrack Watches' },
-      { img: '/assets/samsung/Samsung_CPS_Get_Galaxy_S23_FE_avil_benefits_upto_Rs.14399_200x200.jpg', alt: 'Samsung Devices' },
-      { img: '/assets/salty/200x200.jpg', alt: 'Salty Accessories' },
-      { img: '/assets/lakme/image.png', alt: 'Lakme Cosmetics' },
-      { img: '/assets/clove/250x250-a.jpg', alt: 'Clove Healthcare' },
-      { img: '/assets/moglix/250x250.jpg', alt: 'Moglix Tools' },
-    ],
-    products: newInProducts,
-  },
-  clothing: {
-    banners: [
-      {
-        title: 'Biba Ethnic Wear',
-        subtitle: 'Traditional meets contemporary',
-        img: '/assets/banners/Biba.png',
-        bg: 'bg-yellow-100',
-        url: 'https://track.vcommission.com/click?campaign_id=12553&pub_id=120422'
-      },
-      {
-        title: 'Levis Premium Denim',
-        subtitle: 'Classic fits, modern style',
-        img: '/assets/levis/336x280.jpg',
-        bg: 'bg-blue-100',
-        url: 'https://track.vcommission.com/click?campaign_id=11501&pub_id=120422'
-      },
-    ],
-    gallery: [
-      { img: '/assets/biba/336x280.jpg', alt: 'Biba Ethnic Collection' },
-      { img: '/assets/levis/300x300.png', alt: 'Levis Denim' },
-      { img: '/assets/levis/250x250.jpg', alt: 'Levis Casual' },
-      { img: '/assets/biba/200x200.jpg', alt: 'Biba Traditional' },
-      { img: '/assets/salty/300x300.jpg', alt: 'Salty Fashion' },
-      { img: '/assets/banners/soxytoes.png', alt: 'Soxytoes Collection' },
-    ],
-    products: [
-      { name: 'Biba Ethnic Kurta Set', price: '$89', oldPrice: '$120', img: '/assets/biba/250x250.jpg' },
-      { name: 'Levis Classic Jeans', price: '$79', oldPrice: '$99', img: '/assets/levis/300x300.jpg' },
-      { name: 'Levis Casual Shirt', price: '$65', oldPrice: '$85', img: '/assets/levis/200x200.jpg' },
-      { name: 'Salty Fashion Tee', price: '$39', oldPrice: '$49', img: '/assets/salty/250x250.jpg' },
-    ],
-  },
-  shoes: {
-    banners: [
-      {
-        title: 'Fastrack Footwear',
-        subtitle: 'Step up your style game',
-        img: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_300x250.jpeg',
-        bg: 'bg-red-100',
-      },
-      {
-        title: 'Samsung Wearables',
-        subtitle: 'Smart shoes and accessories',
-        img: '/assets/samsung/24318_KV_Ultra_Banner_250x250.jpg',
-        bg: 'bg-gray-100',
-        url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422'
-      },
-    ],
-    gallery: [
-      { img: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x250.jpeg', alt: 'Fastrack Shoes' },
-      { img: '/assets/salty/300x300.jpg', alt: 'Salty Footwear' },
-      { img: '/assets/samsung/Samsung_CPS_Get_Galaxy_S23_FE_avil_benefits_upto_Rs.14399_250x250.jpg', alt: 'Smart Accessories' },
-      { img: '/assets/levis/250x250.jpg', alt: 'Levis Casual Shoes' },
-    ],
-    products: [
-      { name: 'Fastrack Casual Shoes', price: '$120', oldPrice: '$150', img: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x200.jpeg' },
-      { name: 'Salty Sport Shoes', price: '$99', oldPrice: '$130', img: '/assets/salty/250x250.jpg' },
-      { name: 'Samsung Smart Watch', price: '$199', oldPrice: '$249', img: '/assets/samsung/Samsung_CPS_Get_Galaxy_S23_FE_avil_benefits_upto_Rs.14399_200x200.jpg' },
-      { name: 'Levis Canvas Shoes', price: '$89', oldPrice: '$110', img: '/assets/levis/200x200.jpg' },
-    ],
-  },
-  accessories: {
-    banners: [
-      {
-        title: 'Fastrack Accessories',
-        subtitle: 'Complete your look',
-        img: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_300x250.jpeg',
-        bg: 'bg-red-100',
-      },
-      {
-        title: 'Salty Lifestyle',
-        subtitle: 'Style in every detail',
-        img: '/assets/salty/300x300.jpg',
-        bg: 'bg-green-100',
-        url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422'
-      },
-    ],
-    gallery: [
-      { img: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x250.jpeg', alt: 'Fastrack Watches' },
-      { img: '/assets/salty/250x250.jpg', alt: 'Salty Accessories' },
-      { img: '/assets/banners/jewelry.png', alt: 'Jewelry Collection' },
-      { img: '/assets/banners/soxytoes.png', alt: 'Soxytoes Accessories' },
-      { img: '/assets/samsung/24318_KV_Ultra_Banner_200x200.jpg', alt: 'Samsung Accessories' },
-      { img: '/assets/clove/300x300-a.jpg', alt: 'Health Accessories' },
-    ],
-    products: [
-      { name: 'Fastrack Premium Watch', price: '$150', oldPrice: '$200', img: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x250.jpeg' },
-      { name: 'Salty Fashion Bag', price: '$89', oldPrice: '$120', img: '/assets/salty/200x200.jpg' },
-      { name: 'Samsung Galaxy Buds', price: '$129', oldPrice: '$159', img: '/assets/samsung/24318_KV_Ultra_Banner_160x600.jpg' },
-      { name: 'Jewelry Collection', price: '$45', oldPrice: '$60', img: '/assets/banners/jewelry.png' },
-    ],
-  },
-  activewear: {
-    banners: [
-      {
-        title: 'Samsung ActiveWear',
-        subtitle: 'Tech-enabled fitness gear',
-        img: '/assets/samsung/24318_KV_Ultra_Banner_300x600.jpg',
-        bg: 'bg-gray-100',
-        url: 'https://track.vcommission.com/click?campaign_id=10211&pub_id=120422'
-      },
-      {
-        title: 'Salty Sport Collection',
-        subtitle: 'Move with confidence',
-        img: '/assets/salty/468x60.jpg',
-        bg: 'bg-green-100',
-        url: 'https://track.vcommission.com/click?campaign_id=11241&pub_id=120422'
-      },
-    ],
-    gallery: [
-      { img: '/assets/samsung/Samsung_CPS_Get_Galaxy_S23_FE_avil_benefits_upto_Rs.14399_300x250.jpg', alt: 'Samsung Fitness Tech' },
-      { img: '/assets/salty/160x600.jpg', alt: 'Salty Activewear' },
-      { img: '/assets/clove/300x300-t.jpg', alt: 'Health & Fitness' },
-      { img: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x200.jpeg', alt: 'Fitness Watches' },
-    ],
-    products: [
-      { name: 'Samsung Galaxy Watch', price: '$249', oldPrice: '$299', img: '/assets/samsung/24318_KV_Ultra_Banner_250x250.jpg' },
-      { name: 'Salty Sport Gear', price: '$79', oldPrice: '$99', img: '/assets/salty/300x300.jpg' },
-      { name: 'Fastrack Fitness Watch', price: '$129', oldPrice: '$159', img: '/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x250.jpeg' },
-      { name: 'Clove Health Monitor', price: '$89', oldPrice: '$119', img: '/assets/clove/250x250-h.jpg' },
-    ],
-  },
-  outlet: {
-    banners: [
-      {
-        title: 'Outlet Deals',
-        subtitle: 'Best prices on top brands',
-        img: '/assets/moglix/360x240.jpg',
-        bg: 'bg-orange-100',
-        url: 'https://track.vcommission.com/click?campaign_id=10351&pub_id=120422'
-      },
-      {
-        title: 'Clearance Sale',
-        subtitle: 'Limited time offers',
-        img: '/assets/clove/336x280-h.jpg',
-        bg: 'bg-purple-100',
-        url: 'https://track.vcommission.com/click?campaign_id=12131&pub_id=120422'
-      },
-    ],
-    gallery: [
-      { img: '/assets/moglix/300x250.jpg', alt: 'Moglix Outlet' },
-      { img: '/assets/clove/300x250-d.jpg', alt: 'Clove Clearance' },
-      { img: '/assets/salty/200x200.jpg', alt: 'Salty Outlet' },
-      { img: '/assets/levis/200x200.jpg', alt: 'Levis Sale' },
-    ],
-    products: [
-      { name: 'Moglix Tool Set', price: '$49', oldPrice: '$99', img: '/assets/moglix/200x200.jpg' },
-      { name: 'Clove Health Kit', price: '$39', oldPrice: '$79', img: '/assets/clove/200x200-a.jpg' },
-      { name: 'Salty Clearance Items', price: '$19', oldPrice: '$39', img: '/assets/salty/200x200.jpg' },
-      { name: 'Levis Outlet Jeans', price: '$59', oldPrice: '$99', img: '/assets/levis/200x200.jpg' },
-    ],
-  },
-};
+export default function FashionPage() {
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [wishlist, setWishlist] = useState<number[]>([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [selectedFilter, setSelectedFilter] = useState('all');
 
-const FashionPage = () => {
-  const [selectedGender, setSelectedGender] = useState('women');
-  const [selectedCategory, setSelectedCategory] = useState('newin');
-  const [favourites, setFavourites] = useState<Record<string, boolean>>({});
-  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
+  // Animation refs
+  const heroRef = useRef(null);
+  const categoriesRef = useRef(null);
+  const productsRef = useRef(null);
+  const newsletterRef = useRef(null);
 
-  const toggleFav = (name: string) => {
-    setFavourites((prev) => ({ ...prev, [name]: !prev[name] }));
-  };
+  const heroInView = useInView(heroRef, { once: true });
+  const categoriesInView = useInView(categoriesRef, { once: true });
+  const productsInView = useInView(productsRef, { once: true });
+  const newsletterInView = useInView(newsletterRef, { once: true });
 
-  // Filter products based on search query
-  const filteredProducts = categoryLayouts[selectedCategory].products.filter(product =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  // Clear search when changing categories
+  // Auto-rotate featured collections
   useEffect(() => {
-    setSearchQuery('');
-  }, [selectedCategory]);
-
-  // Auto-slide banner effect
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentBannerIndex((prev) => (prev + 1) % banners.length);
-    }, 4000); // Change banner every 4 seconds
-
-    return () => clearInterval(interval);
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % staticFeaturedCollections.length);
+    }, 5000);
+    return () => clearInterval(timer);
   }, []);
 
+  const toggleWishlist = (productId: number) => {
+    setWishlist(prev =>
+      prev.includes(productId)
+        ? prev.filter(id => id !== productId)
+        : [...prev, productId]
+    );
+  };
+
+  // Trending Products: show all products by default, and allow filtering by brand only if user selects a filter
+  const filteredProducts = selectedFilter === 'all'
+    ? staticTrendingProducts
+    : staticTrendingProducts.filter(product =>
+      product.brand.toLowerCase() === selectedFilter.toLowerCase()
+    );
+
   return (
-    <div className="flex flex-col pt-64 relative overflow-x-hidden overflow-y-hidden bg-gradient-to-br from-slate-900 via-gray-900 to-indigo-900 transition-colors duration-1000">
-      {/* Animated pastel blobs */}
-      <motion.div
-        className="absolute top-[-120px] left-[-120px] w-[340px] h-[340px] bg-pink-200 rounded-full filter blur-3xl opacity-60 z-0"
-        variants={blobVariants}
-        animate="animate"
-      />
-      <motion.div
-        className="absolute top-20 right-[-100px] w-[300px] h-[300px] bg-blue-200 rounded-full filter blur-3xl opacity-50 z-0"
-        variants={blobVariants}
-        animate="animate"
-      />
-      <motion.div
-        className="absolute bottom-[-100px] left-1/2 -translate-x-1/2 w-[500px] h-[200px] bg-purple-200 rounded-full filter blur-3xl opacity-40 z-0"
-        variants={blobVariants}
-        animate="animate"
-      />
-
-      {/* Auto-Sliding Hero Banner */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="w-full flex flex-col items-center justify-center px-2 mb-10 z-10"
-      >
-        <div className="w-full max-w-6xl rounded-[2.5rem] shadow-2xl relative overflow-hidden min-h-[400px]">
-          {/* Background Image - Full Container */}
-          <motion.div
-            key={`bg-${currentBannerIndex}`}
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.8 }}
-            className="absolute inset-0 z-0"
-          >
-            {banners[currentBannerIndex].url ? (
-              // Clickable banner with affiliate link
-              <a
-                href={banners[currentBannerIndex].url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full h-full cursor-pointer hover:scale-105 transition-transform duration-300"
-              >
-                <Image
-                  src={banners[currentBannerIndex].img}
-                  alt={banners[currentBannerIndex].title}
-                  fill
-                  className="object-cover"
-                  sizes="100vw"
-                  priority
-                />
-                {/* Overlay for better text readability */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"></div>
-                {/* Hover indicator for clickable banners */}
-                <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 text-white text-sm opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  Click to Shop
-                </div>
-              </a>
-            ) : (
-              // Non-clickable banner
-              <div className="w-full h-full">
-                <Image
-                  src={banners[currentBannerIndex].img}
-                  alt={banners[currentBannerIndex].title}
-                  fill
-                  className="object-cover"
-                  sizes="100vw"
-                  priority
-                />
-                {/* Overlay for better text readability */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"></div>
-              </div>
-            )}
-          </motion.div>
-
-          {/* Content Overlay */}
-          <motion.div
-            key={currentBannerIndex}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -30 }}
-            transition={{ duration: 0.8 }}
-            className="relative z-10 flex flex-col justify-center items-start text-left p-12 h-full min-h-[400px]"
-          >
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 tracking-tight drop-shadow-2xl">
-              {banners[currentBannerIndex].title}
-            </h1>
-            <div className="text-lg md:text-2xl text-white/90 font-semibold mb-6 drop-shadow-lg">
-              {banners[currentBannerIndex].subtitle}
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.97 }}
-              className="mt-4 px-10 py-4 bg-white text-black rounded-full font-semibold shadow-xl hover:bg-gray-100 transition text-xl"
-            >
-              Shop now
-            </motion.button>
-          </motion.div>
-
-          {/* Banner Indicators */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-            {banners.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentBannerIndex(index)}
-                className={`w-3 h-3 rounded-full transition-all ${index === currentBannerIndex
-                  ? 'bg-gray-800 scale-125'
-                  : 'bg-gray-400 hover:bg-gray-600'
-                  }`}
-              />
-            ))}
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Topbar: Gender tabs & search */}
-      <div className="w-full flex items-center justify-center px-4 mb-8 z-10">
-        <div className="flex items-center w-full max-w-xl bg-white/80 rounded-full border border-pink-300 shadow-inner px-2 py-1">
-          <div className="flex gap-2 ml-2">
-            {genderTabs.map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setSelectedGender(tab.key)}
-                className={`px-4 py-1.5 rounded-full font-semibold text-base transition-all shadow-sm ${selectedGender === tab.key ? 'bg-pink-500/90 text-white shadow-lg' : 'bg-white/80 text-gray-700 hover:bg-pink-100'}`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-          <div className="flex-1 relative">
-            <input
-              type="text"
-              placeholder="Search for items, brands and inspiration..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-transparent px-4 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-400 text-gray-700 placeholder-gray-400"
-              style={{ minWidth: 0 }}
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black text-white overflow-x-hidden">
+      {/* Animated Background Elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 180, 360],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{
+            scale: [1.2, 1, 1.2],
+            rotate: [360, 180, 0],
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.1, 1],
+            x: [0, 100, 0],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute top-1/2 right-0 w-64 h-64 bg-gradient-to-r from-green-500/15 to-teal-500/15 rounded-full blur-3xl"
+        />
       </div>
 
-      {/* Main Content */}
-      <div className="flex flex-1 w-full max-w-7xl mx-auto mt-6 gap-10 z-10">
-        {/* Sidebar */}
-        <aside className="w-80 bg-gradient-to-br from-slate-900/90 via-gray-900/80 to-indigo-900/80 rounded-[2.5rem] shadow-2xl p-12 flex flex-col gap-6 h-fit sticky top-32 border border-indigo-800/40">
-          <nav className="flex flex-col gap-2">
-            {sidebarCategories.map((cat) => (
-              <button
-                key={cat.key}
-                onClick={() => setSelectedCategory(cat.key)}
-                className={`flex items-center gap-4 px-7 py-5 rounded-2xl font-semibold text-xl transition-all ${selectedCategory === cat.key ? 'bg-indigo-800/60 text-indigo-100 shadow-lg' : 'text-indigo-200 hover:bg-indigo-900/40'}`}
-              >
-                {cat.icon}
-                {cat.name}
-              </button>
-            ))}
-          </nav>
-        </aside>
-        {/* Main Section */}
-        <main className="flex-1 flex flex-col gap-10">
-          {/* Category-specific Banners */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            {categoryLayouts[selectedCategory].banners.map((banner, i) => (
+      <div className="relative z-10">
+        {/* Hero Section with Video-like Banner */}
+        <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden pt-20">
+          <div className="absolute inset-0">
+            <motion.div
+              initial={{ scale: 1.1 }}
+              animate={heroInView ? { scale: 1 } : { scale: 1.1 }}
+              transition={{ duration: 2, ease: "easeOut" }}
+              className="w-full h-full"
+            >
+              <Image
+                src={staticFeaturedCollections[currentSlide].image}
+                alt={staticFeaturedCollections[currentSlide].title}
+                fill
+                className="object-cover"
+                priority
+              />
+            </motion.div>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+          </div>
+
+          <div className="container mx-auto px-6 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * i, duration: 0.7 }}
-                className={`rounded-3xl p-14 flex items-center gap-12 shadow-2xl bg-gradient-to-r from-slate-800/80 via-indigo-900/80 to-gray-900/80 relative min-h-[220px] group ${banner.url ? 'cursor-pointer hover:scale-105 transition-transform duration-300' : ''}`}
+                initial={{ opacity: 0, x: -100 }}
+                animate={heroInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -100 }}
+                transition={{ duration: 1, delay: 0.3 }}
+                className="space-y-8"
               >
-                {banner.url ? (
-                  <VerificationProtectedLink
-                    href={banner.url}
-                    requireVerification={true}
-                    className="absolute inset-0 z-10"
+                <div className="space-y-4">
+                  <motion.span
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                    transition={{ duration: 0.8, delay: 0.5 }}
+                    className="inline-block px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full text-sm font-medium"
                   >
-                    <div className="w-full h-full flex items-center gap-12 px-14 cursor-pointer">
+                    {staticFeaturedCollections[currentSlide].badge}
+                  </motion.span>
+
+                  <motion.h1
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                    transition={{ duration: 1, delay: 0.6 }}
+                    className="text-5xl lg:text-7xl font-bold leading-tight mt-4"
+                  >
+                    Fashion
+                    <span className="block bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                      Revolution
+                    </span>
+                  </motion.h1>
+
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                    transition={{ duration: 0.8, delay: 0.8 }}
+                    className="text-xl text-gray-300 leading-relaxed max-w-lg"
+                  >
+                    Discover exclusive student discounts on premium fashion brands.
+                    From ethnic wear to modern streetwear, find your perfect style.
+                  </motion.p>
+                </div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  transition={{ duration: 0.8, delay: 1 }}
+                  className="flex flex-wrap gap-4"
+                >
+                  <VerificationProtectedLink
+                    href={staticFeaturedCollections[currentSlide].url}
+                    requireVerification={true}
+                    className="group"
+                  >
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-semibold rounded-full shadow-2xl hover:shadow-pink-500/25 transition-all duration-300 flex items-center gap-3"
+                    >
+                      <FaShoppingBag className="text-lg" />
+                      Shop Collection
+                      <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+                    </motion.button>
+                  </VerificationProtectedLink>
+
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold rounded-full hover:bg-white/20 transition-all duration-300 flex items-center gap-3"
+                  >
+                    <FaPlay className="text-sm" />
+                    Watch Lookbook
+                  </motion.button>
+                </motion.div>
+
+                {/* Collection Stats */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  transition={{ duration: 0.8, delay: 1.2 }}
+                  className="flex items-center gap-8 pt-8"
+                >
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-pink-400">500+</div>
+                    <div className="text-sm text-gray-400">Premium Brands</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-purple-400">70%</div>
+                    <div className="text-sm text-gray-400">Max Discount</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-cyan-400">24/7</div>
+                    <div className="text-sm text-gray-400">Support</div>
+                  </div>
+                </motion.div>
+              </motion.div>
+
+              {/* Featured Collection Card */}
+              <motion.div
+                initial={{ opacity: 0, x: 100 }}
+                animate={heroInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 100 }}
+                transition={{ duration: 1, delay: 0.5 }}
+                className="hidden lg:block"
+              >
+                <div className="relative bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-8 shadow-2xl">
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="text-2xl font-bold text-indigo-100 mb-1 drop-shadow-lg">{banner.title}</h3>
-                        {banner.subtitle && <p className="text-indigo-300 text-sm font-medium drop-shadow">{banner.subtitle}</p>}
-                        <div className="mt-2 text-xs text-indigo-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          Verify & Shop →
+                        <h3 className="text-2xl font-bold">{staticFeaturedCollections[currentSlide].title}</h3>
+                        <p className="text-gray-300">{staticFeaturedCollections[currentSlide].subtitle}</p>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <FaStar className="text-yellow-400" />
+                        <span className="font-semibold">{staticFeaturedCollections[currentSlide].rating}</span>
+                        <span className="text-gray-400 text-sm">({staticFeaturedCollections[currentSlide].reviews})</span>
+                      </div>
+                    </div>
+
+                    <p className="text-gray-300">{staticFeaturedCollections[currentSlide].description}</p>
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-2xl font-bold text-green-400">{staticFeaturedCollections[currentSlide].price}</div>
+                        <div className="text-sm text-gray-400 line-through">{staticFeaturedCollections[currentSlide].originalPrice}</div>
+                      </div>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => toggleWishlist(staticFeaturedCollections[currentSlide].id)}
+                        className="p-3 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
+                      >
+                        {wishlist.includes(staticFeaturedCollections[currentSlide].id) ?
+                          <FaHeart className="text-red-400" /> :
+                          <FaRegHeart className="text-gray-400" />
+                        }
+                      </motion.button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Slide Indicators */}
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3">
+              {staticFeaturedCollections.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide
+                    ? 'bg-white scale-125'
+                    : 'bg-white/40 hover:bg-white/60'
+                    }`}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Premium Categories Section */}
+        <section ref={categoriesRef} className="py-20 px-6">
+          <div className="container mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={categoriesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+              transition={{ duration: 1 }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-5xl font-bold mb-6">
+                <span className="bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                  Premium Collections
+                </span>
+              </h2>
+              <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+                Explore curated collections from top fashion brands with exclusive student discounts
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {staticFashionCategories.map((category, index) => (
+                <motion.div
+                  key={category.id}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={categoriesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg border border-white/20 hover:border-white/40 transition-all duration-500 hover:scale-105"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/50" />
+
+                  {/* Background Image */}
+                  <div className="relative h-64 overflow-hidden">
+                    <Image
+                      src={category.image || "/assets/placeholder.png"}
+                      alt={category.name}
+                      fill
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "/assets/placeholder.png";
+                      }}
+                      className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-t ${category.gradient} opacity-30 group-hover:opacity-40 transition-opacity duration-500`} />
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative p-6 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+                          {React.createElement(getIconComponent(category.icon), { className: "text-2xl" })}
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-xl font-bold">{category.name}</h3>
+                          <div className="flex items-center gap-2 mt-1">
+                            {category.brandLogo && (
+                              <div className="relative w-20 h-20 rounded overflow-hidden bg-white/10 backdrop-blur-sm border-4 border-white/40 shadow-2xl">
+                                <Image
+                                  src={category.brandLogo}
+                                  alt={`${category.brand} logo`}
+                                  fill
+                                  className="object-contain p-2"
+                                />
+                              </div>
+                            )}
+                            <p className="text-sm text-gray-300">{category.brand}</p>
+                          </div>
                         </div>
                       </div>
-                      <div className="flex-1 flex justify-end">
-                        <Image src={banner.img} alt={banner.title} width={200} height={200} className="object-contain rounded-2xl drop-shadow-2xl scale-110 bg-gray-900/40 p-2 group-hover:scale-125 transition-transform duration-300" />
+                      <span className="px-3 py-1 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full text-xs font-medium">
+                        {category.tag}
+                      </span>
+                    </div>
+
+                    <p className="text-gray-300">{category.description}</p>
+
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm text-gray-400">
+                        {category.products} products
+                      </div>
+                      <div className="text-lg font-bold text-green-400">
+                        {category.discount}
                       </div>
                     </div>
-                  </VerificationProtectedLink>
-                ) : (
-                  <>
-                    <div>
-                      <h3 className="text-2xl font-bold text-indigo-100 mb-1 drop-shadow-lg">{banner.title}</h3>
-                      {banner.subtitle && <p className="text-indigo-300 text-sm font-medium drop-shadow">{banner.subtitle}</p>}
-                    </div>
-                    <div className="flex-1 flex justify-end">
-                      <Image src={banner.img} alt={banner.title} width={200} height={200} className="object-contain rounded-2xl drop-shadow-2xl scale-110 bg-gray-900/40 p-2" />
-                    </div>
-                  </>
-                )}
-              </motion.div>
-            ))}
-          </div>
-          {/* Category-specific Gallery */}
-          {categoryLayouts[selectedCategory].gallery && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 my-10">
-              {categoryLayouts[selectedCategory].gallery!.map((img, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * i, duration: 0.6 }}
-                  className="rounded-2xl overflow-hidden shadow-xl bg-gradient-to-br from-slate-900 via-gray-900 to-indigo-900 hover:scale-105 transition-transform duration-300"
-                >
-                  <div className="relative w-full h-48">
-                    <Image
-                      src={img.img}
-                      alt={img.alt}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                    <div className="absolute bottom-2 left-2 text-white text-sm font-medium drop-shadow-lg">
-                      {img.alt}
-                    </div>
+
+                    <VerificationProtectedLink
+                      href={category.url}
+                      requireVerification={true}
+                      className="w-full"
+                    >
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                      >
+                        Get Discount
+                        <FaGift className="text-sm" />
+                      </motion.button>
+                    </VerificationProtectedLink>
                   </div>
                 </motion.div>
               ))}
             </div>
-          )}
-          {/* Category-specific Products */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((prod: any, i: number) => (
-                <VerificationGate key={i}>
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 + i * 0.1, duration: 0.7 }}
-                    className="bg-gradient-to-br from-slate-900/80 via-indigo-900/80 to-gray-900/80 rounded-2xl shadow-xl p-7 flex flex-col items-center relative group transition-all hover:scale-105 hover:shadow-2xl border border-indigo-900/40"
+          </div>
+        </section>
+
+        {/* Trending Products Section */}
+        <section ref={productsRef} className="py-20 px-6 bg-gradient-to-r from-black/20 to-transparent">
+          <div className="container mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={productsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+              transition={{ duration: 1 }}
+              className="flex items-center justify-between mb-16"
+            >
+              <div>
+                <h2 className="text-5xl font-bold mb-4">
+                  <span className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 bg-clip-text text-transparent">
+                    Trending Now
+                  </span>
+                </h2>
+                <p className="text-xl text-gray-300">
+                  Discover what's hot in fashion this season
+                </p>
+              </div>
+
+              {/* Filter Buttons */}
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full p-1">
+                  {['all', 'Biba', 'Levis', 'Fastrack', 'Swiss Beauty', 'Salty'].map((filter) => (
+                    <button
+                      key={filter}
+                      onClick={() => setSelectedFilter(filter)}
+                      className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${selectedFilter === filter
+                        ? 'bg-gradient-to-r from-pink-600 to-purple-600 text-white'
+                        : 'text-gray-300 hover:text-white hover:bg-white/10'
+                        }`}
+                    >
+                      {filter === 'all' ? 'All' : filter}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`p-3 rounded-xl transition-all ${viewMode === 'grid' ? 'bg-white/20 text-white' : 'text-gray-400 hover:text-white'
+                      }`}
                   >
-                    <div className="absolute top-3 right-3 cursor-pointer z-10" onClick={() => toggleFav(prod.name)}>
-                      {favourites[prod.name] ? <FaHeart className="text-pink-400 text-xl drop-shadow" /> : <FaRegHeart className="text-gray-300 text-xl" />}
+                    <MdOutlineGridView className="text-xl" />
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`p-3 rounded-xl transition-all ${viewMode === 'list' ? 'bg-white/20 text-white' : 'text-gray-400 hover:text-white'
+                      }`}
+                  >
+                    <MdOutlineViewList className="text-xl" />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+
+            <div className={`grid gap-8 ${viewMode === 'grid'
+              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+              : 'grid-cols-1'
+              }`}>
+              <AnimatePresence mode="wait">
+                {filteredProducts.map((product, index) => (
+                  <motion.div
+                    key={product.id}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={productsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className={`group relative bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl overflow-hidden hover:border-white/40 transition-all duration-500 hover:scale-105 ${viewMode === 'list' ? 'flex items-center' : ''
+                      }`}
+                  >
+                    {/* Product Image */}
+                    <div className={`relative overflow-hidden ${viewMode === 'list' ? 'w-48 h-48' : 'h-64'
+                      }`}>
+                      <Image
+                        src={product.image || "/assets/placeholder.png"}
+                        alt={product.name}
+                        fill
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = "/assets/placeholder.png";
+                        }}
+                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
+
+                      {/* Badges */}
+                      <div className="absolute top-4 left-4 space-y-2">
+                        <span className="px-3 py-1 bg-gradient-to-r from-red-500 to-pink-600 text-white text-xs font-bold rounded-full">
+                          {product.discount}
+                        </span>
+                        <span className="block px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-medium rounded-full">
+                          {product.badge}
+                        </span>
+                      </div>
+
+                      {/* Wishlist Button */}
+                      <button
+                        onClick={() => toggleWishlist(product.id)}
+                        className="absolute top-4 right-4 p-2 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-all duration-300"
+                      >
+                        {wishlist.includes(product.id) ?
+                          <HiHeart className="text-red-400 text-xl" /> :
+                          <HiOutlineHeart className="text-white text-xl" />
+                        }
+                      </button>
+
+                      {/* Quick Actions */}
+                      <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="flex gap-2">
+                          <button className="flex-1 px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-xl hover:bg-white/30 transition-all duration-300 text-sm font-medium">
+                            Quick View
+                          </button>
+                          <VerificationProtectedLink
+                            href={product.url || '#'}
+                            requireVerification={true}
+                            className="flex-1"
+                          >
+                            <button className="w-full px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-xl hover:from-pink-700 hover:to-purple-700 transition-all duration-300 text-sm font-medium">
+                              Shop Now
+                            </button>
+                          </VerificationProtectedLink>
+                        </div>
+                      </div>
                     </div>
-                    <Image src={prod.img} alt={prod.name} width={120} height={120} className="object-contain rounded-xl mb-2 drop-shadow-xl" />
-                    <div className="text-center">
-                      <h4 className="font-semibold text-indigo-100 text-base mb-1 drop-shadow">{prod.name}</h4>
-                      <div className="flex items-center justify-center gap-2">
-                        {prod.oldPrice && <span className="text-indigo-400/60 line-through text-sm">{prod.oldPrice}</span>}
-                        <span className="text-indigo-100 font-bold text-lg">{prod.price}</span>
+
+                    {/* Product Info */}
+                    <div className={`p-6 space-y-4 ${viewMode === 'list' ? 'flex-1' : ''}`}>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-purple-400 flex items-center gap-2">
+                            {staticFashionCategories.find(cat => cat.brand === product.brand)?.brandLogo && (
+                              <span className="inline-block w-16 h-16 relative align-middle">
+                                <Image
+                                  src={staticFashionCategories.find(cat => cat.brand === product.brand)?.brandLogo || '/assets/placeholder.png'}
+                                  alt={`${product.brand} logo`}
+                                  fill
+                                  className="object-contain rounded bg-white/10 shadow-lg border-2 border-white/30"
+                                />
+                              </span>
+                            )}
+                            {product.brand}
+                          </span>
+                          <div className="flex items-center gap-1">
+                            <FaStar className="text-yellow-400 text-sm" />
+                            <span className="text-sm font-medium">{product.rating}</span>
+                            <span className="text-xs text-gray-400">({product.reviews})</span>
+                          </div>
+                        </div>
+
+                        <h3 className="text-xl font-bold text-white">{product.name}</h3>
+
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl font-bold text-green-400">{product.price}</span>
+                          <span className="text-lg text-gray-400 line-through">{product.originalPrice}</span>
+                        </div>
+                      </div>
+
+                      {/* Color Options */}
+                      <div className="space-y-2">
+                        <p className="text-sm text-gray-400">Colors:</p>
+                        <div className="flex gap-2">
+                          {product.colors.map((color, colorIndex) => (
+                            <div
+                              key={colorIndex}
+                              className="w-6 h-6 rounded-full border-2 border-white/20 cursor-pointer hover:border-white/40 transition-all"
+                              style={{ backgroundColor: color }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Sizes */}
+                      <div className="space-y-2">
+                        <p className="text-sm text-gray-400">Sizes:</p>
+                        <div className="flex gap-2 flex-wrap">
+                          {product.sizes.map((size, sizeIndex) => (
+                            <span
+                              key={sizeIndex}
+                              className="px-3 py-1 bg-white/10 border border-white/20 rounded-lg text-sm hover:bg-white/20 cursor-pointer transition-all"
+                            >
+                              {size}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </motion.div>
-                </VerificationGate>
-              ))
-            ) : (
-              <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
-                <div className="text-6xl mb-4 opacity-30">🔍</div>
-                <h3 className="text-2xl font-bold text-indigo-100 mb-2">No products found</h3>
-                <p className="text-indigo-300">Try searching with different keywords or browse other categories</p>
-              </div>
-            )}
+                ))}
+              </AnimatePresence>
+            </div>
           </div>
-        </main>
-      </div>
-      {/* Animations */}
-      <style jsx global>{`
-        body { background: none !important; }
-        /* Hide scrollbar for fashion page only */
-        .overflow-y-hidden::-webkit-scrollbar { display: none; }
-        .overflow-y-hidden { -ms-overflow-style: none; scrollbar-width: none; }
-      `}</style>
-    </div>
-  );
-};
+        </section>
 
-export default FashionPage;
+        {/* Newsletter Section */}
+        <section ref={newsletterRef} className="py-20 px-6">
+          <div className="container mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={newsletterInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+              transition={{ duration: 1 }}
+              className="relative bg-gradient-to-r from-pink-600/20 via-purple-600/20 to-cyan-600/20 backdrop-blur-xl border border-white/20 rounded-3xl p-12 text-center overflow-hidden"
+            >
+              {/* Background Decorations */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-pink-400/30 to-purple-600/30 rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-cyan-400/30 to-blue-600/30 rounded-full blur-3xl" />
+
+              <div className="relative z-10 space-y-8">
+                <div className="space-y-4">
+                  <h2 className="text-4xl lg:text-5xl font-bold">
+                    <span className="bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                      Stay In Style
+                    </span>
+                  </h2>
+                  <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+                    Subscribe to get exclusive deals, new arrivals, and fashion tips directly to your inbox.
+                    Plus, get 10% off your first purchase!
+                  </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    className="flex-1 px-6 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white placeholder-gray-400 focus:outline-none focus:border-pink-400 transition-all duration-300"
+                  />
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-semibold rounded-full transition-all duration-300 flex items-center justify-center gap-2"
+                  >
+                    <FaGift className="text-lg" />
+                    Subscribe
+                  </motion.button>
+                </div>
+
+                <div className="flex items-center justify-center gap-8 pt-8">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-pink-400">50K+</div>
+                    <div className="text-sm text-gray-400">Happy Subscribers</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-purple-400">Daily</div>
+                    <div className="text-sm text-gray-400">New Deals</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-cyan-400">Exclusive</div>
+                    <div className="text-sm text-gray-400">Student Offers</div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
