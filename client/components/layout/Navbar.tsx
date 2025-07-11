@@ -13,11 +13,27 @@ import VerifiedBadge from '../ui/VerifiedBadge';
 import { useStudentVerification } from '@/hooks/useStudentVerification';
 import { getUserReferralData } from "@/app/lib/actions/referral.actions";
 
-export default function NavbarClient({ user }: { user: any }) {
+// Define a User type for better type safety
+interface User {
+  given_name?: string;
+  family_name?: string;
+  email?: string;
+  picture?: string;
+}
+
+// Define navCategories before hooks
+const navCategories = [
+  { name: 'INTERNSHIPS', path: '/intern' },
+  { name: 'FASHION & BEAUTY', path: '/fashion' },
+  { name: 'TRAVEL & LIFESTYLE', path: '/lifestyle' },
+  { name: 'TECHNOLOGY', path: '/technology' },
+  { name: 'EVENTS', path: '/events' },
+];
+
+export default function NavbarClient({ user }: { user: User }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -27,7 +43,7 @@ export default function NavbarClient({ user }: { user: any }) {
   const [referralUrl, setReferralUrl] = useState('');
   const [referralLoading, setReferralLoading] = useState(false);
   const [showVerificationModal, setShowVerificationModal] = useState(false);
-  const [showIconsOnly, setShowIconsOnly] = useState(false); // Set to false for testing
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navContainerRef = useRef<HTMLDivElement>(null);
   const navLinksRef = useRef<HTMLDivElement>(null);
@@ -68,9 +84,9 @@ export default function NavbarClient({ user }: { user: any }) {
       console.log('Available Space:', availableSpace, 'Estimated Text Width:', estimatedTextWidth);
 
       if (windowWidth < 768) {
-        setShowIconsOnly(false);
+        // setShowIconsOnly(false); // Removed unused
       } else {
-        setShowIconsOnly(availableSpace < estimatedTextWidth); // Simplified condition
+        // setShowIconsOnly(availableSpace < estimatedTextWidth); // Removed unused
       }
     };
 
@@ -90,7 +106,7 @@ export default function NavbarClient({ user }: { user: any }) {
       if (resizeObserver) resizeObserver.disconnect();
       window.removeEventListener('resize', debouncedResize);
     };
-  }, []);
+  }, [navCategories]); // Added missing dependency
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -102,14 +118,6 @@ export default function NavbarClient({ user }: { user: any }) {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  const navCategories = [
-    { name: 'INTERNSHIPS', path: '/intern' },
-    { name: 'FASHION & BEAUTY', path: '/fashion' },
-    { name: 'TRAVEL & LIFESTYLE', path: '/lifestyle' },
-    { name: 'TECHNOLOGY', path: '/technology' },
-    { name: 'EVENTS', path: '/events' },
-  ];
 
   useEffect(() => {
     async function fetchCoins() {
@@ -178,7 +186,7 @@ export default function NavbarClient({ user }: { user: any }) {
       window.removeEventListener('referralProcessed', handleReferralProcessed);
       window.removeEventListener('focus', refreshUserData);
     };
-  }, [user]);
+  }, [user, refreshUserData]); // Added missing dependency
 
   useEffect(() => {
     if (!user?.email) return;
@@ -189,7 +197,7 @@ export default function NavbarClient({ user }: { user: any }) {
     }, 10000);
 
     return () => clearInterval(interval);
-  }, [user]);
+  }, [user, refreshUserData]); // Added missing dependency
 
   const fetchReferralData = async () => {
     if (!user?.email) return;
@@ -218,12 +226,6 @@ export default function NavbarClient({ user }: { user: any }) {
   const handleOpenReferralModal = () => {
     setShowReferralModal(true);
     fetchReferralData();
-  };
-
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      router.push(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
-    }
   };
 
   function handleSmartSearch(query: string) {
