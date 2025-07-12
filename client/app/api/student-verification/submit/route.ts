@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { saveVerification } from '@/lib/db/verifications';
 import { VerificationStatus } from '@/types/verification';
+import dbConnect from '@/app/lib/db/connect';
+import User from '@/app/lib/db/models/user.model';
 
 // Add CORS headers for production
 function addCorsHeaders(response: NextResponse) {
@@ -20,6 +23,17 @@ export async function OPTIONS(request: NextRequest) {
 export async function POST(request: NextRequest) {
     try {
         console.log('Starting verification submission...');
+
+        // Check if user is authenticated
+        const { getUser } = getKindeServerSession();
+        const kindeUser = await getUser();
+
+        if (!kindeUser) {
+            return addCorsHeaders(NextResponse.json(
+                { success: false, message: 'User authentication required' },
+                { status: 401 }
+            ));
+        }
 
         const formData = await request.formData();
         console.log('FormData received');
@@ -86,7 +100,8 @@ export async function POST(request: NextRequest) {
         // Create verification record
         const verificationRecord: VerificationStatus = {
             id: verificationId,
-            userId: 'user_' + Date.now(), // In production, get from auth session
+            userId: kindeUser.id,
+            userEmail: kindeUser.email || '',
             status: 'pending',
             submittedAt: new Date(),
             studentData,

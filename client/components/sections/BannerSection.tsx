@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import BannerAd from "../BannerAd";
 
 const bannerAds = [
 	{
@@ -81,15 +80,35 @@ const BannerSection = () => {
 						className={`absolute left-0 top-0 w-screen h-full transition-opacity duration-700 ${current === idx ? "opacity-100 z-10" : "opacity-0 z-0"
 							}`}
 					>
-						<BannerAd
-							imageUrl={ad.imageUrl}
-							title={ad.title}
-							description={ad.description}
-							ctaText={ad.ctaText}
-							ctaLink={ad.ctaLink}
-							bgColor="bg-transparent"
-							fullWidthImage
-						/>
+						<div className="w-full h-full flex items-center justify-center bg-transparent">
+							<div className="flex items-center gap-8 px-8 md:px-16 max-w-7xl mx-auto">
+								<div className="flex-1 text-center md:text-left">
+									<h2 className="text-2xl md:text-4xl font-bold text-white mb-2">
+										{ad.title}
+									</h2>
+									<p className="text-gray-300 text-sm md:text-lg mb-4">
+										{ad.description}
+									</p>
+									<a
+										href={ad.ctaLink}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="inline-block bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition-colors font-medium"
+									>
+										{ad.ctaText}
+									</a>
+								</div>
+								{ad.imageUrl && (
+									<div className="hidden md:block flex-shrink-0">
+										<img
+											src={ad.imageUrl}
+											alt={ad.title}
+											className="w-32 h-32 object-contain rounded-lg"
+										/>
+									</div>
+								)}
+							</div>
+						</div>
 					</div>
 				))}
 				{/* Indicators */}

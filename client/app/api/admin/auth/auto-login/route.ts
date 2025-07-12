@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Admin email addresses - in production, store these in environment variables or database
+// Admin email addresses
 const ADMIN_EMAILS = [
     'prince1362005@gmail.com',
     'lavanya.varshney2104@gmail.com',
-    'vrindabindal1212@gmail.com',
-    process.env.ADMIN_EMAIL, // Additional admin emails can be added via env vars
-].filter(Boolean); // Remove any undefined values
+    'vrindabindal1212@gmail.com'
+];
 
 export async function POST(request: NextRequest) {
     try {
@@ -14,16 +13,9 @@ export async function POST(request: NextRequest) {
 
         // Validate if email is in admin list
         if (ADMIN_EMAILS.includes(email)) {
-            // In production, you would:
-            // 1. Integrate with Google OAuth
-            // 2. Verify email ownership through email verification
-            // 3. Generate a JWT token
-            // 4. Set secure HTTP-only cookies
-            // 5. Implement proper session management
-
             const response = NextResponse.json({
                 success: true,
-                message: 'Admin access granted',
+                message: 'Admin access granted automatically',
                 adminEmail: email
             });
 
@@ -32,7 +24,7 @@ export async function POST(request: NextRequest) {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'lax',
-                maxAge: 60 * 60 * 24 // 24 hours
+                maxAge: 60 * 60 * 24 * 7 // 7 days
             });
 
             // Store admin email in cookie for verification
@@ -40,7 +32,7 @@ export async function POST(request: NextRequest) {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'lax',
-                maxAge: 60 * 60 * 24 // 24 hours
+                maxAge: 60 * 60 * 24 * 7 // 7 days
             });
 
             return response;

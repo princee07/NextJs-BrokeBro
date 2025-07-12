@@ -255,7 +255,7 @@ export default function VerificationTimer({
 
                     <h4 className="text-white font-semibold mb-2">Verification Timer</h4>
                     <p className="text-gray-400 text-sm">
-                        Typical verification takes 2-5 minutes. You'll be notified once it's complete.
+                        Typical verification takes under 24 hours. You'll be notified once it's complete.
                     </p>
                 </div>
             )}

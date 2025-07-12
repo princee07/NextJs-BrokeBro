@@ -9,8 +9,7 @@ import AnimatedEyes from '../ui/AnimatedEyes';
 import { useRouter } from 'next/navigation';
 import Modal from '../ui/Modal';
 import VerificationModal from '../auth/VerificationModal';
-import BannerSection from '../sections/BannerSection';
-import DiscountBar from './DiscountBar';
+
 import NavbarUserMenu from './NavbarUserMenu';
 import VerifiedBadge from '../ui/VerifiedBadge';
 import { useStudentVerification } from '@/hooks/useStudentVerification';
@@ -407,9 +406,7 @@ export default function NavbarClient({ user }: { user: any }) {
   }
 
   return (
-    <header className="fixed w-full z-50 flex flex-col mt-8 md:mt-10">
-      {/* Discount Bar at the very top */}
-      <DiscountBar />
+    <header className="fixed w-full z-50 flex flex-col">
       {/* Main Navbar */}
       <nav
         className={`w-full transition-all duration-500 relative ${scrolled
@@ -661,9 +658,9 @@ export default function NavbarClient({ user }: { user: any }) {
                             </Link>
 
                             {/* Admin Panel Option - Only for authorized emails */}
-                            {user?.email === 'prince1362005@gmail.com' && (
+                            {user?.email && ['prince1362005@gmail.com', 'lavanya.varshney2104@gmail.com', 'vrindabindal1212@gmail.com'].includes(user.email) && (
                               <Link
-                                href="/admin/login"
+                                href="/admin"
                                 className="flex items-center px-4 py-3 text-orange-400 hover:text-white hover:bg-orange-500/10 transition-colors duration-200 border-t border-orange-500/20"
                                 onClick={() => setProfileDropdownOpen(false)}
                               >
