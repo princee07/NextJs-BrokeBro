@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, X, CheckCircle } from 'lucide-react';
-import { useStudentVerification } from '@/hooks/useStudentVerification';
+import { useUserVerification } from '@/hooks/useUserVerification';
 import StudentVerification from '@/components/auth/StudentVerification';
 
 interface VerificationGateProps {
@@ -17,7 +17,7 @@ export default function VerificationGate({
     className = '',
     disabled = false
 }: VerificationGateProps) {
-    const { isVerified } = useStudentVerification();
+    const { isVerified } = useUserVerification();
     const [showVerificationModal, setShowVerificationModal] = useState(false);
 
     // If user is verified or gate is disabled, render children normally

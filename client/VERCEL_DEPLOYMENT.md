@@ -21,7 +21,7 @@ MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database
 
 ### **Email Service (Gmail SMTP)**
 ```
-BROKEBRO_MAIL_USER=connect@brokebro.in
+BROKEBRO_MAIL_USER=brokebroindia@gmail.com
 BROKEBRO_MAIL_PASS=your_gmail_app_password
 ```
 

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { User, Settings, LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
 import VerifiedBadge from '../ui/VerifiedBadge';
+import { useUserVerification } from '../../hooks/useUserVerification';
 
 interface UserProfileProps {
     user: {
@@ -16,14 +17,8 @@ interface UserProfileProps {
 }
 
 export default function UserProfile({ user, className = '' }: UserProfileProps) {
-    const [isVerified, setIsVerified] = useState(false);
+    const { isVerified } = useUserVerification();
     const [showDropdown, setShowDropdown] = useState(false);
-
-    // Check verification status on component mount
-    useEffect(() => {
-        const verified = localStorage.getItem('studentVerified') === 'true';
-        setIsVerified(verified);
-    }, []);
 
     return (
         <div className={`relative ${className}`}>

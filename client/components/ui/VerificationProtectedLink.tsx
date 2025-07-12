@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { useStudentVerification } from '@/hooks/useStudentVerification';
+import { useUserVerification } from '@/hooks/useUserVerification';
 import StudentVerification from '@/components/auth/StudentVerification';
 import { motion } from 'framer-motion';
 import { ShieldCheck, AlertCircle } from 'lucide-react';
@@ -23,7 +23,7 @@ export default function VerificationProtectedLink({
     requireVerification = true,
     showTooltip = true
 }: VerificationProtectedLinkProps) {
-    const { isVerified, updateVerificationStatus } = useStudentVerification();
+    const { isVerified } = useUserVerification();
     const [showVerificationModal, setShowVerificationModal] = useState(false);
     const [showTooltipState, setShowTooltipState] = useState(false);
 
@@ -53,7 +53,10 @@ export default function VerificationProtectedLink({
     };
 
     const handleVerificationComplete = (verified: boolean) => {
-        updateVerificationStatus(verified);
+        if (verified) {
+            localStorage.setItem('studentVerified', 'true');
+            localStorage.setItem('verificationDate', new Date().toISOString());
+        }
         setShowVerificationModal(false);
 
         if (verified) {
