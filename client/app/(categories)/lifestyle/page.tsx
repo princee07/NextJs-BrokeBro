@@ -3,7 +3,9 @@
 import React, { useEffect, useState } from "react";
 import { Search, ShoppingCart, Heart, Eye, ArrowRight, Zap, Shield, Truck } from "lucide-react";
 import VerificationGate from '@/components/ui/VerificationGate';
-
+import Modal from '@/components/ui/Modal';
+import Image from 'next/image';
+import RevealCodeButton from '@/components/ui/RevealCodeButton';
 type Product = {
   id: string;
   title: string;
@@ -321,7 +323,11 @@ export default function LifestylePage() {
   const [category, setCategory] = useState(categories[0]);
   const [price, setPrice] = useState(priceRanges[0]);
   const [duration, setDuration] = useState(durations[0]);
-
+const [showProductModal, setShowProductModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [productCodeData, setProductCodeData] = useState<any>(null);
+   // Add product click handler with debugging
+ const userId=""
   useEffect(() => {
     const interval = setInterval(() => {
       setProducts((prev) =>
@@ -393,7 +399,26 @@ export default function LifestylePage() {
       });
     };
   }, [products]);
-
+const handleProductClick = (product: any) => {
+  console.log('Product clicked:', product); // Debug log
+  
+  // Generate or retrieve product-specific code data
+  const codeData = {
+    code: `${product.name.replace(/\s+/g, '').slice(0, 8).toUpperCase()}10`,
+    isExpired: false,
+    timeLeft: null,
+    isRevealed: false,
+    codeType: 'fixed' // You can make this dynamic based on product
+  };
+  
+  console.log('Generated code data:', codeData); // Debug log
+  
+  setProductCodeData(codeData);
+  setSelectedProduct(product);
+  setShowProductModal(true);
+  
+  console.log('Modal should be open now'); // Debug log
+};
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
       <nav className="bg-gradient-to-r from-gray-900 to-black py-4 px-4 sm:px-6 lg:px-8 shadow-lg">
@@ -424,19 +449,99 @@ export default function LifestylePage() {
         </div>
       </nav>
       <HeroSection />
-      <ProductsSection
-        products={products}
-        added={added}
-        handleAddToCart={handleAddToCart}
-        category={category}
-        setCategory={setCategory}
-        price={price}
-        setPrice={setPrice}
-        duration={duration}
-        setDuration={setDuration}
-        filterProducts={filterProducts}
-        productCount={productCount}
-      />
+   <ProductsSection
+  products={products}
+  added={added}
+  handleAddToCart={handleAddToCart}
+  category={category}
+  setCategory={setCategory}
+  price={price}
+  setPrice={setPrice}
+  duration={duration}
+  setDuration={setDuration}
+  filterProducts={filterProducts}         // <-- add this
+  productCount={productCount}             // <-- and this
+/>
+<Modal isOpen={showProductModal} onClose={() => setShowProductModal(false)}>
+  {selectedProduct && productCodeData ? (
+    <div className="relative flex flex-col items-center text-center p-5 w-80 mx-auto bg-gray-900 rounded-2xl shadow-2xl">
+      {/* Close Button */}
+      <button
+        onClick={() => setShowProductModal(false)}
+        className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-white text-lg z-10"
+        aria-label="Close"
+      >
+        ×
+      </button>
+      {/* Product Image */}
+      <div className="w-24 h-20 bg-white rounded-lg flex items-center justify-center mb-3 shadow">
+        <Image
+          src={selectedProduct.image || selectedProduct.img}
+          alt={selectedProduct.name}
+          width={80}
+          height={60}
+          className="object-contain"
+        />
+      </div>
+      {/* Product Name */}
+      <h2 className="text-base font-bold text-white mb-1">{selectedProduct.name}</h2>
+      {/* Price Row */}
+      <div className="flex items-center justify-center gap-2 mb-2">
+        {(selectedProduct.originalPrice || selectedProduct.oldPrice) && (
+          <span className="text-gray-400 line-through text-xs">
+            {selectedProduct.originalPrice || selectedProduct.oldPrice}
+          </span>
+        )}
+        <span className="text-green-400 font-bold text-sm">
+          {selectedProduct.price}
+        </span>
+      </div>
+      {/* Discount Info */}
+      {(selectedProduct.originalPrice || selectedProduct.oldPrice) && (
+        <p className="text-green-400 text-xs font-medium mb-2">
+          Save {(() => {
+            const old = parseFloat(
+              (selectedProduct.originalPrice || selectedProduct.oldPrice).replace(/[^\d.]/g, '')
+            );
+            const current = parseFloat(
+              selectedProduct.price.replace(/[^\d.]/g, '')
+            );
+            const savings = old - current;
+            const percentage = Math.round((savings / old) * 100);
+            return `₹${savings.toFixed(0)} (${percentage}% off)`;
+          })()}
+        </p>
+      )}
+      {/* Divider */}
+      <div className="w-full border-b border-gray-800 my-2"></div>
+      {/* Coupon Code Section */}
+      <div className="w-full mb-3">
+        <p className="text-gray-300 text-xs mb-2">Your student coupon code:</p>
+        <RevealCodeButton
+          code={productCodeData.code}
+          isRevealed={productCodeData.isRevealed}
+          brandSlug={selectedProduct.name.replace(/\s+/g, '').toLowerCase()}
+          userId={userId}
+          codeType={productCodeData.codeType}
+        />
+      </div>
+      {/* Visit Store Button */}
+      <a
+        href={selectedProduct.url || "#"}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-2 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-200 text-xs"
+      >
+        Visit Store
+      </a>
+    </div>
+  ) : (
+    <div className="p-4 text-white w-80 mx-auto bg-gray-900 rounded-2xl relative shadow-2xl">
+      <p className="text-sm mt-4">Loading...</p>
+    </div>
+  )}
+</Modal>
+      
     </div>
   );
 }
