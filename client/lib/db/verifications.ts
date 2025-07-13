@@ -2,6 +2,8 @@ import { VerificationStatus } from '@/types/verification';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { addVerificationToMemory, getVerificationsFromMemory } from './memory-storage';
+import dbConnect from '@/app/lib/db/connect';
+import VerificationModel from '@/app/lib/db/models/verification.model';
 
 // Path to store verification data (in production, use a real database)
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -44,13 +46,10 @@ export async function getAllVerifications(): Promise<VerificationStatus[]> {
         });
 
         if (isVercel || isProduction || isReadOnlyFS) {
-            // In production, use in-memory storage
-            console.log('🔴 Production environment - retrieving from memory storage');
-            const memoryVerifications = getVerificationsFromMemory();
-            console.log('🔴 Retrieved from memory:', memoryVerifications.length, 'verifications');
-
-            // Convert string dates back to Date objects
-            return memoryVerifications.map((v: any) => ({
+            // In production, use MongoDB
+            await dbConnect();
+            const docs = await VerificationModel.find({}).lean();
+            return docs.map((v: any) => ({
                 ...v,
                 submittedAt: new Date(v.submittedAt),
                 reviewedAt: v.reviewedAt ? new Date(v.reviewedAt) : undefined,
@@ -100,13 +99,10 @@ export async function saveVerification(verification: VerificationStatus): Promis
         });
 
         if (isVercel || isProduction || isReadOnlyFS) {
-            // In production, save to memory storage
-            console.log('🟠 Production environment detected - saving to memory storage:');
-            console.log('🟠 Verification ID:', verification.id);
-            console.log('🟠 Student name:', verification.studentData.studentName);
-
-            addVerificationToMemory(verification);
-            console.log('🟠 Successfully added to memory storage');
+            // In production, save to MongoDB
+            await dbConnect();
+            await VerificationModel.create(verification);
+            console.log('🟠 Successfully added to MongoDB');
             return;
         }
 
@@ -134,24 +130,18 @@ export async function updateVerificationStatus(
         const isReadOnlyFS = process.env.VERCEL_ENV || process.env.RENDER || process.env.NETLIFY;
 
         if (isVercel || isProduction || isReadOnlyFS) {
-            // In production, update in memory storage
-            console.log('🟣 Production mode - updating in memory storage');
-            const verifications = getVerificationsFromMemory();
-            const index = verifications.findIndex(v => v.id === verificationId);
-
-            if (index === -1) {
-                console.log('🟣 Verification not found in memory:', verificationId);
+            // In production, update in MongoDB
+            await dbConnect();
+            const result = await VerificationModel.findOneAndUpdate(
+                { id: verificationId },
+                { status, reviewedAt: new Date(), adminNotes },
+                { new: true }
+            );
+            if (!result) {
+                console.log('🟣 Verification not found in MongoDB:', verificationId);
                 return false;
             }
-
-            verifications[index] = {
-                ...verifications[index],
-                status,
-                reviewedAt: new Date(),
-                adminNotes,
-            };
-
-            console.log('🟣 Updated verification in memory storage:', verificationId, 'to status:', status);
+            console.log('🟣 Updated verification in MongoDB:', verificationId, 'to status:', status);
             return true;
         }
 
