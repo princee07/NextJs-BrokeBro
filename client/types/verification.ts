@@ -15,6 +15,7 @@ export interface DocumentUpload {
 export interface VerificationStatus {
     id: string;
     userId: string;
+    userEmail?: string;
     status: 'pending' | 'under_review' | 'approved' | 'rejected';
     submittedAt: Date;
     reviewedAt?: Date;

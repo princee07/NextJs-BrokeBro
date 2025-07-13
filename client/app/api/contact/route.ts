@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   const transporter = nodemailer.createTransport({
     service: "gmail", // or your SMTP provider
     auth: {
-      user: process.env.BROKEBRO_MAIL_USER, // e.g., connect@brokebro.in
+      user: process.env.BROKEBRO_MAIL_USER, // e.g., brokebroindia@gmail.com
       pass: process.env.BROKEBRO_MAIL_PASS,
     },
   });
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
   try {
     await transporter.sendMail({
       from: email,
-      to: "connect@brokebro.in",
+      to: "brokebroindia@gmail.com",
       subject: `[Contact Form] ${subject}`,
       text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
     });

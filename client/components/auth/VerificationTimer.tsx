@@ -28,20 +28,11 @@ export default function VerificationTimer({
     onComplete,
     onBack
 }: VerificationTimerProps) {
-    const [timeRemaining, setTimeRemaining] = useState(300); // 5 minutes in seconds
     const [status, setStatus] = useState<'waiting' | 'checking' | 'approved' | 'rejected'>('waiting');
-    const [isTimerActive, setIsTimerActive] = useState(true);
     const [isPolling, setIsPolling] = useState(true);
 
-    // Format time as MM:SS
-    const formatTime = (seconds: number) => {
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    };
-
-    // Calculate progress percentage
-    const progressPercentage = ((300 - timeRemaining) / 300) * 100;
+    // Calculate progress percentage (we'll use a simple animation instead of timer)
+    const progressPercentage = 15; // Static progress for visual appeal
 
     // Check verification status from server
     const checkVerificationStatus = async () => {
@@ -54,12 +45,10 @@ export default function VerificationTimer({
 
                     if (newStatus === 'approved') {
                         setStatus('approved');
-                        setIsTimerActive(false);
                         setIsPolling(false);
                         setTimeout(() => onComplete(true), 3000);
                     } else if (newStatus === 'rejected') {
                         setStatus('rejected');
-                        setIsTimerActive(false);
                         setIsPolling(false);
                         setTimeout(() => onComplete(false), 3000);
                     } else if (newStatus === 'under_review') {
@@ -87,68 +76,6 @@ export default function VerificationTimer({
 
         return () => clearInterval(statusInterval);
     }, [isPolling, verificationId]);
-
-    // Timer effect
-    useEffect(() => {
-        if (!isTimerActive || timeRemaining <= 0) return;
-
-        const timer = setInterval(() => {
-            setTimeRemaining(prev => {
-                if (prev <= 1) {
-                    setIsTimerActive(false);
-                    // Simulate admin decision after timer ends
-                    simulateAdminDecision();
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, [isTimerActive, timeRemaining]);
-
-    // Simulate admin checking process
-    useEffect(() => {
-        // Randomly simulate admin checking at different intervals
-        const checkingIntervals = [30, 60, 120, 180]; // seconds
-
-        const timeouts: NodeJS.Timeout[] = [];
-
-        checkingIntervals.forEach(interval => {
-            const timeout = setTimeout(() => {
-                setStatus(prevStatus => {
-                    if (prevStatus === 'waiting') {
-                        setTimeout(() => {
-                            setStatus(currentStatus => currentStatus === 'checking' ? 'waiting' : currentStatus);
-                        }, 5000); // Check for 5 seconds
-                        return 'checking';
-                    }
-                    return prevStatus;
-                });
-            }, interval * 1000);
-
-            timeouts.push(timeout);
-        });
-
-        return () => {
-            timeouts.forEach(timeout => clearTimeout(timeout));
-        };
-    }, []);
-
-    // Simulate admin decision (in real app, this would be real-time updates)
-    const simulateAdminDecision = () => {
-        setStatus('checking');
-
-        setTimeout(() => {
-            // 85% chance of approval for demo purposes
-            const isApproved = Math.random() > 0.15;
-            setStatus(isApproved ? 'approved' : 'rejected');
-
-            setTimeout(() => {
-                onComplete(isApproved);
-            }, 3000); // Show result for 3 seconds before closing
-        }, 3000);
-    };
 
     // Manual refresh function
     const handleRefresh = async () => {
@@ -213,49 +140,18 @@ export default function VerificationTimer({
             </div>
 
             {/* Timer Display */}
-            {isTimerActive && status !== 'approved' && status !== 'rejected' && (
+            {status !== 'approved' && status !== 'rejected' && (
                 <div className="bg-gray-800 rounded-2xl p-6 text-center">
                     <div className="relative w-32 h-32 mx-auto mb-4">
-                        {/* Background circle */}
-                        <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 120 120">
-                            <circle
-                                cx="60"
-                                cy="60"
-                                r="54"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="8"
-                                className="text-gray-700"
-                            />
-                            <circle
-                                cx="60"
-                                cy="60"
-                                r="54"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="8"
-                                strokeLinecap="round"
-                                className="text-orange-500"
-                                strokeDasharray={`${2 * Math.PI * 54}`}
-                                strokeDashoffset={`${2 * Math.PI * 54 * (1 - progressPercentage / 100)}`}
-                                style={{ transition: 'stroke-dashoffset 1s ease-in-out' }}
-                            />
-                        </svg>
-
-                        {/* Timer text */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="text-center">
-                                <div className="text-2xl font-bold text-white">
-                                    {formatTime(timeRemaining)}
-                                </div>
-                                <div className="text-xs text-gray-400">remaining</div>
-                            </div>
+                        {/* Status icon */}
+                        <div className="w-32 h-32 bg-gradient-to-r from-orange-500 to-amber-600 rounded-full flex items-center justify-center">
+                            {getStatusIcon()}
                         </div>
                     </div>
 
-                    <h4 className="text-white font-semibold mb-2">Verification Timer</h4>
+                    <h4 className="text-white font-semibold mb-2">Verification Submitted</h4>
                     <p className="text-gray-400 text-sm">
-                        Typical verification takes 2-5 minutes. You'll be notified once it's complete.
+                        Verification typically processed within 24 hours. You'll be notified once it's complete.
                     </p>
                 </div>
             )}

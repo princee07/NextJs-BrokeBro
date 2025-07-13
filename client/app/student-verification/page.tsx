@@ -72,7 +72,7 @@ export default function StudentVerificationPage() {
 
                             <p className="text-gray-400 text-lg mb-8 leading-relaxed">
                                 Unlock exclusive student discounts and benefits across top brands.
-                                Quick 3-step verification process takes only 5 minutes.
+                                Quick 3-step verification process completed within 24 hours.
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-4">
@@ -127,7 +127,7 @@ export default function StudentVerificationPage() {
 
                                     <div className="flex items-center gap-3 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
                                         <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
-                                        <span className="text-white">Wait 5 minutes for approval</span>
+                                        <span className="text-white">Get approved within 24 hours</span>
                                     </div>
                                 </div>
 
@@ -192,7 +192,7 @@ export default function StudentVerificationPage() {
                             Ready to Start Saving?
                         </h2>
                         <p className="text-gray-400 text-lg mb-8">
-                            Verification takes less than 5 minutes. Start unlocking exclusive student discounts today!
+                            Verification processed within 24 hours. Start unlocking exclusive student discounts today!
                         </p>
 
                         <motion.button

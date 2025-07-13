@@ -1,12 +1,26 @@
 "use client";
 
-import { useStudentVerification } from '@/hooks/useStudentVerification';
+import { useUserVerification } from '@/hooks/useUserVerification';
 import { motion } from 'framer-motion';
 import { Shield, ShieldCheck, RotateCcw, Settings } from 'lucide-react';
 import Link from 'next/link';
 
 export default function VerificationTestControls() {
-    const { isVerified, updateVerificationStatus, clearVerification } = useStudentVerification();
+    const { isVerified } = useUserVerification();
+
+    const testVerify = () => {
+        localStorage.setItem('studentVerified', 'true');
+        localStorage.setItem('verificationDate', new Date().toISOString());
+        localStorage.setItem('verificationId', 'test-verification-123');
+        window.location.reload();
+    };
+
+    const clearVerification = () => {
+        localStorage.removeItem('studentVerified');
+        localStorage.removeItem('verificationDate');
+        localStorage.removeItem('verificationId');
+        window.location.reload();
+    };
 
     return (
         <div className="fixed bottom-4 right-4 z-50 bg-gray-900/90 backdrop-blur-sm rounded-lg p-4 border border-gray-700">
@@ -27,7 +41,7 @@ export default function VerificationTestControls() {
                     <div className="flex gap-2">
                         {!isVerified && (
                             <motion.button
-                                onClick={() => updateVerificationStatus(true, 'test-verification-123')}
+                                onClick={testVerify}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded-md transition-colors"

@@ -79,7 +79,7 @@ export default function AdminVerificationPage({ }: AdminVerificationPageProps) {
         adminNotes?: string
     ) => {
         try {
-            const response = await fetch('/api/student-verification/status', {
+            const response = await fetch('/api/admin/verifications/update', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ verificationId, status, adminNotes }),

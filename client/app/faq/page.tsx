@@ -12,7 +12,7 @@ export default function FAQPage() {
         subject: "",
         message: ""
     });
-    const [formStatus, setFormStatus] = useState<"idle"|"loading"|"success"|"error">("idle");
+    const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
     const faqs = [
         {
@@ -62,7 +62,7 @@ export default function FAQPage() {
             icon: Mail,
             title: "Email Support",
             description: "Get help via email",
-            contact: "connect@brokebro.in",
+            contact: "brokebroindia@gmail.com",
             hours: "24/7 response within 6 hours"
         },
         {
@@ -270,7 +270,7 @@ export default function FAQPage() {
                                 Send Message
                             </motion.button>
                             {formStatus === "success" && (
-                                <div className="text-green-400 font-semibold text-center">Thank you! Your message has been sent to connect@brokebro.in.</div>
+                                <div className="text-green-400 font-semibold text-center">Thank you! Your message has been sent to brokebroindia@gmail.com.</div>
                             )}
                             {formStatus === "error" && (
                                 <div className="text-red-400 font-semibold text-center">Sorry, there was a problem sending your message. Please try again later.</div>

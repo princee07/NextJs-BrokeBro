@@ -27,7 +27,7 @@ export default function ContactPage() {
         <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col items-center shadow-lg">
           <span className="text-2xl mb-2">📧</span>
           <span className="text-gray-400 text-sm mb-1">Email</span>
-          <a href="mailto:connect@brokebro.in" className="text-orange-300 font-semibold underline">connect@brokebro.in</a>
+          <a href="mailto:brokebroindia@gmail.com" className="text-orange-300 font-semibold underline">brokebroindia@gmail.com</a>
         </div>
         <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col items-center shadow-lg">
           <span className="text-2xl mb-2">📞</span>

@@ -41,10 +41,10 @@ const PressPage = () => {
             category: "Campaign Launch",
             readTime: "2 min read"
         },
-      
+
     ];
 
-   
+
 
     const stats = [
         { number: "1K+", label: "Verified Students" },
@@ -227,7 +227,7 @@ const PressPage = () => {
                                     <div className="w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center mr-3">
                                         <span className="text-xs">📧</span>
                                     </div>
-                                    <span>connect@brokebro.in</span>
+                                    <span>brokebroindia@gmail.com</span>
                                 </div>
                                 <div className="flex items-center text-gray-300">
                                     <div className="w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center mr-3">
