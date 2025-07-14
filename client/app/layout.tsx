@@ -60,7 +60,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         window.location.reload();
       }
     }
-  }, [user]);
+    // No redirect after login/signup; user stays on landing page
+  }, [user, isAuthenticated]);
 
   return (
     <html lang="en">
