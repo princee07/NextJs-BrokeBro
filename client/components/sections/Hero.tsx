@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/store/useUserStore';
+import { useAuthSync } from '@/hooks/useAuthSync';
 import Modal from '../ui/Modal';
 import RevealCodeButton from '../ui/RevealCodeButton';
 import { useStudentVerification } from '@/hooks/useStudentVerification';
@@ -20,6 +22,20 @@ const Hero = () => {
   const [showBrandModal, setShowBrandModal] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState<any>(null);
   //const [countdown, setCountdown] = useState<string>('');
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn);
+  useAuthSync();
+  // Debug: print all localStorage keys and values on every render
+  useEffect(() => {
+    console.log('--- localStorage contents ---');
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      const value = localStorage.getItem(key!);
+      console.log(key, value);
+    }
+    console.log('isLoggedIn Zustand value:', isLoggedIn);
+    console.log('user-auth token:', localStorage.getItem('user-auth'));
+  });
+  const SIGNUP_URL = "https://brokebro.kinde.com/auth/cx/_:nav&m:register&psid:0198098f4886f8128ed90644dc82ce2c&state:v1_c30d040703023ec39763be7ee5d368d288014e81edde51afea729e9fcdc83bded66eeb85979bf82f855dfe6d4b5a45699e833b5f353f052de6f3b2da4d90327e109e666a452e21086adc6a4bc3a6406ca4777d6696aeb5ca230baa9596ec09ae498278194289681f946120df643138146277d8233b27a09367d61de2633d5fc3e3d313b1c2b34368f260906490cb7e1f530ed9c125bc4bfc8b";
 
   const router = useRouter();
   const { isVerified } = useStudentVerification();
@@ -78,14 +94,14 @@ const Hero = () => {
       logo: '/assets/images/akina.png',
       gradient: 'from-white-500 to-teal-300',
       slug: 'akina',
-      
+
     },
     {
       name: 'BIBA',
       logo: '/assets/images/biba.png',
       gradient: 'from-red-500 to-teal-300',
       slug: 'biba',
-    
+
     },
     {
       name: 'just lil things',
@@ -93,7 +109,7 @@ const Hero = () => {
       gradient: 'from-pink-400 to-teal-100',
       slug: 'just lil things',
       discount: '15% OFF',
-    
+
     },
     {
       name: 'lakme',
@@ -108,7 +124,7 @@ const Hero = () => {
       gradient: 'from-orange-500 to-red-400',
       slug: 'soxytoes',
       discount: '₹1000 OFF',
-    
+
     },
     {
       name: 'just lil things',
@@ -160,7 +176,7 @@ const Hero = () => {
       gradient: 'from-white-600 to-red-700',
       slug: 'Bhootiya store',
       discount: '20% OFF',
-    
+
     }
 
   ];
@@ -174,73 +190,59 @@ const Hero = () => {
   const column2Cards = [...brandCards.slice(6), ...brandCards.slice(6)]; // 12 total cards
 
   // ... existing useEffects
-// Add this state to track real-time countdown
+  // Add this state to track real-time countdown
 
 
-// Add this useEffect for real-time countdown and auto-regeneration
-useEffect(() => {
-  if (selectedBrand?.codeType === 'expiring' && codeData && showBrandModal) {
-    const interval = setInterval(() => {
-      const userId = "kp_3ba83e44eb4d4956b8fe252c8064da8a";
-      const storageKey = `code_${selectedBrand.slug}_${userId}`;
-      const storedData = localStorage.getItem(storageKey);
-      
-      if (storedData) {
-        const { revealTime } = JSON.parse(storedData);
-        const now = Date.now();
-        const twentyFourHours = 24 * 60 * 60 * 1000;
-        const timeLeft = twentyFourHours - (now - revealTime);
-        
-        if (timeLeft <= 0) {
-          // Code has expired, generate new one automatically
-          localStorage.removeItem(storageKey);
-          const newCodeData = getOrCreateExpiringCode(selectedBrand, userId);
-          setCodeData(newCodeData);
-          console.log('Code expired, generated new one:', newCodeData);
-        } else {
-          // Update countdown display
-          const hours = Math.floor(timeLeft / (60 * 60 * 1000));
-          const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
-        
-          
-          // Update codeData with current timeLeft
-          setCodeData((prev: any) => ({
-            ...prev,
-            timeLeft: { hours, minutes }
-          }));
+  // Add this useEffect for real-time countdown and auto-regeneration
+  useEffect(() => {
+    if (selectedBrand?.codeType === 'expiring' && codeData && showBrandModal) {
+      const interval = setInterval(() => {
+        const userId = "kp_3ba83e44eb4d4956b8fe252c8064da8a";
+        const storageKey = `code_${selectedBrand.slug}_${userId}`;
+        const storedData = localStorage.getItem(storageKey);
+
+        if (storedData) {
+          const { revealTime } = JSON.parse(storedData);
+          const now = Date.now();
+          const twentyFourHours = 24 * 60 * 60 * 1000;
+          const timeLeft = twentyFourHours - (now - revealTime);
+
+          if (timeLeft <= 0) {
+            // Code has expired, generate new one automatically
+            localStorage.removeItem(storageKey);
+            const newCodeData = getOrCreateExpiringCode(selectedBrand, userId);
+            setCodeData(newCodeData);
+            console.log('Code expired, generated new one:', newCodeData);
+          } else {
+            // Update countdown display
+            const hours = Math.floor(timeLeft / (60 * 60 * 1000));
+            const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
+
+
+            // Update codeData with current timeLeft
+            setCodeData((prev: any) => ({
+              ...prev,
+              timeLeft: { hours, minutes }
+            }));
+          }
         }
-      }
-    }, 60000); // Update every minute
-    
-    return () => clearInterval(interval);
-  }
-}, [selectedBrand, codeData, showBrandModal]);
+      }, 60000); // Update every minute
 
-// Update your handleBrandCardClick function to handle expired codes better
-const handleBrandCardClick = (brand: any) => {
-  let currentCodeData;
+      return () => clearInterval(interval);
+    }
+  }, [selectedBrand, codeData, showBrandModal]);
 
-  
-  
-    // Always check for expiration when clicking
-    const storageKey = `code_${brand.slug}`;
-    const storedData = localStorage.getItem(storageKey);
-    
-   
- 
-    // Fixed code
-    currentCodeData = {
-      code: brand.code || 'STUDENT10',
-      isExpired: false,
-      timeLeft: null
-    };
-    console.log('Fixed code data:', currentCodeData);
-  
-  
-  setCodeData(currentCodeData);
-  setSelectedBrand(brand);
-  setShowBrandModal(true);
-};
+  // Update your handleBrandCardClick function to handle unauthenticated users
+  const handleBrandCardClick = (brand: any) => {
+    console.log('Brand card clicked. isLoggedIn:', isLoggedIn);
+    if (!isLoggedIn) {
+      window.location.href = SIGNUP_URL;
+      return;
+    }
+    // If logged in, use Next.js router for internal navigation
+    router.push('/student-verification');
+    console.log('Navigated to /student-verification');
+  };
 
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
@@ -562,57 +564,57 @@ const handleBrandCardClick = (brand: any) => {
         </div>
       </div>
 
-     
+
       {/* Modal for brand card */}
-<Modal isOpen={showBrandModal} onClose={() => setShowBrandModal(false)}>
-  {selectedBrand && codeData && (
-    <div className="flex flex-col items-center text-center p-4">
-      {/* Brand logo in a rounded rectangle */}
-      <div className="w-full max-w-xs h-40 bg-white rounded-xl flex items-center justify-center mb-4 shadow-lg">
-        <Image src={selectedBrand.logo} alt={selectedBrand.name} width={240} height={120} style={{ objectFit: 'contain', width: '100%', height: '120px' }} />
-      </div>
-      <h2 className="text-2xl font-extrabold mb-1 text-gray-100 drop-shadow">{selectedBrand.name} Student Discount</h2>
-      <p className="text-lg font-semibold text-pink-400 mb-2">{selectedBrand.discount}</p>
-      <div className="w-full border-b border-gray-700 my-3"></div>
-      
-      {/* Rating row */}
-      <div className="flex items-center justify-center gap-3 mb-4">
-        <span className="text-gray-300 text-sm mr-2">Rate this offer:</span>
-        <button className="text-2xl hover:scale-110 transition-transform">👎</button>
-        <button className="text-2xl hover:scale-110 transition-transform">👍</button>
-      </div>
-      
-      {/* Show countdown for expiring codes */}
-      {selectedBrand.codeType === 'expiring' && codeData.timeLeft && (
-        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mb-4">
-         
-        </div>
-      )}
-      
-      {/* Show if code just expired (this should rarely show now) */}
-      {selectedBrand.codeType === 'expiring' && !codeData.timeLeft && (
-        <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 mb-4">
-          <p className="text-green-400 text-sm font-medium">
-            ✨ New code generated! This code is valid for 24 hours.
-          </p>
-        </div>
-      )}
-      
-      <p className="mb-4 text-gray-300 text-sm">
-        {selectedBrand.codeType === 'expiring' 
-          ? "This is a time-limited code. Use it within 24 hours of revealing."
-          : "Enter this code in the promotional code area during checkout to benefit from the student discount."
-        }
-      </p>
-      
-      {/* Reveal code button with animation */}
-      <RevealCodeButton code={codeData.code} />
-      <a href="#" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
-        Visit {selectedBrand.name} website
-      </a>
-    </div>
-  )}
-</Modal>
+      <Modal isOpen={showBrandModal} onClose={() => setShowBrandModal(false)}>
+        {selectedBrand && codeData && (
+          <div className="flex flex-col items-center text-center p-4">
+            {/* Brand logo in a rounded rectangle */}
+            <div className="w-full max-w-xs h-40 bg-white rounded-xl flex items-center justify-center mb-4 shadow-lg">
+              <Image src={selectedBrand.logo} alt={selectedBrand.name} width={240} height={120} style={{ objectFit: 'contain', width: '100%', height: '120px' }} />
+            </div>
+            <h2 className="text-2xl font-extrabold mb-1 text-gray-100 drop-shadow">{selectedBrand.name} Student Discount</h2>
+            <p className="text-lg font-semibold text-pink-400 mb-2">{selectedBrand.discount}</p>
+            <div className="w-full border-b border-gray-700 my-3"></div>
+
+            {/* Rating row */}
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <span className="text-gray-300 text-sm mr-2">Rate this offer:</span>
+              <button className="text-2xl hover:scale-110 transition-transform">👎</button>
+              <button className="text-2xl hover:scale-110 transition-transform">👍</button>
+            </div>
+
+            {/* Show countdown for expiring codes */}
+            {selectedBrand.codeType === 'expiring' && codeData.timeLeft && (
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mb-4">
+
+              </div>
+            )}
+
+            {/* Show if code just expired (this should rarely show now) */}
+            {selectedBrand.codeType === 'expiring' && !codeData.timeLeft && (
+              <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 mb-4">
+                <p className="text-green-400 text-sm font-medium">
+                  ✨ New code generated! This code is valid for 24 hours.
+                </p>
+              </div>
+            )}
+
+            <p className="mb-4 text-gray-300 text-sm">
+              {selectedBrand.codeType === 'expiring'
+                ? "This is a time-limited code. Use it within 24 hours of revealing."
+                : "Enter this code in the promotional code area during checkout to benefit from the student discount."
+              }
+            </p>
+
+            {/* Reveal code button with animation */}
+            <RevealCodeButton code={codeData.code} />
+            <a href="#" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
+              Visit {selectedBrand.name} website
+            </a>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };

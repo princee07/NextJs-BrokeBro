@@ -1,8 +1,11 @@
 "use client"
 import type React from "react"
 import { useState, useEffect } from "react"
+import Modal from '@/components/ui/Modal';
+import StudentVerification from '@/components/auth/StudentVerification';
 import { ShoppingCart, Heart, Star, Eye, ArrowRight, Zap, Shield, Truck } from "lucide-react"
 import VerificationGate from '@/components/ui/VerificationGate';
+import { useUserStore } from '@/store/useUserStore';
 
 interface Product {
   id: number
@@ -21,6 +24,11 @@ interface Product {
 const EcommerceHero: React.FC = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
   const [currentSlide, setCurrentSlide] = useState(0)
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn);
+  const isVerified = useUserStore((state) => state.isVerified);
+  const [showCouponModal, setShowCouponModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [couponCode, setCouponCode] = useState<string | null>(null);
 
   const featuredProducts: Product[] = [
     {
@@ -112,8 +120,8 @@ const EcommerceHero: React.FC = () => {
       isNew: true,
       description: "Upto 55% off on student laptop",
     },
-     {
-      id: 8,
+    {
+      id: 9,
       name: "Apple MacBook Pro",
       price: 49.99,
       image: "https://images.seeklogo.com/logo-png/42/1/apple-logo-png_seeklogo-427436.png",
@@ -121,8 +129,8 @@ const EcommerceHero: React.FC = () => {
       reviews: 892,
       isNew: true,
       description: "Save up to ₹10000 on select Mac or iPad with education pricing.",
-    }    
-    ]
+    }
+  ]
 
   const heroSlides = [
     {
@@ -163,6 +171,25 @@ const EcommerceHero: React.FC = () => {
       />
     ))
   }
+
+  const SIGNUP_URL = "https://brokebro.kinde.com/auth/cx/_:nav&m:register&psid:0198098f4886f8128ed90644dc82ce2c&state:v1_c30d040703023ec39763be7ee5d368d288014e81edde51afea729e9fcdc83bded66eeb85979bf82f855dfe6d4b5a45699e833b5f353f052de6f3b2da4d90327e109e666a452e21086adc6a4bc3a6406ca4777d6696aeb5ca230baa9596ec09ae498278194289681f946120df643138146277d8233b27a09367d61de2633d5fc3e3d313b1c2b34368f260906490cb7e1f530ed9c125bc4bfc8b";
+  const handleGetDiscount = (product: Product) => {
+    if (!isLoggedIn) {
+      window.location.href = SIGNUP_URL;
+      return;
+    }
+    if (!isVerified) {
+      window.location.href = '/student-verification';
+      return;
+    }
+    // If verified, show coupon modal
+    setSelectedProduct(product);
+    // Generate a simple coupon code based on product name
+    setCouponCode(`${product.name.replace(/\s+/g, '').slice(0, 8).toUpperCase()}10`);
+    setShowCouponModal(true);
+  };
+
+  // No verification modal needed
 
   return (
     <div className="min-h-screen  mt-35 bg-gradient-to-br from-gray-900 via-black to-gray-800">
@@ -259,13 +286,13 @@ const EcommerceHero: React.FC = () => {
                         <img
                           src={product.image || "/placeholder.svg"}
                           alt={product.name}
-                        className="w-full h-auto" // Remove fixed height and other classes
+                          className="w-full h-auto" // Remove fixed height and other classes
                         />
 
                         {/* Badges */}
                         <div className="absolute top-2 left-2 flex flex-col gap-1">
-                        
-                       
+
+
                         </div>
 
                         {/* Quick Actions */}
@@ -280,9 +307,12 @@ const EcommerceHero: React.FC = () => {
 
                         {/* Quick Add to Cart */}
                         <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <button className="w-full bg-gradient-to-r from-orange-500 to-pink-600 text-white py-2 px-3 rounded-lg text-xs font-medium hover:from-orange-600 hover:to-pink-700 transition-all flex items-center justify-center space-x-1">
+                          <button
+                            className="w-full bg-gradient-to-r from-orange-500 to-pink-600 text-white py-2 px-3 rounded-lg text-xs font-medium hover:from-orange-600 hover:to-pink-700 transition-all flex items-center justify-center space-x-1"
+                            onClick={() => handleGetDiscount(product)}
+                          >
                             <ShoppingCart className="w-3 h-3" />
-                            <span>Add to Cart</span>
+                            <span>Get Discount</span>
                           </button>
                         </div>
                       </div>
@@ -295,7 +325,7 @@ const EcommerceHero: React.FC = () => {
                         <div>{product.description}</div>
 
                         <div className="flex items-center justify-between">
-                        
+
                         </div>
                       </div>
                     </div>
@@ -385,23 +415,79 @@ const EcommerceHero: React.FC = () => {
                     </h3>
 
                     <div className="flex items-center gap-2 mb-4">
-                   
-                   
+
+
                     </div>
 
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
-                       
+
                       </div>
 
-                    </div> 
-                     <p className="text-base text-gray-300 mb-4 line-clamp-2 leading-relaxed">
+                    </div>
+                    <p className="text-base text-gray-300 mb-4 line-clamp-2 leading-relaxed">
                       {product.description}
-                    </p>            
-                        <button className="w-full bg-gradient-to-r from-orange-500 to-pink-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25">
+                    </p>
+                    <button
+                      className="w-full bg-gradient-to-r from-orange-500 to-pink-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25"
+                      onClick={() => handleGetDiscount(product)}
+                    >
                       <ShoppingCart className="w-5 h-5" />
-                      <span>Add to Cart</span>
+                      <span>Get Discount</span>
                     </button>
+                    {/* Coupon Modal */}
+                    <Modal isOpen={showCouponModal} onClose={() => setShowCouponModal(false)}>
+                      {selectedProduct && couponCode ? (
+                        <div className="relative flex flex-col items-center text-center p-5 w-80 mx-auto bg-gray-900 rounded-2xl shadow-2xl">
+                          <button
+                            onClick={() => setShowCouponModal(false)}
+                            className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-white text-lg z-10"
+                            aria-label="Close"
+                          >
+                            ×
+                          </button>
+                          <div className="w-24 h-20 bg-white rounded-lg flex items-center justify-center mb-3 shadow">
+                            <img
+                              src={selectedProduct.image || '/placeholder.svg'}
+                              alt={selectedProduct.name}
+                              width={80}
+                              height={60}
+                              className="object-contain"
+                            />
+                          </div>
+                          <h2 className="text-base font-bold text-white mb-1">{selectedProduct.name}</h2>
+                          <div className="flex items-center justify-center gap-2 mb-2">
+                            {selectedProduct.originalPrice && (
+                              <span className="text-gray-400 line-through text-xs">
+                                {selectedProduct.originalPrice}
+                              </span>
+                            )}
+                            <span className="text-green-400 font-bold text-sm">
+                              {selectedProduct.price}
+                            </span>
+                          </div>
+                          <div className="w-full border-b border-gray-800 my-2"></div>
+                          <div className="w-full mb-3">
+                            <p className="text-gray-300 text-xs mb-2">Your student coupon code:</p>
+                            <span className="text-2xl font-bold text-orange-400 bg-gray-800 px-4 py-2 rounded-lg select-all">
+                              {couponCode}
+                            </span>
+                          </div>
+                          <a
+                            href={selectedProduct.url || "#"}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-2 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-200 text-xs"
+                          >
+                            Visit Store
+                          </a>
+                        </div>
+                      ) : (
+                        <div className="p-4 text-white w-80 mx-auto bg-gray-900 rounded-2xl relative shadow-2xl">
+                          <p className="text-sm mt-4">Loading...</p>
+                        </div>
+                      )}
+                    </Modal>
                   </div>
                 </div>
               </VerificationGate>
@@ -409,6 +495,7 @@ const EcommerceHero: React.FC = () => {
           </div>
         </div>
       </div>
+
     </div>
   )
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { useUserStore } from '@/store/useUserStore';
 
 interface VerificationState {
     isVerified: boolean;
@@ -14,6 +15,11 @@ export function useStudentVerification() {
         verificationDate: null,
         verificationId: null,
     });
+    const {
+        setVerified,
+        setVerificationId,
+        setVerificationDate
+    } = useUserStore();
 
     // Load verification status from localStorage on mount and listen for changes
     useEffect(() => {
@@ -26,6 +32,9 @@ export function useStudentVerification() {
                 verificationDate,
                 verificationId,
             });
+            setVerified(isVerified);
+            setVerificationId(verificationId);
+            setVerificationDate(verificationDate);
         };
 
         syncVerificationState();

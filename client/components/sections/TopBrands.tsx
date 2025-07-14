@@ -5,6 +5,7 @@ import { motion, useAnimation, useInView } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import VerificationGate from '@/components/ui/VerificationGate';
+import { useUserStore } from '@/store/useUserStore';
 
 const TopBrands = () => {
   // Define brand data
@@ -54,6 +55,17 @@ const TopBrands = () => {
       controls.start("visible");
     }
   }, [isInView, controls]);
+
+  const isLoggedIn = useUserStore ? useUserStore((state) => state.isLoggedIn) : false;
+  const SIGNUP_URL = "https://brokebro.kinde.com/auth/cx/_:nav&m:register&psid:0198098f4886f8128ed90644dc82ce2c&state:v1_c30d040703023ec39763be7ee5d368d288014e81edde51afea729e9fcdc83bded66eeb85979bf82f855dfe6d4b5a45699e833b5f353f052de6f3b2da4d90327e109e666a452e21086adc6a4bc3a6406ca4777d6696aeb5ca230baa9596ec09ae498278194289681f946120df643138146277d8233b27a09367d61de2633d5fc3e3d313b1c2b34368f260906490cb7e1f530ed9c125bc4bfc8b";
+
+  const handleBrandClick = (url: string) => {
+    if (!isLoggedIn) {
+      window.location.href = SIGNUP_URL;
+      return;
+    }
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
 
   return (
     <section
@@ -109,7 +121,7 @@ const TopBrands = () => {
               {/* Double the items for seamless loop */}
               {[...topBrands[0], ...topBrands[0]].map((brand, index) => (
                 <VerificationGate key={index}>
-                  <a href={brand.url} target="_blank" rel="noopener noreferrer" className="relative group">
+                  <a href="#" onClick={() => handleBrandClick(brand.url)} className="relative group">
                     <motion.div
                       whileHover={{
                         y: -10,
@@ -171,7 +183,7 @@ const TopBrands = () => {
               {/* Double the items for seamless loop */}
               {[...topBrands[1], ...topBrands[1]].map((brand, index) => (
                 <VerificationGate key={index}>
-                  <a href={brand.url} target="_blank" rel="noopener noreferrer" className="relative group">
+                  <a href="#" onClick={() => handleBrandClick(brand.url)} className="relative group">
                     <motion.div
                       whileHover={{
                         y: -10,

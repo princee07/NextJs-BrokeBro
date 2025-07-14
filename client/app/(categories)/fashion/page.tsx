@@ -1,14 +1,16 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, useAnimation, useInView, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useStudentVerification } from '@/hooks/useStudentVerification';
+
+import { useUserStore } from '@/store/useUserStore';
 import {
   FaHeart,
   FaRegHeart,
-  FaShoppingBag,
   FaStar,
   FaFilter,
   FaSearch,
@@ -19,13 +21,17 @@ import {
   FaGem,
   FaCrown,
   FaGift,
-  FaEye
+  FaEye,
+  FaShoppingBag
 } from 'react-icons/fa';
+import { useAuthSync } from '@/hooks/useAuthSync';
 import { HiSparkles } from 'react-icons/hi';
 import { MdOutlineGridView, MdOutlineViewList, MdTrendingUp } from 'react-icons/md';
 import { HiOutlineHeart, HiHeart } from 'react-icons/hi';
-import VerificationProtectedLink from '@/components/ui/VerificationProtectedLink';
+import StudentVerification from '@/components/auth/StudentVerification';
 import { GiClothes, GiArmoredPants, GiWatch, GiLipstick, GiHoodie } from 'react-icons/gi';
+import VerifiedBadge from '@/components/ui/VerifiedBadge';
+import ProfileVerificationBadge from '@/components/ui/ProfileVerificationBadge';
 
 // Full static data from JSON files
 const staticFashionCategories = [
@@ -379,6 +385,9 @@ function getIconComponent(iconName: string) {
 }
 
 export default function FashionPage() {
+  // Sync login state from localStorage to Zustand
+  useAuthSync();
+
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [wishlist, setWishlist] = useState<number[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -394,8 +403,10 @@ export default function FashionPage() {
   const categoriesInView = useInView(categoriesRef, { once: true });
   const productsInView = useInView(productsRef, { once: true });
   const newsletterInView = useInView(newsletterRef, { once: true });
-   const { isVerified } = useStudentVerification();
-   console.log(`User is verified: ${isVerified}`);
+  useStudentVerification(); // keep localStorage sync
+  const isVerified = useUserStore((state) => state.isVerified);
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn);
+  const [openVerificationCard, setOpenVerificationCard] = useState<string | null>(null);
   // Auto-rotate featured collections
   useEffect(() => {
     const timer = setInterval(() => {
@@ -418,51 +429,38 @@ export default function FashionPage() {
     : staticTrendingProducts.filter(product =>
       product.brand.toLowerCase() === selectedFilter.toLowerCase()
     );
-
+  const SIGNUP_URL = "https://brokebro.kinde.com/auth/cx/_:nav&m:register&psid:0198098f4886f8128ed90644dc82ce2c&state:v1_c30d040703023ec39763be7ee5d368d288014e81edde51afea729e9fcdc83bded66eeb85979bf82f855dfe6d4b5a45699e833b5f353f052de6f3b2da4d90327e109e666a452e21086adc6a4bc3a6406ca4777d6696aeb5ca230baa9596ec09ae498278194289681f946120df643138146277d8233b27a09367d61de2633d5fc3e3d313b1c2b34368f260906490cb7e1f530ed9c125bc4bfc8b";
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black text-white overflow-x-hidden">
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
+          animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-3xl"
         />
         <motion.div
-          animate={{
-            scale: [1.2, 1, 1.2],
-            rotate: [360, 180, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
+          animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
           className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-3xl"
         />
         <motion.div
-          animate={{
-            scale: [1, 1.1, 1],
-            x: [0, 100, 0],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "linear"
-          }}
+          animate={{ scale: [1, 1.1, 1], x: [0, 100, 0] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
           className="absolute top-1/2 right-0 w-64 h-64 bg-gradient-to-r from-green-500/15 to-teal-500/15 rounded-full blur-3xl"
         />
       </div>
 
       <div className="relative z-10">
-        {/* Hero Section with Video-like Banner */}
+        {/* Navbar Profile Avatar with Verified Tick Overlay */}
+        <div className="absolute top-8 right-8 z-50 flex items-center gap-2">
+          <div className="relative w-10 h-10">
+            <Image src={"/assets/placeholder.png"} alt="Profile" fill sizes="40px" className="rounded-full object-cover" />
+            {isVerified && <ProfileVerificationBadge size="sm" variant="overlay" />}
+          </div>
+        </div>
+
+        {/* Hero Section */}
         <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden pt-20">
           <div className="absolute inset-0">
             <motion.div
@@ -471,17 +469,19 @@ export default function FashionPage() {
               transition={{ duration: 2, ease: "easeOut" }}
               className="w-full h-full"
             >
-              <Image
-                src={staticFeaturedCollections[currentSlide].image}
-                alt={staticFeaturedCollections[currentSlide].title}
-                fill
-                className="object-cover"
-                priority
-              />
+              <div className="relative w-full h-full min-h-[400px]">
+                <Image
+                  src={staticFeaturedCollections[currentSlide].image}
+                  alt={staticFeaturedCollections[currentSlide].title}
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                  priority
+                />
+              </div>
             </motion.div>
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
           </div>
-
           <div className="container mx-auto px-6 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <motion.div
@@ -499,7 +499,6 @@ export default function FashionPage() {
                   >
                     {staticFeaturedCollections[currentSlide].badge}
                   </motion.span>
-
                   <motion.h1
                     initial={{ opacity: 0, y: 30 }}
                     animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -511,7 +510,6 @@ export default function FashionPage() {
                       Revolution
                     </span>
                   </motion.h1>
-
                   <motion.p
                     initial={{ opacity: 0, y: 20 }}
                     animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -522,29 +520,38 @@ export default function FashionPage() {
                     From ethnic wear to modern streetwear, find your perfect style.
                   </motion.p>
                 </div>
-
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                   transition={{ duration: 0.8, delay: 1 }}
                   className="flex flex-wrap gap-4"
                 >
-                  <VerificationProtectedLink
-                    href={staticFeaturedCollections[currentSlide].url}
-                    requireVerification={true}
-                    className="group"
-                  >
+                  {isVerified ? (
+                    <motion.a
+                      href={staticFeaturedCollections[currentSlide].url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-semibold rounded-full shadow-2xl hover:shadow-pink-500/25 transition-all duration-300 flex items-center gap-3 group"
+                    >
+                      <FaShoppingBag className="text-lg" />
+                      Shop Collection
+                      <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+                      <VerifiedBadge size="sm" />
+                    </motion.a>
+                  ) : (
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className="px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-semibold rounded-full shadow-2xl hover:shadow-pink-500/25 transition-all duration-300 flex items-center gap-3"
+                      onClick={() => setOpenVerificationCard('hero')}
                     >
                       <FaShoppingBag className="text-lg" />
                       Shop Collection
                       <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
                     </motion.button>
-                  </VerificationProtectedLink>
-
+                  )}
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -554,8 +561,6 @@ export default function FashionPage() {
                     Watch Lookbook
                   </motion.button>
                 </motion.div>
-
-                {/* Collection Stats */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -576,8 +581,6 @@ export default function FashionPage() {
                   </div>
                 </motion.div>
               </motion.div>
-
-              {/* Featured Collection Card */}
               <motion.div
                 initial={{ opacity: 0, x: 100 }}
                 animate={heroInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 100 }}
@@ -597,9 +600,7 @@ export default function FashionPage() {
                         <span className="text-gray-400 text-sm">({staticFeaturedCollections[currentSlide].reviews})</span>
                       </div>
                     </div>
-
                     <p className="text-gray-300">{staticFeaturedCollections[currentSlide].description}</p>
-
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="text-2xl font-bold text-green-400">{staticFeaturedCollections[currentSlide].price}</div>
@@ -621,17 +622,12 @@ export default function FashionPage() {
                 </div>
               </motion.div>
             </div>
-
-            {/* Slide Indicators */}
             <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3">
               {staticFeaturedCollections.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide
-                    ? 'bg-white scale-125'
-                    : 'bg-white/40 hover:bg-white/60'
-                    }`}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white/60'}`}
                 />
               ))}
             </div>
@@ -656,7 +652,6 @@ export default function FashionPage() {
                 Explore curated collections from top fashion brands with exclusive student discounts
               </p>
             </motion.div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {staticFashionCategories.map((category, index) => (
                 <motion.div
@@ -667,23 +662,19 @@ export default function FashionPage() {
                   className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg border border-white/20 hover:border-white/40 transition-all duration-500 hover:scale-105"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/50" />
-
-                  {/* Background Image */}
-                  <div className="relative h-64 overflow-hidden">
+                  <div className="relative w-full h-64">
                     <Image
                       src={category.image || "/assets/placeholder.png"}
                       alt={category.name}
                       fill
+                      sizes="256px"
                       onError={(e) => {
                         e.currentTarget.onerror = null;
                         e.currentTarget.src = "/assets/placeholder.png";
                       }}
                       className="object-cover group-hover:scale-110 transition-transform duration-700"
                     />
-                    <div className={`absolute inset-0 bg-gradient-to-t ${category.gradient} opacity-30 group-hover:opacity-40 transition-opacity duration-500`} />
                   </div>
-
-                  {/* Content */}
                   <div className="relative p-6 space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -711,9 +702,7 @@ export default function FashionPage() {
                         {category.tag}
                       </span>
                     </div>
-
                     <p className="text-gray-300">{category.description}</p>
-
                     <div className="flex items-center justify-between">
                       <div className="text-sm text-gray-400">
                         {category.products} products
@@ -722,21 +711,24 @@ export default function FashionPage() {
                         {category.discount}
                       </div>
                     </div>
-
-                    <VerificationProtectedLink
-                      href={category.url}
-                      requireVerification={true}
-                      className="w-full"
-                    >
+                    {isVerified ? null : (
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                        onClick={() => setOpenVerificationCard(category.id)}
                       >
                         Get Discount
                         <FaGift className="text-sm" />
                       </motion.button>
-                    </VerificationProtectedLink>
+                    )}
+                    {openVerificationCard === category.id && (
+                      <StudentVerification
+                        isOpen={true}
+                        onClose={() => setOpenVerificationCard(null)}
+                        onVerificationComplete={() => setOpenVerificationCard(null)}
+                      />
+                    )}
                   </div>
                 </motion.div>
               ))}
@@ -763,47 +755,35 @@ export default function FashionPage() {
                   Discover what's hot in fashion this season
                 </p>
               </div>
-
-              {/* Filter Buttons */}
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full p-1">
                   {['all', 'Biba', 'Levis', 'Fastrack', 'Swiss Beauty', 'Salty'].map((filter) => (
                     <button
                       key={filter}
                       onClick={() => setSelectedFilter(filter)}
-                      className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${selectedFilter === filter
-                        ? 'bg-gradient-to-r from-pink-600 to-purple-600 text-white'
-                        : 'text-gray-300 hover:text-white hover:bg-white/10'
-                        }`}
+                      className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${selectedFilter === filter ? 'bg-gradient-to-r from-pink-600 to-purple-600 text-white' : 'text-gray-300 hover:text-white hover:bg-white/10'}`}
                     >
                       {filter === 'all' ? 'All' : filter}
                     </button>
                   ))}
                 </div>
-
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setViewMode('grid')}
-                    className={`p-3 rounded-xl transition-all ${viewMode === 'grid' ? 'bg-white/20 text-white' : 'text-gray-400 hover:text-white'
-                      }`}
+                    className={`p-3 rounded-xl transition-all ${viewMode === 'grid' ? 'bg-white/20 text-white' : 'text-gray-400 hover:text-white'}`}
                   >
                     <MdOutlineGridView className="text-xl" />
                   </button>
                   <button
                     onClick={() => setViewMode('list')}
-                    className={`p-3 rounded-xl transition-all ${viewMode === 'list' ? 'bg-white/20 text-white' : 'text-gray-400 hover:text-white'
-                      }`}
+                    className={`p-3 rounded-xl transition-all ${viewMode === 'list' ? 'bg-white/20 text-white' : 'text-gray-400 hover:text-white'}`}
                   >
                     <MdOutlineViewList className="text-xl" />
                   </button>
                 </div>
               </div>
             </motion.div>
-
-            <div className={`grid gap-8 ${viewMode === 'grid'
-              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-              : 'grid-cols-1'
-              }`}>
+            <div className={`grid gap-8 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
               <AnimatePresence mode="wait">
                 {filteredProducts.map((product, index) => (
                   <motion.div
@@ -812,64 +792,29 @@ export default function FashionPage() {
                     animate={productsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
-                    className={`group relative bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl overflow-hidden hover:border-white/40 transition-all duration-500 hover:scale-105 ${viewMode === 'list' ? 'flex items-center' : ''
-                      }`}
+                    className={`group relative bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl overflow-hidden hover:border-white/40 transition-all duration-500 hover:scale-105 ${viewMode === 'list' ? 'flex items-center' : ''}`}
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      if (isLoggedIn) {
+                        window.location.href = '/student-verification';
+                      } else {
+                        window.location.href = SIGNUP_URL;
+                      }
+                    }}
                   >
-                    {/* Product Image */}
-                    <div className={`relative overflow-hidden ${viewMode === 'list' ? 'w-48 h-48' : 'h-64'
-                      }`}>
+                    <div className={`relative ${viewMode === 'list' ? 'w-48 h-48' : 'w-full h-64'}`}>
                       <Image
                         src={product.image || "/assets/placeholder.png"}
                         alt={product.name}
                         fill
+                        sizes={viewMode === 'list' ? '192px' : '256px'}
                         onError={(e) => {
                           e.currentTarget.onerror = null;
                           e.currentTarget.src = "/assets/placeholder.png";
                         }}
                         className="object-cover group-hover:scale-110 transition-transform duration-700"
                       />
-
-                      {/* Badges */}
-                      <div className="absolute top-4 left-4 space-y-2">
-                        <span className="px-3 py-1 bg-gradient-to-r from-red-500 to-pink-600 text-white text-xs font-bold rounded-full">
-                          {product.discount}
-                        </span>
-                        <span className="block px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-medium rounded-full">
-                          {product.badge}
-                        </span>
-                      </div>
-
-                      {/* Wishlist Button */}
-                      <button
-                        onClick={() => toggleWishlist(product.id)}
-                        className="absolute top-4 right-4 p-2 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-all duration-300"
-                      >
-                        {wishlist.includes(product.id) ?
-                          <HiHeart className="text-red-400 text-xl" /> :
-                          <HiOutlineHeart className="text-white text-xl" />
-                        }
-                      </button>
-
-                      {/* Quick Actions */}
-                      <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="flex gap-2">
-                          <button className="flex-1 px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-xl hover:bg-white/30 transition-all duration-300 text-sm font-medium">
-                            Quick View
-                          </button>
-                          <VerificationProtectedLink
-                            href={product.url || '#'}
-                            requireVerification={true}
-                            className="flex-1"
-                          >
-                            <button className="w-full px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-xl hover:from-pink-700 hover:to-purple-700 transition-all duration-300 text-sm font-medium">
-                              Shop Now
-                            </button>
-                          </VerificationProtectedLink>
-                        </div>
-                      </div>
                     </div>
-
-                    {/* Product Info */}
                     <div className={`p-6 space-y-4 ${viewMode === 'list' ? 'flex-1' : ''}`}>
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
@@ -892,16 +837,12 @@ export default function FashionPage() {
                             <span className="text-xs text-gray-400">({product.reviews})</span>
                           </div>
                         </div>
-
                         <h3 className="text-xl font-bold text-white">{product.name}</h3>
-
                         <div className="flex items-center gap-3">
                           <span className="text-2xl font-bold text-green-400">{product.price}</span>
                           <span className="text-lg text-gray-400 line-through">{product.originalPrice}</span>
                         </div>
                       </div>
-
-                      {/* Color Options */}
                       <div className="space-y-2">
                         <p className="text-sm text-gray-400">Colors:</p>
                         <div className="flex gap-2">
@@ -914,8 +855,6 @@ export default function FashionPage() {
                           ))}
                         </div>
                       </div>
-
-                      {/* Sizes */}
                       <div className="space-y-2">
                         <p className="text-sm text-gray-400">Sizes:</p>
                         <div className="flex gap-2 flex-wrap">
@@ -934,70 +873,46 @@ export default function FashionPage() {
                 ))}
               </AnimatePresence>
             </div>
-          </div>
-        </section>
-
-        {/* Newsletter Section */}
-        <section ref={newsletterRef} className="py-20 px-6">
-          <div className="container mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={newsletterInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-              transition={{ duration: 1 }}
-              className="relative bg-gradient-to-r from-pink-600/20 via-purple-600/20 to-cyan-600/20 backdrop-blur-xl border border-white/20 rounded-3xl p-12 text-center overflow-hidden"
-            >
-              {/* Background Decorations */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-pink-400/30 to-purple-600/30 rounded-full blur-3xl" />
-              <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-cyan-400/30 to-blue-600/30 rounded-full blur-3xl" />
-
-              <div className="relative z-10 space-y-8">
-                <div className="space-y-4">
-                  <h2 className="text-4xl lg:text-5xl font-bold">
-                    <span className="bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                      Stay In Style
-                    </span>
-                  </h2>
-                  <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                    Subscribe to get exclusive deals, new arrivals, and fashion tips directly to your inbox.
-                    Plus, get 10% off your first purchase!
-                  </p>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="flex-1 px-6 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white placeholder-gray-400 focus:outline-none focus:border-pink-400 transition-all duration-300"
+            {openVerificationCard && typeof window !== 'undefined' && createPortal(
+              <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-md !top-0 !left-0 !right-0 !bottom-0">
+                {/* Close Button */}
+                <button
+                  className="fixed top-6 right-8 text-white hover:text-pink-400 text-4xl z-[10000] bg-black/40 rounded-full p-2 transition-colors"
+                  onClick={() => setOpenVerificationCard(null)}
+                  aria-label="Close"
+                  style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.25)' }}
+                >
+                  &times;
+                </button>
+                <div className="relative z-[10001] w-full max-w-md mx-auto">
+                  <StudentVerification
+                    isOpen={true}
+                    onClose={() => setOpenVerificationCard(null)}
+                    onVerificationComplete={() => setOpenVerificationCard(null)}
                   />
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-semibold rounded-full transition-all duration-300 flex items-center justify-center gap-2"
-                  >
-                    <FaGift className="text-lg" />
-                    Subscribe
-                  </motion.button>
                 </div>
-
-                <div className="flex items-center justify-center gap-8 pt-8">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-pink-400">50K+</div>
-                    <div className="text-sm text-gray-400">Happy Subscribers</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-purple-400">Daily</div>
-                    <div className="text-sm text-gray-400">New Deals</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-cyan-400">Exclusive</div>
-                    <div className="text-sm text-gray-400">Student Offers</div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+              </div>,
+              document.body
+            )}
           </div>
         </section>
-      </div>
-    </div>
-  );
+
+        {/* Stats at the end */}
+        <div className="flex items-center justify-center gap-8 pt-8">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-pink-400">50K+</div>
+            <div className="text-sm text-gray-400">Happy Subscribers</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-purple-400">Daily</div>
+            <div className="text-sm text-gray-400">New Deals</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-cyan-400">Exclusive</div>
+            <div className="text-sm text-gray-400">Student Offers</div>
+          </div>
+        </div>
+      </div >
+    </div >
+  );
 }

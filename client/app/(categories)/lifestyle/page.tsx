@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useUserStore } from '@/store/useUserStore';
 import { Search, ShoppingCart, Heart, Eye, ArrowRight, Zap, Shield, Truck } from "lucide-react";
 import VerificationGate from '@/components/ui/VerificationGate';
-import Modal from '@/components/ui/Modal';
+// import Modal from '@/components/ui/Modal';
+// import StudentVerification from '@/components/auth/StudentVerification';
 import Image from 'next/image';
-import RevealCodeButton from '@/components/ui/RevealCodeButton';
+// import RevealCodeButton from '@/components/ui/RevealCodeButton';
 type Product = {
   id: string;
   title: string;
@@ -63,7 +65,7 @@ const initialProducts: Product[] = [
     id: "4",
     title: "Air India",
     description:
-    "Students can enjoy up to 25%* off on Air India flights!",
+      "Students can enjoy up to 25%* off on Air India flights!",
     originalPrice: 1899,
     currentPrice: 759,
     discount: "60% OFF",
@@ -202,10 +204,11 @@ type ProductCardProps = {
   handleAddToCart: (id: string) => void;
 };
 
-const ProductCard: React.FC<ProductCardProps> = ({
+const ProductCard: React.FC<ProductCardProps & { onGetDiscount: (product: Product) => void }> = ({
   product,
   added,
   handleAddToCart,
+  onGetDiscount,
 }) => (
   <div className="product-card bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl shadow-lg overflow-hidden group hover:shadow-2xl hover:border-orange-500/50 transition-all duration-300 transform hover:-translate-y-2">
     <div className="relative h-48 overflow-hidden">
@@ -227,11 +230,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </div>
       <div className="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
         <button
-          onClick={() => handleAddToCart(product.id)}
+          onClick={() => onGetDiscount(product)}
           className={`bg-gradient-to-r ${added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"} text-white px-6 py-3 rounded-full font-semibold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center space-x-2 shadow-lg`}
         >
           <ShoppingCart className="w-5 h-5" />
-          <span>{added ? "Added! ✓" : "Book Deal"}</span>
+          <span>{added ? "Added! ✓" : "Get Discount"}</span>
         </button>
       </div>
     </div>
@@ -243,14 +246,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
         </div>
-       
       </div>
       <button
-        onClick={() => handleAddToCart(product.id)}
+        onClick={() => onGetDiscount(product)}
         className={`w-full bg-gradient-to-r ${added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"} text-white py-3 px-4 rounded-xl font-semibold hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25`}
       >
         <ShoppingCart className="w-5 h-5" />
-        <span>{added ? "Added! ✓" : "Book Deal"}</span>
+        <span>{added ? "Added! ✓" : "Get Discount"}</span>
       </button>
     </div>
   </div>
@@ -268,6 +270,7 @@ const ProductsSection: React.FC<{
   setDuration: (val: string) => void;
   filterProducts: () => void;
   productCount: number;
+  onGetDiscount: (product: Product) => void;
 }> = ({
   products,
   added,
@@ -280,54 +283,52 @@ const ProductsSection: React.FC<{
   setDuration,
   filterProducts,
   productCount,
+  onGetDiscount,
 }) => (
-  <section className="py-16 bg-gradient-to-b from-black via-gray-900 to-black" id="products">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold bg-gradient-to-r from-orange-400 via-pink-500 to-orange-400 bg-clip-text text-transparent mb-4">
-          Featured Travel Deals
-        </h2>
-        <p className="text-xl bg-gradient-to-r from-orange-300 to-pink-400 bg-clip-text text-transparent max-w-2xl mx-auto">
-          Discover our hand-picked selection of premium travel experiences
-        </p>
+    <section className="py-16 bg-gradient-to-b from-black via-gray-900 to-black" id="products">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-orange-400 via-pink-500 to-orange-400 bg-clip-text text-transparent mb-4">
+            Featured Travel Deals
+          </h2>
+          <p className="text-xl bg-gradient-to-r from-orange-300 to-pink-400 bg-clip-text text-transparent max-w-2xl mx-auto">
+            Discover our hand-picked selection of premium travel experiences
+          </p>
+        </div>
+        <FilterBar
+          category={category}
+          setCategory={setCategory}
+          price={price}
+          setPrice={setPrice}
+          duration={duration}
+          setDuration={setDuration}
+          filterProducts={filterProducts}
+          productCount={productCount}
+        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 justify-items-center">
+          {products.map((p) => (
+            <VerificationGate key={p.id}>
+              <ProductCard
+                product={p}
+                added={!!added[p.id]}
+                handleAddToCart={handleAddToCart}
+                onGetDiscount={onGetDiscount}
+              />
+            </VerificationGate>
+          ))}
+        </div>
       </div>
-      <FilterBar
-        category={category}
-        setCategory={setCategory}
-        price={price}
-        setPrice={setPrice}
-        duration={duration}
-        setDuration={setDuration}
-        filterProducts={filterProducts}
-        productCount={productCount}
-      />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 justify-items-center">
-        {products.map((p) => (
-          <VerificationGate key={p.id}>
-            <ProductCard
-              product={p}
-              added={!!added[p.id]}
-              handleAddToCart={handleAddToCart}
-            />
-          </VerificationGate>
-        ))}
-      </div>
-    </div>
-  </section>
-);
+    </section>
+  );
 
 export default function LifestylePage() {
+  const isLoggedIn = useUserStore ? useUserStore((state) => state.isLoggedIn) : false;
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [productCount, setProductCount] = useState(initialProducts.length);
   const [added, setAdded] = useState<{ [id: string]: boolean }>({});
   const [category, setCategory] = useState(categories[0]);
   const [price, setPrice] = useState(priceRanges[0]);
   const [duration, setDuration] = useState(durations[0]);
-const [showProductModal, setShowProductModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
-  const [productCodeData, setProductCodeData] = useState<any>(null);
-   // Add product click handler with debugging
- const userId=""
   useEffect(() => {
     const interval = setInterval(() => {
       setProducts((prev) =>
@@ -399,26 +400,14 @@ const [showProductModal, setShowProductModal] = useState(false);
       });
     };
   }, [products]);
-const handleProductClick = (product: any) => {
-  console.log('Product clicked:', product); // Debug log
-  
-  // Generate or retrieve product-specific code data
-  const codeData = {
-    code: `${product.name.replace(/\s+/g, '').slice(0, 8).toUpperCase()}10`,
-    isExpired: false,
-    timeLeft: null,
-    isRevealed: false,
-    codeType: 'fixed' // You can make this dynamic based on product
+  const SIGNUP_URL = "https://brokebro.kinde.com/auth/cx/_:nav&m:register&psid:0198098f4886f8128ed90644dc82ce2c&state:v1_c30d040703023ec39763be7ee5d368d288014e81edde51afea729e9fcdc83bded66eeb85979bf82f855dfe6d4b5a45699e833b5f353f052de6f3b2da4d90327e109e666a452e21086adc6a4bc3a6406ca4777d6696aeb5ca230baa9596ec09ae498278194289681f946120df643138146277d8233b27a09367d61de2633d5fc3e3d313b1c2b34368f260906490cb7e1f530ed9c125bc4bfc8b";
+  const handleProductClick = (product: any) => {
+    if (isLoggedIn) {
+      window.location.href = '/student-verification';
+    } else {
+      window.location.href = SIGNUP_URL;
+    }
   };
-  
-  console.log('Generated code data:', codeData); // Debug log
-  
-  setProductCodeData(codeData);
-  setSelectedProduct(product);
-  setShowProductModal(true);
-  
-  console.log('Modal should be open now'); // Debug log
-};
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
       <nav className="bg-gradient-to-r from-gray-900 to-black py-4 px-4 sm:px-6 lg:px-8 shadow-lg">
@@ -449,99 +438,22 @@ const handleProductClick = (product: any) => {
         </div>
       </nav>
       <HeroSection />
-   <ProductsSection
-  products={products}
-  added={added}
-  handleAddToCart={handleAddToCart}
-  category={category}
-  setCategory={setCategory}
-  price={price}
-  setPrice={setPrice}
-  duration={duration}
-  setDuration={setDuration}
-  filterProducts={filterProducts}         // <-- add this
-  productCount={productCount}             // <-- and this
-/>
-<Modal isOpen={showProductModal} onClose={() => setShowProductModal(false)}>
-  {selectedProduct && productCodeData ? (
-    <div className="relative flex flex-col items-center text-center p-5 w-80 mx-auto bg-gray-900 rounded-2xl shadow-2xl">
-      {/* Close Button */}
-      <button
-        onClick={() => setShowProductModal(false)}
-        className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-white text-lg z-10"
-        aria-label="Close"
-      >
-        ×
-      </button>
-      {/* Product Image */}
-      <div className="w-24 h-20 bg-white rounded-lg flex items-center justify-center mb-3 shadow">
-        <Image
-          src={selectedProduct.image || selectedProduct.img}
-          alt={selectedProduct.name}
-          width={80}
-          height={60}
-          className="object-contain"
-        />
-      </div>
-      {/* Product Name */}
-      <h2 className="text-base font-bold text-white mb-1">{selectedProduct.name}</h2>
-      {/* Price Row */}
-      <div className="flex items-center justify-center gap-2 mb-2">
-        {(selectedProduct.originalPrice || selectedProduct.oldPrice) && (
-          <span className="text-gray-400 line-through text-xs">
-            {selectedProduct.originalPrice || selectedProduct.oldPrice}
-          </span>
-        )}
-        <span className="text-green-400 font-bold text-sm">
-          {selectedProduct.price}
-        </span>
-      </div>
-      {/* Discount Info */}
-      {(selectedProduct.originalPrice || selectedProduct.oldPrice) && (
-        <p className="text-green-400 text-xs font-medium mb-2">
-          Save {(() => {
-            const old = parseFloat(
-              (selectedProduct.originalPrice || selectedProduct.oldPrice).replace(/[^\d.]/g, '')
-            );
-            const current = parseFloat(
-              selectedProduct.price.replace(/[^\d.]/g, '')
-            );
-            const savings = old - current;
-            const percentage = Math.round((savings / old) * 100);
-            return `₹${savings.toFixed(0)} (${percentage}% off)`;
-          })()}
-        </p>
-      )}
-      {/* Divider */}
-      <div className="w-full border-b border-gray-800 my-2"></div>
-      {/* Coupon Code Section */}
-      <div className="w-full mb-3">
-        <p className="text-gray-300 text-xs mb-2">Your student coupon code:</p>
-        <RevealCodeButton
-          code={productCodeData.code}
-          isRevealed={productCodeData.isRevealed}
-          brandSlug={selectedProduct.name.replace(/\s+/g, '').toLowerCase()}
-          userId={userId}
-          codeType={productCodeData.codeType}
-        />
-      </div>
-      {/* Visit Store Button */}
-      <a
-        href={selectedProduct.url || "#"}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-2 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-200 text-xs"
-      >
-        Visit Store
-      </a>
-    </div>
-  ) : (
-    <div className="p-4 text-white w-80 mx-auto bg-gray-900 rounded-2xl relative shadow-2xl">
-      <p className="text-sm mt-4">Loading...</p>
-    </div>
-  )}
-</Modal>
-      
+      <ProductsSection
+        products={products}
+        added={added}
+        handleAddToCart={handleAddToCart}
+        category={category}
+        setCategory={setCategory}
+        price={price}
+        setPrice={setPrice}
+        duration={duration}
+        setDuration={setDuration}
+        filterProducts={filterProducts}
+        productCount={productCount}
+        onGetDiscount={handleProductClick}
+      />
+
+
     </div>
   );
 }

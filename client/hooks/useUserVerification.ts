@@ -92,6 +92,32 @@ export function useUserVerification(): UserVerificationStatus {
         };
 
         checkVerificationStatus();
+
+        // Listen for localStorage changes (cross-tab and in-tab)
+        const syncFromStorage = () => {
+            const isVerified = localStorage.getItem('studentVerified') === 'true';
+            const verificationDate = localStorage.getItem('verificationDate');
+            const verificationId = localStorage.getItem('verificationId');
+            setStatus(prev => ({
+                ...prev,
+                isVerified,
+                verificationId,
+                verificationDate: verificationDate ? new Date(verificationDate) : null,
+                loading: false
+            }));
+        };
+        const handleStorage = (event: StorageEvent) => {
+            if (event.key === 'studentVerified' || event.key === 'verificationDate' || event.key === 'verificationId') {
+                syncFromStorage();
+            }
+        };
+        window.addEventListener('storage', handleStorage);
+        window.addEventListener('studentVerificationChanged', syncFromStorage);
+
+        return () => {
+            window.removeEventListener('storage', handleStorage);
+            window.removeEventListener('studentVerificationChanged', syncFromStorage);
+        };
     }, [isAuthenticated, user]);
 
     return { ...status, user, isAuthenticated };
