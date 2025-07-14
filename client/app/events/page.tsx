@@ -314,8 +314,8 @@ export default function EventsPage() {
             {events.map(event => {
               const regCount = registrations[event.id]?.length || 0;
               const isUserRegistered = registrations[event.id]?.includes(registerName);
-              // Only show 'You are the Host' if registerName is not empty and matches event.hostName
-              const isHost = registerName && event.hostName && event.hostName === registerName;
+              // Only show 'You are the Host' if the current user is the host and the hostName is not empty and not just whitespace
+              const isHost = event.hostName && event.hostName.trim().length > 0 && event.hostName === registerName && registerName.trim().length > 0;
               return (
                 <div key={event.id} className="bg-gray-900 rounded-xl shadow-lg overflow-hidden relative group">
                   <div className="relative h-40 w-full">
