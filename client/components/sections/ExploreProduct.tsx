@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import VerificationProtectedLink from '@/components/ui/VerificationProtectedLink';
 import VerificationGate from '@/components/ui/VerificationGate';
+import { useUserVerification } from '@/hooks/useUserVerification';
 
 // Category data based on available assets
 const categories = [
