@@ -7,15 +7,12 @@ import ReferralProcessor from "@/components/auth/ReferralProcessor";
 import { useUserVerification } from '@/hooks/useUserVerification';
 import { useState, useEffect } from 'react';
 import StudentVerification from '@/components/auth/StudentVerification';
+import { LoginLink, RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
 
 import { Analytics } from "@vercel/analytics/next"
 import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
-  title: "BrokeBro",
-  description: "Student Discounts Platform",
-};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const { isVerified, loading, verificationId } = useUserVerification();
@@ -26,30 +23,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      // Only intercept left clicks
       if (e.button !== 0) return;
-      // Only intercept if target is a button, link, or card
       let el = e.target as HTMLElement;
       while (el && el !== document.body) {
-        // Prevent intercepting Login/Signup buttons (Kinde)
+        // If user clicks a card/brand, show verification/coupon modal only if authenticated
         if (
-          el.classList.contains('kinde-login') ||
-          el.classList.contains('kinde-signup')
-        ) {
-          return;
-        }
-        if (
-          el.tagName === 'BUTTON' ||
-          el.tagName === 'A' ||
           el.classList.contains('card') ||
           el.classList.contains('product-card')
         ) {
           e.preventDefault();
           e.stopPropagation();
           if (!loading) {
-            // If not logged in (no verificationId), show login/signup modal
             if (!verificationId) {
-              setShowLoginModal(true);
+              // Let KindeAuth handle login/signup as normal
+              return;
             } else if (!isVerified) {
               setShowVerificationModal(true);
             } else {
@@ -63,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     };
     document.addEventListener('click', handleClick, true);
     return () => document.removeEventListener('click', handleClick, true);
-  }, [isVerified, loading]);
+  }, [isVerified, loading, verificationId]);
 
   return (
     <html lang="en">
@@ -88,18 +75,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main>{children}</main>
         <Footer />
         <Analytics />
-        {/* Login/Signup Modal Placeholder */}
-        {showLoginModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-            <div className="bg-white rounded-lg p-8 shadow-xl flex flex-col items-center">
-              <h2 className="text-2xl font-bold mb-4 text-blue-600">Login / Signup</h2>
-              <p className="mb-4 text-gray-700">Please login or signup to continue.</p>
-              <button className="mt-2 px-4 py-2 bg-blue-600 text-white rounded kinde-login">Login</button>
-              <button className="mt-2 px-4 py-2 bg-green-600 text-white rounded kinde-signup">Signup</button>
-              <button className="mt-4 px-4 py-2 bg-gray-400 text-black rounded" onClick={() => setShowLoginModal(false)}>Close</button>
-            </div>
-          </div>
-        )}
         {/* Coupon Modal */}
         {showCouponModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
@@ -114,6 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {showVerificationModal && (
           <StudentVerification isOpen={true} onClose={() => setShowVerificationModal(false)} />
         )}
+        {/* Login/Signup handled by KindeAuth buttons as before */}
       </body>
     </html>
   );
