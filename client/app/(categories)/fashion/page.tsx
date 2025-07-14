@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, useAnimation, useInView, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useStudentVerification } from '@/hooks/useStudentVerification';
 import {
   FaHeart,
   FaRegHeart,
@@ -393,7 +394,8 @@ export default function FashionPage() {
   const categoriesInView = useInView(categoriesRef, { once: true });
   const productsInView = useInView(productsRef, { once: true });
   const newsletterInView = useInView(newsletterRef, { once: true });
-
+   const { isVerified } = useStudentVerification();
+   console.log(`User is verified: ${isVerified}`);
   // Auto-rotate featured collections
   useEffect(() => {
     const timer = setInterval(() => {
