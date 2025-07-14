@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, useAnimation, useInView, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+
 import {
   FaHeart,
   FaRegHeart,
@@ -25,6 +26,8 @@ import { MdOutlineGridView, MdOutlineViewList, MdTrendingUp } from 'react-icons/
 import { HiOutlineHeart, HiHeart } from 'react-icons/hi';
 import VerificationProtectedLink from '@/components/ui/VerificationProtectedLink';
 import { GiClothes, GiArmoredPants, GiWatch, GiLipstick, GiHoodie } from 'react-icons/gi';
+import Modal from '@/components/ui/Modal';
+import RevealCodeButton from '@/components/ui/RevealCodeButton';
 
 // Full static data from JSON files
 const staticFashionCategories = [
@@ -33,70 +36,80 @@ const staticFashionCategories = [
     name: "Ethnic Elegance",
     description: "Traditional meets contemporary",
     image: "/assets/biba/336x280.jpg",
-    url: "#",
+    url: "https://track.vcommission.com/click?campaign_id=12553&pub_id=120422",
     brand: "Biba",
     brandLogo: "/assets/afiliate/biba.png",
     gradient: "from-amber-600 via-orange-500 to-red-500",
     icon: "FaCrown",
     products: 150,
     discount: "Up to 60% OFF",
-    tag: "Festive Special"
+    tag: "Festive Special",
+    code: "BIBA60",
+    codeType: "fixed"
   },
   {
     id: "denim",
     name: "Premium Denim",
     description: "Iconic American style",
     image: "/assets/levis/300x300.png",
-    url: "#",
+    url: "https://track.vcommission.com/click?campaign_id=11501&pub_id=120422",
     brand: "Levis",
     brandLogo: "/assets/afiliate/levis.png",
     gradient: "from-blue-600 via-indigo-500 to-purple-600",
     icon: "FaGem",
     products: 89,
     discount: "Up to 40% OFF",
-    tag: "Classic Fit"
+    tag: "Classic Fit",
+    code: "LEVIS40",
+    codeType: "fixed"
   },
   {
     id: "accessories",
     name: "Luxury Accessories",
     description: "Complete your perfect look",
     image: "/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x250.jpeg",
-    url: "#",
+    url: "https://track.vcommission.com/click?campaign_id=10742&pub_id=120422",
     brand: "Fastrack",
     brandLogo: "/assets/afiliate/fastrack.png",
     gradient: "from-pink-600 via-rose-500 to-red-500",
     icon: "HiSparkles",
     products: 76,
     discount: "Up to 50% OFF",
-    tag: "Limited Edition"
+    tag: "Limited Edition",
+    code: "FASTRACK50",
+    codeType: "fixed"
   },
   {
     id: "beauty",
     name: "Beauty Essentials",
     description: "Professional makeup collection",
     image: "/assets/banners/swissbeauty.png",
-    url: "#",
+    url: "https://track.vcommission.com/click?campaign_id=12372&pub_id=120422",
     brand: "Swiss Beauty",
     brandLogo: "/assets/afiliate/swissbeauty.png",
     gradient: "from-purple-600 via-pink-500 to-rose-500",
     icon: "FaGift",
     products: 120,
     discount: "Up to 55% OFF",
-    tag: "Pro Collection"
+    tag: "Pro Collection",
+    code: "SWISS55",
+    codeType: "fixed"
   },
   {
     id: "lifestyle",
     name: "Lifestyle Hub",
     description: "Curated modern essentials",
     image: "/assets/salty/250x250.jpg",
-    url: "#",
+    url: "https://track.vcommission.com/click?campaign_id=11241&pub_id=120422",
     brand: "Salty",
     brandLogo: "/assets/afiliate/salty.png",
     gradient: "from-green-600 via-teal-500 to-cyan-500",
     icon: "FaFire",
     products: 95,
     discount: "Up to 45% OFF",
-    tag: "Trendy"
+    tag: "Trendy",
+    code: "SALTY45",
+    codeType: "fixed"
   },
   {
     id: "premium",
@@ -110,7 +123,9 @@ const staticFashionCategories = [
     icon: "FaEye",
     products: 67,
     discount: "Up to 70% OFF",
-    tag: "Exclusive"
+    tag: "Exclusive",
+    code: "LAKME70",
+    codeType: "fixed"
   },
   {
     id: "shoes",
@@ -124,7 +139,9 @@ const staticFashionCategories = [
     icon: "FaGem",
     products: 60,
     discount: "Up to 25% OFF",
-    tag: "Sports"
+    tag: "Sports",
+    code: "NIKE25",
+    codeType: "fixed"
   }
 ];
 
@@ -140,7 +157,12 @@ const staticFeaturedCollections = [
     originalPrice: "₹2,999",
     badge: "Festive Special",
     rating: 4.8,
-    reviews: 2845
+    reviews: 2845,
+    code: "BIBA60",
+    codeType: "fixed",
+    brand: "Biba",
+    logo: "/assets/afiliate/biba.png",
+    discount: "Up to 60% OFF"
   },
   {
     id: 2,
@@ -153,7 +175,12 @@ const staticFeaturedCollections = [
     originalPrice: "₹4,999",
     badge: "Classic Collection",
     rating: 4.7,
-    reviews: 1892
+    reviews: 1892,
+    code: "LEVIS40",
+    codeType: "fixed",
+    brand: "Levis",
+    logo: "/assets/afiliate/levis.png",
+    discount: "Up to 40% OFF"
   },
   {
     id: 3,
@@ -166,7 +193,12 @@ const staticFeaturedCollections = [
     originalPrice: "₹1,299",
     badge: "Beauty Expert",
     rating: 4.9,
-    reviews: 3247
+    reviews: 3247,
+    code: "SWISS55",
+    codeType: "fixed",
+    brand: "Swiss Beauty",
+    logo: "/assets/afiliate/swissbeauty.png",
+    discount: "Up to 55% OFF"
   }
 ];
 
@@ -185,7 +217,10 @@ const staticTrendingProducts = [
     badge: "Bestseller",
     colors: ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4"],
     sizes: ["S", "M", "L", "XL"],
-    category: "ethnic"
+    category: "ethnic",
+    code: "BIBA60",
+    codeType: "fixed",
+    logo: "/assets/afiliate/biba.png"
   },
   {
     id: 2,
@@ -201,7 +236,10 @@ const staticTrendingProducts = [
     badge: "Premium",
     colors: ["#1a1a1a", "#4a4a4a", "#6a6a6a"],
     sizes: ["28", "30", "32", "34", "36"],
-    category: "denim"
+    category: "denim",
+    code: "LEVIS40",
+    codeType: "fixed",
+    logo: "/assets/afiliate/levis.png"
   },
   {
     id: 3,
@@ -217,7 +255,10 @@ const staticTrendingProducts = [
     badge: "Limited Edition",
     colors: ["#C0392B", "#8E44AD", "#2980B9"],
     sizes: ["Free Size"],
-    category: "accessories"
+    category: "accessories",
+    code: "FASTRACK50",
+    codeType: "fixed",
+    logo: "/assets/afiliate/fastrack.png"
   },
   {
     id: 4,
@@ -233,7 +274,10 @@ const staticTrendingProducts = [
     badge: "New Arrival",
     colors: ["#E74C3C", "#F39C12", "#8E44AD", "#C0392B"],
     sizes: ["Standard"],
-    category: "beauty"
+    category: "beauty",
+    code: "SWISS55",
+    codeType: "fixed",
+    logo: "/assets/afiliate/swissbeauty.png"
   },
   {
     id: 5,
@@ -249,7 +293,10 @@ const staticTrendingProducts = [
     badge: "Trendy",
     colors: ["#2C3E50", "#E67E22", "#27AE60"],
     sizes: ["One Size"],
-    category: "lifestyle"
+    category: "lifestyle",
+    code: "SALTY45",
+    codeType: "fixed",
+    logo: "/assets/afiliate/salty.png"
   },
   {
     id: 6,
@@ -265,103 +312,10 @@ const staticTrendingProducts = [
     badge: "Premium",
     colors: ["#F39C12", "#E74C3C", "#8E44AD"],
     sizes: ["Standard"],
-    category: "beauty"
-  },
-  {
-    id: 7,
-    name: "Biba Silk Saree",
-    brand: "Biba",
-    price: "₹3,299",
-    originalPrice: "₹5,999",
-    image: "/assets/biba/saree-250x250.jpg",
-    url: "https://track.vcommission.com/click?campaign_id=12553&pub_id=120422",
-    rating: 4.9,
-    reviews: 156,
-    discount: "45% OFF",
-    badge: "Premium",
-    colors: ["#D4AF37", "#800080", "#DC143C", "#228B22"],
-    sizes: ["Free Size"],
-    category: "ethnic"
-  },
-  {
-    id: 8,
-    name: "Levis Denim Jacket",
-    brand: "Levis",
-    price: "₹3,599",
-    originalPrice: "₹5,999",
-    image: "/assets/levis/jacket-250x250.jpg",
-    url: "https://track.vcommission.com/click?campaign_id=11501&pub_id=120422",
-    rating: 4.7,
-    reviews: 289,
-    discount: "40% OFF",
-    badge: "Classic",
-    colors: ["#1e3a8a", "#000000", "#6b7280"],
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    category: "denim"
-  },
-  {
-    id: 9,
-    name: "Fastrack Smart Watch",
-    brand: "Fastrack",
-    price: "₹2,799",
-    originalPrice: "₹4,499",
-    image: "/assets/fastrack/smartwatch-250x250.jpg",
-    url: "https://track.vcommission.com/click?campaign_id=10742&pub_id=120422",
-    rating: 4.4,
-    reviews: 423,
-    discount: "38% OFF",
-    badge: "Tech",
-    colors: ["#000000", "#C0392B", "#2980B9"],
-    sizes: ["Free Size"],
-    category: "accessories"
-  },
-  {
-    id: 10,
-    name: "Swiss Beauty Eye Shadow Palette",
-    brand: "Swiss Beauty",
-    price: "₹599",
-    originalPrice: "₹999",
-    image: "/assets/banners/eyeshadow-250x250.jpg",
-    url: "https://track.vcommission.com/click?campaign_id=12372&pub_id=120422",
-    rating: 4.6,
-    reviews: 678,
-    discount: "40% OFF",
-    badge: "Makeup",
-    colors: ["#8B4513", "#FF69B4", "#9370DB", "#32CD32"],
-    sizes: ["Standard"],
-    category: "beauty"
-  },
-  {
-    id: 11,
-    name: "Salty Urban Backpack",
-    brand: "Salty",
-    price: "₹1,899",
-    originalPrice: "₹2,999",
-    image: "/assets/salty/backpack-250x250.jpg",
-    url: "https://track.vcommission.com/click?campaign_id=11241&pub_id=120422",
-    rating: 4.5,
-    reviews: 234,
-    discount: "37% OFF",
-    badge: "Urban",
-    colors: ["#2C3E50", "#E67E22", "#27AE60", "#8E44AD"],
-    sizes: ["One Size"],
-    category: "lifestyle"
-  },
-  {
-    id: 12,
-    name: "Lakme Foundation",
-    brand: "Lakme",
-    price: "₹799",
-    originalPrice: "₹1,199",
-    image: "/assets/lakme/foundation-250x250.jpg",
-    url: "#",
-    rating: 4.2,
-    reviews: 345,
-    discount: "33% OFF",
-    badge: "Base",
-    colors: ["#F5DEB3", "#DEB887", "#CD853F", "#8B4513"],
-    sizes: ["30ml"],
-    category: "beauty"
+    category: "beauty",
+    code: "LAKME70",
+    codeType: "fixed",
+    logo: "/assets/lakme/logo.png"
   }
 ];
 
@@ -382,6 +336,11 @@ export default function FashionPage() {
   const [wishlist, setWishlist] = useState<number[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedFilter, setSelectedFilter] = useState('all');
+  
+  // Modal states
+  const [showBrandModal, setShowBrandModal] = useState(false);
+  const [selectedBrand, setSelectedBrand] = useState<any>(null);
+  const [codeData, setCodeData] = useState<any>(null);
 
   // Animation refs
   const heroRef = useRef(null);
@@ -393,6 +352,8 @@ export default function FashionPage() {
   const categoriesInView = useInView(categoriesRef, { once: true });
   const productsInView = useInView(productsRef, { once: true });
   const newsletterInView = useInView(newsletterRef, { once: true });
+
+ 
 
   // Auto-rotate featured collections
   useEffect(() => {
@@ -408,6 +369,22 @@ export default function FashionPage() {
         ? prev.filter(id => id !== productId)
         : [...prev, productId]
     );
+  };
+
+  // Handle modal opening for any product/category click
+  const handleProductClick = (item: any) => {
+    const currentCodeData = {
+      code: item.code || 'STUDENT10',
+      isExpired: false,
+      timeLeft: null
+    };
+    
+    setCodeData(currentCodeData);
+    setSelectedBrand({
+      ...item,
+      slug: item.brand?.toLowerCase() || item.name?.toLowerCase()
+    });
+    setShowBrandModal(true);
   };
 
   // Trending Products: show all products by default, and allow filtering by brand only if user selects a filter
@@ -527,21 +504,16 @@ export default function FashionPage() {
                   transition={{ duration: 0.8, delay: 1 }}
                   className="flex flex-wrap gap-4"
                 >
-                  <VerificationProtectedLink
-                    href={staticFeaturedCollections[currentSlide].url}
-                    requireVerification={true}
-                    className="group"
+                  <motion.button
+                    onClick={() => handleProductClick(staticFeaturedCollections[currentSlide])}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="group px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-semibold rounded-full shadow-2xl hover:shadow-pink-500/25 transition-all duration-300 flex items-center gap-3"
                   >
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-semibold rounded-full shadow-2xl hover:shadow-pink-500/25 transition-all duration-300 flex items-center gap-3"
-                    >
-                      <FaShoppingBag className="text-lg" />
-                      Shop Collection
-                      <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
-                    </motion.button>
-                  </VerificationProtectedLink>
+                    <FaShoppingBag className="text-lg" />
+                    Get Discount Code
+                    <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+                  </motion.button>
 
                   <motion.button
                     whileHover={{ scale: 1.05 }}
@@ -721,20 +693,15 @@ export default function FashionPage() {
                       </div>
                     </div>
 
-                    <VerificationProtectedLink
-                      href={category.url}
-                      requireVerification={true}
-                      className="w-full"
+                    <motion.button
+                      onClick={() => handleProductClick(category)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
                     >
-                      <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
-                      >
-                        Get Discount
-                        <FaGift className="text-sm" />
-                      </motion.button>
-                    </VerificationProtectedLink>
+                      Get Discount Code
+                      <FaGift className="text-sm" />
+                    </motion.button>
                   </div>
                 </motion.div>
               ))}
@@ -851,18 +818,16 @@ export default function FashionPage() {
                       {/* Quick Actions */}
                       <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <div className="flex gap-2">
-                          <button className="flex-1 px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-xl hover:bg-white/30 transition-all duration-300 text-sm font-medium">
-                            Quick View
+                          <button 
+                            onClick={() => handleProductClick(product)}
+                            className="flex-1 px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-xl hover:bg-white/30 transition-all duration-300 text-sm font-medium">
+                            Get Code
                           </button>
-                          <VerificationProtectedLink
-                            href={product.url || '#'}
-                            requireVerification={true}
-                            className="flex-1"
-                          >
-                            <button className="w-full px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-xl hover:from-pink-700 hover:to-purple-700 transition-all duration-300 text-sm font-medium">
-                              Shop Now
-                            </button>
-                          </VerificationProtectedLink>
+                          <button 
+                            onClick={() => handleProductClick(product)}
+                            className="flex-1 px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-xl hover:from-pink-700 hover:to-purple-700 transition-all duration-300 text-sm font-medium">
+                            Shop Now
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -872,10 +837,10 @@ export default function FashionPage() {
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium text-purple-400 flex items-center gap-2">
-                            {staticFashionCategories.find(cat => cat.brand === product.brand)?.brandLogo && (
+                            {product.logo && (
                               <span className="inline-block w-16 h-16 relative align-middle">
                                 <Image
-                                  src={staticFashionCategories.find(cat => cat.brand === product.brand)?.brandLogo || '/assets/placeholder.png'}
+                                  src={product.logo}
                                   alt={`${product.brand} logo`}
                                   fill
                                   className="object-contain rounded bg-white/10 shadow-lg border-2 border-white/30"
@@ -996,6 +961,70 @@ export default function FashionPage() {
           </div>
         </section>
       </div>
-    </div>
-  );
+
+      {/* Modal for brand card */}
+      <Modal isOpen={showBrandModal} onClose={() => setShowBrandModal(false)}>
+        {selectedBrand && codeData && (
+          <div className="flex flex-col items-center text-center p-4">
+            {/* Brand logo in a rounded rectangle */}
+            <div className="w-full max-w-xs h-40 bg-white rounded-xl flex items-center justify-center mb-4 shadow-lg">
+              <Image 
+                src={selectedBrand.logo || selectedBrand.brandLogo || "/assets/placeholder.png"} 
+                alt={selectedBrand.name || selectedBrand.brand} 
+                width={240} 
+                height={120} 
+                style={{ objectFit: 'contain', width: '100%', height: '120px' }} 
+              />
+            </div>
+            <h2 className="text-2xl font-extrabold mb-1 text-gray-100 drop-shadow">
+              {selectedBrand.name || selectedBrand.brand} Student Discount
+            </h2>
+            <p className="text-lg font-semibold text-pink-400 mb-2">{selectedBrand.discount}</p>
+            <div className="w-full border-b border-gray-700 my-3"></div>
+            
+            {/* Rating row */}
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <span className="text-gray-300 text-sm mr-2">Rate this offer:</span>
+              <button className="text-2xl hover:scale-110 transition-transform">👎</button>
+              <button className="text-2xl hover:scale-110 transition-transform">👍</button>
+            </div>
+            
+            {/* Show countdown for expiring codes */}
+            {selectedBrand.codeType === 'expiring' && codeData.timeLeft && (
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mb-4">
+               
+              </div>
+            )}
+            
+            {/* Show if code just expired (this should rarely show now) */}
+            {selectedBrand.codeType === 'expiring' && !codeData.timeLeft && (
+              <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 mb-4">
+                <p className="text-green-400 text-sm font-medium">
+                  ✨ New code generated! This code is valid for 24 hours.
+                </p>
+              </div>
+            )}
+            
+            <p className="mb-4 text-gray-300 text-sm">
+              {selectedBrand.codeType === 'expiring' 
+                ? "This is a time-limited code. Use it within 24 hours of revealing."
+                : "Enter this code in the promotional code area during checkout to benefit from the student discount."
+              }
+            </p>
+            
+            {/* Reveal code button with animation */}
+            <RevealCodeButton code={codeData.code} />
+            <a 
+              href={selectedBrand.url || "#"} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200"
+            >
+              Visit {selectedBrand.name || selectedBrand.brand} website
+            </a>
+          </div>
+        )}
+      </Modal>
+    </div>
+  );
 }

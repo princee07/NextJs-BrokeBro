@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { Search, ShoppingCart, Heart, Eye, ArrowRight, Zap, Shield, Truck } from "lucide-react";
-import VerificationGate from '@/components/ui/VerificationGate';
 import Modal from '@/components/ui/Modal';
 import Image from 'next/image';
 import RevealCodeButton from '@/components/ui/RevealCodeButton';
@@ -17,6 +16,7 @@ type Product = {
   imageClass: string;
   category: string;
   duration: string;
+  url: string;
 };
 
 const initialProducts: Product[] = [
@@ -32,6 +32,7 @@ const initialProducts: Product[] = [
     image: "https://vectorseek.com/wp-content/uploads/2023/09/Goibibo-Logo-Vector.svg-.png",
     category: "Beach Destinations",
     duration: "Week (4-7 days)",
+    url: "https://www.goibibo.com/",
   },
   {
     id: "2",
@@ -45,6 +46,7 @@ const initialProducts: Product[] = [
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQ-kLKzM2sjd7pKVOjmaETC2tEDkZjlokSigLroQYAoW0PiHlQ-8wwvfDrB7KEprB2tvg&usqp=CAU",
     category: "Mountain Retreats",
     duration: "Extended (8+ days)",
+    url: "https://www.goindigo.in/",
   },
   {
     id: "3",
@@ -58,6 +60,7 @@ const initialProducts: Product[] = [
     image: "/assets/logos/SpiceJet_logo.png",
     category: "City Breaks",
     duration: "Weekend (2-3 days)",
+    url: "https://www.spicejet.com/",
   },
   {
     id: "4",
@@ -71,6 +74,7 @@ const initialProducts: Product[] = [
     image: "https://upload.wikimedia.org/wikipedia/commons/f/f7/Air_India.svg",
     category: "Luxury Travel",
     duration: "Extended (8+ days)",
+    url: "https://www.airindia.com/",
   },
 ];
 
@@ -198,16 +202,17 @@ const FilterBar: React.FC<FilterBarProps> = ({
 
 type ProductCardProps = {
   product: Product;
-  added: boolean;
-  handleAddToCart: (id: string) => void;
+  onProductClick: (product: Product) => void;
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({
   product,
-  added,
-  handleAddToCart,
+  onProductClick,
 }) => (
-  <div className="product-card bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl shadow-lg overflow-hidden group hover:shadow-2xl hover:border-orange-500/50 transition-all duration-300 transform hover:-translate-y-2">
+  <div 
+    className="product-card bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl shadow-lg overflow-hidden group hover:shadow-2xl hover:border-orange-500/50 transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
+    onClick={() => onProductClick(product)}
+  >
     <div className="relative h-48 overflow-hidden">
       <img
         src={product.image || "/placeholder.svg"}
@@ -225,15 +230,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <Eye className="w-5 h-5 text-gray-300 hover:text-white" />
         </button>
       </div>
-      <div className="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-        <button
-          onClick={() => handleAddToCart(product.id)}
-          className={`bg-gradient-to-r ${added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"} text-white px-6 py-3 rounded-full font-semibold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center space-x-2 shadow-lg`}
-        >
-          <ShoppingCart className="w-5 h-5" />
-          <span>{added ? "Added! ✓" : "Book Deal"}</span>
-        </button>
-      </div>
+     
     </div>
     <div className="p-6">
       <h3 className="text-xl font-semibold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent mb-2">
@@ -246,11 +243,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
        
       </div>
       <button
-        onClick={() => handleAddToCart(product.id)}
-        className={`w-full bg-gradient-to-r ${added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"} text-white py-3 px-4 rounded-xl font-semibold hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25`}
+        onClick={(e) => {
+          e.stopPropagation();
+          onProductClick(product);
+        }}
+        className="w-full bg-gradient-to-r from-orange-500 to-pink-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25"
       >
         <ShoppingCart className="w-5 h-5" />
-        <span>{added ? "Added! ✓" : "Book Deal"}</span>
+        <span>Get Coupon</span>
       </button>
     </div>
   </div>
@@ -258,8 +258,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
 const ProductsSection: React.FC<{
   products: Product[];
-  added: { [id: string]: boolean };
-  handleAddToCart: (id: string) => void;
+  onProductClick: (product: Product) => void;
   category: string;
   setCategory: (val: string) => void;
   price: string;
@@ -270,8 +269,7 @@ const ProductsSection: React.FC<{
   productCount: number;
 }> = ({
   products,
-  added,
-  handleAddToCart,
+  onProductClick,
   category,
   setCategory,
   price,
@@ -303,13 +301,11 @@ const ProductsSection: React.FC<{
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 justify-items-center">
         {products.map((p) => (
-          <VerificationGate key={p.id}>
-            <ProductCard
-              product={p}
-              added={!!added[p.id]}
-              handleAddToCart={handleAddToCart}
-            />
-          </VerificationGate>
+          <ProductCard
+            key={p.id}
+            product={p}
+            onProductClick={onProductClick}
+          />
         ))}
       </div>
     </div>
@@ -319,15 +315,15 @@ const ProductsSection: React.FC<{
 export default function LifestylePage() {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [productCount, setProductCount] = useState(initialProducts.length);
-  const [added, setAdded] = useState<{ [id: string]: boolean }>({});
   const [category, setCategory] = useState(categories[0]);
   const [price, setPrice] = useState(priceRanges[0]);
   const [duration, setDuration] = useState(durations[0]);
-const [showProductModal, setShowProductModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
-  const [productCodeData, setProductCodeData] = useState<any>(null);
-   // Add product click handler with debugging
- const userId=""
+ // Modal states
+   const [showBrandModal, setShowBrandModal] = useState(false);
+   const [selectedBrand, setSelectedBrand] = useState<any>(null);
+   const [codeData, setCodeData] = useState<any>(null);
+ 
+  const userId = "";
   useEffect(() => {
     const interval = setInterval(() => {
       setProducts((prev) =>
@@ -373,13 +369,6 @@ const [showProductModal, setShowProductModal] = useState(false);
     });
   };
 
-  const handleAddToCart = (id: string) => {
-    setAdded((prev) => ({ ...prev, [id]: true }));
-    setTimeout(() => {
-      setAdded((prev) => ({ ...prev, [id]: false }));
-    }, 2000);
-  };
-
   useEffect(() => {
     const cards = document.querySelectorAll<HTMLElement>(".product-card");
     const enter = function (this: HTMLElement) {
@@ -399,26 +388,22 @@ const [showProductModal, setShowProductModal] = useState(false);
       });
     };
   }, [products]);
-const handleProductClick = (product: any) => {
-  console.log('Product clicked:', product); // Debug log
-  
-  // Generate or retrieve product-specific code data
-  const codeData = {
-    code: `${product.name.replace(/\s+/g, '').slice(0, 8).toUpperCase()}10`,
-    isExpired: false,
-    timeLeft: null,
-    isRevealed: false,
-    codeType: 'fixed' // You can make this dynamic based on product
+ // Handle modal opening for any product/category click
+  const handleProductClick = (item: any) => {
+    const currentCodeData = {
+      code: item.code || 'STUDENT10',
+      isExpired: false,
+      timeLeft: null
+    };
+    
+    setCodeData(currentCodeData);
+    setSelectedBrand({
+      ...item,
+      slug: item.brand?.toLowerCase() || item.name?.toLowerCase()
+    });
+    setShowBrandModal(true);
   };
-  
-  console.log('Generated code data:', codeData); // Debug log
-  
-  setProductCodeData(codeData);
-  setSelectedProduct(product);
-  setShowProductModal(true);
-  
-  console.log('Modal should be open now'); // Debug log
-};
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
       <nav className="bg-gradient-to-r from-gray-900 to-black py-4 px-4 sm:px-6 lg:px-8 shadow-lg">
@@ -451,96 +436,79 @@ const handleProductClick = (product: any) => {
       <HeroSection />
    <ProductsSection
   products={products}
-  added={added}
-  handleAddToCart={handleAddToCart}
+  onProductClick={handleProductClick}
   category={category}
   setCategory={setCategory}
   price={price}
   setPrice={setPrice}
   duration={duration}
   setDuration={setDuration}
-  filterProducts={filterProducts}         // <-- add this
-  productCount={productCount}             // <-- and this
+  filterProducts={filterProducts}
+  productCount={productCount}
 />
-<Modal isOpen={showProductModal} onClose={() => setShowProductModal(false)}>
-  {selectedProduct && productCodeData ? (
-    <div className="relative flex flex-col items-center text-center p-5 w-80 mx-auto bg-gray-900 rounded-2xl shadow-2xl">
-      {/* Close Button */}
-      <button
-        onClick={() => setShowProductModal(false)}
-        className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-white text-lg z-10"
-        aria-label="Close"
-      >
-        ×
-      </button>
-      {/* Product Image */}
-      <div className="w-24 h-20 bg-white rounded-lg flex items-center justify-center mb-3 shadow">
-        <Image
-          src={selectedProduct.image || selectedProduct.img}
-          alt={selectedProduct.name}
-          width={80}
-          height={60}
-          className="object-contain"
-        />
-      </div>
-      {/* Product Name */}
-      <h2 className="text-base font-bold text-white mb-1">{selectedProduct.name}</h2>
-      {/* Price Row */}
-      <div className="flex items-center justify-center gap-2 mb-2">
-        {(selectedProduct.originalPrice || selectedProduct.oldPrice) && (
-          <span className="text-gray-400 line-through text-xs">
-            {selectedProduct.originalPrice || selectedProduct.oldPrice}
-          </span>
+  {/* Modal for brand card */}
+      <Modal isOpen={showBrandModal} onClose={() => setShowBrandModal(false)}>
+        {selectedBrand && codeData && (
+          <div className="flex flex-col items-center text-center p-4">
+            {/* Brand logo in a rounded rectangle */}
+            <div className="w-full max-w-xs h-40 bg-white rounded-xl flex items-center justify-center mb-4 shadow-lg">
+              <Image 
+                src={selectedBrand.logo || selectedBrand.brandLogo || "/assets/placeholder.png"} 
+                alt={selectedBrand.name || selectedBrand.brand} 
+                width={240} 
+                height={120} 
+                style={{ objectFit: 'contain', width: '100%', height: '120px' }} 
+              />
+            </div>
+            <h2 className="text-2xl font-extrabold mb-1 text-gray-100 drop-shadow">
+              {selectedBrand.name || selectedBrand.brand} Student Discount
+            </h2>
+            <p className="text-lg font-semibold text-pink-400 mb-2">{selectedBrand.discount}</p>
+            <div className="w-full border-b border-gray-700 my-3"></div>
+            
+            {/* Rating row */}
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <span className="text-gray-300 text-sm mr-2">Rate this offer:</span>
+              <button className="text-2xl hover:scale-110 transition-transform">👎</button>
+              <button className="text-2xl hover:scale-110 transition-transform">👍</button>
+            </div>
+            
+            {/* Show countdown for expiring codes */}
+            {selectedBrand.codeType === 'expiring' && codeData.timeLeft && (
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mb-4">
+               
+              </div>
+            )}
+            
+            {/* Show if code just expired (this should rarely show now) */}
+            {selectedBrand.codeType === 'expiring' && !codeData.timeLeft && (
+              <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 mb-4">
+                <p className="text-green-400 text-sm font-medium">
+                  ✨ New code generated! This code is valid for 24 hours.
+                </p>
+              </div>
+            )}
+            
+            <p className="mb-4 text-gray-300 text-sm">
+              {selectedBrand.codeType === 'expiring' 
+                ? "This is a time-limited code. Use it within 24 hours of revealing."
+                : "Enter this code in the promotional code area during checkout to benefit from the student discount."
+              }
+            </p>
+            
+            {/* Reveal code button with animation */}
+            <RevealCodeButton code={codeData.code} />
+            <a 
+              href={selectedBrand.url || "#"} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200"
+            >
+              Visit {selectedBrand.name || selectedBrand.brand} website
+            </a>
+          </div>
         )}
-        <span className="text-green-400 font-bold text-sm">
-          {selectedProduct.price}
-        </span>
-      </div>
-      {/* Discount Info */}
-      {(selectedProduct.originalPrice || selectedProduct.oldPrice) && (
-        <p className="text-green-400 text-xs font-medium mb-2">
-          Save {(() => {
-            const old = parseFloat(
-              (selectedProduct.originalPrice || selectedProduct.oldPrice).replace(/[^\d.]/g, '')
-            );
-            const current = parseFloat(
-              selectedProduct.price.replace(/[^\d.]/g, '')
-            );
-            const savings = old - current;
-            const percentage = Math.round((savings / old) * 100);
-            return `₹${savings.toFixed(0)} (${percentage}% off)`;
-          })()}
-        </p>
-      )}
-      {/* Divider */}
-      <div className="w-full border-b border-gray-800 my-2"></div>
-      {/* Coupon Code Section */}
-      <div className="w-full mb-3">
-        <p className="text-gray-300 text-xs mb-2">Your student coupon code:</p>
-        <RevealCodeButton
-          code={productCodeData.code}
-          isRevealed={productCodeData.isRevealed}
-          brandSlug={selectedProduct.name.replace(/\s+/g, '').toLowerCase()}
-          userId={userId}
-          codeType={productCodeData.codeType}
-        />
-      </div>
-      {/* Visit Store Button */}
-      <a
-        href={selectedProduct.url || "#"}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-2 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-200 text-xs"
-      >
-        Visit Store
-      </a>
-    </div>
-  ) : (
-    <div className="p-4 text-white w-80 mx-auto bg-gray-900 rounded-2xl relative shadow-2xl">
-      <p className="text-sm mt-4">Loading...</p>
-    </div>
-  )}
-</Modal>
+      </Modal>
       
     </div>
   );

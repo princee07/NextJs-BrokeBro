@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
       'm.media-amazon.com',
       'brokebro.in', // Add production domain
       'www.brokebro.in', // Add www subdomain
+      'vectorseek.com',
+      'encrypted-tbn0.gstatic.com',
+      'upload.wikimedia.org',
     ],
 
   },

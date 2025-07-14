@@ -78,14 +78,12 @@ const Hero = () => {
       logo: '/assets/images/akina.png',
       gradient: 'from-white-500 to-teal-300',
       slug: 'akina',
-      
     },
     {
       name: 'BIBA',
       logo: '/assets/images/biba.png',
       gradient: 'from-red-500 to-teal-300',
       slug: 'biba',
-    
     },
     {
       name: 'just lil things',
@@ -93,14 +91,12 @@ const Hero = () => {
       gradient: 'from-pink-400 to-teal-100',
       slug: 'just lil things',
       discount: '15% OFF',
-    
     },
     {
       name: 'lakme',
       logo: '/assets/images/lakme.png',
       gradient: 'from-purple-400 to-teal-300',
       slug: 'lakme',
-
     },
     {
       name: 'soxytoes',
@@ -108,7 +104,6 @@ const Hero = () => {
       gradient: 'from-orange-500 to-red-400',
       slug: 'soxytoes',
       discount: '₹1000 OFF',
-    
     },
     {
       name: 'just lil things',
@@ -116,35 +111,36 @@ const Hero = () => {
       gradient: 'from-pink-400 to-teal-100',
       slug: 'just lil things',
       discount: '15% OFF',
-      codeType: 'fixed' // or 'expiring'
+      codeType: 'fixed', // or 'expiring'
     },
     {
       name: 'the Ultimate RC',
       logo: '/assets/images/ultimateRC.png',
       gradient: 'from-black-500 to-red-200',
       slug: 'Ultimate Rides',
-      discount: '1 + 1 free'
+      discount: '1 + 1 free',
+      codeType: 'expiring',
     },
     {
       name: 'glued',
       logo: '/assets/logos/gluednew.png',
       gradient: 'from-orange-500 to-red-400',
       slug: 'glued',
-
+      discount: undefined,
+      codeType: 'expiring',
     },
     {
       name: 'just lil things',
       logo: '/assets/images/justlilthings.png',
       gradient: 'from-pink-400 to-teal-100',
       slug: 'just lil things',
-      discount: '15% OFF'
+      discount: '15% OFF',
     },
     {
       name: 'gamepalacio',
       logo: '/assets/images/gamepalacio.png',
       gradient: 'from-black to-yellow-600',
       slug: 'gamepalacio',
-
     },
     {
       name: 'Unity',
@@ -152,7 +148,6 @@ const Hero = () => {
       gradient: 'from-gray-700 to-gray-900',
       slug: 'unity',
       discount: '20% OFF',
-
     },
     {
       name: 'Bhootiya store',
@@ -160,9 +155,7 @@ const Hero = () => {
       gradient: 'from-white-600 to-red-700',
       slug: 'Bhootiya store',
       discount: '20% OFF',
-    
-    }
-
+    },
   ];
 
   // Duplicate cards for smooth infinite scrolling - ensure enough cards to fill viewport + buffer
@@ -177,66 +170,115 @@ const Hero = () => {
 // Add this state to track real-time countdown
 
 
-// Add this useEffect for real-time countdown and auto-regeneration
+// For expiring codes (Glued, Ultimate RC), code is valid for only 1 reveal: after modal opens, mark as expired and block new code for 24h
 useEffect(() => {
   if (selectedBrand?.codeType === 'expiring' && codeData && showBrandModal) {
-    const interval = setInterval(() => {
-      const userId = "kp_3ba83e44eb4d4956b8fe252c8064da8a";
-      const storageKey = `code_${selectedBrand.slug}_${userId}`;
+    const userId = "kp_3ba83e44eb4d4956b8fe252c8064da8a";
+    const storageKey = `code_${selectedBrand.slug}_${userId}`;
+    // Mark code as used after reveal
+    if (codeData && !codeData.isExpired) {
+      // Mark as expired in localStorage, and store expireAt
       const storedData = localStorage.getItem(storageKey);
-      
+      let expireAt = Date.now() + 24 * 60 * 60 * 1000;
       if (storedData) {
-        const { revealTime } = JSON.parse(storedData);
+        const parsed = JSON.parse(storedData);
+        parsed.isExpired = true;
+        parsed.expireAt = expireAt;
+        localStorage.setItem(storageKey, JSON.stringify(parsed));
+      } else {
+        // fallback: store expireAt anyway
+        localStorage.setItem(storageKey, JSON.stringify({ isExpired: true, expireAt }));
+      }
+      // Mark as expired in state
+      setCodeData((prev: any) => ({ ...prev, isExpired: true, expireAt }));
+    }
+  }
+}, [selectedBrand, showBrandModal]);
+
+// When opening modal for expiring code, block new code for 24h after reveal
+useEffect(() => {
+  if (selectedBrand?.codeType === 'expiring' && showBrandModal) {
+    const userId = "kp_3ba83e44eb4d4956b8fe252c8064da8a";
+    const storageKey = `code_${selectedBrand.slug}_${userId}`;
+    const storedData = localStorage.getItem(storageKey);
+    if (storedData) {
+      const parsed = JSON.parse(storedData);
+      if (parsed.isExpired && parsed.expireAt) {
         const now = Date.now();
-        const twentyFourHours = 24 * 60 * 60 * 1000;
-        const timeLeft = twentyFourHours - (now - revealTime);
-        
-        if (timeLeft <= 0) {
-          // Code has expired, generate new one automatically
+        if (now < parsed.expireAt) {
+          // Block new code, show unavailable message
+          setCodeData({ isExpired: true, expireAt: parsed.expireAt });
+          return;
+        } else {
+          // 24h passed, allow new code
           localStorage.removeItem(storageKey);
           const newCodeData = getOrCreateExpiringCode(selectedBrand, userId);
           setCodeData(newCodeData);
-          console.log('Code expired, generated new one:', newCodeData);
-        } else {
-          // Update countdown display
-          const hours = Math.floor(timeLeft / (60 * 60 * 1000));
-          const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
-        
-          
-          // Update codeData with current timeLeft
-          setCodeData((prev: any) => ({
-            ...prev,
-            timeLeft: { hours, minutes }
-          }));
         }
+      } else if (parsed.isExpired) {
+        // fallback: block for 24h from now
+        const expireAt = Date.now() + 24 * 60 * 60 * 1000;
+        parsed.expireAt = expireAt;
+        localStorage.setItem(storageKey, JSON.stringify(parsed));
+        setCodeData({ isExpired: true, expireAt });
       }
-    }, 60000); // Update every minute
-    
-    return () => clearInterval(interval);
+    } else {
+      // No code yet, allow new code
+      const newCodeData = getOrCreateExpiringCode(selectedBrand, userId);
+      setCodeData(newCodeData);
+    }
   }
-}, [selectedBrand, codeData, showBrandModal]);
+}, [selectedBrand, showBrandModal]);
 
-// Update your handleBrandCardClick function to handle expired codes better
+// Update your handleBrandCardClick function to handle expiring codes for Ultimate RC and Glued
 const handleBrandCardClick = (brand: any) => {
   let currentCodeData;
-
-  
-  
-    // Always check for expiration when clicking
-    const storageKey = `code_${brand.slug}`;
+  const userId = "kp_3ba83e44eb4d4956b8fe252c8064da8a";
+  if (brand.codeType === 'expiring') {
+    const storageKey = `code_${brand.slug}_${userId}`;
     const storedData = localStorage.getItem(storageKey);
-    
-   
- 
+    if (storedData) {
+      const parsed = JSON.parse(storedData);
+      if (parsed.isExpired && parsed.expireAt) {
+        const now = Date.now();
+        if (now < parsed.expireAt) {
+          // Block new code
+          setCodeData({ isExpired: true, expireAt: parsed.expireAt });
+          setSelectedBrand(brand);
+          setShowBrandModal(true);
+          return;
+        } else {
+          // 24h passed, allow new code
+          localStorage.removeItem(storageKey);
+          const newCodeData = getOrCreateExpiringCode(brand, userId);
+          currentCodeData = newCodeData;
+        }
+      } else if (parsed.isExpired) {
+        // fallback: block for 24h from now
+        const expireAt = Date.now() + 24 * 60 * 60 * 1000;
+        parsed.expireAt = expireAt;
+        localStorage.setItem(storageKey, JSON.stringify(parsed));
+        setCodeData({ isExpired: true, expireAt });
+        setSelectedBrand(brand);
+        setShowBrandModal(true);
+        return;
+      } else {
+        // Not expired, but code exists (shouldn't happen)
+        currentCodeData = parsed;
+      }
+    } else {
+      // No code yet, generate new
+      const newCodeData = getOrCreateExpiringCode(brand, userId);
+      currentCodeData = newCodeData;
+    }
+  } else {
     // Fixed code
     currentCodeData = {
       code: brand.code || 'STUDENT10',
       isExpired: false,
-      timeLeft: null
+      timeLeft: null,
     };
-    console.log('Fixed code data:', currentCodeData);
-  
-  
+  }
   setCodeData(currentCodeData);
   setSelectedBrand(brand);
   setShowBrandModal(true);
@@ -582,18 +624,30 @@ const handleBrandCardClick = (brand: any) => {
         <button className="text-2xl hover:scale-110 transition-transform">👍</button>
       </div>
       
-      {/* Show countdown for expiring codes */}
-      {selectedBrand.codeType === 'expiring' && codeData.timeLeft && (
-        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mb-4">
-         
+      {/* Show countdown for expiring codes or block message if expired */}
+      {selectedBrand.codeType === 'expiring' && codeData && codeData.isExpired && codeData.expireAt && (
+        <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 mb-4">
+          <p className="text-red-400 text-sm font-medium">
+            🚫 You have already revealed a code. Please wait until the cooldown ends to get a new code.<br />
+            {(() => {
+              const now = Date.now();
+              const msLeft = codeData.expireAt - now;
+              if (msLeft > 0) {
+                const hours = Math.floor(msLeft / (60 * 60 * 1000));
+                const minutes = Math.floor((msLeft % (60 * 60 * 1000)) / (60 * 1000));
+                return `Time left: ${hours}h ${minutes}m`;
+              } else {
+                return 'You can now get a new code.';
+              }
+            })()}
+          </p>
         </div>
       )}
-      
-      {/* Show if code just expired (this should rarely show now) */}
-      {selectedBrand.codeType === 'expiring' && !codeData.timeLeft && (
-        <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 mb-4">
-          <p className="text-green-400 text-sm font-medium">
-            ✨ New code generated! This code is valid for 24 hours.
+      {/* Show countdown for expiring codes if not expired */}
+      {selectedBrand.codeType === 'expiring' && codeData && !codeData.isExpired && codeData.timeLeft && (
+        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mb-4">
+          <p className="text-yellow-400 text-sm font-medium">
+            ⏳ Code expires in {codeData.timeLeft.hours}h {codeData.timeLeft.minutes}m
           </p>
         </div>
       )}
