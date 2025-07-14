@@ -23,7 +23,7 @@ const Hero = () => {
 
   const router = useRouter();
   const { isVerified } = useStudentVerification();
-
+  console.log(`User is verified: ${isVerified}`);
   // Text to type out
   const fullText = "STUDENT DISCOUNTS UNLOCKED";
 

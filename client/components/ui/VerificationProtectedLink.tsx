@@ -15,6 +15,7 @@ interface VerificationProtectedLinkProps {
     showTooltip?: boolean;
 }
 
+
 export default function VerificationProtectedLink({
     href,
     onClick,
@@ -30,16 +31,8 @@ export default function VerificationProtectedLink({
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-
-        console.log('VerificationProtectedLink clicked:', {
-            isVerified,
-            requireVerification,
-            href
-        });
-
         if (!requireVerification || isVerified) {
             // User is verified or verification not required
-            console.log('Proceeding to link - user is verified or verification not required');
             if (href) {
                 window.open(href, '_blank', 'noopener,noreferrer');
             } else if (onClick) {
@@ -47,7 +40,6 @@ export default function VerificationProtectedLink({
             }
         } else {
             // User is not verified, show verification modal
-            console.log('User not verified - showing verification modal');
             setShowVerificationModal(true);
         }
     };
@@ -58,7 +50,6 @@ export default function VerificationProtectedLink({
             localStorage.setItem('verificationDate', new Date().toISOString());
         }
         setShowVerificationModal(false);
-
         if (verified) {
             // After verification, proceed with the original action
             setTimeout(() => {

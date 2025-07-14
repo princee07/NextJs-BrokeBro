@@ -6,6 +6,16 @@ import Modal from '../../components/ui/Modal';
 
 const initialEvents = [
   {
+    id: 2,
+    title: 'Dance Competition',
+    date: '2023-10-05',
+    location: 'BrokeBro Venue',
+    price: 'FREE',
+    image: '/assets/images/broke-bro.png',
+    isFree: true,
+    hostName: '',
+  },
+  {
     id: 1,
     title: 'Indonesia - Korea Conference',
     date: '2023-09-18',
@@ -16,7 +26,7 @@ const initialEvents = [
     hostName: '',
   },
   {
-    id: 2,
+    id: 3,
     title: 'Dream World Wide in Jakarta',
     date: '2023-09-17',
     location: 'Jakarta',
@@ -26,7 +36,7 @@ const initialEvents = [
     hostName: '',
   },
   {
-    id: 3,
+    id: 4,
     title: 'Pesta Kembang Api Terbesar',
     date: '2023-09-16',
     location: 'Jakarta',
@@ -155,14 +165,16 @@ export default function EventsPage() {
         </div>
       </div>
 
-      {/* Host an Event Button */}
+      {/* Register Now Button (was Host an Event) */}
       <div className="container mx-auto px-4 flex justify-end mb-4">
-        <button
-          className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-6 py-2 rounded-lg font-semibold shadow hover:from-orange-600 hover:to-pink-600 transition"
-          onClick={() => setModalOpen(true)}
+        <a
+          href="https://forms.gle/JbwHTNQcpgUrdXwu7"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-6 py-2 rounded-lg font-semibold shadow hover:from-orange-600 hover:to-pink-600 transition flex items-center justify-center"
         >
-          Host an Event
-        </button>
+          Register Now
+        </a>
       </div>
 
       {/* Modal for Event Creation */}
@@ -302,7 +314,8 @@ export default function EventsPage() {
             {events.map(event => {
               const regCount = registrations[event.id]?.length || 0;
               const isUserRegistered = registrations[event.id]?.includes(registerName);
-              const isHost = event.hostName === registerName;
+              // Only show 'You are the Host' if the current user is the host and the hostName is not empty and not just whitespace
+              const isHost = event.hostName && event.hostName.trim().length > 0 && event.hostName === registerName && registerName.trim().length > 0;
               return (
                 <div key={event.id} className="bg-gray-900 rounded-xl shadow-lg overflow-hidden relative group">
                   <div className="relative h-40 w-full">
@@ -337,13 +350,30 @@ export default function EventsPage() {
                       <span className="mr-2">{event.date ? new Date(event.date).toLocaleDateString() : ''}</span>•<span className="ml-2">{event.location}</span>
                     </div>
                     <div className="text-xs text-gray-400 mb-2">Host: {event.hostName}</div>
-                    <button
-                      className={`mt-2 w-full bg-gradient-to-r from-orange-500 to-pink-500 text-white py-2 rounded-lg font-semibold transition ${isUserRegistered || isHost ? 'opacity-60 cursor-not-allowed' : 'hover:from-orange-600 hover:to-pink-600'}`}
-                      onClick={() => openRegisterModal(event.id)}
-                      disabled={isUserRegistered || isHost}
-                    >
-                      {isHost ? 'You are the Host' : isUserRegistered ? 'Registered' : 'Register'}
-                    </button>
+                    {isHost ? (
+                      <button
+                        className={`mt-2 w-full bg-gradient-to-r from-orange-500 to-pink-500 text-white py-2 rounded-lg font-semibold opacity-60 cursor-not-allowed`}
+                        disabled
+                      >
+                        You are the Host
+                      </button>
+                    ) : isUserRegistered ? (
+                      <button
+                        className={`mt-2 w-full bg-gradient-to-r from-orange-500 to-pink-500 text-white py-2 rounded-lg font-semibold opacity-60 cursor-not-allowed`}
+                        disabled
+                      >
+                        Registered
+                      </button>
+                    ) : (
+                      <a
+                        href="https://forms.gle/JbwHTNQcpgUrdXwu7"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-2 w-full block bg-gradient-to-r from-orange-500 to-pink-500 text-white py-2 rounded-lg font-semibold hover:from-orange-600 hover:to-pink-600 transition text-center"
+                      >
+                        Register
+                      </a>
+                    )}
                   </div>
                 </div>
               );
@@ -364,4 +394,4 @@ export default function EventsPage() {
       </div>
     </div>
   );
-} 
+}
