@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import VerificationGate from '@/components/ui/VerificationGate';
 
 const TopBrands = () => {
   // Define brand data
@@ -107,38 +108,40 @@ const TopBrands = () => {
             >
               {/* Double the items for seamless loop */}
               {[...topBrands[0], ...topBrands[0]].map((brand, index) => (
-                <a href={brand.url} target="_blank" rel="noopener noreferrer" key={index} className="relative group">
-                  <motion.div
-                    whileHover={{
-                      y: -10,
-                      boxShadow: "0 10px 30px -10px rgba(249, 115, 22, 0.4)"
-                    }}
-                    className="w-44 h-32 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative p-3"
-                  >
-                    {/* Brand logo */}
-                    <div className="relative w-28 h-16 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200 mb-2">
-                      <Image
-                        src={brand.logo}
-                        alt={brand.name}
-                        fill
-                        style={{ objectFit: "contain" }}
-                        className="p-1"
-                      />
-                    </div>
-
-                    {/* Brand name */}
-                    <p className="text-white font-medium text-xs text-center">{brand.name}</p>
-
-                    {/* Discount badge */}
+                <VerificationGate key={index}>
+                  <a href={brand.url} target="_blank" rel="noopener noreferrer" className="relative group">
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      whileHover={{ opacity: 1, scale: 1 }}
-                      className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                      whileHover={{
+                        y: -10,
+                        boxShadow: "0 10px 30px -10px rgba(249, 115, 22, 0.4)"
+                      }}
+                      className="w-44 h-32 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative p-3"
                     >
-                      {brand.discount}
+                      {/* Brand logo */}
+                      <div className="relative w-28 h-16 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200 mb-2">
+                        <Image
+                          src={brand.logo}
+                          alt={brand.name}
+                          fill
+                          style={{ objectFit: "contain" }}
+                          className="p-1"
+                        />
+                      </div>
+
+                      {/* Brand name */}
+                      <p className="text-white font-medium text-xs text-center">{brand.name}</p>
+
+                      {/* Discount badge */}
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        whileHover={{ opacity: 1, scale: 1 }}
+                        className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                      >
+                        {brand.discount}
+                      </motion.div>
                     </motion.div>
-                  </motion.div>
-                </a>
+                  </a>
+                </VerificationGate>
               ))}
             </motion.div>
           </motion.div>
@@ -167,38 +170,40 @@ const TopBrands = () => {
             >
               {/* Double the items for seamless loop */}
               {[...topBrands[1], ...topBrands[1]].map((brand, index) => (
-                <a href={brand.url} target="_blank" rel="noopener noreferrer" key={index} className="relative group">
-                  <motion.div
-                    whileHover={{
-                      y: -10,
-                      boxShadow: "0 10px 30px -10px rgba(249, 115, 22, 0.4)"
-                    }}
-                    className="w-44 h-32 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative p-3"
-                  >
-                    {/* Brand logo */}
-                    <div className="relative w-28 h-16 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200 mb-2">
-                      <Image
-                        src={brand.logo}
-                        alt={brand.name}
-                        fill
-                        style={{ objectFit: "contain" }}
-                        className="p-1"
-                      />
-                    </div>
-
-                    {/* Brand name */}
-                    <p className="text-white font-medium text-xs text-center">{brand.name}</p>
-
-                    {/* Discount badge */}
+                <VerificationGate key={index}>
+                  <a href={brand.url} target="_blank" rel="noopener noreferrer" className="relative group">
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      whileHover={{ opacity: 1, scale: 1 }}
-                      className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                      whileHover={{
+                        y: -10,
+                        boxShadow: "0 10px 30px -10px rgba(249, 115, 22, 0.4)"
+                      }}
+                      className="w-44 h-32 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative p-3"
                     >
-                      {brand.discount}
+                      {/* Brand logo */}
+                      <div className="relative w-28 h-16 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200 mb-2">
+                        <Image
+                          src={brand.logo}
+                          alt={brand.name}
+                          fill
+                          style={{ objectFit: "contain" }}
+                          className="p-1"
+                        />
+                      </div>
+
+                      {/* Brand name */}
+                      <p className="text-white font-medium text-xs text-center">{brand.name}</p>
+
+                      {/* Discount badge */}
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        whileHover={{ opacity: 1, scale: 1 }}
+                        className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                      >
+                        {brand.discount}
+                      </motion.div>
                     </motion.div>
-                  </motion.div>
-                </a>
+                  </a>
+                </VerificationGate>
               ))}
             </motion.div>
           </motion.div>

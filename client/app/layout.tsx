@@ -1,3 +1,9 @@
+"use client";
+export const metadata = {
+  title: "BrokeBro",
+  description: "Student Discounts Platform",
+};
+
 import { Inter } from "next/font/google";
 import "./styles/global.css";
 import NavbarWrapper from "@/components/layout/NavbarWrapper";
@@ -10,11 +16,6 @@ import StudentVerification from '@/components/auth/StudentVerification';
 import { Analytics } from "@vercel/analytics/next"
 import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
-
-export const metadata = {
-  title: "BrokeBro",
-  description: "Student Discounts Platform",
-};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const { isVerified, loading } = useUserVerification();
