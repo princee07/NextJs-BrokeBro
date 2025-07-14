@@ -6,6 +6,16 @@ import Modal from '../../components/ui/Modal';
 
 const initialEvents = [
   {
+    id: 2,
+    title: 'Dance Competition',
+    date: '2023-10-05',
+    location: 'BrokeBro Venue',
+    price: 'FREE',
+    image: '/assets/images/broke-bro.png',
+    isFree: true,
+    hostName: '',
+  },
+  {
     id: 1,
     title: 'Indonesia - Korea Conference',
     date: '2023-09-18',
@@ -16,7 +26,7 @@ const initialEvents = [
     hostName: '',
   },
   {
-    id: 2,
+    id: 3,
     title: 'Dream World Wide in Jakarta',
     date: '2023-09-17',
     location: 'Jakarta',
@@ -26,7 +36,7 @@ const initialEvents = [
     hostName: '',
   },
   {
-    id: 3,
+    id: 4,
     title: 'Pesta Kembang Api Terbesar',
     date: '2023-09-16',
     location: 'Jakarta',
@@ -155,14 +165,16 @@ export default function EventsPage() {
         </div>
       </div>
 
-      {/* Host an Event Button */}
+      {/* Register Now Button (was Host an Event) */}
       <div className="container mx-auto px-4 flex justify-end mb-4">
-        <button
-          className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-6 py-2 rounded-lg font-semibold shadow hover:from-orange-600 hover:to-pink-600 transition"
-          onClick={() => setModalOpen(true)}
+        <a
+          href="https://forms.gle/JbwHTNQcpgUrdXwu7"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-6 py-2 rounded-lg font-semibold shadow hover:from-orange-600 hover:to-pink-600 transition flex items-center justify-center"
         >
-          Host an Event
-        </button>
+          Register Now
+        </a>
       </div>
 
       {/* Modal for Event Creation */}
@@ -364,4 +376,4 @@ export default function EventsPage() {
       </div>
     </div>
   );
-} 
+}
