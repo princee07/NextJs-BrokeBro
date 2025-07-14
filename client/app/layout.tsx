@@ -15,7 +15,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const { isVerified, loading, verificationId } = useUserVerification();
+  const { isVerified, loading, verificationId, user, isAuthenticated } = useUserVerification();
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);

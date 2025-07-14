@@ -7,6 +7,8 @@ interface UserVerificationStatus {
     verificationId: string | null;
     verificationDate: Date | null;
     loading: boolean;
+    user?: any;
+    isAuthenticated?: boolean | null;
 }
 
 export function useUserVerification(): UserVerificationStatus {
@@ -92,5 +94,5 @@ export function useUserVerification(): UserVerificationStatus {
         checkVerificationStatus();
     }, [isAuthenticated, user]);
 
-    return status;
+    return { ...status, user, isAuthenticated };
 }
