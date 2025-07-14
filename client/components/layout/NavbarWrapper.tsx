@@ -1,8 +1,6 @@
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+"use client";
 import NavbarClient from "./Navbar";
 
-export default async function NavbarWrapper() {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
-  return <NavbarClient user={user} />;
+export default function NavbarWrapper() {
+  return <NavbarClient user={undefined} />;
 }

@@ -1,9 +1,4 @@
-"use client";
-export const metadata = {
-  title: "BrokeBro",
-  description: "Student Discounts Platform",
-};
-
+"use client"
 import { Inter } from "next/font/google";
 import "./styles/global.css";
 import NavbarWrapper from "@/components/layout/NavbarWrapper";
@@ -17,10 +12,16 @@ import { Analytics } from "@vercel/analytics/next"
 import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
+export const metadata = {
+  title: "BrokeBro",
+  description: "Student Discounts Platform",
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const { isVerified, loading } = useUserVerification();
+  const { isVerified, loading, verificationId } = useUserVerification();
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [showVerificationModal, setShowVerificationModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [activeCoupon, setActiveCoupon] = useState('STUDENT2025');
 
   useEffect(() => {
@@ -30,6 +31,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       // Only intercept if target is a button, link, or card
       let el = e.target as HTMLElement;
       while (el && el !== document.body) {
+        // Prevent intercepting Login/Signup buttons (Kinde)
+        if (
+          el.classList.contains('kinde-login') ||
+          el.classList.contains('kinde-signup')
+        ) {
+          return;
+        }
         if (
           el.tagName === 'BUTTON' ||
           el.tagName === 'A' ||
@@ -39,10 +47,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           e.preventDefault();
           e.stopPropagation();
           if (!loading) {
-            if (isVerified) {
-              setShowCouponModal(true);
-            } else {
+            // If not logged in (no verificationId), show login/signup modal
+            if (!verificationId) {
+              setShowLoginModal(true);
+            } else if (!isVerified) {
               setShowVerificationModal(true);
+            } else {
+              setShowCouponModal(true);
             }
           }
           return;
@@ -77,6 +88,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main>{children}</main>
         <Footer />
         <Analytics />
+        {/* Login/Signup Modal Placeholder */}
+        {showLoginModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+            <div className="bg-white rounded-lg p-8 shadow-xl flex flex-col items-center">
+              <h2 className="text-2xl font-bold mb-4 text-blue-600">Login / Signup</h2>
+              <p className="mb-4 text-gray-700">Please login or signup to continue.</p>
+              <button className="mt-2 px-4 py-2 bg-blue-600 text-white rounded kinde-login">Login</button>
+              <button className="mt-2 px-4 py-2 bg-green-600 text-white rounded kinde-signup">Signup</button>
+              <button className="mt-4 px-4 py-2 bg-gray-400 text-black rounded" onClick={() => setShowLoginModal(false)}>Close</button>
+            </div>
+          </div>
+        )}
         {/* Coupon Modal */}
         {showCouponModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
