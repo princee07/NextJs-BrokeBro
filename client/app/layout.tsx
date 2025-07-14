@@ -52,6 +52,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return () => document.removeEventListener('click', handleClick, true);
   }, [isVerified, loading, verificationId]);
 
+  useEffect(() => {
+    // If redirected from Kinde and user is still undefined, reload to fetch session
+    if (!user && typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('code') || params.has('state')) {
+        window.location.reload();
+      }
+    }
+  }, [user]);
+
   return (
     <html lang="en">
       <head>

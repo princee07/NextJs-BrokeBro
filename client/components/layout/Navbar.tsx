@@ -41,6 +41,16 @@ export default function NavbarClient({ user }: { user: any }) {
     console.log("user", user);
   }, [user]);
 
+  // Fix: Reload page after Kinde redirect if user is undefined
+  useEffect(() => {
+    if (!user && typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('code') || params.has('state')) {
+        window.location.reload();
+      }
+    }
+  }, [user]);
+
   const shouldShowAuth = isHydrated;
 
   useEffect(() => {
@@ -259,11 +269,10 @@ export default function NavbarClient({ user }: { user: any }) {
   return (
     <header className="fixed w-full z-50 flex flex-col">
       <nav
-        className={`w-full transition-all duration-500 relative ${
-          scrolled
+        className={`w-full transition-all duration-500 relative ${scrolled
             ? 'py-0 bg-black/90 backdrop-blur-md shadow-lg shadow-orange-900/10'
             : 'py-0 bg-black'
-        }`}
+          }`}
         style={{ height: 'auto' }}
       >
         <div className="container mx-auto px-2 py-2" ref={navContainerRef}>
@@ -299,11 +308,10 @@ export default function NavbarClient({ user }: { user: any }) {
                     onMouseLeave={() => setHoveredCategory(null)}
                   >
                     <Link href={category.path}>
-                      <div className={`relative px-2 py-2 rounded-full transition-all duration-300 ${
-                        activeCategory === category.name
+                      <div className={`relative px-2 py-2 rounded-full transition-all duration-300 ${activeCategory === category.name
                           ? 'text-white bg-gradient-to-r from-orange-500/20 to-pink-500/20'
                           : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-pink-500/20'
-                      }`}>
+                        }`}>
                         <span className="text-xs font-medium whitespace-nowrap">
                           {category.name}
                         </span>
