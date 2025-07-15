@@ -15,6 +15,7 @@ import {
     IdCard
 } from 'lucide-react';
 import { StudentFormData, DocumentUpload, VerificationStage } from '@/types/verification';
+import { useUserStore } from '@/store/useUserStore';
 import StudentInfoForm from '@/components/auth/StudentInfoForm';
 import DocumentUploadForm from '@/components/auth/DocumentUploadForm';
 import VerificationTimer from '@/components/auth/VerificationTimer';
@@ -44,6 +45,8 @@ export default function StudentVerification({
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [verificationId, setVerificationId] = useState<string>('');
+    const setVerified = useUserStore((state) => state.setVerified);
+    const isVerified = useUserStore((state) => state.isVerified);
 
     const stages = [
         {
@@ -131,14 +134,22 @@ export default function StudentVerification({
             onVerificationComplete(isApproved);
         }
         if (isApproved) {
-            // Store verification status in localStorage
-            localStorage.setItem('studentVerified', 'true');
+            // Store verification date and id in localStorage for reference (optional)
             localStorage.setItem('verificationDate', new Date().toISOString());
             if (verificationId) {
                 localStorage.setItem('verificationId', verificationId);
             }
+            // Update Zustand store (persisted)
+            setVerified(true);
         }
     };
+
+    // Sync verification status from localStorage to Zustand store on mount
+    useEffect(() => {
+        // Zustand persist will hydrate isVerified automatically
+        // No need to sync from localStorage
+        console.log('[StudentVerification] Zustand isVerified:', isVerified);
+    }, [isVerified, setVerified]);
 
     // Compact mode for inline rendering
     if (compact) {

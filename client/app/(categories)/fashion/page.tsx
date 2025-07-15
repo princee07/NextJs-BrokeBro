@@ -1,3 +1,44 @@
+type CouponModalContentProps = { brand: string; code: string; onClose: () => void };
+const CouponModalContent: React.FC<CouponModalContentProps> = ({ brand, code, onClose }) => {
+  const couponStore = useCouponStore();
+  const coupon = couponStore.getCoupon(brand);
+  let expiresIn = '';
+  if (coupon && coupon.isVariable && coupon.expiresAt) {
+    const ms = coupon.expiresAt - Date.now();
+    if (ms > 0) {
+      const hours = Math.floor(ms / (1000 * 60 * 60));
+      const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+      expiresIn = `Expires in ${hours}h ${minutes}m`;
+    } else {
+      expiresIn = 'Expired. Please try again after 24 hours.';
+    }
+  }
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-md">
+      <div className="relative flex flex-col items-center text-center p-5 w-80 mx-auto bg-gray-900 rounded-2xl shadow-2xl">
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-white text-lg z-10"
+          aria-label="Close"
+        >
+          ×
+        </button>
+        <h2 className="text-base font-bold text-white mb-1">{brand}</h2>
+        <div className="w-full border-b border-gray-800 my-2"></div>
+        <div className="w-full mb-3">
+          <p className="text-gray-300 text-xs mb-2">Your student coupon code:</p>
+          <span className="text-2xl font-bold text-orange-400 bg-gray-800 px-4 py-2 rounded-lg select-all">
+            {code}
+          </span>
+          {expiresIn && (
+            <div className="text-xs text-red-400 mt-2">{expiresIn}</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+// Coupon Modal Content Component
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -8,6 +49,7 @@ import Link from 'next/link';
 import { useStudentVerification } from '@/hooks/useStudentVerification';
 
 import { useUserStore } from '@/store/useUserStore';
+import { useCouponStore } from '@/store/useCouponStore';
 import {
   FaHeart,
   FaRegHeart,
@@ -407,6 +449,60 @@ export default function FashionPage() {
   const isVerified = useUserStore((state) => state.isVerified);
   const isLoggedIn = useUserStore((state) => state.isLoggedIn);
   const [openVerificationCard, setOpenVerificationCard] = useState<string | null>(null);
+  const [showCouponModal, setShowCouponModal] = useState(false);
+  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+  const [couponCode, setCouponCode] = useState<string | null>(null);
+  // Brands with fixed coupon codes
+  const fixedCouponBrands: Record<string, string> = {
+    'Biba': 'BIBA2025',
+    'Levis': 'LEVIS25',
+    // Add more as needed
+  };
+  // Brands with variable coupon codes
+  const variableCouponBrands: string[] = [
+    'Fastrack',
+    'Swiss Beauty',
+    'Salty',
+    'Lakme',
+    'Nike',
+    // Add more as needed
+  ];
+  const couponStore = useCouponStore();
+
+  const handleGetDiscount = (brand: string) => {
+    if (!isLoggedIn) {
+      window.location.href = SIGNUP_URL;
+      return;
+    }
+    if (!isVerified) {
+      setOpenVerificationCard(brand);
+      return;
+    }
+    setSelectedBrand(brand);
+    let code = '';
+    if (fixedCouponBrands[brand]) {
+      code = couponStore.revealCoupon(brand, false, fixedCouponBrands[brand]);
+    } else if (variableCouponBrands.includes(brand)) {
+      const coupon = couponStore.getCoupon(brand);
+      const now = Date.now();
+      if (coupon && coupon.expiresAt && coupon.expiresAt > now) {
+        code = coupon.code;
+      } else {
+        code = couponStore.revealCoupon(brand, true);
+      }
+    } else {
+      code = brand.replace(/\s+/g, '').slice(0, 8).toUpperCase() + '10';
+    }
+    setCouponCode(code);
+    setShowCouponModal(true);
+  };
+
+  const handleVerificationComplete = () => {
+    if (openVerificationCard) {
+      setOpenVerificationCard(null);
+      handleGetDiscount(openVerificationCard);
+    }
+  };
   // Auto-rotate featured collections
   useEffect(() => {
     const timer = setInterval(() => {
@@ -711,24 +807,27 @@ export default function FashionPage() {
                         {category.discount}
                       </div>
                     </div>
-                    {isVerified ? null : (
-                      <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
-                        onClick={() => setOpenVerificationCard(category.id)}
-                      >
-                        Get Discount
-                        <FaGift className="text-sm" />
-                      </motion.button>
-                    )}
-                    {openVerificationCard === category.id && (
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                      onClick={() => handleGetDiscount(category.brand)}
+                    >
+                      Get Discount
+                      <FaGift className="text-sm" />
+                    </motion.button>
+                    {openVerificationCard === category.brand && (
                       <StudentVerification
                         isOpen={true}
                         onClose={() => setOpenVerificationCard(null)}
-                        onVerificationComplete={() => setOpenVerificationCard(null)}
+                        onVerificationComplete={handleVerificationComplete}
                       />
                     )}
+                    {/* Coupon Modal */}
+                    {showCouponModal && selectedBrand && couponCode && (
+                      <CouponModalContent brand={selectedBrand} code={couponCode} onClose={() => setShowCouponModal(false)} />
+                    )}
+// Coupon Modal Content Component
                   </div>
                 </motion.div>
               ))}

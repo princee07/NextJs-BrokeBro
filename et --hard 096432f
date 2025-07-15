@@ -1,0 +1,17 @@
+[33m69e65d7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: reset: moving to HEAD@{10}
+[33meab1cd4[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mbackup-before-reset[m[33m)[m HEAD@{1}: reset: moving to HEAD@{10}
+[33mf4b2f82[m HEAD@{2}: reset: moving to HEAD@{10}
+[33m096432f[m HEAD@{3}: commit: second level
+[33mc35e803[m HEAD@{4}: commit: status updated
+[33m1cd13c1[m HEAD@{5}: commit: profile
+[33mf306275[m HEAD@{6}: commit: web updatd
+[33mcad922c[m HEAD@{7}: commit: is auth set up
+[33mf761ce7[m HEAD@{8}: commit: authteication
+[33md0c5e01[m HEAD@{9}: commit (merge): login resolved
+[33m83aa979[m HEAD@{10}: commit: prince updated
+[33m69e65d7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{11}: commit: verification button updated
+[33meab1cd4[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mbackup-before-reset[m[33m)[m HEAD@{12}: pull: Fast-forward
+[33mf4b2f82[m HEAD@{13}: commit: verifiaction updated
+[33m4aa8514[m HEAD@{14}: commit: updated
+[33m630cc42[m HEAD@{15}: commit: verification updaetd
+[33m8620d6b[m HEAD@{16}: clone: from https://github.com/princee07/NextJs-BrokeBro.git

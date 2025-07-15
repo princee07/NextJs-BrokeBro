@@ -1,3 +1,68 @@
+type CouponModalContentProps = { product: Product; code: string };
+const CouponModalContent: React.FC<CouponModalContentProps> = ({ product, code }) => {
+  const couponStore = useCouponStore();
+  const coupon = couponStore.getCoupon(product.name);
+  let expiresIn = '';
+  if (coupon && coupon.isVariable && coupon.expiresAt) {
+    const ms = coupon.expiresAt - Date.now();
+    if (ms > 0) {
+      const hours = Math.floor(ms / (1000 * 60 * 60));
+      const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+      expiresIn = `Expires in ${hours}h ${minutes}m`;
+    } else {
+      expiresIn = 'Expired. Please try again after 24 hours.';
+    }
+  }
+  return (
+    <div className="relative flex flex-col items-center text-center p-5 w-80 mx-auto bg-gray-900 rounded-2xl shadow-2xl">
+      <button
+        onClick={() => couponStore.resetCoupon(product.name)}
+        className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-white text-lg z-10"
+        aria-label="Close"
+      >
+        ×
+      </button>
+      <div className="w-24 h-20 bg-white rounded-lg flex items-center justify-center mb-3 shadow">
+        <img
+          src={product.image || '/placeholder.svg'}
+          alt={product.name}
+          width={80}
+          height={60}
+          className="object-contain"
+        />
+      </div>
+      <h2 className="text-base font-bold text-white mb-1">{product.name}</h2>
+      <div className="flex items-center justify-center gap-2 mb-2">
+        {product.originalPrice && (
+          <span className="text-gray-400 line-through text-xs">
+            {product.originalPrice}
+          </span>
+        )}
+        <span className="text-green-400 font-bold text-sm">
+          {product.price}
+        </span>
+      </div>
+      <div className="w-full border-b border-gray-800 my-2"></div>
+      <div className="w-full mb-3">
+        <p className="text-gray-300 text-xs mb-2">Your student coupon code:</p>
+        <span className="text-2xl font-bold text-orange-400 bg-gray-800 px-4 py-2 rounded-lg select-all">
+          {code}
+        </span>
+        {expiresIn && (
+          <div className="text-xs text-red-400 mt-2">{expiresIn}</div>
+        )}
+      </div>
+      <a
+        href={product.url || "#"}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-2 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-200 text-xs"
+      >
+        Visit Store
+      </a>
+    </div>
+  );
+};
 "use client"
 import type React from "react"
 import { useState, useEffect } from "react"
@@ -6,6 +71,7 @@ import StudentVerification from '@/components/auth/StudentVerification';
 import { ShoppingCart, Heart, Star, Eye, ArrowRight, Zap, Shield, Truck } from "lucide-react"
 import VerificationGate from '@/components/ui/VerificationGate';
 import { useUserStore } from '@/store/useUserStore';
+import { useCouponStore } from '@/store/useCouponStore';
 
 interface Product {
   id: number
@@ -19,6 +85,7 @@ interface Product {
   isSale?: boolean
   discount?: number
   description?: string
+  url?: string
 }
 
 const EcommerceHero: React.FC = () => {
@@ -29,6 +96,7 @@ const EcommerceHero: React.FC = () => {
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [couponCode, setCouponCode] = useState<string | null>(null);
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
 
   const featuredProducts: Product[] = [
     {
@@ -173,23 +241,76 @@ const EcommerceHero: React.FC = () => {
   }
 
   const SIGNUP_URL = "https://brokebro.kinde.com/auth/cx/_:nav&m:register&psid:0198098f4886f8128ed90644dc82ce2c&state:v1_c30d040703023ec39763be7ee5d368d288014e81edde51afea729e9fcdc83bded66eeb85979bf82f855dfe6d4b5a45699e833b5f353f052de6f3b2da4d90327e109e666a452e21086adc6a4bc3a6406ca4777d6696aeb5ca230baa9596ec09ae498278194289681f946120df643138146277d8233b27a09367d61de2633d5fc3e3d313b1c2b34368f260906490cb7e1f530ed9c125bc4bfc8b";
+  // Brands with fixed coupon codes
+  const fixedCouponBrands: Record<string, string> = {
+    'Canva Pro Subscription': 'CANVA2025',
+    'Grammarly Premium': 'GRAMMARLY25',
+    // Add more as needed
+  };
+
+  // Brands with variable coupon codes
+  const variableCouponBrands: string[] = [
+    'Notion Pro Plan',
+    'HP Laptop',
+    'Dell',
+    'Lenovo',
+    'Apple MacBook Pro',
+    // Add more as needed
+  ];
+
+  const couponStore = useCouponStore();
+
   const handleGetDiscount = (product: Product) => {
     if (!isLoggedIn) {
       window.location.href = SIGNUP_URL;
       return;
     }
     if (!isVerified) {
-      window.location.href = '/student-verification';
+      setSelectedProduct(product);
+      setShowVerificationModal(true);
       return;
     }
-    // If verified, show coupon modal
     setSelectedProduct(product);
-    // Generate a simple coupon code based on product name
-    setCouponCode(`${product.name.replace(/\s+/g, '').slice(0, 8).toUpperCase()}10`);
+    let code = '';
+    const brand = product.name;
+    if (fixedCouponBrands[brand]) {
+      code = couponStore.revealCoupon(brand, false, fixedCouponBrands[brand]);
+    } else if (variableCouponBrands.includes(brand)) {
+      // Check if code exists and is not expired
+      const coupon = couponStore.getCoupon(brand);
+      const now = Date.now();
+      if (coupon && coupon.expiresAt && coupon.expiresAt > now) {
+        code = coupon.code;
+      } else {
+        code = couponStore.revealCoupon(brand, true);
+      }
+    } else {
+      // Default fallback
+      code = `${brand.replace(/\s+/g, '').slice(0, 8).toUpperCase()}10`;
+    }
+    setCouponCode(code);
     setShowCouponModal(true);
   };
 
-  // No verification modal needed
+  // Callback for when student verification is complete
+  const handleVerificationComplete = (verified: boolean) => {
+    setShowVerificationModal(false);
+    if (verified && selectedProduct) {
+      handleGetDiscount(selectedProduct);
+    }
+  };
+
+
+  // Student Verification Modal
+  {
+    showVerificationModal && (
+      <StudentVerification
+        isOpen={showVerificationModal}
+        onClose={() => setShowVerificationModal(false)}
+        onVerificationComplete={handleVerificationComplete}
+      />
+    )
+  }
 
   return (
     <div className="min-h-screen  mt-35 bg-gradient-to-br from-gray-900 via-black to-gray-800">
@@ -438,50 +559,7 @@ const EcommerceHero: React.FC = () => {
                     {/* Coupon Modal */}
                     <Modal isOpen={showCouponModal} onClose={() => setShowCouponModal(false)}>
                       {selectedProduct && couponCode ? (
-                        <div className="relative flex flex-col items-center text-center p-5 w-80 mx-auto bg-gray-900 rounded-2xl shadow-2xl">
-                          <button
-                            onClick={() => setShowCouponModal(false)}
-                            className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-white text-lg z-10"
-                            aria-label="Close"
-                          >
-                            ×
-                          </button>
-                          <div className="w-24 h-20 bg-white rounded-lg flex items-center justify-center mb-3 shadow">
-                            <img
-                              src={selectedProduct.image || '/placeholder.svg'}
-                              alt={selectedProduct.name}
-                              width={80}
-                              height={60}
-                              className="object-contain"
-                            />
-                          </div>
-                          <h2 className="text-base font-bold text-white mb-1">{selectedProduct.name}</h2>
-                          <div className="flex items-center justify-center gap-2 mb-2">
-                            {selectedProduct.originalPrice && (
-                              <span className="text-gray-400 line-through text-xs">
-                                {selectedProduct.originalPrice}
-                              </span>
-                            )}
-                            <span className="text-green-400 font-bold text-sm">
-                              {selectedProduct.price}
-                            </span>
-                          </div>
-                          <div className="w-full border-b border-gray-800 my-2"></div>
-                          <div className="w-full mb-3">
-                            <p className="text-gray-300 text-xs mb-2">Your student coupon code:</p>
-                            <span className="text-2xl font-bold text-orange-400 bg-gray-800 px-4 py-2 rounded-lg select-all">
-                              {couponCode}
-                            </span>
-                          </div>
-                          <a
-                            href={selectedProduct.url || "#"}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-2 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-200 text-xs"
-                          >
-                            Visit Store
-                          </a>
-                        </div>
+                        <CouponModalContent product={selectedProduct} code={couponCode} />
                       ) : (
                         <div className="p-4 text-white w-80 mx-auto bg-gray-900 rounded-2xl relative shadow-2xl">
                           <p className="text-sm mt-4">Loading...</p>
