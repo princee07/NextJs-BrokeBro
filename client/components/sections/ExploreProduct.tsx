@@ -6,6 +6,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import VerificationProtectedLink from '@/components/ui/VerificationProtectedLink';
 import VerificationGate from '@/components/ui/VerificationGate';
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useRouter } from "next/navigation";
+import { useUserVerification } from '@/hooks/useUserVerification';
+import Modal from '../ui/Modal';
 
 // Category data based on available assets
 const categories = [
@@ -216,6 +220,26 @@ export default function ExploreProducts() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [inView, setInView] = useState(false);
   const sectionRef = useRef(null);
+  const { isAuthenticated, isLoading } = useKindeBrowserClient();
+  const { isVerified } = useUserVerification();
+  const [showCouponModal, setShowCouponModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const router = useRouter();
+
+  // Handler for card click
+  const handleCardClick = (product: any) => {
+    if (isLoading) return;
+    if (!isAuthenticated) {
+      router.push('/signup');
+      return;
+    }
+    if (!isVerified) {
+      router.push('/student-verification');
+      return;
+    }
+    setSelectedProduct(product);
+    setShowCouponModal(true);
+  };
 
   // Handle scroll animation
   useEffect(() => {
@@ -571,17 +595,14 @@ export default function ExploreProducts() {
                       <span className="text-gray-400 text-sm font-medium">(4.5)</span>
                     </div>
 
-                    <Link href={`/product/${product.id}`}>
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-amber-600 flex items-center justify-center hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-300"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                        </svg>
-                      </motion.button>
-                    </Link>
+                    <button
+                      onClick={() => handleCardClick(product)}
+                      className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-amber-600 flex items-center justify-center hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-300"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
               </motion.div>
@@ -697,6 +718,31 @@ export default function ExploreProducts() {
           </motion.div>
         </div>
       </div>
+      {/* Coupon Modal */}
+      <Modal isOpen={showCouponModal} onClose={() => setShowCouponModal(false)}>
+        {selectedProduct && (
+          <div className="flex flex-col items-center text-center p-4">
+            <div className="w-full max-w-xs h-40 bg-white rounded-xl flex items-center justify-center mb-4 shadow-lg">
+              <Image src={selectedProduct.image} alt={selectedProduct.name} width={120} height={120} style={{ objectFit: 'contain', width: '100%', height: '120px' }} />
+            </div>
+            <h2 className="text-2xl font-extrabold mb-1 text-gray-100 drop-shadow">{selectedProduct.name} Student Discount</h2>
+            <p className="text-lg font-semibold text-pink-400 mb-2">{selectedProduct.discount}</p>
+            <div className="w-full border-b border-gray-700 my-3"></div>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <span className="text-gray-300 text-sm mr-2">Rate this offer:</span>
+              <button className="text-2xl hover:scale-110 transition-transform">👎</button>
+              <button className="text-2xl hover:scale-110 transition-transform">👍</button>
+            </div>
+            <p className="text-gray-400 text-sm mb-2">Enter this code in the promotional code area during checkout to benefit from the student discount.</p>
+            <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-mono text-xl font-bold py-2 px-4 rounded-lg tracking-wider mb-4">
+              EXPLORE10
+            </div>
+            <a href="#" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
+              Visit {selectedProduct.name} website
+            </a>
+          </div>
+        )}
+      </Modal>
     </section>
   );
 }

@@ -6,6 +6,9 @@ import VerificationGate from '@/components/ui/VerificationGate';
 import Modal from '@/components/ui/Modal';
 import Image from 'next/image';
 import RevealCodeButton from '@/components/ui/RevealCodeButton';
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
+import { useUserVerification } from '@/hooks/useUserVerification';
+import { useRouter } from 'next/navigation';
 type Product = {
   id: string;
   title: string;
@@ -206,55 +209,104 @@ const ProductCard: React.FC<ProductCardProps> = ({
   product,
   added,
   handleAddToCart,
-}) => (
-  <div className="product-card bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl shadow-lg overflow-hidden group hover:shadow-2xl hover:border-orange-500/50 transition-all duration-300 transform hover:-translate-y-2">
-    <div className="relative h-48 overflow-hidden">
-      <img
-        src={product.image || "/placeholder.svg"}
-        alt={product.title}
-        className="w-full h-48 object-contain"
-      />
-      <div className="absolute top-4 right-4 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm px-3 py-1 rounded-full font-medium">
-        {product.discount}
-      </div>
-      <div className="absolute top-4 left-4 flex flex-col gap-2">
-        <button className="p-2 bg-gray-800/80 rounded-full shadow-lg hover:bg-gradient-to-r hover:from-orange-500 hover:to-pink-600 transition-all opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 duration-300">
-          <Heart className="w-5 h-5 text-gray-300 hover:text-white" />
-        </button>
-        <button className="p-2 bg-gray-800/80 rounded-full shadow-lg hover:bg-gradient-to-r hover:from-orange-500 hover:to-pink-600 transition-all opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 duration-300 delay-75">
-          <Eye className="w-5 h-5 text-gray-300 hover:text-white" />
-        </button>
-      </div>
-      <div className="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-        <button
-          onClick={() => handleAddToCart(product.id)}
-          className={`bg-gradient-to-r ${added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"} text-white px-6 py-3 rounded-full font-semibold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center space-x-2 shadow-lg`}
-        >
-          <ShoppingCart className="w-5 h-5" />
-          <span>{added ? "Added! ✓" : "Book Deal"}</span>
-        </button>
-      </div>
-    </div>
-    <div className="p-6">
-      <h3 className="text-xl font-semibold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent mb-2">
-        {product.title}
-      </h3>
-      <p className="text-sm text-gray-400 mb-4 line-clamp-2">{product.description}</p>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
+}) => {
+  const { isAuthenticated, isLoading } = useKindeBrowserClient();
+  const { isVerified } = useUserVerification();
+  const router = useRouter();
+  const [showCouponModal, setShowCouponModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  // 3-stage click handler
+  const handleGetDiscount = () => {
+    if (isLoading) return;
+    if (!isAuthenticated) {
+      router.push('/signup');
+      return;
+    }
+    if (!isVerified) {
+      router.push('/student-verification');
+      return;
+    }
+    setSelectedProduct(product);
+    setShowCouponModal(true);
+  };
+
+  return (
+    <>
+      <div className="product-card bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl shadow-lg overflow-hidden group hover:shadow-2xl hover:border-orange-500/50 transition-all duration-300 transform hover:-translate-y-2">
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={product.image || "/placeholder.svg"}
+            alt={product.title}
+            className="w-full h-48 object-contain"
+          />
+          <div className="absolute top-4 right-4 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm px-3 py-1 rounded-full font-medium">
+            {product.discount}
+          </div>
+          <div className="absolute top-4 left-4 flex flex-col gap-2">
+            <button className="p-2 bg-gray-800/80 rounded-full shadow-lg hover:bg-gradient-to-r hover:from-orange-500 hover:to-pink-600 transition-all opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 duration-300">
+              <Heart className="w-5 h-5 text-gray-300 hover:text-white" />
+            </button>
+            <button className="p-2 bg-gray-800/80 rounded-full shadow-lg hover:bg-gradient-to-r hover:from-orange-500 hover:to-pink-600 transition-all opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 duration-300 delay-75">
+              <Eye className="w-5 h-5 text-gray-300 hover:text-white" />
+            </button>
+          </div>
+          <div className="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+            <button
+              onClick={handleGetDiscount}
+              className={`bg-gradient-to-r ${added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"} text-white px-6 py-3 rounded-full font-semibold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center space-x-2 shadow-lg`}
+            >
+              <ShoppingCart className="w-5 h-5" />
+              <span>{added ? "Added! ✓" : "Get Discount"}</span>
+            </button>
+          </div>
         </div>
-       
+        <div className="p-6">
+          <h3 className="text-xl font-semibold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent mb-2">
+            {product.title}
+          </h3>
+          <p className="text-sm text-gray-400 mb-4 line-clamp-2">{product.description}</p>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+            </div>
+          </div>
+          <button
+            onClick={handleGetDiscount}
+            className={`w-full bg-gradient-to-r ${added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"} text-white py-3 px-4 rounded-xl font-semibold hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25`}
+          >
+            <ShoppingCart className="w-5 h-5" />
+            <span>{added ? "Added! ✓" : "Get Discount"}</span>
+          </button>
+        </div>
       </div>
-      <button
-        onClick={() => handleAddToCart(product.id)}
-        className={`w-full bg-gradient-to-r ${added ? "from-green-500 to-emerald-500" : "from-orange-500 to-pink-600"} text-white py-3 px-4 rounded-xl font-semibold hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25`}
-      >
-        <ShoppingCart className="w-5 h-5" />
-        <span>{added ? "Added! ✓" : "Book Deal"}</span>
-      </button>
-    </div>
-  </div>
-);
+      {/* Coupon Modal */}
+      <Modal isOpen={showCouponModal} onClose={() => setShowCouponModal(false)}>
+        {selectedProduct && (
+          <div className="flex flex-col items-center text-center p-4">
+            <div className="w-full max-w-xs h-40 bg-white rounded-xl flex items-center justify-center mb-4 shadow-lg">
+              <img src={selectedProduct.image} alt={selectedProduct.title} style={{ objectFit: 'contain', width: '100%', height: '120px' }} />
+            </div>
+            <h2 className="text-2xl font-extrabold mb-1 text-gray-100 drop-shadow">{selectedProduct.title} Student Discount</h2>
+            <p className="text-lg font-semibold text-pink-400 mb-2">Exclusive Travel Deal</p>
+            <div className="w-full border-b border-gray-700 my-3"></div>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <span className="text-gray-300 text-sm mr-2">Rate this offer:</span>
+              <button className="text-2xl hover:scale-110 transition-transform">👎</button>
+              <button className="text-2xl hover:scale-110 transition-transform">👍</button>
+            </div>
+            <p className="text-gray-400 text-sm mb-2">Enter this code in the promotional code area during checkout to benefit from the student discount.</p>
+            <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-mono text-xl font-bold py-2 px-4 rounded-lg tracking-wider mb-4">
+              TRAVELSTUDENT10
+            </div>
+            <a href="#" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
+              Visit {selectedProduct.title} website
+            </a>
+          </div>
+        )}
+      </Modal>
+    </>
+  );
+};
 
 const ProductsSection: React.FC<{
   products: Product[];
@@ -298,8 +350,8 @@ const ProductsSection: React.FC<{
         setPrice={setPrice}
         duration={duration}
         setDuration={setDuration}
-        filterProducts={filterProducts}
-        productCount={productCount}
+        filterProducts={filterProducts}         // <-- add this
+        productCount={productCount}             // <-- and this
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 justify-items-center">
         {products.map((p) => (
