@@ -137,6 +137,11 @@ export default function StudentVerification({
             if (verificationId) {
                 localStorage.setItem('verificationId', verificationId);
             }
+            // Add a small delay to allow the database to update before refetching
+            setTimeout(() => {
+                // Dispatch a global event to notify other components to refetch verification status
+                window.dispatchEvent(new CustomEvent('verification-complete'));
+            }, 1000); // 1-second delay
         }
     };
 

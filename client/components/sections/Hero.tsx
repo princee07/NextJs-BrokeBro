@@ -9,6 +9,8 @@ import Modal from '../ui/Modal';
 import RevealCodeButton from '../ui/RevealCodeButton';
 import { useStudentVerification } from '@/hooks/useStudentVerification';
 import { getOrCreateExpiringCode } from '../../utils/codeExpiry';
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
+import { useUserVerification } from '@/hooks/useUserVerification';
 // Pop sound path
 const popSoundPath = '/assets/sounds/pop.mp4';
 
@@ -23,6 +25,8 @@ const Hero = () => {
 
   const router = useRouter();
   const { isVerified } = useStudentVerification();
+  const { isAuthenticated, isLoading } = useKindeBrowserClient();
+  const { isVerified: isUserVerified } = useUserVerification();
   console.log(`User is verified: ${isVerified}`);
   // Text to type out
   const fullText = "STUDENT DISCOUNTS UNLOCKED";
@@ -232,6 +236,15 @@ useEffect(() => {
 
 // Update your handleBrandCardClick function to handle expiring codes for Ultimate RC and Glued
 const handleBrandCardClick = (brand: any) => {
+  if (isLoading) return;
+  if (!isAuthenticated) {
+    router.push('/signup');
+    return;
+  }
+  if (!isUserVerified) {
+    router.push('/student-verification');
+    return;
+  }
   let currentCodeData;
   const userId = "kp_3ba83e44eb4d4956b8fe252c8064da8a";
   if (brand.codeType === 'expiring') {

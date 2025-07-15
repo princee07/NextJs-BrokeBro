@@ -3,12 +3,23 @@
 import { LoginLink, RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useUserVerification } from "@/hooks/useUserVerification";
 
 export default function SignupPage() {
   const searchParams = useSearchParams();
   const referralCode = searchParams.get("ref");
+  const router = useRouter();
+  const { isAuthenticated } = useKindeBrowserClient();
+  const { isVerified } = useUserVerification();
 
   useEffect(() => {
+    // Redirect if already authenticated and verified
+    if (isAuthenticated && isVerified) {
+      router.replace("/");
+      return;
+    }
     // If there's a referral code in the URL, store it in a cookie for later use
     if (referralCode) {
       // Set cookie to expire in 30 days
@@ -16,7 +27,7 @@ export default function SignupPage() {
       expirationDate.setDate(expirationDate.getDate() + 30);
       document.cookie = `brokebro_ref=${referralCode}; expires=${expirationDate.toUTCString()}; path=/; SameSite=Lax`;
     }
-  }, [referralCode]);
+  }, [isAuthenticated, isVerified, referralCode, router]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-4">

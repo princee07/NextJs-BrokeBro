@@ -63,14 +63,30 @@ export async function PUT(request: NextRequest) {
 
                     // Update user's verification status
                     if (verification.userEmail) {
-                        await User.findOneAndUpdate(
-                            { email: verification.userEmail },
-                            {
+                        const user = await User.findOne({ email: verification.userEmail });
+                        if (user) {
+                            await User.findOneAndUpdate(
+                                { email: verification.userEmail },
+                                {
+                                    isVerified: true,
+                                    verificationDate: new Date(),
+                                    verificationId: verification.id
+                                }
+                            );
+                            console.log('User found and updated:', verification.userEmail);
+                        } else {
+                            // Create user if not found
+                            await User.create({
+                                name: verification.studentData.studentName || 'Unknown',
+                                email: verification.userEmail,
                                 isVerified: true,
                                 verificationDate: new Date(),
-                                verificationId: verification.id
-                            }
-                        );
+                                verificationId: verification.id,
+                                referralCode: Math.random().toString(36).substring(2, 10),
+                                coins: 0
+                            });
+                            console.log('User not found, created new user with isVerified: true:', verification.userEmail);
+                        }
                     }
 
                     console.log('Verified user record created successfully');

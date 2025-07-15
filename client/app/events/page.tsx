@@ -376,14 +376,14 @@ export default function EventsPage() {
                     <div className="text-xs text-gray-400 mb-2">Host: {event.hostName}</div>
                     {isHost ? (
                       <button
-                        className={`mt-2 w-full bg-gradient-to-r from-orange-500 to-pink-500 text-white py-2 rounded-lg font-semibold opacity-60 cursor-not-allowed`}
+                        className="mt-2 w-full bg-gradient-to-r from-orange-500 to-pink-500 text-white py-2 rounded-lg font-semibold opacity-60 cursor-not-allowed"
                         disabled
                       >
                         You are the Host
                       </button>
                     ) : isUserRegistered ? (
                       <button
-                        className={`mt-2 w-full bg-gradient-to-r from-orange-500 to-pink-500 text-white py-2 rounded-lg font-semibold opacity-60 cursor-not-allowed`}
+                        className="mt-2 w-full bg-gradient-to-r from-orange-500 to-pink-500 text-white py-2 rounded-lg font-semibold opacity-60 cursor-not-allowed"
                         disabled
                       >
                         Registered
@@ -413,6 +413,6 @@ export default function EventsPage() {
         </div>
         {/* ...sidebar widget removed... */}
       </div>
-    </div>
-  );
+    </div>
+  );
 }

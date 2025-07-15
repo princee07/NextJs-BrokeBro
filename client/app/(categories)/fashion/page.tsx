@@ -26,8 +26,10 @@ import { MdOutlineGridView, MdOutlineViewList, MdTrendingUp } from 'react-icons/
 import { HiOutlineHeart, HiHeart } from 'react-icons/hi';
 import VerificationProtectedLink from '@/components/ui/VerificationProtectedLink';
 import { GiClothes, GiArmoredPants, GiWatch, GiLipstick, GiHoodie } from 'react-icons/gi';
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
+import { useUserVerification } from '@/hooks/useUserVerification';
 import Modal from '@/components/ui/Modal';
-import RevealCodeButton from '@/components/ui/RevealCodeButton';
+import { useRouter } from 'next/navigation';
 
 // Full static data from JSON files
 const staticFashionCategories = [
@@ -352,9 +354,28 @@ export default function FashionPage() {
   const categoriesInView = useInView(categoriesRef, { once: true });
   const productsInView = useInView(productsRef, { once: true });
   const newsletterInView = useInView(newsletterRef, { once: true });
+   const { isVerified } = useStudentVerification();
+   const { isAuthenticated, isLoading } = useKindeBrowserClient();
+   const { isVerified: userIsVerified } = useUserVerification();
+   const [showCouponModal, setShowCouponModal] = useState(false);
+   type FashionCategory = typeof staticFashionCategories[number];
+   const [selectedBrand, setSelectedBrand] = useState<FashionCategory | null>(null);
+   const router = useRouter();
 
- 
-
+   // 3-stage click handler
+   const handleBrandClick = (brand: FashionCategory) => {
+    if (isLoading) return; // Don't do anything while loading auth state
+    if (!isAuthenticated) {
+      router.push('/signup');
+      return;
+    }
+    if (!userIsVerified) {
+      router.push('/student-verification');
+      return;
+    }
+    setSelectedBrand(brand);
+    setShowCouponModal(true);
+  };
   // Auto-rotate featured collections
   useEffect(() => {
     const timer = setInterval(() => {
@@ -639,7 +660,7 @@ export default function FashionPage() {
                   <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/50" />
 
                   {/* Background Image */}
-                  <div className="relative h-64 overflow-hidden">
+                  <div className="relative h-64 overflow-hidden cursor-pointer" onClick={() => handleBrandClick(category)}>
                     <Image
                       src={category.image || "/assets/placeholder.png"}
                       alt={category.name}
@@ -664,7 +685,7 @@ export default function FashionPage() {
                           <h3 className="text-xl font-bold">{category.name}</h3>
                           <div className="flex items-center gap-2 mt-1">
                             {category.brandLogo && (
-                              <div className="relative w-20 h-20 rounded overflow-hidden bg-white/10 backdrop-blur-sm border-4 border-white/40 shadow-2xl">
+                              <div className="relative w-20 h-20 rounded overflow-hidden bg-white/10 backdrop-blur-sm border-4 border-white/40 shadow-2xl cursor-pointer" onClick={() => handleBrandClick(category)}>
                                 <Image
                                   src={category.brandLogo}
                                   alt={`${category.brand} logo`}
@@ -693,15 +714,13 @@ export default function FashionPage() {
                       </div>
                     </div>
 
-                    <motion.button
-                      onClick={() => handleProductClick(category)}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                    <button
                       className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                      onClick={() => handleBrandClick(category)}
                     >
-                      Get Discount Code
+                      Get Discount
                       <FaGift className="text-sm" />
-                    </motion.button>
+                    </button>
                   </div>
                 </motion.div>
               ))}
@@ -961,70 +980,31 @@ export default function FashionPage() {
           </div>
         </section>
       </div>
-
-      {/* Modal for brand card */}
-      <Modal isOpen={showBrandModal} onClose={() => setShowBrandModal(false)}>
-        {selectedBrand && codeData && (
+      {/* Coupon Modal */}
+      <Modal isOpen={showCouponModal} onClose={() => setShowCouponModal(false)}>
+        {selectedBrand && (
           <div className="flex flex-col items-center text-center p-4">
-            {/* Brand logo in a rounded rectangle */}
             <div className="w-full max-w-xs h-40 bg-white rounded-xl flex items-center justify-center mb-4 shadow-lg">
-              <Image 
-                src={selectedBrand.logo || selectedBrand.brandLogo || "/assets/placeholder.png"} 
-                alt={selectedBrand.name || selectedBrand.brand} 
-                width={240} 
-                height={120} 
-                style={{ objectFit: 'contain', width: '100%', height: '120px' }} 
-              />
+              <Image src={selectedBrand.brandLogo} alt={selectedBrand.brand} width={120} height={120} style={{ objectFit: 'contain', width: '100%', height: '120px' }} />
             </div>
-            <h2 className="text-2xl font-extrabold mb-1 text-gray-100 drop-shadow">
-              {selectedBrand.name || selectedBrand.brand} Student Discount
-            </h2>
+            <h2 className="text-2xl font-extrabold mb-1 text-gray-100 drop-shadow">{selectedBrand.brand} Student Discount</h2>
             <p className="text-lg font-semibold text-pink-400 mb-2">{selectedBrand.discount}</p>
             <div className="w-full border-b border-gray-700 my-3"></div>
-            
-            {/* Rating row */}
             <div className="flex items-center justify-center gap-3 mb-4">
               <span className="text-gray-300 text-sm mr-2">Rate this offer:</span>
               <button className="text-2xl hover:scale-110 transition-transform">👎</button>
               <button className="text-2xl hover:scale-110 transition-transform">👍</button>
             </div>
-            
-            {/* Show countdown for expiring codes */}
-            {selectedBrand.codeType === 'expiring' && codeData.timeLeft && (
-              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mb-4">
-               
-              </div>
-            )}
-            
-            {/* Show if code just expired (this should rarely show now) */}
-            {selectedBrand.codeType === 'expiring' && !codeData.timeLeft && (
-              <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 mb-4">
-                <p className="text-green-400 text-sm font-medium">
-                  ✨ New code generated! This code is valid for 24 hours.
-                </p>
-              </div>
-            )}
-            
-            <p className="mb-4 text-gray-300 text-sm">
-              {selectedBrand.codeType === 'expiring' 
-                ? "This is a time-limited code. Use it within 24 hours of revealing."
-                : "Enter this code in the promotional code area during checkout to benefit from the student discount."
-              }
-            </p>
-            
-            {/* Reveal code button with animation */}
-            <RevealCodeButton code={codeData.code} />
-            <a 
-              href={selectedBrand.url || "#"} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200"
-            >
-              Visit {selectedBrand.name || selectedBrand.brand} website
+            <p className="text-gray-400 text-sm mb-2">Enter this code in the promotional code area during checkout to benefit from the student discount.</p>
+            <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-mono text-xl font-bold py-2 px-4 rounded-lg tracking-wider mb-4">
+              STUDENT10
+            </div>
+            <a href={selectedBrand.url || '#'} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
+              Visit {selectedBrand.brand} website
             </a>
           </div>
         )}
       </Modal>
-    </div>
-  );
+    </div>
+  );
 }
