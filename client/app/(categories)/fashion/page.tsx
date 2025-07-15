@@ -341,7 +341,7 @@ export default function FashionPage() {
   
   // Modal states
   const [showBrandModal, setShowBrandModal] = useState(false);
-  const [selectedBrand, setSelectedBrand] = useState<any>(null);
+
   const [codeData, setCodeData] = useState<any>(null);
 
   // Animation refs
@@ -354,7 +354,7 @@ export default function FashionPage() {
   const categoriesInView = useInView(categoriesRef, { once: true });
   const productsInView = useInView(productsRef, { once: true });
   const newsletterInView = useInView(newsletterRef, { once: true });
-   const { isVerified } = useStudentVerification();
+   //const { isVerified } = useStudentVerification();
    const { isAuthenticated, isLoading } = useKindeBrowserClient();
    const { isVerified: userIsVerified } = useUserVerification();
    const [showCouponModal, setShowCouponModal] = useState(false);

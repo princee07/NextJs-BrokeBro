@@ -26,7 +26,7 @@ const EcommerceHero: React.FC = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
   const [currentSlide, setCurrentSlide] = useState(0)
   const [showCouponModal, setShowCouponModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  //const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const featuredProducts: Product[] = [
     {
