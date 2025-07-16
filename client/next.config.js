@@ -2,6 +2,7 @@ const nextConfig = {
   // ...existing config...
   images: {
     domains: [
+      'zatpvpdzodwja266.public.blob.vercel-storage.com',
       'soxytoes.com',
       'lh3.googleusercontent.com',
       'i.pravatar.cc', 
