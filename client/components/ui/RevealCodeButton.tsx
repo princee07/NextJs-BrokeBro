@@ -31,6 +31,17 @@ const RevealCodeButton: React.FC<RevealCodeButtonProps> = ({ code, isRevealed = 
             await navigator.clipboard.writeText(code);
             setCopied(true);
             setTimeout(() => setCopied(false), 1200);
+            // For expiring codes, expire the code immediately after copy
+            if (codeType === 'expiring' && brandSlug && userId) {
+                // Mark as expired in localStorage for 24 hours
+                const storageKey = `code_${brandSlug}_${userId}`;
+                const expireAt = Date.now() + 24 * 60 * 60 * 1000;
+                const storedData = localStorage.getItem(storageKey);
+                let parsed = storedData ? JSON.parse(storedData) : {};
+                parsed.isExpired = true;
+                parsed.expireAt = expireAt;
+                localStorage.setItem(storageKey, JSON.stringify(parsed));
+            }
         } catch (e) {
             // fallback or error
         }
