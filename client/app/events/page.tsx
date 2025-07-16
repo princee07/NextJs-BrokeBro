@@ -6,43 +6,13 @@ import Modal from '../../components/ui/Modal';
 
 const initialEvents = [
   {
-    id: 2,
+    id: 1,
     title: 'Dance Competition',
     date: '2023-10-05',
     location: 'BrokeBro Venue',
     price: 'FREE',
     image: '/assets/images/broke-bro.png',
     isFree: true,
-    hostName: '',
-  },
-  {
-    id: 1,
-    title: 'Indonesia - Korea Conference',
-    date: '2023-09-18',
-    location: 'Jakarta',
-    price: '$10.00',
-    image: '/assets/images/discount.png',
-    isFree: false,
-    hostName: '',
-  },
-  {
-    id: 3,
-    title: 'Dream World Wide in Jakarta',
-    date: '2023-09-17',
-    location: 'Jakarta',
-    price: 'FREE',
-    image: '/assets/images/broke-bro.png',
-    isFree: true,
-    hostName: '',
-  },
-  {
-    id: 4,
-    title: 'Pesta Kembang Api Terbesar',
-    date: '2023-09-16',
-    location: 'Jakarta',
-    price: '$20.00',
-    image: '/assets/images/indian-flag.png',
-    isFree: false,
     hostName: '',
   },
 ];
@@ -61,13 +31,12 @@ export default function EventsPage() {
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
-  // Registration state
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
   const [registerName, setRegisterName] = useState('');
   const [registerSuccess, setRegisterSuccess] = useState(false);
   const [registerEventId, setRegisterEventId] = useState<number | null>(null);
   const [registrations, setRegistrations] = useState<{ [eventId: number]: string[] }>({});
+  const [danceModalOpen, setDanceModalOpen] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -116,7 +85,6 @@ export default function EventsPage() {
     });
   };
 
-  // Registration logic
   const openRegisterModal = (eventId: number) => {
     setRegisterEventId(eventId);
     setRegisterModalOpen(true);
@@ -129,7 +97,7 @@ export default function EventsPage() {
     if (!registerEventId || !registerName) return;
     setRegistrations(prev => {
       const prevRegs = prev[registerEventId] || [];
-      if (prevRegs.includes(registerName)) return prev; // Prevent duplicate registration
+      if (prevRegs.includes(registerName)) return prev;
       return {
         ...prev,
         [registerEventId]: [...prevRegs, registerName],
@@ -142,7 +110,6 @@ export default function EventsPage() {
     }, 1200);
   };
 
-  // Helper: check if "current user" (by name) is registered for an event
   const isRegistered = (eventId: number) => {
     return registerEventId && registrations[eventId]?.includes(registerName);
   };
@@ -152,29 +119,22 @@ export default function EventsPage() {
       {/* Hero Section */}
       <div className="relative w-full h-[380px] flex items-center justify-center mb-8">
         <Image
-          src="/assets/images/discount.png"
+          src="/assets/events/events.jpg"
           alt="Event Hero"
           fill
-          className="object-cover object-center opacity-60"
+          className="object-cover object-center opacity-80"
           priority
+          onError={(e) => {
+            e.currentTarget.src = '/assets/images/broke-bro.png';
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 to-black/60" />
-        <div className="relative z-10 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-2 tracking-tight drop-shadow-lg">MADE FOR THOSE WHO DO</h1>
-          <p className="text-lg text-gray-300 drop-shadow">Discover and book the best events around you</p>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40" />
+        <div className="relative z-10 text-center bg-black/30 rounded-lg p-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-2 tracking-tight drop-shadow-lg bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">
+            MADE FOR THOSE WHO DO
+          </h1>
+          <p className="text-lg text-gray-100 drop-shadow">Discover and book the best events around you</p>
         </div>
-      </div>
-
-      {/* Register Now Button (was Host an Event) */}
-      <div className="container mx-auto px-4 flex justify-end mb-4">
-        <a
-          href="https://forms.gle/JbwHTNQcpgUrdXwu7"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-6 py-2 rounded-lg font-semibold shadow hover:from-orange-600 hover:to-pink-600 transition flex items-center justify-center"
-        >
-          Register Now
-        </a>
       </div>
 
       {/* Modal for Event Creation */}
@@ -284,24 +244,76 @@ export default function EventsPage() {
         )}
       </Modal>
 
+      {/* Modal for Dance Competition Details */}
+      <Modal isOpen={danceModalOpen} onClose={() => setDanceModalOpen(false)}>
+        <div className="space-y-4">
+          <h2 className="text-2xl font-bold text-center mb-2 bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">BrokeBro 1-Minute Dance Challenge</h2>
+          <div className="text-center text-white">College Edition – Show your best moves!</div>
+          <div className="text-left text-white">
+            <div className="font-bold mb-1">🏆 Prizes</div>
+            <div>🥇 Solo: ₹3,000 + Merch</div>
+            <div>🥇 Group: ₹5,000 + Merch</div>
+            <div className="mb-2">🧾 E-certificates for all valid entries</div>
+            <div className="font-bold mb-1">📅 Important Dates</div>
+            <div>Submit by: 6 Aug</div>
+            <div>Voting: 7–14 Aug</div>
+            <div className="mb-2">Results: 15 Aug, 6 PM</div>
+            <div className="font-bold mb-1">✅ What to Do</div>
+            <div>Upload a 60-sec dance video (MP4/MOV, ≤100MB)</div>
+            <div>Or share a Google Drive link (set to public)</div>
+            <div>No bot likes – real votes only!</div>
+          </div>
+          <a
+            href="https://forms.gle/KGuZFDbTqwWPhtYQ7"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full bg-gradient-to-r from-orange-500 to-pink-500 text-white py-2 rounded-lg font-semibold text-center hover:from-orange-600 hover:to-pink-600 transition"
+          >
+            Click here to Register
+          </a>
+        </div>
+      </Modal>
+
       {/* Filter/Search Bar */}
       <div className="container mx-auto px-4 mb-12">
-        <div className="bg-gray-800 rounded-xl shadow-lg flex flex-col md:flex-row items-center justify-between p-4 md:space-x-4 space-y-2 md:space-y-0">
-          <input
-            type="text"
-            placeholder="Looking for..."
-            className="bg-gray-900 text-white px-4 py-2 rounded-lg focus:outline-none w-full md:w-1/3"
-          />
-          <input
-            type="text"
-            placeholder="Location"
-            className="bg-gray-900 text-white px-4 py-2 rounded-lg focus:outline-none w-full md:w-1/4"
-          />
-          <input
-            type="date"
-            className="bg-gray-900 text-white px-4 py-2 rounded-lg focus:outline-none w-full md:w-1/4"
-          />
-          <button className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-6 py-2 rounded-lg font-semibold shadow hover:from-orange-600 hover:to-pink-600 transition">Search</button>
+        <div className="bg-black rounded-2xl shadow-2xl flex flex-col md:flex-row items-center justify-between p-6 md:space-x-6 space-y-3 md:space-y-0 border-2 border-orange-500">
+          <div className="flex items-center w-full md:w-1/3 bg-gray-900 rounded-lg px-3 py-2 border-2 border-transparent focus-within:border-orange-500 transition-all">
+            <svg className="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input
+              type="text"
+              placeholder="Search events..."
+              className="bg-transparent text-white px-2 py-1 w-full focus:outline-none placeholder-gray-400"
+            />
+          </div>
+          <div className="flex items-center w-full md:w-1/4 bg-gray-900 rounded-lg px-3 py-2 border-2 border-transparent focus-within:border-orange-500 transition-all">
+            <svg className="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/>
+            </svg>
+            <input
+              type="text"
+              placeholder="Location"
+              className="bg-transparent text-white px-2 py-1 w-full focus:outline-none placeholder-gray-400"
+            />
+          </div>
+          <div className="flex items-center w-full md:w-1/4 bg-gray-900 rounded-lg px-3 py-2 border-2 border-transparent focus-within:border-orange-500 transition-all">
+            <svg className="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
+              <path d="M16 2v4M8 2v4M3 10h18"/>
+            </svg>
+            <input
+              type="date"
+              className="bg-transparent text-white px-2 py-1 w-full focus:outline-none placeholder-gray-400 rounded-lg"
+            />
+          </div>
+          <button className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-8 py-2 rounded-xl font-bold shadow-lg hover:from-orange-600 hover:to-pink-600 transition flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/>
+            </svg>
+            Search
+          </button>
         </div>
       </div>
 
@@ -309,86 +321,84 @@ export default function EventsPage() {
       <div className="container mx-auto px-4 flex flex-col lg:flex-row gap-8">
         {/* Events List */}
         <div className="flex-1">
-          <h2 className="text-2xl font-bold mb-6">Upcoming Events</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          <h2 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">Upcoming Events</h2>
+          <div className="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
             {events.map(event => {
               const regCount = registrations[event.id]?.length || 0;
               const isUserRegistered = registrations[event.id]?.includes(registerName);
-              // Only show 'You are the Host' if the current user is the host and the hostName is not empty and not just whitespace
               const isHost = event.hostName && event.hostName.trim().length > 0 && event.hostName === registerName && registerName.trim().length > 0;
               return (
-                <div key={event.id} className="bg-gray-900 rounded-xl shadow-lg overflow-hidden relative group">
-                  <div className="relative h-40 w-full">
+                <div
+                  key={event.id}
+                  className="bg-gray-900 rounded-lg shadow-lg overflow-hidden flex md:flex-row flex-col group hover:shadow-xl hover:shadow-orange-500/30 transition-all border border-gray-800"
+                >
+                  <div className="relative w-full md:w-2/5 h-48 md:h-auto">
                     <Image
                       src={event.image}
                       alt={event.title}
                       fill
-                      className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                      className="object-cover object-center group-hover:scale-105 transition-transform duration-300 rounded-l-lg"
                     />
-                    <div className="absolute top-2 left-2 bg-gradient-to-r from-orange-500 to-pink-500 text-xs px-3 py-1 rounded-full font-bold">
+                    <div className="absolute top-3 left-3 bg-gradient-to-r from-orange-500 to-pink-500 text-xs px-3 py-1 rounded-full font-semibold">
                       {event.isFree ? 'FREE' : event.price}
                     </div>
-                    {/* Delete Button */}
-                    <button
-                      onClick={() => handleDelete(event.id)}
-                      className="absolute top-2 right-2 bg-black/60 hover:bg-red-600 text-white rounded-full p-1 transition z-10"
-                      title="Delete Event"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
                   </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold mb-1 flex items-center gap-2">
-                      {event.title}
-                      {regCount > 0 && (
-                        <span className="ml-2 bg-green-600 text-xs px-2 py-0.5 rounded-full animate-pulse">{regCount} Registered</span>
-                      )}
-                    </h3>
-                    <div className="flex items-center text-gray-400 text-sm mb-2">
-                      <span className="mr-2">{event.date ? new Date(event.date).toLocaleDateString() : ''}</span>•<span className="ml-2">{event.location}</span>
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-xl font-semibold mb-2 flex items-center gap-2">
+                        {event.title}
+                        {regCount > 0 && (
+                          <span className="ml-2 bg-green-600 text-xs px-2 py-0.5 rounded-full animate-pulse">
+                            {regCount} Registered
+                          </span>
+                        )}
+                      </h3>
+                      <div className="flex items-center text-gray-400 text-sm mb-3">
+                        <span className="mr-2">
+                          {event.date ? new Date(event.date).toLocaleDateString() : ''}
+                        </span>
+                        •
+                        <span className="ml-2">{event.location}</span>
+                      </div>
+                      <div className="text-sm text-gray-400">Host: {event.hostName || 'TBD'}</div>
                     </div>
-                    <div className="text-xs text-gray-400 mb-2">Host: {event.hostName}</div>
-                    {isHost ? (
-                      <button
-                        className={`mt-2 w-full bg-gradient-to-r from-orange-500 to-pink-500 text-white py-2 rounded-lg font-semibold opacity-60 cursor-not-allowed`}
-                        disabled
-                      >
-                        You are the Host
-                      </button>
-                    ) : isUserRegistered ? (
-                      <button
-                        className={`mt-2 w-full bg-gradient-to-r from-orange-500 to-pink-500 text-white py-2 rounded-lg font-semibold opacity-60 cursor-not-allowed`}
-                        disabled
-                      >
-                        Registered
-                      </button>
-                    ) : (
-                      <a
-                        href="https://forms.gle/JbwHTNQcpgUrdXwu7"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-2 w-full block bg-gradient-to-r from-orange-500 to-pink-500 text-white py-2 rounded-lg font-semibold hover:from-orange-600 hover:to-pink-600 transition text-center"
-                      >
-                        Register
-                      </a>
-                    )}
+                    <div className="mt-4">
+                      {isHost ? (
+                        <button
+                          className="w-auto px-4 py-1.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-sm opacity-60 cursor-not-allowed"
+                          disabled
+                        >
+                          You are the Host
+                        </button>
+                      ) : isUserRegistered ? (
+                        <button
+                          className="w-auto px-4 py-1.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-sm opacity-60 cursor-not-allowed"
+                          disabled
+                        >
+                          Registered
+                        </button>
+                      ) : event.title === 'Dance Competition' ? (
+                        <button
+                          className="w-auto px-4 py-1.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-sm hover:from-orange-600 hover:to-pink-600 transition"
+                          onClick={() => setDanceModalOpen(true)}
+                        >
+                          Register
+                        </button>
+                      ) : (
+                        <a
+                          href="https://forms.gle/KGuZFDbTqwWPhtYQ7"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-auto px-4 py-1.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-sm hover:from-orange-600 hover:to-pink-600 transition"
+                        >
+                          Register
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
               );
             })}
-          </div>
-        </div>
-        {/* Sidebar Widget */}
-        <div className="w-full lg:w-80 flex-shrink-0">
-          <div className="bg-gray-900 rounded-xl shadow-lg p-6 mb-8">
-            <h3 className="text-lg font-bold mb-2">Date & Time</h3>
-            <p className="text-gray-400 mb-4">Saturday, Sep 14, 2019 at 20:30 PM</p>
-            <button className="w-full mb-3 bg-gradient-to-r from-purple-500 to-blue-500 text-white py-2 rounded-lg font-semibold hover:from-purple-600 hover:to-blue-600 transition">Add to Calendar</button>
-            <button className="w-full mb-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white py-2 rounded-lg font-semibold hover:from-orange-600 hover:to-pink-600 transition">Book Now (Free)</button>
-            <button className="w-full bg-gray-800 text-gray-300 py-2 rounded-lg font-semibold mt-2">Promoter Program</button>
-            <p className="text-xs text-gray-500 mt-2 text-center">No Refunds</p>
           </div>
         </div>
       </div>

@@ -1,10 +1,13 @@
 "use client"
 
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import VerificationGate from '@/components/ui/VerificationGate';
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
+import { useUserVerification } from '@/hooks/useUserVerification';
+import { useRouter } from 'next/navigation';
+import Modal from '../ui/Modal';
 
 const TopBrands = () => {
   // Define brand data
@@ -54,6 +57,26 @@ const TopBrands = () => {
       controls.start("visible");
     }
   }, [isInView, controls]);
+
+  const { isAuthenticated, isLoading } = useKindeBrowserClient();
+  const { isVerified } = useUserVerification();
+  const router = useRouter();
+  const [showCouponModal, setShowCouponModal] = useState(false);
+  const [selectedBrand, setSelectedBrand] = useState<any>(null);
+
+  const handleBrandClick = (brand: any) => {
+    if (isLoading) return;
+    if (!isAuthenticated) {
+      router.push('/signup');
+      return;
+    }
+    if (!isVerified) {
+      router.push('/student-verification');
+      return;
+    }
+    setSelectedBrand(brand);
+    setShowCouponModal(true);
+  };
 
   return (
     <section
@@ -108,40 +131,38 @@ const TopBrands = () => {
             >
               {/* Double the items for seamless loop */}
               {[...topBrands[0], ...topBrands[0]].map((brand, index) => (
-                <VerificationGate key={index}>
-                  <a href={brand.url} target="_blank" rel="noopener noreferrer" className="relative group">
-                    <motion.div
-                      whileHover={{
-                        y: -10,
-                        boxShadow: "0 10px 30px -10px rgba(249, 115, 22, 0.4)"
-                      }}
-                      className="w-44 h-32 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative p-3"
-                    >
-                      {/* Brand logo */}
-                      <div className="relative w-28 h-16 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200 mb-2">
-                        <Image
-                          src={brand.logo}
-                          alt={brand.name}
-                          fill
-                          style={{ objectFit: "contain" }}
-                          className="p-1"
-                        />
-                      </div>
+                <button key={index} className="relative group bg-transparent border-none p-0 m-0" onClick={() => handleBrandClick(brand)}>
+                  <motion.div
+                    whileHover={{
+                      y: -10,
+                      boxShadow: "0 10px 30px -10px rgba(249, 115, 22, 0.4)"
+                    }}
+                    className="w-44 h-32 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative p-3"
+                  >
+                    {/* Brand logo */}
+                    <div className="relative w-28 h-16 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200 mb-2">
+                      <Image
+                        src={brand.logo}
+                        alt={brand.name}
+                        fill
+                        style={{ objectFit: "contain" }}
+                        className="p-1"
+                      />
+                    </div>
 
                       {/* Brand name */}
                       <p className="text-white font-medium text-xs text-center">{brand.name}</p>
 
-                      {/* Discount badge */}
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        whileHover={{ opacity: 1, scale: 1 }}
-                        className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full"
-                      >
-                        {brand.discount}
-                      </motion.div>
+                    {/* Discount badge */}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      whileHover={{ opacity: 1, scale: 1 }}
+                      className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                    >
+                      {brand.discount}
                     </motion.div>
-                  </a>
-                </VerificationGate>
+                  </motion.div>
+                </button>
               ))}
             </motion.div>
           </motion.div>
@@ -170,40 +191,38 @@ const TopBrands = () => {
             >
               {/* Double the items for seamless loop */}
               {[...topBrands[1], ...topBrands[1]].map((brand, index) => (
-                <VerificationGate key={index}>
-                  <a href={brand.url} target="_blank" rel="noopener noreferrer" className="relative group">
-                    <motion.div
-                      whileHover={{
-                        y: -10,
-                        boxShadow: "0 10px 30px -10px rgba(249, 115, 22, 0.4)"
-                      }}
-                      className="w-44 h-32 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative p-3"
-                    >
-                      {/* Brand logo */}
-                      <div className="relative w-28 h-16 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200 mb-2">
-                        <Image
-                          src={brand.logo}
-                          alt={brand.name}
-                          fill
-                          style={{ objectFit: "contain" }}
-                          className="p-1"
-                        />
-                      </div>
+                <button key={index} className="relative group bg-transparent border-none p-0 m-0" onClick={() => handleBrandClick(brand)}>
+                  <motion.div
+                    whileHover={{
+                      y: -10,
+                      boxShadow: "0 10px 30px -10px rgba(249, 115, 22, 0.4)"
+                    }}
+                    className="w-44 h-32 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative p-3"
+                  >
+                    {/* Brand logo */}
+                    <div className="relative w-28 h-16 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200 mb-2">
+                      <Image
+                        src={brand.logo}
+                        alt={brand.name}
+                        fill
+                        style={{ objectFit: "contain" }}
+                        className="p-1"
+                      />
+                    </div>
 
                       {/* Brand name */}
                       <p className="text-white font-medium text-xs text-center">{brand.name}</p>
 
-                      {/* Discount badge */}
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        whileHover={{ opacity: 1, scale: 1 }}
-                        className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full"
-                      >
-                        {brand.discount}
-                      </motion.div>
+                    {/* Discount badge */}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      whileHover={{ opacity: 1, scale: 1 }}
+                      className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                    >
+                      {brand.discount}
                     </motion.div>
-                  </a>
-                </VerificationGate>
+                  </motion.div>
+                </button>
               ))}
             </motion.div>
           </motion.div>
@@ -227,6 +246,32 @@ const TopBrands = () => {
           </Link>
         </motion.div>
       </div>
+
+      {/* Coupon Modal */}
+      <Modal isOpen={showCouponModal} onClose={() => setShowCouponModal(false)}>
+        {selectedBrand && (
+          <div className="flex flex-col items-center text-center p-4">
+            <div className="w-full max-w-xs h-40 bg-white rounded-xl flex items-center justify-center mb-4 shadow-lg">
+              <Image src={selectedBrand.logo} alt={selectedBrand.name} width={120} height={120} style={{ objectFit: 'contain', width: '100%', height: '120px' }} />
+            </div>
+            <h2 className="text-2xl font-extrabold mb-1 text-gray-100 drop-shadow">{selectedBrand.name} Student Discount</h2>
+            <p className="text-lg font-semibold text-pink-400 mb-2">{selectedBrand.discount}</p>
+            <div className="w-full border-b border-gray-700 my-3"></div>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <span className="text-gray-300 text-sm mr-2">Rate this offer:</span>
+              <button className="text-2xl hover:scale-110 transition-transform">👎</button>
+              <button className="text-2xl hover:scale-110 transition-transform">👍</button>
+            </div>
+            <p className="text-gray-400 text-sm mb-2">Enter this code in the promotional code area during checkout to benefit from the student discount.</p>
+            <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-mono text-xl font-bold py-2 px-4 rounded-lg tracking-wider mb-4">
+              TOPBRAND10
+            </div>
+            <a href={selectedBrand.url || '#'} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
+              Visit {selectedBrand.name} website
+            </a>
+          </div>
+        )}
+      </Modal>
     </section>
   );
 };

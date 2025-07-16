@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useState, useEffect, useRef } from 'react';
 import Link from "next/link";
 import { RegisterLink, LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
+const LOGOUT_REDIRECT_URL = "https://www.brokebro.in/";
 import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedEyes from '../ui/AnimatedEyes';
 import { useRouter } from 'next/navigation';
@@ -675,7 +676,7 @@ export default function NavbarClient({ user }: { user: any }) {
                             )}
 
                             <div className="border-t border-orange-500/20 mt-2 pt-2">
-                              <LogoutLink>
+                              <LogoutLink postLogoutRedirectURL={LOGOUT_REDIRECT_URL}>
                                 <div className="flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-red-500/10 transition-colors duration-200 w-full cursor-pointer">
                                   <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -815,7 +816,7 @@ export default function NavbarClient({ user }: { user: any }) {
               ))}              <div className="mt-6 pb-4 px-4 grid grid-cols-2 gap-3">
                 {shouldShowAuth ? (
                   user ? (
-                    <LogoutLink>
+                    <LogoutLink postLogoutRedirectURL={LOGOUT_REDIRECT_URL}>
                       <div className="block text-center py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm hover:from-orange-600 hover:to-orange-700 transition-colors duration-300 cursor-pointer">
                         Logout
                       </div>

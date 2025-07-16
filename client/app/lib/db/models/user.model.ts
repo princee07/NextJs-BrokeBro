@@ -13,6 +13,10 @@ export interface IUser extends Document {
   resumeUploadDate?: Date;
   createdAt?: Date;
   updatedAt?: Date;
+  // Verification fields
+  isVerified?: boolean;
+  verificationDate?: Date;
+  verificationId?: string;
   // ...add other fields as needed
 }
 
@@ -31,6 +35,10 @@ const UserSchema: Schema = new Schema<IUser>({
   resumeFileName: { type: String, default: null },
   resumeFilePath: { type: String, default: null },
   resumeUploadDate: { type: Date, default: null },
+  // Verification fields
+  isVerified: { type: Boolean, default: false },
+  verificationDate: { type: Date, default: null },
+  verificationId: { type: String, default: null },
   // ...add other fields as needed
 }, {
   timestamps: true, // This adds createdAt and updatedAt automatically
