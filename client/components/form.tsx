@@ -1,21 +1,18 @@
 "use client";
 
 import { useState } from "react";
-<<<<<<< HEAD
 import Image from "next/image";
 
-export function UploadForm() {
+export default function UploadForm() {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [inProgress, setInProgress] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) return;
 
     setInProgress(true);
-    setError(null);
 
     const formData = new FormData();
     formData.append("file", file);
@@ -27,18 +24,17 @@ export function UploadForm() {
       });
 
       const contentType = response.headers.get("content-type");
+
       if (!response.ok || !contentType?.includes("application/json")) {
         const text = await response.text();
         throw new Error(`Server error: ${response.status} - ${text}`);
       }
 
       const data = await response.json();
-      if (!data.url) throw new Error("No URL returned in response");
-
       setPreview(data.url);
-    } catch (err: any) {
+    } catch (err) {
       console.error("Upload failed:", err);
-      setError(err.message || "Upload failed");
+      alert("Upload failed. Check the console for details.");
     } finally {
       setInProgress(false);
     }
@@ -49,82 +45,33 @@ export function UploadForm() {
     input: "border p-2 mb-4 w-full border-gray-300 rounded",
   };
 
-  const isExternalUrl = (url: string) => url.startsWith("http");
-
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <input
         className={styles.input}
         type="file"
-        onChange={(e) => setFile(e.target.files?.[0] || null)}
+        onChange={(e) => setFile(e.target.files?.item(0) || null)}
       />
       <button
         className="bg-blue-500 text-white p-2 rounded w-full hover:bg-blue-600"
         type="submit"
-        disabled={inProgress}
       >
         {inProgress ? "Uploading..." : "Upload"}
       </button>
 
-      {error && <p className="text-red-600 mt-2">{error}</p>}
-
       {preview && (
         <div className="mt-4">
-          {isExternalUrl(preview) ? (
-            <img
-              src={preview}
-              alt="Uploaded Image"
-              width={600}
-              height={600}
-              className="rounded"
-            />
-          ) : (
-            <Image
-              src={preview}
-              alt="Uploaded Image"
-              width={600}
-              height={600}
-              className="rounded"
-            />
-          )}
+          <Image src={preview} alt="Uploaded Image" width={600} height={600} />
+          <a
+            href={preview}
+            target="_blank"
+            className="block mt-2 text-blue-600 underline"
+            rel="noopener noreferrer"
+          >
+            View in new tab
+          </a>
         </div>
       )}
     </form>
   );
 }
-=======
-
-export default function UploadForm() {
-  const [file, setFile] = useState<File | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("file", file as Blob);
-
-    const response = await fetch("/api/file", {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!response.ok) {
-      console.error("Upload failed");
-    } else {
-      console.log("Upload successful");
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="file"
-        onChange={(e) => setFile(e.target.files?.item(0) || null)}
-      />
-      <button type="submit">Upload</button>
-    </form>
-  );
-}
->>>>>>> e99d73b8acd9f49234ad8375f6a7d0bfa1cb4158

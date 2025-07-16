@@ -1,6 +1,8 @@
 // app/page.tsx
 
-import { UploadForm } from "@/components/form";
+import UploadForm from "@/components/form";
+
+
 
 
 export default function HomePage() {
