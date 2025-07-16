@@ -114,9 +114,6 @@ const TopBrands = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative"
           >
-            <div className="absolute inset-y-0 left-0 w-20 z-10 bg-gradient-to-r from-black to-transparent"></div>
-            <div className="absolute inset-y-0 right-0 w-20 z-10 bg-gradient-to-l from-black to-transparent"></div>
-
             <motion.div
               className="flex space-x-6 py-2"
               animate={{ x: [0, -2000] }}
@@ -174,9 +171,6 @@ const TopBrands = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="relative"
           >
-            <div className="absolute inset-y-0 left-0 w-20 z-10 bg-gradient-to-r from-black to-transparent"></div>
-            <div className="absolute inset-y-0 right-0 w-20 z-10 bg-gradient-to-l from-black to-transparent"></div>
-
             <motion.div
               className="flex space-x-6 py-2"
               animate={{ x: [-2000, 0] }}

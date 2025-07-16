@@ -11,7 +11,7 @@ const initialEvents = [
     date: '2023-10-05',
     location: 'BrokeBro Venue',
     price: 'FREE',
-    image: '/assets/images/broke-bro.png',
+    image: '/assets/dance/image.png',
     isFree: true,
     hostName: '',
   },
@@ -330,9 +330,9 @@ export default function EventsPage() {
               return (
                 <div
                   key={event.id}
-                  className="bg-gray-900 rounded-lg shadow-lg overflow-hidden flex md:flex-row flex-col group hover:shadow-xl hover:shadow-orange-500/30 transition-all border border-gray-800"
+                  className="bg-gray-900 rounded-lg shadow-lg overflow-hidden flex md:flex-row flex-col group hover:shadow-xl hover:shadow-orange-500/30 transition-all border border-gray-800 min-h-[320px] md:min-h-[280px]"
                 >
-                  <div className="relative w-full md:w-2/5 h-48 md:h-auto">
+                  <div className="relative w-full md:w-2/5 h-64 md:h-auto">
                     <Image
                       src={event.image}
                       alt={event.title}
@@ -343,9 +343,9 @@ export default function EventsPage() {
                       {event.isFree ? 'FREE' : event.price}
                     </div>
                   </div>
-                  <div className="p-6 flex-1 flex flex-col justify-between">
+                  <div className="p-8 flex-1 flex flex-col justify-between">
                     <div>
-                      <h3 className="text-xl font-semibold mb-2 flex items-center gap-2">
+                      <h3 className="text-2xl font-semibold mb-3 flex items-center gap-2">
                         {event.title}
                         {regCount > 0 && (
                           <span className="ml-2 bg-green-600 text-xs px-2 py-0.5 rounded-full animate-pulse">
@@ -353,33 +353,33 @@ export default function EventsPage() {
                           </span>
                         )}
                       </h3>
-                      <div className="flex items-center text-gray-400 text-sm mb-3">
+                      <div className="flex items-center text-gray-400 text-base mb-4">
                         <span className="mr-2">
                           {event.date ? new Date(event.date).toLocaleDateString() : ''}
                         </span>
                         •
                         <span className="ml-2">{event.location}</span>
                       </div>
-                      <div className="text-sm text-gray-400">Host: {event.hostName || 'TBD'}</div>
+                      <div className="text-base text-gray-400 mb-4">Host: {event.hostName || 'TBD'}</div>
                     </div>
-                    <div className="mt-4">
+                    <div className="mt-6">
                       {isHost ? (
                         <button
-                          className="w-auto px-4 py-1.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-sm opacity-60 cursor-not-allowed"
+                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base opacity-60 cursor-not-allowed"
                           disabled
                         >
                           You are the Host
                         </button>
                       ) : isUserRegistered ? (
                         <button
-                          className="w-auto px-4 py-1.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-sm opacity-60 cursor-not-allowed"
+                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base opacity-60 cursor-not-allowed"
                           disabled
                         >
                           Registered
                         </button>
                       ) : event.title === 'Dance Competition' ? (
                         <button
-                          className="w-auto px-4 py-1.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-sm hover:from-orange-600 hover:to-pink-600 transition"
+                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition"
                           onClick={() => setDanceModalOpen(true)}
                         >
                           Register
@@ -389,7 +389,7 @@ export default function EventsPage() {
                           href="https://forms.gle/KGuZFDbTqwWPhtYQ7"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-auto px-4 py-1.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-sm hover:from-orange-600 hover:to-pink-600 transition"
+                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition"
                         >
                           Register
                         </a>
