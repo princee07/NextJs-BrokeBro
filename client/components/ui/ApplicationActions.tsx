@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { CheckCircle, Upload, Building } from 'lucide-react';
-import ResumeUpload from '@/components/ui/ResumeUpload';
+import { CheckCircle } from 'lucide-react';
 import { useUserData } from '@/app/lib/hooks/useUserData';
+import UploadForm from '../form';
+
 
 interface ApplicationActionsProps {
     internshipTitle?: string;
@@ -19,33 +20,9 @@ export default function ApplicationActions({
 }: ApplicationActionsProps) {
     const { isAuthenticated, isLoading: authLoading } = useKindeBrowserClient();
     const { userData, loading: userLoading, refetchUserData } = useUserData();
-    const [uploadSuccess, setUploadSuccess] = useState(false);
-    const [uploadError, setUploadError] = useState<string | null>(null);
     const [applicationSuccess, setApplicationSuccess] = useState(false);
+    const [uploadError, setUploadError] = useState<string | null>(null);
     const [isApplying, setIsApplying] = useState(false);
-
-    const handleUploadSuccess = (file: File, url: string) => {
-        setUploadSuccess(true);
-        setUploadError(null);
-        // Clear success message after 3 seconds
-        setTimeout(() => {
-            setUploadSuccess(false);
-        }, 3000);
-    };
-
-    const handleUploadError = (error: string) => {
-        setUploadError(error);
-        setUploadSuccess(false);
-        // Clear error message after 5 seconds
-        setTimeout(() => {
-            setUploadError(null);
-        }, 5000);
-    };
-
-    const handleUploadComplete = async () => {
-        // Refresh user data to get updated resume status
-        await refetchUserData();
-    };
 
     const handleQuickApply = async () => {
         setIsApplying(true);
@@ -55,8 +32,8 @@ export default function ApplicationActions({
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    internshipId: internshipId,
-                    internshipTitle: internshipTitle
+                    internshipId,
+                    internshipTitle
                 })
             });
 
@@ -67,11 +44,8 @@ export default function ApplicationActions({
             }
 
             setApplicationSuccess(true);
-
-            // Refresh user data to update coins
             await refetchUserData();
 
-            // Clear success message after 5 seconds
             setTimeout(() => {
                 setApplicationSuccess(false);
             }, 5000);
@@ -84,7 +58,6 @@ export default function ApplicationActions({
         }
     };
 
-    // Show loading state while checking auth and user data
     if (authLoading || userLoading) {
         return (
             <div className={`space-y-3 ${className}`}>
@@ -95,7 +68,6 @@ export default function ApplicationActions({
         );
     }
 
-    // Show login prompt if not authenticated
     if (!isAuthenticated) {
         return (
             <div className={`space-y-3 ${className}`}>
@@ -114,21 +86,12 @@ export default function ApplicationActions({
 
     return (
         <div className={`space-y-3 ${className}`}>
-            {/* Error message */}
             {uploadError && (
                 <div className="p-3 bg-red-900/50 border border-red-600 rounded-lg">
                     <p className="text-red-300 text-sm">{uploadError}</p>
                 </div>
             )}
 
-            {/* Success message */}
-            {uploadSuccess && (
-                <div className="p-3 bg-green-900/50 border border-green-600 rounded-lg">
-                    <p className="text-green-300 text-sm">Resume uploaded successfully!</p>
-                </div>
-            )}
-
-            {/* Application success message */}
             {applicationSuccess && (
                 <div className="p-4 bg-green-900/50 border border-green-600 rounded-lg">
                     <div className="flex items-center gap-2">
@@ -143,10 +106,8 @@ export default function ApplicationActions({
                 </div>
             )}
 
-            {/* Conditional rendering based on resume status */}
             {userData?.hasResume ? (
                 <>
-                    {/* Quick Apply - only show if user has uploaded resume */}
                     <button
                         onClick={handleQuickApply}
                         disabled={isApplying || applicationSuccess}
@@ -175,24 +136,6 @@ export default function ApplicationActions({
                         )}
                     </button>
 
-                    {/* Upload Resume option (for updating existing resume) */}
-                    <ResumeUpload
-                        onUploadSuccess={handleUploadSuccess}
-                        onUploadError={handleUploadError}
-                        onUploadComplete={handleUploadComplete}
-                        className="w-full"
-                    />
-
-                    {/* Build Resume with AI */}
-                    <a
-                        href="/resume-builder/templates"
-                        className="w-full block bg-gradient-to-r from-orange-500 to-amber-600 text-white font-bold py-3 rounded-lg text-center hover:from-orange-600 hover:to-amber-700 transition-all duration-300 shadow-md hover:shadow-orange-500/20 flex items-center justify-center gap-2"
-                    >
-                        <Building className="w-5 h-5" />
-                        Build Resume with AI
-                    </a>
-
-                    {/* Resume status info */}
                     <div className="p-3 bg-green-900/20 border border-green-600 rounded-lg">
                         <div className="flex items-center gap-2 text-green-300">
                             <CheckCircle className="w-4 h-4" />
@@ -209,27 +152,11 @@ export default function ApplicationActions({
                 </>
             ) : (
                 <>
-                    {/* Upload Resume - primary action when no resume */}
-                    <ResumeUpload
-                        onUploadSuccess={handleUploadSuccess}
-                        onUploadError={handleUploadError}
-                        onUploadComplete={handleUploadComplete}
-                        className="w-full"
-                    />
+                    <UploadForm />
 
-                    {/* Build Resume with AI */}
-                    <a
-                        href="/resume-builder/templates"
-                        className="w-full block bg-gradient-to-r from-orange-500 to-amber-600 text-white font-bold py-3 rounded-lg text-center hover:from-orange-600 hover:to-amber-700 transition-all duration-300 shadow-md hover:shadow-orange-500/20 flex items-center justify-center gap-2"
-                    >
-                        <Building className="w-5 h-5" />
-                        Build Resume with AI
-                    </a>
-
-                    {/* Info message */}
                     <div className="p-3 bg-yellow-900/30 border border-yellow-600 rounded-lg">
                         <p className="text-yellow-300 text-sm">
-                            Upload your resume or build one with AI to enable Quick Apply for internships.
+                            Upload your resume to enable Quick Apply for internships.
                         </p>
                     </div>
                 </>
