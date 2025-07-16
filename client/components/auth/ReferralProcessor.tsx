@@ -1,22 +1,46 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { processReferral } from "@/app/lib/actions/referral.actions";
 
-// Helper function to get a cookie by name from the browser
-function getCookie(name: string): string | undefined {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop()?.split(';').shift();
-}
-
-// Helper function to delete a cookie by name from the browser
-function deleteCookie(name: string) {
-  document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-}
-
 export default function ReferralProcessor() {
+  const [mounted, setMounted] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  // First useEffect to set mounted state
   useEffect(() => {
+    setMounted(true);
+    setIsClient(typeof window !== 'undefined');
+  }, []);
+
+  // Second useEffect for the actual referral processing
+  useEffect(() => {
+    // Multiple guards to ensure we're fully client-side
+    if (!mounted || !isClient || typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
+    // Helper function to get a cookie by name from the browser
+    const getCookie = (name: string): string | undefined => {
+      try {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop()?.split(';').shift();
+      } catch (error) {
+        console.error('Error reading cookie:', error);
+        return undefined;
+      }
+    };
+
+    // Helper function to delete a cookie by name from the browser
+    const deleteCookie = (name: string) => {
+      try {
+        document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+      } catch (error) {
+        console.error('Error deleting cookie:', error);
+      }
+    };
+
     const referralCode = getCookie("brokebro_ref");
 
     if (referralCode) {
@@ -72,7 +96,12 @@ export default function ReferralProcessor() {
         console.error('Error processing referral:', error);
       });
     }
-  }, []); // The empty dependency array ensures this runs only once on mount.
+  }, [mounted, isClient]); // Dependencies include both mounted and isClient
+
+  // Don't render anything during hydration
+  if (!mounted || !isClient) {
+    return null;
+  }
 
   return null; // This component renders nothing to the screen.
 } 
