@@ -225,6 +225,7 @@ export default function ExploreProducts() {
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const router = useRouter();
+  const [showSignupModal, setShowSignupModal] = useState(false);
 
   // Handler for card click
   const handleCardClick = (product: any) => {
@@ -361,7 +362,6 @@ export default function ExploreProducts() {
 
     return () => clearInterval(interval);
   }, [selectedCategory, getCurrentBanners().length]);
-
   // Reset banner index when category changes
   useEffect(() => {
     setBannerIndex(0);
@@ -521,6 +521,8 @@ export default function ExploreProducts() {
                 transition={{ duration: 0.5, delay: 0.4 + (index * 0.1) }}
                 className={`group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10 ${product.size === 'large' ? 'col-span-1 md:col-span-2 h-[400px]' : 'h-[350px]'
                   } ${product.size === 'medium' ? 'row-span-1' : ''}`}
+                onClick={() => handleCardClick(product)}
+                style={{ cursor: 'pointer' }}
               >
                 <div className="p-6 h-full flex flex-col relative">
                   {/* Badge */}

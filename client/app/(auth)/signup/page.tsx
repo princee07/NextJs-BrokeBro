@@ -16,6 +16,10 @@ export default function SignupPage() {
 
   useEffect(() => {
     // Redirect if already authenticated and verified
+    if (isAuthenticated && !isVerified) {
+      router.replace("/student-verification");
+      return;
+    }
     if (isAuthenticated && isVerified) {
       router.replace("/");
       return;
@@ -52,7 +56,7 @@ export default function SignupPage() {
         <RegisterLink
           className="block w-full text-center py-3 rounded-lg bg-gradient-to-r from-orange-500 to-pink-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-orange-600/20 transition-all duration-300"
         >
-          Sign up with email or SSO
+          Sign up with email 
         </RegisterLink>
 
         <div className="text-center">

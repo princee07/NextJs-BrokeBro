@@ -4,6 +4,12 @@ import dbConnect from '@/app/lib/db/connect';
 import User from '@/app/lib/db/models/user.model';
 import nodemailer from 'nodemailer';
 
+// --- ENVIRONMENT VARIABLE CHECK AT STARTUP ---
+if (!process.env.BROKEBRO_MAIL_USER || !process.env.BROKEBRO_MAIL_PASS) {
+    // eslint-disable-next-line no-console
+    console.warn('[BrokeBro] WARNING: BROKEBRO_MAIL_USER or BROKEBRO_MAIL_PASS is not set. Email notifications will not work.');
+}
+
 export async function PUT(request: NextRequest) {
     try {
         // Check admin authentication
@@ -213,7 +219,7 @@ async function sendApprovalEmail(userEmail: string, studentName: string) {
         await transporter.sendMail(mailOptions);
         console.log('Approval email sent successfully to:', userEmail);
     } catch (error) {
-        console.error('Error sending approval email to', userEmail, ':', error);
+        console.error('Error sending approval email to', userEmail, ':', error instanceof Error ? error.stack : error);
         // Don't throw error to prevent blocking the verification update
     }
 }

@@ -16,15 +16,8 @@ import NavbarUserMenu from './NavbarUserMenu';
 import VerifiedBadge from '../ui/VerifiedBadge';
 import { useStudentVerification } from '@/hooks/useStudentVerification';
 import { getUserReferralData } from "@/app/lib/actions/referral.actions";
-import {
-  HiOutlineBriefcase,
-  HiOutlineSparkles,
-  HiOutlineGlobeAlt,
-  HiOutlineDesktopComputer,
-  HiOutlineGift,
-  HiOutlineCalendar
-} from 'react-icons/hi';
 import SearchBar from '../ui/SearchBar';
+import { usePathname } from 'next/navigation';
 // Pop sound path
 const popSoundPath = '/assets/sounds/pop.mp4';
 
@@ -43,11 +36,11 @@ export default function NavbarClient({ user }: { user: any }) {
   const [referralUrl, setReferralUrl] = useState('');
   const [referralLoading, setReferralLoading] = useState(false);
   const [showVerificationModal, setShowVerificationModal] = useState(false);
-  const [showIconsOnly, setShowIconsOnly] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navContainerRef = useRef<HTMLDivElement>(null);
   const navLinksRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
 
   // Student verification state
   const { isVerified } = useStudentVerification();
@@ -67,116 +60,6 @@ export default function NavbarClient({ user }: { user: any }) {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Monitor navbar space and determine if we should show icons only
-  useEffect(() => {
-    const checkNavbarSpace = () => {
-      if (!navLinksRef.current || !navContainerRef.current) return;
-
-      const windowWidth = window.innerWidth;
-      const navContainer = navContainerRef.current;
-
-      // For very small screens (mobile), always show full text when there's space
-      if (windowWidth < 768) {
-        setShowIconsOnly(false);
-        return;
-      }
-
-      // Simple and reliable zoom detection using devicePixelRatio and window dimensions
-      // Get browser zoom level - this is more reliable than screen width comparison
-      const getBrowserZoom = () => {
-        // Method 1: Using outerWidth vs innerWidth (most reliable)
-        if (window.outerWidth && window.innerWidth) {
-          return Math.round((window.outerWidth / window.innerWidth) * 100);
-        }
-
-        // Method 2: Fallback using devicePixelRatio
-        const devicePixelRatio = window.devicePixelRatio || 1;
-        return Math.round(devicePixelRatio * 100);
-      };
-
-      const zoomLevel = getBrowserZoom();
-      console.log('Current zoom level:', zoomLevel + '%'); // Debug log
-
-      // Get the width of the navigation container
-      const containerWidth = navContainer.clientWidth;
-
-      // Calculate the width of other elements in the nav more accurately
-      const logoWidth = 220; // Logo area with some buffer
-      const searchWidth = windowWidth < 1024 ? 280 : 340; // Search area (responsive)
-      const authWidth = windowWidth < 1024 ? 180 : 220; // Auth buttons area (responsive)
-      const padding = 60; // Safety padding for breathing room
-
-      // Calculate available space for navigation links
-      const availableSpace = containerWidth - logoWidth - searchWidth - authWidth - padding;
-
-      // Calculate estimated width needed for all navigation links with full text
-      const estimatedTextWidth = navCategories.reduce((total, category) => {
-        // Estimate: ~8px per character + 32px padding + some buffer for font weight
-        return total + (category.name.length * 8) + 32;
-      }, 0);
-
-      // Calculate estimated width needed for icon-only display
-      const estimatedIconWidth = navCategories.length * (48 + 8); // 48px for icon container + 8px margin
-
-      // Primary zoom-based logic
-      if (zoomLevel <= 90) {
-        // At 90% zoom or lower (including 80%), show full text unless absolutely no space
-        if (availableSpace < estimatedTextWidth - 150) { // Give generous tolerance
-          setShowIconsOnly(true);
-        } else {
-          setShowIconsOnly(false);
-        }
-      } else if (zoomLevel >= 100) {
-        // At 100% zoom or higher, prefer icons for better space utilization
-        setShowIconsOnly(true);
-      } else {
-        // For zoom levels between 90% and 100%, use hybrid logic
-        if (availableSpace < estimatedTextWidth + 50) {
-          setShowIconsOnly(true);
-        } else {
-          setShowIconsOnly(false);
-        }
-      }
-
-      // Override: If even icons don't fit, force icons anyway (they're more compact)
-      if (estimatedIconWidth > availableSpace && windowWidth >= 768) {
-        setShowIconsOnly(true);
-      }
-    };
-
-    // Check on initial load with a delay to ensure DOM is ready
-    const initialCheck = () => {
-      setTimeout(checkNavbarSpace, 300);
-    };
-
-    initialCheck();
-
-    // Create ResizeObserver to watch for container size changes
-    let resizeObserver: ResizeObserver | null = null;
-
-    if (typeof ResizeObserver !== 'undefined' && navContainerRef.current) {
-      resizeObserver = new ResizeObserver(() => {
-        // Debounce the resize check
-        setTimeout(checkNavbarSpace, 100);
-      });
-      resizeObserver.observe(navContainerRef.current);
-    }
-
-    // Also listen to window resize as fallback
-    const debouncedResize = () => {
-      setTimeout(checkNavbarSpace, 100);
-    };
-
-    window.addEventListener('resize', debouncedResize);
-
-    return () => {
-      if (resizeObserver) {
-        resizeObserver.disconnect();
-      }
-      window.removeEventListener('resize', debouncedResize);
-    };
-  }, [showIconsOnly]); // Add showIconsOnly as dependency for hysteresis
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -218,32 +101,11 @@ export default function NavbarClient({ user }: { user: any }) {
   // }, [adIndex, showAd]);
 
   const navCategories = [
-    {
-      name: 'INTERNSHIPS',
-      path: '/intern',
-      icon: <HiOutlineBriefcase className="w-5 h-5" />
-    },
-    {
-      name: 'FASHION & BEAUTY',
-      path: '/fashion',
-      icon: <HiOutlineSparkles className="w-5 h-5" />
-    },
-    {
-      name: 'TRAVEL AND LIFESTYLE',
-      path: '/lifestyle',
-      icon: <HiOutlineGlobeAlt className="w-5 h-5" />
-    },
-    {
-      name: 'TECHNOLOGY',
-      path: '/technology',
-      icon: <HiOutlineDesktopComputer className="w-5 h-5" />
-    },
-
-    {
-      name: 'EVENTS',
-      path: '/events',
-      icon: <HiOutlineCalendar className="w-5 h-5" />
-    },
+    { name: 'INTERNSHIPS', path: '/intern' },
+    { name: 'FASHION & BEAUTY', path: '/fashion' },
+    { name: 'TRAVEL AND LIFESTYLE', path: '/lifestyle' },
+    { name: 'TECHNOLOGY', path: '/technology' },
+    { name: 'EVENTS', path: '/events' },
   ];
 
   useEffect(() => {
@@ -463,71 +325,37 @@ export default function NavbarClient({ user }: { user: any }) {
                     }}
                   />
                 )}
-                {navCategories.map((category, index) => (
-                  <motion.div
-                    key={index}
-                    id={`nav-${category.name}`}
-                    onMouseEnter={() => setHoveredCategory(category.name)}
-                    onMouseLeave={() => setHoveredCategory(null)}
-                    whileHover={{ scale: showIconsOnly ? 1.15 : 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ duration: showIconsOnly ? 0.15 : 0.3 }}
-                  >
-                    <Link href={category.path}>
-                      <div className={`relative ${showIconsOnly ? 'px-2 py-2 mx-0.5' : 'px-4 py-2'} rounded-full transition-all duration-300 ${activeCategory === category.name
-                        ? 'text-white'
-                        : 'text-gray-300 hover:text-white'
-                        }`}>
-                        {/* Conditional display based on available space */}
-                        <motion.div
-                          layout
-                          transition={{ duration: 0.2, ease: "easeInOut" }}
-                          className="flex items-center justify-center"
-                        >
-                          {showIconsOnly ? (
-                            // Show only icon when space is limited with faster hover effects
+                {navCategories.map((category, index) => {
+                  const isActive = pathname === category.path || pathname.startsWith(category.path + '/');
+                  return (
+                    <motion.div
+                      key={index}
+                      id={`nav-${category.name}`}
+                      onMouseEnter={() => setHoveredCategory(category.name)}
+                      onMouseLeave={() => setHoveredCategory(null)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Link href={category.path}>
+                        <div className={`relative px-4 py-2 rounded-full transition-all duration-300 ${isActive ? 'text-white' : 'text-gray-300 hover:text-white'}`}>
+                          <span className={`text-sm font-medium whitespace-nowrap transition-all duration-200 ${isActive ? 'bg-gradient-to-r from-orange-300 to-pink-300 text-transparent bg-clip-text scale-105' : ''}`}>
+                            {category.name}
+                          </span>
+                          {isActive && (
                             <motion.div
-                              className={`flex items-center justify-center p-1 rounded-lg ${hoveredCategory === category.name
-                                ? 'text-orange-300 bg-orange-500/10 scale-110'
-                                : 'hover:bg-gray-700/30'
-                                } transition-all duration-150`}
-                              title={category.name}
-                              whileHover={{
-                                scale: 1.1,
-                                backgroundColor: "rgba(249, 115, 22, 0.1)"
-                              }}
-                              transition={{ duration: 0.1 }}
-                            >
-                              <span className="transform transition-transform duration-100 hover:scale-110">
-                                {React.cloneElement(category.icon, {
-                                  className: `w-5 h-5 ${hoveredCategory === category.name ? 'text-orange-300' : ''}`
-                                })}
-                              </span>
-                            </motion.div>
-                          ) : (
-                            // Show full text when there's enough space
-                            <span className={`text-sm font-medium whitespace-nowrap transition-all duration-200 ${hoveredCategory === category.name
-                              ? 'bg-gradient-to-r from-orange-300 to-pink-300 text-transparent bg-clip-text scale-105'
-                              : ''
-                              }`}>
-                              {category.name}
-                            </span>
+                              className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full w-3/5"
+                              initial={{ scaleX: 0 }}
+                              animate={{ scaleX: 1 }}
+                              transition={{ duration: 0.2 }}
+                              layoutId={`underline-${category.name}`}
+                            />
                           )}
-                        </motion.div>
-                        {(hoveredCategory === category.name || activeCategory === category.name) && (
-                          <motion.div
-                            className={`absolute -bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full ${showIconsOnly ? 'w-6' : 'w-3/5'
-                              }`}
-                            initial={{ scaleX: 0 }}
-                            animate={{ scaleX: 1 }}
-                            transition={{ duration: showIconsOnly ? 0.15 : 0.2 }}
-                            layoutId={`underline-${category.name}`}
-                          />
-                        )}
-                      </div>
-                    </Link>
-                  </motion.div>
-                ))}
+                        </div>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
               </div>
             </div>
             {/* Authentication Buttons */}
@@ -793,27 +621,25 @@ export default function NavbarClient({ user }: { user: any }) {
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             <div className="container mx-auto px-4 py-3">
-              {navCategories.map((category, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Link
-                    href={category.path}
-                    className="block py-3 px-4 text-gray-100 hover:text-white border-b border-orange-500/10 hover:bg-orange-500/5 rounded-lg transition-all duration-200"
-                    onClick={() => setMobileMenuOpen(false)}
+              {navCategories.map((category, index) => {
+                const isActive = pathname === category.path || pathname.startsWith(category.path + '/');
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="text-orange-400">
-                        {category.icon}
-                      </div>
-                      <span className="font-medium">{category.name}</span>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}              <div className="mt-6 pb-4 px-4 grid grid-cols-2 gap-3">
+                    <Link
+                      href={category.path}
+                      className={`block py-3 px-4 font-medium border-b border-orange-500/10 hover:text-white hover:bg-orange-500/5 rounded-lg transition-all duration-200 ${isActive ? 'text-white underline underline-offset-4 decoration-2 decoration-pink-500' : 'text-gray-100'}`}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {category.name}
+                    </Link>
+                  </motion.div>
+                );
+              })}              <div className="mt-6 pb-4 px-4 grid grid-cols-2 gap-3">
                 {shouldShowAuth ? (
                   user ? (
                     <LogoutLink postLogoutRedirectURL={LOGOUT_REDIRECT_URL}>

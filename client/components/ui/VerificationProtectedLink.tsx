@@ -92,14 +92,6 @@ export default function VerificationProtectedLink({
                     </div>
                 )}
 
-                {/* Verification Badge for Verified Users */}
-                {requireVerification && isVerified && (
-                    <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 shadow-lg">
-                        <ShieldCheck className="w-3 h-3" />
-                        Verified
-                    </div>
-                )}
-
                 {/* Tooltip */}
                 {showTooltip && showTooltipState && requireVerification && !isVerified && (
                     <motion.div
