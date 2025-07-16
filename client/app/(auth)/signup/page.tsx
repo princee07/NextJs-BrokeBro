@@ -11,12 +11,13 @@ export default function SignupPage() {
   useEffect(() => {
     // If there's a referral code in the URL, store it in a cookie for later use
     if (referralCode) {
-      // Set cookie to expire in 30 days
       const expirationDate = new Date();
       expirationDate.setDate(expirationDate.getDate() + 30);
       document.cookie = `brokebro_ref=${referralCode}; expires=${expirationDate.toUTCString()}; path=/; SameSite=Lax`;
     }
   }, [referralCode]);
+
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-4">
@@ -42,6 +43,14 @@ export default function SignupPage() {
           className="block w-full text-center py-3 rounded-lg bg-gradient-to-r from-orange-500 to-pink-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-orange-600/20 transition-all duration-300"
         >
           Sign up with email or SSO
+        </RegisterLink>
+
+        {/* Google Sign-In Button using Kinde RegisterLink with connection */}
+        <RegisterLink
+          className="block w-full text-center py-3 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-blue-600/20 transition-all duration-300"
+          authUrlParams={{ connection_id: "conn_019797c30eecdd2694bde53419dda788" }}
+        >
+          Sign in with Google
         </RegisterLink>
 
         <div className="text-center">
