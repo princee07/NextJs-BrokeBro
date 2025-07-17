@@ -229,7 +229,7 @@ export default function NavbarClient({ user }: { user: any }) {
       icon: <HiOutlineSparkles className="w-5 h-5" />
     },
     {
-      name: 'TRAVEL AND LIFESTYLE',
+      name: 'TRAVEL',
       path: '/lifestyle',
       icon: <HiOutlineGlobeAlt className="w-5 h-5" />
     },
