@@ -684,7 +684,7 @@ export default function NavbarClient({ user }: { user: any }) {
       </nav>
 
       {/* --- NAVBAR SEARCH BAR --- */}
-      <div className="bg-gradient-to-r from-black via-black/95 to-black/90 py-4 px-4 border-b border-orange-500/20 shadow-md">
+       <div className="bg-gradient-to-r from-black via-black/95 to-black/90 py-2 px-2 border-b border-orange-500/20 shadow-md">
         <div className="container mx-auto flex flex-col items-center justify-center relative">
           <div className="relative w-full max-w-2xl group z-50">
             <div className="absolute inset-0 rounded-full transition-all duration-500" />
