@@ -421,7 +421,7 @@ export default function ExploreProducts() {
             initial={{ opacity: 0, y: 50 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="col-span-1 md:col-span-2 lg:col-span-3 rounded-2xl overflow-hidden h-[260px] md:h-[340px] lg:h-[420px] transition-all duration-1000 ease-in-out relative group"
+            className="col-span-1 md:col-span-2 lg:col-span-3 rounded-2xl overflow-hidden h-[160px] md:h-[200px] lg:h-[260px] transition-all duration-1000 ease-in-out relative group"
           >
             {getCurrentBanners()[bannerIndex]?.url ? (
               // Clickable banner with affiliate link - Protected by verification
