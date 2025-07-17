@@ -229,7 +229,7 @@ export default function NavbarClient({ user }: { user: any }) {
       icon: <HiOutlineSparkles className="w-5 h-5" />
     },
     {
-      name: 'TRAVEL AND LIFESTYLE',
+      name: 'TRAVEL',
       path: '/lifestyle',
       icon: <HiOutlineGlobeAlt className="w-5 h-5" />
     },
@@ -587,17 +587,7 @@ export default function NavbarClient({ user }: { user: any }) {
                             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m4 4h-1v-4h-1m-4 4h-1v-4h-1" /></svg>
                             Refer & Earn
                           </button>
-
-                          {/* Get Verified Button */}
-                          <button
-                            className="w-full flex items-center justify-center px-4 py-2 text-green-500 hover:text-white hover:bg-green-600/10 transition-colors duration-200 font-semibold border-b border-green-500/20 bg-green-500/5"
-                            onClick={() => setShowVerificationModal(true)}
-                          >
-                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2zm0 2c-2.21 0-4 1.79-4 4v1h8v-1c0-2.21-1.79-4-4-4z" />
-                            </svg>
-                            <span className="font-bold">Get Verified</span>
-                          </button>
+                           
 
                         
                             {/* Admin Panel Option - Only for authorized emails */}
