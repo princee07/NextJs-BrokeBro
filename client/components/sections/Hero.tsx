@@ -172,162 +172,159 @@ const Hero = () => {
   const column2Cards = [...brandCards.slice(6), ...brandCards.slice(6)]; // 12 total cards
 
   // ... existing useEffects
-// Add this state to track real-time countdown
+  // Add this state to track real-time countdown
 
 
-// For expiring codes (Glued, Ultimate RC), code is valid for only 1 reveal: after modal opens, mark as expired and block new code for 24h
-useEffect(() => {
-  if (selectedBrand?.codeType === 'expiring' && codeData && showBrandModal) {
-    const userId = "kp_3ba83e44eb4d4956b8fe252c8064da8a";
-    const storageKey = `code_${selectedBrand.slug}_${userId}`;
-    // Mark code as used after reveal
-    if (codeData && !codeData.isExpired) {
-      // Mark as expired in localStorage, and store expireAt
+  // For expiring codes (Glued, Ultimate RC), code is valid for only 1 reveal: after modal opens, mark as expired and block new code for 24h
+  useEffect(() => {
+    if (selectedBrand?.codeType === 'expiring' && codeData && showBrandModal) {
+      const userId = "kp_3ba83e44eb4d4956b8fe252c8064da8a";
+      const storageKey = `code_${selectedBrand.slug}_${userId}`;
+      // Mark code as used after reveal
+      if (codeData && !codeData.isExpired) {
+        // Mark as expired in localStorage, and store expireAt
+        const storedData = localStorage.getItem(storageKey);
+        let expireAt = Date.now() + 24 * 60 * 60 * 1000;
+        if (storedData) {
+          const parsed = JSON.parse(storedData);
+          parsed.isExpired = true;
+          parsed.expireAt = expireAt;
+          localStorage.setItem(storageKey, JSON.stringify(parsed));
+        } else {
+          // fallback: store expireAt anyway
+          localStorage.setItem(storageKey, JSON.stringify({ isExpired: true, expireAt }));
+        }
+        // Mark as expired in state
+        setCodeData((prev: any) => ({ ...prev, isExpired: true, expireAt }));
+      }
+    }
+  }, [selectedBrand, showBrandModal]);
+
+  // When opening modal for expiring code, block new code for 24h after reveal
+  useEffect(() => {
+    if (selectedBrand?.codeType === 'expiring' && showBrandModal) {
+      const userId = "kp_3ba83e44eb4d4956b8fe252c8064da8a";
+      const storageKey = `code_${selectedBrand.slug}_${userId}`;
       const storedData = localStorage.getItem(storageKey);
-      let expireAt = Date.now() + 24 * 60 * 60 * 1000;
       if (storedData) {
         const parsed = JSON.parse(storedData);
-        parsed.isExpired = true;
-        parsed.expireAt = expireAt;
-        localStorage.setItem(storageKey, JSON.stringify(parsed));
-      } else {
-        // fallback: store expireAt anyway
-        localStorage.setItem(storageKey, JSON.stringify({ isExpired: true, expireAt }));
-      }
-      // Mark as expired in state
-      setCodeData((prev: any) => ({ ...prev, isExpired: true, expireAt }));
-    }
-  }
-}, [selectedBrand, showBrandModal]);
-
-// When opening modal for expiring code, block new code for 24h after reveal
-useEffect(() => {
-  if (selectedBrand?.codeType === 'expiring' && showBrandModal) {
-    const userId = "kp_3ba83e44eb4d4956b8fe252c8064da8a";
-    const storageKey = `code_${selectedBrand.slug}_${userId}`;
-    const storedData = localStorage.getItem(storageKey);
-    if (storedData) {
-      const parsed = JSON.parse(storedData);
-      if (parsed.isExpired && parsed.expireAt) {
-        const now = Date.now();
-        if (now < parsed.expireAt) {
-          // Block new code, show unavailable message
-          setCodeData({ isExpired: true, expireAt: parsed.expireAt });
-          return;
-        } else {
-          // 24h passed, allow new code
-          localStorage.removeItem(storageKey);
-          const newCodeData = getOrCreateExpiringCode(selectedBrand, userId);
-          setCodeData(newCodeData);
+        if (parsed.isExpired && parsed.expireAt) {
+          const now = Date.now();
+          if (now < parsed.expireAt) {
+            // Block new code, show unavailable message
+            setCodeData({ isExpired: true, expireAt: parsed.expireAt });
+            return;
+          } else {
+            // 24h passed, allow new code
+            localStorage.removeItem(storageKey);
+            const newCodeData = getOrCreateExpiringCode(selectedBrand, userId);
+            setCodeData(newCodeData);
+          }
+        } else if (parsed.isExpired) {
+          // fallback: block for 24h from now
+          const expireAt = Date.now() + 24 * 60 * 60 * 1000;
+          parsed.expireAt = expireAt;
+          localStorage.setItem(storageKey, JSON.stringify(parsed));
+          setCodeData({ isExpired: true, expireAt });
         }
-      } else if (parsed.isExpired) {
-        // fallback: block for 24h from now
-        const expireAt = Date.now() + 24 * 60 * 60 * 1000;
-        parsed.expireAt = expireAt;
-        localStorage.setItem(storageKey, JSON.stringify(parsed));
-        setCodeData({ isExpired: true, expireAt });
+      } else {
+        // No code yet, allow new code
+        const newCodeData = getOrCreateExpiringCode(selectedBrand, userId);
+        setCodeData(newCodeData);
       }
-    } else {
-      // No code yet, allow new code
-      const newCodeData = getOrCreateExpiringCode(selectedBrand, userId);
-      setCodeData(newCodeData);
     }
-  }
-}, [selectedBrand, showBrandModal]);
+  }, [selectedBrand, showBrandModal]);
 
-// Update your handleBrandCardClick function to handle expiring codes for Ultimate RC and Glued
-const handleBrandCardClick = (brand: any) => {
-  if (isLoading) return;
-  if (!isAuthenticated) {
-    router.push('/signup');
-    return;
-  }
-  if (!isUserVerified) {
-    router.push('/student-verification');
-    return;
-  }
-  let currentCodeData;
-  const userId = "kp_3ba83e44eb4d4956b8fe252c8064da8a";
-  if (brand.codeType === 'expiring') {
-    const storageKey = `code_${brand.slug}_${userId}`;
-    const storedData = localStorage.getItem(storageKey);
-    if (storedData) {
-      const parsed = JSON.parse(storedData);
-      if (parsed.isExpired && parsed.expireAt) {
-        const now = Date.now();
-        if (now < parsed.expireAt) {
-          // Block new code
-          setCodeData({ isExpired: true, expireAt: parsed.expireAt });
+  // Update your handleBrandCardClick function to handle expiring codes for Ultimate RC and Glued
+  const handleBrandCardClick = (brand: any) => {
+    if (isLoading) return;
+    if (!isAuthenticated) {
+      router.push('/signup');
+      return;
+    }
+    if (!isUserVerified) {
+      router.push('/student-verification');
+      return;
+    }
+    let currentCodeData;
+    const userId = "kp_3ba83e44eb4d4956b8fe252c8064da8a";
+    if (brand.codeType === 'expiring') {
+      const storageKey = `code_${brand.slug}_${userId}`;
+      const storedData = localStorage.getItem(storageKey);
+      if (storedData) {
+        const parsed = JSON.parse(storedData);
+        if (parsed.isExpired && parsed.expireAt) {
+          const now = Date.now();
+          if (now < parsed.expireAt) {
+            // Block new code
+            setCodeData({ isExpired: true, expireAt: parsed.expireAt });
+            setSelectedBrand(brand);
+            setShowBrandModal(true);
+            return;
+          } else {
+            // 24h passed, allow new code
+            localStorage.removeItem(storageKey);
+            const newCodeData = getOrCreateExpiringCode(brand, userId);
+            currentCodeData = newCodeData;
+          }
+        } else if (parsed.isExpired) {
+          // fallback: block for 24h from now
+          const expireAt = Date.now() + 24 * 60 * 60 * 1000;
+          parsed.expireAt = expireAt;
+          localStorage.setItem(storageKey, JSON.stringify(parsed));
+          setCodeData({ isExpired: true, expireAt });
           setSelectedBrand(brand);
           setShowBrandModal(true);
           return;
         } else {
-          // 24h passed, allow new code
-          localStorage.removeItem(storageKey);
-          const newCodeData = getOrCreateExpiringCode(brand, userId);
-          currentCodeData = newCodeData;
+          // Not expired, but code exists (shouldn't happen)
+          currentCodeData = parsed;
         }
-      } else if (parsed.isExpired) {
-        // fallback: block for 24h from now
-        const expireAt = Date.now() + 24 * 60 * 60 * 1000;
-        parsed.expireAt = expireAt;
-        localStorage.setItem(storageKey, JSON.stringify(parsed));
-        setCodeData({ isExpired: true, expireAt });
-        setSelectedBrand(brand);
-        setShowBrandModal(true);
-        return;
       } else {
-        // Not expired, but code exists (shouldn't happen)
-        currentCodeData = parsed;
+        // No code yet, generate new
+        const newCodeData = getOrCreateExpiringCode(brand, userId);
+        currentCodeData = newCodeData;
       }
     } else {
-      // No code yet, generate new
-      const newCodeData = getOrCreateExpiringCode(brand, userId);
-      currentCodeData = newCodeData;
+      // Fixed code
+      currentCodeData = {
+        code: brand.code || 'STUDENT10',
+        isExpired: false,
+        timeLeft: null,
+      };
     }
-  } else {
-    // Fixed code
-    currentCodeData = {
-      code: brand.code || 'STUDENT10',
-      isExpired: false,
-      timeLeft: null,
-    };
-  }
-  setCodeData(currentCodeData);
-  setSelectedBrand(brand);
-  setShowBrandModal(true);
-};
+    setCodeData(currentCodeData);
+    setSelectedBrand(brand);
+    setShowBrandModal(true);
+  };
 
   return (
-    <section className="relative w-full min-h-[70vh] flex flex-col justify-center items-center py-16 px-4 overflow-hidden" style={{}}>
+    <section className="relative w-full min-h-[70vh] flex flex-col justify-center items-center py-16 px-4 overflow-hidden pt-24 md:pt-32">
       {/* Background image */}
       <div className="absolute inset-0 w-full h-full z-0">
         <img
-          src="/assets/images/hero-internship.png"
+          src="/assets/mainhero.png"
           alt="Background crowd"
-          className="w-full h-full object-cover object-center"
-          style={{ filter: 'brightness(0.45)' }}
+          className="w-full h-full object-contain object-center"
+          style={{ filter: 'brightness(0.45)', objectFit: 'contain', objectPosition: 'center', minHeight: '100%', minWidth: '100%' }}
         />
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/60" />
       </div>
       <div className="relative z-10 w-full max-w-2xl mx-auto flex flex-col items-center text-center">
-        {/* Illustration */}
-        <img
-          src="/assets/images/hero-internship.png"
-          alt="Student deals illustration"
-          className="w-32 h-32 object-contain mx-auto mb-6 drop-shadow-xl"
-        />
         {/* Heading */}
-        <h1 className="mt-12 md:mt-20 text-5xl md:text-7xl font-extrabold text-white mb-3 leading-tight drop-shadow-lg">
-          Unlock <span className="text-yellow-300">Instant Student Discounts</span>
+        <h1 className="mt-24 md:mt-32 text-5xl md:text-7xl font-extrabold text-white mb-3 leading-tight drop-shadow-lg">
+          <span>Unlock </span>
+          <span className="text-yellow-300" style={{ fontSize: '1.5em', fontWeight: 900, letterSpacing: '1px', textShadow: '0 4px 16px #000, 0 1px 0 #fff' }}>Instant</span>
+          <span> </span>
+          <span>Student Discounts</span>
         </h1>
         {/* Subheading */}
         <p className="text-lg md:text-xl text-white/90 mb-6">
           One free account. 300+ brands. Real savings for real students.
         </p>
         {/* Key Benefits */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+        {/* <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
           <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full text-white font-medium text-base shadow">
             <FaShieldAlt className="text-green-300 text-lg" /> Verified student-only deals
           </div>
@@ -337,7 +334,7 @@ const handleBrandCardClick = (brand: any) => {
           <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full text-white font-medium text-base shadow">
             <FaBolt className="text-yellow-300 text-lg" /> Instant access—sign up in seconds
           </div>
-        </div>
+        </div> */}
         {/* CTA Button */}
         <a href="/signup" className="w-full max-w-xs">
           <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-orange-900 font-bold text-lg py-4 px-8 rounded-full shadow-lg transition-all duration-300 mb-3 animate-bounce focus:outline-none">

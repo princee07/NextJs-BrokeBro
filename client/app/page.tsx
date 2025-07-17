@@ -30,10 +30,10 @@ export default function Home() {
           </div>
         </div>
       )}
-
-      <OfferSlider />
       <TopBrands />
       <ExploreProducts />
+      <OfferSlider />
+
       <OrbitTestimonials />
 
       {/* Development Test Controls */}
