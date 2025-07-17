@@ -413,35 +413,36 @@ export default function NavbarClient({ user }: { user: any }) {
 
       {/* Main Navbar */}
       <nav
-        className={`w-full transition-all duration-500 relative ${scrolled
-          ? 'py-0 bg-black/90 backdrop-blur-md shadow-lg shadow-orange-900/10'
-          : 'py-0 bg-black'
-          }`}
-        style={{ height: '70px' }}
+      className={`w-full transition-all duration-500 relative ${
+          scrolled
+            ? 'py-0 bg-black/90 backdrop-blur-md shadow-lg shadow-orange-900/10'
+            : 'py-0 bg-black'
+        }`}
+        style={{ height: 'auto' }}
       >
-        <div className="container mx-auto px-4 h-full" ref={navContainerRef}>
-          <div className="flex justify-between items-center h-full">
-            {/* Logo */}
-            <Link href="/" className="relative h-full flex items-center">
-              <motion.div
-                className="relative"
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              >
-                <div className="relative h-20 w-56" style={{ marginBottom: '-5px' }}>
-                  <Image
-                    src="/assets/images/brokebro.png"
-                    alt="BrokeBro Logo"
-                    fill
-                    style={{
-                      objectFit: 'contain',
-                      objectPosition: 'left center'
-                    }}
-                    priority
-                  />
-                </div>
-              </motion.div>
-            </Link>
+        <div className="container mx-auto px-2 py-2" ref={navContainerRef}>
+          <div className="flex flex-col space-y-1">
+            <div className="flex justify-between items-center h-full overflow-visible gap-2">
+              <Link href="/" className="relative flex items-center">
+                <motion.div
+                  className="relative"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <div className="relative h-[60px] w-[150px]">
+                    <Image
+                      src="/assets/images/brokebro.png"
+                      alt="BrokeBro Logo"
+                      fill
+                      style={{
+                        objectFit: 'contain',
+                        objectPosition: 'left center',
+                      }}
+                      priority
+                    />
+                  </div>
+                </motion.div>
+              </Link>
 
             {/* Nav Links - Desktop */}
             <div className="hidden md:flex items-center justify-center space-x-1 mx-auto">
@@ -474,55 +475,17 @@ export default function NavbarClient({ user }: { user: any }) {
                     transition={{ duration: showIconsOnly ? 0.15 : 0.3 }}
                   >
                     <Link href={category.path}>
-                      <div className={`relative ${showIconsOnly ? 'px-2 py-2 mx-0.5' : 'px-4 py-2'} rounded-full transition-all duration-300 ${activeCategory === category.name
-                        ? 'text-white'
-                        : 'text-gray-300 hover:text-white'
-                        }`}>
-                        {/* Conditional display based on available space */}
-                        <motion.div
-                          layout
-                          transition={{ duration: 0.2, ease: "easeInOut" }}
-                          className="flex items-center justify-center"
-                        >
-                          {showIconsOnly ? (
-                            // Show only icon when space is limited with faster hover effects
-                            <motion.div
-                              className={`flex items-center justify-center p-1 rounded-lg ${hoveredCategory === category.name
-                                ? 'text-orange-300 bg-orange-500/10 scale-110'
-                                : 'hover:bg-gray-700/30'
-                                } transition-all duration-150`}
-                              title={category.name}
-                              whileHover={{
-                                scale: 1.1,
-                                backgroundColor: "rgba(249, 115, 22, 0.1)"
-                              }}
-                              transition={{ duration: 0.1 }}
-                            >
-                              <span className="transform transition-transform duration-100 hover:scale-110">
-                                {React.cloneElement(category.icon, {
-                                  className: `w-5 h-5 ${hoveredCategory === category.name ? 'text-orange-300' : ''}`
-                                })}
-                              </span>
-                            </motion.div>
-                          ) : (
-                            // Show full text when there's enough space
-                            <span className={`text-sm font-medium whitespace-nowrap transition-all duration-200 ${hoveredCategory === category.name
-                              ? 'bg-gradient-to-r from-orange-300 to-pink-300 text-transparent bg-clip-text scale-105'
-                              : ''
-                              }`}>
-                              {category.name}
-                            </span>
-                          )}
-                        </motion.div>
+                       <div className={`relative px-2 py-2 rounded-full transition-all duration-300 ${
+                        activeCategory === category.name
+                          ? 'text-white bg-gradient-to-r from-orange-500/20 to-pink-500/20'
+                          : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-pink-500/20'
+                      }`}>
+                        <span className="text-xs font-medium whitespace-nowrap">
+                          {category.name}
+                        </span>
+                         
                         {(hoveredCategory === category.name || activeCategory === category.name) && (
-                          <motion.div
-                            className={`absolute -bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full ${showIconsOnly ? 'w-6' : 'w-3/5'
-                              }`}
-                            initial={{ scaleX: 0 }}
-                            animate={{ scaleX: 1 }}
-                            transition={{ duration: showIconsOnly ? 0.15 : 0.2 }}
-                            layoutId={`underline-${category.name}`}
-                          />
+                           <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full w-3/5" />
                         )}
                       </div>
                     </Link>
@@ -716,6 +679,7 @@ export default function NavbarClient({ user }: { user: any }) {
               </motion.button>
             </div>
           </div>
+        </div>
         </div>
       </nav>
 
