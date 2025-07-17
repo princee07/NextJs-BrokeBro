@@ -11,6 +11,7 @@ import { useStudentVerification } from '@/hooks/useStudentVerification';
 import { getOrCreateExpiringCode } from '../../utils/codeExpiry';
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 import { useUserVerification } from '@/hooks/useUserVerification';
+import { FaCheckCircle, FaShieldAlt, FaBolt, FaEnvelopeOpenText } from 'react-icons/fa';
 // Pop sound path
 const popSoundPath = '/assets/sounds/pop.mp4';
 
@@ -298,389 +299,53 @@ const handleBrandCardClick = (brand: any) => {
 };
 
   return (
-    <div className="relative min-h-screen bg-black overflow-hidden">
-
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-violet-900/20 via-black to-black"></div>
-      <div className="absolute top-0 left-0 w-full h-full">
-        {/* Animated gradient blobs */}
-        <motion.div
-          className="absolute top-10 left-10 w-72 h-72 bg-purple-700/20 rounded-full filter blur-3xl"
-          animate={{
-            x: [0, 30, 0],
-            y: [0, 40, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            repeatType: "reverse"
-          }}
+    <section className="relative w-full min-h-[70vh] flex flex-col justify-center items-center py-16 px-4 overflow-hidden" style={{}}>
+      {/* Background image */}
+      <div className="absolute inset-0 w-full h-full z-0">
+        <img
+          src="/assets/images/hero-internship.png"
+          alt="Background crowd"
+          className="w-full h-full object-cover object-center"
+          style={{ filter: 'brightness(0.45)' }}
         />
-        <motion.div
-          className="absolute top-20 right-20 w-96 h-96 bg-orange-500/10 rounded-full filter blur-3xl"
-          animate={{
-            x: [0, -40, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            repeatType: "reverse",
-            delay: 2
-          }}
-        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/60" />
       </div>
-
-      {/* Content Container */}
-      <div className="container mx-auto px-4 pb-20 relative z-10">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center">
-          {/* Hero Text Content - WITH FIXED SPACING */}
-          <div className="w-full lg:w-1/2 mb-10 lg:mb-0 lg:sticky lg:top-32 mt-72">
-            {/* Fixed height container for main heading */}
-            <div className="h-[130px] md:h-[150px]">
-              <motion.div
-                className="space-y-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8 }}
-              >
-                {/* Main heading with DECREASED font size */}
-                <div className="flex items-center">
-                  <h1 className="text-3xl md:text-5xl font-extrabold">
-                    <span className="bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 bg-clip-text text-transparent inline-block">
-                      {typedText}
-                      <span className={`inline-block w-1 h-8 bg-orange-400 ml-1 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'}`}></span>
-                    </span>
-                  </h1>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Deal headings with spacing to prevent overlap */}
-            <div className="mt-8">
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={currentDealIndex}
-                  className="text-lg md:text-xl text-gray-300 font-medium"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {dealHeadings[currentDealIndex]}
-                </motion.p>
-              </AnimatePresence>
-            </div>
-
-            {/* Description with good spacing */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="mt-8"
-            >
-              <p className="text-base text-gray-300 max-w-xl leading-relaxed">
-                <span className="font-semibold text-orange-400">College is expensive enough.</span> We've partnered with top brands to bring you
-                exclusive student discounts that make a difference.
-              </p>
-
-              {/* Feature list */}
-              <ul className="mt-4 space-y-2">
-                {[
-                  "Verified with your student ID or .edu email",
-                  "Exclusive deals not available to the public"
-                ].map((feature, index) => (
-                  <motion.li
-                    key={feature}
-                    className="flex items-center text-gray-300 text-sm"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.8 + (index * 0.15) }}
-                  >
-                    <div className="bg-gradient-to-r from-orange-500 to-pink-500 rounded-full p-1 mr-3 shadow-md shadow-orange-500/20">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    {feature}
-                  </motion.li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* CTA Button */}
-            <motion.div
-              className="mt-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1.3 }}
-            >
-              <Link href="/auth/signup">
-                <motion.div
-                  className="relative inline-block bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 text-white font-bold text-base py-3 px-6 rounded-full transition-all duration-300 overflow-hidden hover:shadow-lg hover:shadow-orange-600/20"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <span className="flex items-center relative z-10">
-                    Get Student Discounts
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </span>
-                </motion.div>
-              </Link>
-            </motion.div>
+      <div className="relative z-10 w-full max-w-2xl mx-auto flex flex-col items-center text-center">
+        {/* Illustration */}
+        <img
+          src="/assets/images/hero-internship.png"
+          alt="Student deals illustration"
+          className="w-32 h-32 object-contain mx-auto mb-6 drop-shadow-xl"
+        />
+        {/* Heading */}
+        <h1 className="mt-12 md:mt-20 text-5xl md:text-7xl font-extrabold text-white mb-3 leading-tight drop-shadow-lg">
+          Unlock <span className="text-yellow-300">Instant Student Discounts</span>
+        </h1>
+        {/* Subheading */}
+        <p className="text-lg md:text-xl text-white/90 mb-6">
+          One free account. 300+ brands. Real savings for real students.
+        </p>
+        {/* Key Benefits */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+          <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full text-white font-medium text-base shadow">
+            <FaShieldAlt className="text-green-300 text-lg" /> Verified student-only deals
           </div>
-
-          {/* Vertical Sliding Columns */}
-          <div className="w-full lg:w-1/2 pl-0 lg:pl-6 mt-44">
-            <div className="grid grid-cols-2 gap-3 h-[500px] md:h-[650px] overflow-hidden rounded-2xl">
-              {/* Left Column - Sliding Upward */}
-              <div className="relative h-full overflow-hidden">
-                <motion.div
-                  className="absolute top-0 left-0 w-full"
-                  animate={{
-                    y: [0, -TOTAL_HEIGHT]
-                  }}
-                  transition={{
-                    duration: 40,
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    ease: "linear"
-                  }}
-                >
-                  {column1Cards.map((brand, index) => (
-                    <div
-                      key={`col1-${index}`}
-                      onClick={() => handleBrandCardClick(brand)}
-                      className={`relative ${index === 0 ? '' : 'mt-10'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
-                    >
-                      <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
-                      {/* Student Discount Badge */}
-                      <div className="absolute top-4 left-0 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-lg transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300">
-                        <span className="text-sm">STUDENT DEAL</span>
-                      </div>
-                      <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white font-bold py-1 px-3 rounded-full shadow-lg">
-                        <span className="text-sm">{brand.discount}</span>
-                      </div>
-                      <div className="relative h-full flex items-center justify-center p-6">
-                        <Image
-                          src={brand.logo}
-                          alt={brand.name}
-                          width={300}
-                          height={400}
-                          style={{ objectFit: 'contain', maxWidth: '90%', maxHeight: '85%', marginTop: '20px' }}
-                          className="transition-transform duration-700 group-hover:scale-110"
-                        />
-                      </div>
-                      <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
-                        <p className="text-white font-semibold">{brand.name} Student Deals</p>
-                      </div>
-                    </div>
-                  ))}
-                </motion.div>
-
-                {/* Clone for seamless looping */}
-                <motion.div
-                  className="absolute top-0 left-0 w-full"
-                  animate={{
-                    y: [TOTAL_HEIGHT, 0]
-                  }}
-                  transition={{
-                    duration: 40,
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    ease: "linear"
-                  }}
-                >
-                  {column1Cards.map((brand, index) => (
-                    <div
-                      key={`col1-clone-${index}`}
-                      onClick={() => handleBrandCardClick(brand)}
-                      className={`relative ${index === 0 ? '' : 'mt-10'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
-                    >
-                      <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
-                      {/* Student Discount Badge */}
-                      <div className="absolute top-4 left-0 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-lg transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300">
-                        <span className="text-sm">STUDENT DEAL</span>
-                      </div>
-                      <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white font-bold py-1 px-3 rounded-full shadow-lg">
-                        <span className="text-sm">{brand.discount}</span>
-                      </div>
-                      <div className="relative h-full flex items-center justify-center p-6">
-                        <Image
-                          src={brand.logo}
-                          alt={brand.name}
-                          width={300}
-                          height={400}
-                          style={{ objectFit: 'contain', maxWidth: '90%', maxHeight: '85%', marginTop: '20px' }}
-                          className="transition-transform duration-700 group-hover:scale-110"
-                        />
-                      </div>
-                      <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
-                        <p className="text-white font-semibold">{brand.name} Student Deals</p>
-                      </div>
-                    </div>
-                  ))}
-                </motion.div>
-              </div>
-
-              {/* Right Column - Sliding Downward */}
-              <div className="relative h-full overflow-hidden">
-                <motion.div
-                  className="absolute top-0 left-0 w-full"
-                  animate={{
-                    y: [0, TOTAL_HEIGHT]
-                  }}
-                  transition={{
-                    duration: 40, // Match duration with left column
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    ease: "linear"
-                  }}
-                >
-                  {column2Cards.map((brand, index) => (
-                    <div
-                      key={`col2-${index}`}
-                      onClick={() => handleBrandCardClick(brand)}
-                      className={`relative ${index === 0 ? '' : 'mt-10'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
-                    >
-                      <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
-                      <div className="absolute top-4 left-0 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-lg transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300">
-                        <span className="text-sm">STUDENT DEAL</span>
-                      </div>
-                      <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white font-bold py-1 px-3 rounded-full shadow-lg">
-                        <span className="text-sm">{brand.discount}</span>
-                      </div>
-                      <div className="relative h-full flex items-center justify-center p-6">
-                        <Image
-                          src={brand.logo}
-                          alt={brand.name}
-                          width={300}
-                          height={400}
-                          style={{ objectFit: 'contain', maxWidth: '90%', maxHeight: '85%', marginTop: '20px' }}
-                          className="transition-transform duration-700 group-hover:scale-110"
-                        />
-                      </div>
-                      <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
-                        <p className="text-white font-semibold">{brand.name} Student Deals</p>
-                      </div>
-                    </div>
-                  ))}
-                </motion.div>
-
-                {/* Clone for seamless looping */}
-                <motion.div
-                  className="absolute top-0 left-0 w-full"
-                  animate={{
-                    y: [-TOTAL_HEIGHT, 0]
-                  }}
-                  transition={{
-                    duration: 40, // Match duration with main animation
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    ease: "linear"
-                  }}
-                >
-                  {column2Cards.map((brand, index) => (
-                    <div
-                      key={`col2-clone-${index}`}
-                      onClick={() => { handleBrandCardClick(brand); }}
-                      className={`relative ${index === 0 ? '' : 'mt-10'} h-[250px] rounded-2xl overflow-hidden group cursor-pointer`}
-                    >
-                      <div className={`absolute inset-0 bg-gradient-to-br ${brand.gradient}`}></div>
-                      <div className="absolute top-4 left-0 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-lg transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300">
-                        <span className="text-sm">STUDENT DEAL</span>
-                      </div>
-                      <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white font-bold py-1 px-3 rounded-full shadow-lg">
-                        <span className="text-sm">{brand.discount}</span>
-                      </div>
-                      <div className="relative h-full flex items-center justify-center p-6">
-                        <Image
-                          src={brand.logo}
-                          alt={brand.name}
-                          width={300}
-                          height={400}
-                          style={{ objectFit: 'contain', maxWidth: '90%', maxHeight: '85%', marginTop: '20px' }}
-                          className="transition-transform duration-700 group-hover:scale-110"
-                        />
-                      </div>
-                      <div className="absolute bottom-0 w-full bg-black/60 backdrop-blur-sm p-4">
-                        <p className="text-white font-semibold">{brand.name} Student Deals</p>
-                      </div>
-                    </div>
-                  ))}
-                </motion.div>
-              </div>
-            </div>
+          <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full text-white font-medium text-base shadow">
+            <FaEnvelopeOpenText className="text-blue-200 text-lg" /> No spam, no fees
+          </div>
+          <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full text-white font-medium text-base shadow">
+            <FaBolt className="text-yellow-300 text-lg" /> Instant access—sign up in seconds
           </div>
         </div>
+        {/* CTA Button */}
+        <a href="/signup" className="w-full max-w-xs">
+          <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-orange-900 font-bold text-lg py-4 px-8 rounded-full shadow-lg transition-all duration-300 mb-3 animate-bounce focus:outline-none">
+            Start Saving Now
+          </button>
+        </a>
       </div>
-
-     
-      {/* Modal for brand card */}
-<Modal isOpen={showBrandModal} onClose={() => setShowBrandModal(false)}>
-  {selectedBrand && codeData && (
-    <div className="flex flex-col items-center text-center p-4">
-      {/* Brand logo in a rounded rectangle */}
-      <div className="w-full max-w-xs h-40 bg-white rounded-xl flex items-center justify-center mb-4 shadow-lg">
-        <Image src={selectedBrand.logo} alt={selectedBrand.name} width={240} height={120} style={{ objectFit: 'contain', width: '100%', height: '120px' }} />
-      </div>
-      <h2 className="text-2xl font-extrabold mb-1 text-gray-100 drop-shadow">{selectedBrand.name} Student Discount</h2>
-      <p className="text-lg font-semibold text-pink-400 mb-2">{selectedBrand.discount}</p>
-      <div className="w-full border-b border-gray-700 my-3"></div>
-      
-      {/* Rating row */}
-      <div className="flex items-center justify-center gap-3 mb-4">
-        <span className="text-gray-300 text-sm mr-2">Rate this offer:</span>
-        <button className="text-2xl hover:scale-110 transition-transform">👎</button>
-        <button className="text-2xl hover:scale-110 transition-transform">👍</button>
-      </div>
-      
-      {/* Show countdown for expiring codes or block message if expired */}
-      {selectedBrand.codeType === 'expiring' && codeData && codeData.isExpired && codeData.expireAt && (
-        <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 mb-4">
-          <p className="text-red-400 text-sm font-medium">
-            🚫 You have already revealed a code. Please wait until the cooldown ends to get a new code.<br />
-            {(() => {
-              const now = Date.now();
-              const msLeft = codeData.expireAt - now;
-              if (msLeft > 0) {
-                const hours = Math.floor(msLeft / (60 * 60 * 1000));
-                const minutes = Math.floor((msLeft % (60 * 60 * 1000)) / (60 * 1000));
-                return `Time left: ${hours}h ${minutes}m`;
-              } else {
-                return 'You can now get a new code.';
-              }
-            })()}
-          </p>
-        </div>
-      )}
-      {/* Show countdown for expiring codes if not expired */}
-      {selectedBrand.codeType === 'expiring' && codeData && !codeData.isExpired && codeData.timeLeft && (
-        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mb-4">
-          <p className="text-yellow-400 text-sm font-medium">
-            ⏳ Code expires in {codeData.timeLeft.hours}h {codeData.timeLeft.minutes}m
-          </p>
-        </div>
-      )}
-      
-      <p className="mb-4 text-gray-300 text-sm">
-        {selectedBrand.codeType === 'expiring' 
-          ? "This is a time-limited code. Use it within 24 hours of revealing."
-          : "Enter this code in the promotional code area during checkout to benefit from the student discount."
-        }
-      </p>
-      
-      {/* Reveal code button with animation */}
-      <RevealCodeButton code={codeData.code} />
-      <a href="#" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
-        Visit {selectedBrand.name} website
-      </a>
-    </div>
-  )}
-</Modal>
-    </div>
+    </section>
   );
 };
 
