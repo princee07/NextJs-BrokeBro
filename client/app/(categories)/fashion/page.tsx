@@ -405,7 +405,7 @@ export default function FashionPage() {
       ...item,
       slug: item.brand?.toLowerCase() || item.name?.toLowerCase()
     });
-    setShowBrandModal(true);
+    setShowCouponModal(true);
   };
 
   // Trending Products: show all products by default, and allow filtering by brand only if user selects a filter
@@ -717,6 +717,7 @@ export default function FashionPage() {
                     <button
                       className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
                       onClick={() => handleBrandClick(category)}
+                      style={{ cursor: 'pointer' }}
                     >
                       Get Discount
                       <FaGift className="text-sm" />
@@ -796,12 +797,10 @@ export default function FashionPage() {
                     animate={productsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
-                    className={`group relative bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl overflow-hidden hover:border-white/40 transition-all duration-500 hover:scale-105 ${viewMode === 'list' ? 'flex items-center' : ''
-                      }`}
+                    className={`group relative bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl overflow-hidden hover:border-white/40 transition-all duration-500 hover:scale-105 ${viewMode === 'list' ? 'flex items-center' : ''}`}
                   >
-                    {/* Product Image */}
-                    <div className={`relative overflow-hidden ${viewMode === 'list' ? 'w-48 h-48' : 'h-64'
-                      }`}>
+                    {/* Background Image */}
+                    <div className={`relative h-64 overflow-hidden cursor-pointer w-full`} onClick={() => handleProductClick(product)}>
                       <Image
                         src={product.image || "/assets/placeholder.png"}
                         alt={product.name}
@@ -812,20 +811,21 @@ export default function FashionPage() {
                         }}
                         className="object-cover group-hover:scale-110 transition-transform duration-700"
                       />
-
-                      {/* Badges */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-30 group-hover:opacity-40 transition-opacity duration-500" />
+                      {/* Discount Badge */}
                       <div className="absolute top-4 left-4 space-y-2">
                         <span className="px-3 py-1 bg-gradient-to-r from-red-500 to-pink-600 text-white text-xs font-bold rounded-full">
                           {product.discount}
                         </span>
-                        <span className="block px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-medium rounded-full">
-                          {product.badge}
-                        </span>
+                        {product.badge && (
+                          <span className="block px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-medium rounded-full">
+                            {product.badge}
+                          </span>
+                        )}
                       </div>
-
                       {/* Wishlist Button */}
                       <button
-                        onClick={() => toggleWishlist(product.id)}
+                        onClick={(e) => { e.stopPropagation(); toggleWishlist(product.id); }}
                         className="absolute top-4 right-4 p-2 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-all duration-300"
                       >
                         {wishlist.includes(product.id) ?
@@ -833,83 +833,47 @@ export default function FashionPage() {
                           <HiOutlineHeart className="text-white text-xl" />
                         }
                       </button>
-
-                      {/* Quick Actions */}
-                      <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="flex gap-2">
-                          <button 
-                            onClick={() => handleProductClick(product)}
-                            className="flex-1 px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-xl hover:bg-white/30 transition-all duration-300 text-sm font-medium">
-                            Get Code
-                          </button>
-                          <button 
-                            onClick={() => handleProductClick(product)}
-                            className="flex-1 px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-xl hover:from-pink-700 hover:to-purple-700 transition-all duration-300 text-sm font-medium">
-                            Shop Now
-                          </button>
-                        </div>
-                      </div>
                     </div>
-
-                    {/* Product Info */}
-                    <div className={`p-6 space-y-4 ${viewMode === 'list' ? 'flex-1' : ''}`}>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-purple-400 flex items-center gap-2">
-                            {product.logo && (
-                              <span className="inline-block w-16 h-16 relative align-middle">
-                                <Image
-                                  src={product.logo}
-                                  alt={`${product.brand} logo`}
-                                  fill
-                                  className="object-contain rounded bg-white/10 shadow-lg border-2 border-white/30"
-                                />
-                              </span>
-                            )}
-                            {product.brand}
-                          </span>
-                          <div className="flex items-center gap-1">
-                            <FaStar className="text-yellow-400 text-sm" />
-                            <span className="text-sm font-medium">{product.rating}</span>
-                            <span className="text-xs text-gray-400">({product.reviews})</span>
-                          </div>
-                        </div>
-
-                        <h3 className="text-xl font-bold text-white">{product.name}</h3>
-
-                        <div className="flex items-center gap-3">
-                          <span className="text-2xl font-bold text-green-400">{product.price}</span>
-                          <span className="text-lg text-gray-400 line-through">{product.originalPrice}</span>
-                        </div>
-                      </div>
-
-                      {/* Color Options */}
-                      <div className="space-y-2">
-                        <p className="text-sm text-gray-400">Colors:</p>
-                        <div className="flex gap-2">
-                          {product.colors.map((color, colorIndex) => (
-                            <div
-                              key={colorIndex}
-                              className="w-6 h-6 rounded-full border-2 border-white/20 cursor-pointer hover:border-white/40 transition-all"
-                              style={{ backgroundColor: color }}
+                    {/* Content */}
+                    <div className="p-6 flex flex-col gap-2">
+                      <div className="flex items-center gap-3 mb-2">
+                        {product.logo && (
+                          <span className="inline-block w-12 h-12 relative align-middle">
+                            <Image
+                              src={product.logo}
+                              alt={`${product.brand} logo`}
+                              fill
+                              className="object-contain rounded bg-white/10 shadow-lg border-2 border-white/30"
                             />
-                          ))}
+                          </span>
+                        )}
+                        <span className="text-sm font-medium text-purple-400">{product.brand}</span>
+                        <div className="flex items-center gap-1 ml-auto">
+                          <FaStar className="text-yellow-400 text-sm" />
+                          <span className="text-sm font-medium">{product.rating}</span>
+                          <span className="text-xs text-gray-400">({product.reviews})</span>
                         </div>
                       </div>
-
-                      {/* Sizes */}
-                      <div className="space-y-2">
-                        <p className="text-sm text-gray-400">Sizes:</p>
-                        <div className="flex gap-2 flex-wrap">
-                          {product.sizes.map((size, sizeIndex) => (
-                            <span
-                              key={sizeIndex}
-                              className="px-3 py-1 bg-white/10 border border-white/20 rounded-lg text-sm hover:bg-white/20 cursor-pointer transition-all"
-                            >
-                              {size}
-                            </span>
-                          ))}
-                        </div>
+                      <h3 className="text-xl font-bold text-white mb-2">{product.name}</h3>
+                      <div className="flex gap-2 mt-auto">
+                        <button
+                          onClick={() => {
+                            if (isLoading) return;
+                            if (!isAuthenticated) {
+                              router.push('/signup');
+                              return;
+                            }
+                            if (!userIsVerified) {
+                              router.push('/student-verification');
+                              return;
+                            }
+                            handleProductClick(product);
+                          }}
+                          className="w-full px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-xl hover:from-pink-700 hover:to-purple-700 transition-all duration-300 text-sm font-semibold"
+                          style={{ cursor: 'pointer' }}
+                        >
+                          Get Discount
+                        </button>
                       </div>
                     </div>
                   </motion.div>
@@ -997,7 +961,7 @@ export default function FashionPage() {
             </div>
             <p className="text-gray-400 text-sm mb-2">Enter this code in the promotional code area during checkout to benefit from the student discount.</p>
             <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-mono text-xl font-bold py-2 px-4 rounded-lg tracking-wider mb-4">
-              STUDENT10
+              {selectedBrand.code || 'STUDENT10'}
             </div>
             <a href={selectedBrand.url || '#'} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
               Visit {selectedBrand.brand} website
