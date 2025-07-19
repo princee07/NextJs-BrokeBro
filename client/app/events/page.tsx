@@ -256,7 +256,7 @@ export default function EventsPage() {
             <div className="mb-2">🧾 E-certificates for all valid entries</div>
             <div className="font-bold mb-1">📅 Important Dates</div>
             <div>Submit by: 6 Aug</div>
-            <div>Voting: 7–14 Aug</div>
+            <div>Voting: 1-15 Aug</div>
             <div className="mb-2">Results: 15 Aug, 6 PM</div>
             <div className="font-bold mb-1">✅ What to Do</div>
             <div>Upload a 60-sec dance video (MP4/MOV, ≤100MB)</div>
