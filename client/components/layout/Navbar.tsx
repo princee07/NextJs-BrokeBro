@@ -30,6 +30,8 @@ const popSoundPath = '/assets/sounds/pop.mp4';
 
 export default function NavbarClient({ user }: { user: any }) {
   const [scrolled, setScrolled] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const lastScrollY = useRef(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFocused, setSearchFocused] = useState(false);
@@ -62,7 +64,16 @@ export default function NavbarClient({ user }: { user: any }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const currentScrollY = window.scrollY;
+      setScrolled(currentScrollY > 20);
+      if (currentScrollY > lastScrollY.current && currentScrollY > 60) {
+        // Scrolling down
+        setShowNavbar(false);
+      } else {
+        // Scrolling up
+        setShowNavbar(true);
+      }
+      lastScrollY.current = currentScrollY;
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -408,16 +419,15 @@ export default function NavbarClient({ user }: { user: any }) {
   }
 
   return (
-    <header className="fixed w-full z-50 flex flex-col ">
+    <header className="fixed w-full z-50 flex flex-col transition-transform duration-500" style={{ transform: showNavbar ? 'translateY(0)' : 'translateY(-100%)' }}>
       {/* Discount Bar at the very top */}
 
       {/* Main Navbar */}
       <nav
-      className={`w-full transition-all duration-500 relative ${
-          scrolled
-            ? 'py-0 bg-black/90 backdrop-blur-md shadow-lg shadow-orange-900/10'
-            : 'py-0 bg-black'
-        }`}
+        className={`w-full transition-all duration-500 relative ${scrolled
+          ? 'py-0 bg-black/90 backdrop-blur-md shadow-lg shadow-orange-900/10'
+          : 'py-0 bg-black'
+          }`}
         style={{ height: 'auto' }}
       >
         <div className="container mx-auto px-2 py-2" ref={navContainerRef}>
@@ -444,237 +454,236 @@ export default function NavbarClient({ user }: { user: any }) {
                 </motion.div>
               </Link>
 
-            {/* Nav Links - Desktop */}
-            <div className="hidden md:flex items-center justify-center space-x-1 mx-auto">
-              <div className="relative flex items-center space-x-2 p-1 rounded-full bg-black/60" ref={navLinksRef}>
-                {hoveredCategory && (
-                  <motion.div
-                    className="absolute h-full rounded-full bg-gradient-to-r from-orange-600/20 to-pink-600/20 backdrop-blur-sm"
-                    layoutId="navHighlight"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 200,
-                      damping: 20
-                    }}
-                    style={{
-                      width: document.getElementById(`nav-${hoveredCategory}`)?.offsetWidth,
-                      left: document.getElementById(`nav-${hoveredCategory}`)?.offsetLeft,
-                    }}
-                  />
-                )}
-                {navCategories.map((category, index) => (
-                  <motion.div
-                    key={index}
-                    id={`nav-${category.name}`}
-                    onMouseEnter={() => setHoveredCategory(category.name)}
-                    onMouseLeave={() => setHoveredCategory(null)}
-                    whileHover={{ scale: showIconsOnly ? 1.15 : 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ duration: showIconsOnly ? 0.15 : 0.3 }}
-                  >
-                    <Link href={category.path}>
-                       <div className={`relative px-2 py-2 rounded-full transition-all duration-300 ${
-                        activeCategory === category.name
+              {/* Nav Links - Desktop */}
+              <div className="hidden md:flex items-center justify-center space-x-1 mx-auto">
+                <div className="relative flex items-center space-x-2 p-1 rounded-full bg-black/60" ref={navLinksRef}>
+                  {hoveredCategory && (
+                    <motion.div
+                      className="absolute h-full rounded-full bg-gradient-to-r from-orange-600/20 to-pink-600/20 backdrop-blur-sm"
+                      layoutId="navHighlight"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 200,
+                        damping: 20
+                      }}
+                      style={{
+                        width: document.getElementById(`nav-${hoveredCategory}`)?.offsetWidth,
+                        left: document.getElementById(`nav-${hoveredCategory}`)?.offsetLeft,
+                      }}
+                    />
+                  )}
+                  {navCategories.map((category, index) => (
+                    <motion.div
+                      key={index}
+                      id={`nav-${category.name}`}
+                      onMouseEnter={() => setHoveredCategory(category.name)}
+                      onMouseLeave={() => setHoveredCategory(null)}
+                      whileHover={{ scale: showIconsOnly ? 1.15 : 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ duration: showIconsOnly ? 0.15 : 0.3 }}
+                    >
+                      <Link href={category.path}>
+                        <div className={`relative px-2 py-2 rounded-full transition-all duration-300 ${activeCategory === category.name
                           ? 'text-white bg-gradient-to-r from-orange-500/20 to-pink-500/20'
                           : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-pink-500/20'
-                      }`}>
-                        <span className="text-xs font-medium whitespace-nowrap">
-                          {category.name}
-                        </span>
-                         
-                        {(hoveredCategory === category.name || activeCategory === category.name) && (
-                           <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full w-3/5" />
-                        )}
-                      </div>
-                    </Link>
-                  </motion.div>
-                ))}
+                          }`}>
+                          <span className="text-xs font-medium whitespace-nowrap">
+                            {category.name}
+                          </span>
+
+                          {(hoveredCategory === category.name || activeCategory === category.name) && (
+                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full w-3/5" />
+                          )}
+                        </div>
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
-            </div>
-            {/* Authentication Buttons */}
+              {/* Authentication Buttons */}
 
-            <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3">
 
-              {shouldShowAuth ? (
-                user ? (
-                  <div className="relative flex items-center space-x-3" ref={dropdownRef}>
-                    <span className="text-amber-50">Hi, {user?.given_name}</span>
+                {shouldShowAuth ? (
+                  user ? (
+                    <div className="relative flex items-center space-x-3" ref={dropdownRef}>
+                      <span className="text-amber-50">Hi, {user?.given_name}</span>
 
-                    {/* Profile Avatar - Clickable */}
-                    <NavbarUserMenu
-                      user={{
-                        name: `${user?.given_name || ''} ${user?.family_name || ''}`.trim() || 'User',
-                        email: user?.email || '',
-                        avatar: user?.picture
-                      }}
-                      onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                    />
+                      {/* Profile Avatar - Clickable */}
+                      <NavbarUserMenu
+                        user={{
+                          name: `${user?.given_name || ''} ${user?.family_name || ''}`.trim() || 'User',
+                          email: user?.email || '',
+                          avatar: user?.picture
+                        }}
+                        onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                      />
 
-                    {/* Dropdown Menu */}
-                    <AnimatePresence>
-                      {profileDropdownOpen && (
-                        <motion.div
-                          className="absolute right-0 top-full mt-2 w-64 bg-black/95 backdrop-blur-md rounded-lg border border-orange-500/20 shadow-lg shadow-orange-500/10 z-50"
-                          initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                          transition={{ duration: 0.2, ease: "easeOut" }}
-                        >
-                          {/* User Info Header */}
-                          <div className="p-4 border-b border-orange-500/20">
-                            <div className="flex items-center space-x-3">
-                              <div className="relative">
-                                {user?.picture ? (
-                                  <Image
-                                    src={user.picture}
-                                    alt="User Avatar"
-                                    width={50}
-                                    height={50}
-                                    className="rounded-full"
-                                  />
-                                ) : (
-                                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 flex items-center justify-center text-white font-semibold text-lg">
-                                    {user?.given_name?.charAt(0) || 'U'}
-                                  </div>
-                                )}
+                      {/* Dropdown Menu */}
+                      <AnimatePresence>
+                        {profileDropdownOpen && (
+                          <motion.div
+                            className="absolute right-0 top-full mt-2 w-64 bg-black/95 backdrop-blur-md rounded-lg border border-orange-500/20 shadow-lg shadow-orange-500/10 z-50"
+                            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
+                          >
+                            {/* User Info Header */}
+                            <div className="p-4 border-b border-orange-500/20">
+                              <div className="flex items-center space-x-3">
+                                <div className="relative">
+                                  {user?.picture ? (
+                                    <Image
+                                      src={user.picture}
+                                      alt="User Avatar"
+                                      width={50}
+                                      height={50}
+                                      className="rounded-full"
+                                    />
+                                  ) : (
+                                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 flex items-center justify-center text-white font-semibold text-lg">
+                                      {user?.given_name?.charAt(0) || 'U'}
+                                    </div>
+                                  )}
 
-                                {/* Verified Badge in Dropdown */}
-                                {isVerified && (
-                                  <VerifiedBadge size="sm" />
-                                )}
-                              </div>
-                              <div>
-                                <p className="text-white font-semibold">{user?.given_name} {user?.family_name}</p>
-                                <p className="text-gray-400 text-sm">{user?.email}</p>
-                                {coins !== null && (
-                                  <button
-                                    onClick={() => {
-                                      console.log('Manual refresh triggered from coins display');
-                                      refreshUserData();
-                                    }}
-                                    className="mt-1 flex items-center text-amber-300 text-sm font-semibold hover:text-amber-200 transition-colors cursor-pointer"
-                                    title="Click to refresh coins"
-                                  >
-                                    <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" /></svg>
-                                    {coins} Coins
-                                    <svg className="w-3 h-3 ml-1 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                    </svg>
-                                  </button>
-                                )}
+                                  {/* Verified Badge in Dropdown */}
+                                  {isVerified && (
+                                    <VerifiedBadge size="sm" />
+                                  )}
+                                </div>
+                                <div>
+                                  <p className="text-white font-semibold">{user?.given_name} {user?.family_name}</p>
+                                  <p className="text-gray-400 text-sm">{user?.email}</p>
+                                  {coins !== null && (
+                                    <button
+                                      onClick={() => {
+                                        console.log('Manual refresh triggered from coins display');
+                                        refreshUserData();
+                                      }}
+                                      className="mt-1 flex items-center text-amber-300 text-sm font-semibold hover:text-amber-200 transition-colors cursor-pointer"
+                                      title="Click to refresh coins"
+                                    >
+                                      <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" /></svg>
+                                      {coins} Coins
+                                      <svg className="w-3 h-3 ml-1 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                      </svg>
+                                    </button>
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                           {/* Menu Items */}
-                          <div className="py-2">
-                            <Link
-                              href="/profile"
-                              className="flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-orange-500/10 transition-colors duration-200"
-                              onClick={() => setProfileDropdownOpen(false)}
-                            >
-                              <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                              </svg>
-                              Profile
-                            </Link>
-                          {/* Refer & Earn Button */}
-                          <button
-                            className="w-full flex items-center justify-center px-4 py-2 text-orange-400 hover:text-white hover:bg-orange-500/10 transition-colors duration-200 font-semibold border-b border-orange-500/20"
-                            onClick={handleOpenReferralModal}
-                          >
-                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m4 4h-1v-4h-1m-4 4h-1v-4h-1" /></svg>
-                            Refer & Earn
-                          </button>
-                           
-
-                        
-                            {/* Admin Panel Option - Only for authorized emails */}
-                            {user?.email === 'prince1362005@gmail.com' && (
+                            {/* Menu Items */}
+                            <div className="py-2">
                               <Link
-                                href="/admin/login"
-                                className="flex items-center px-4 py-3 text-orange-400 hover:text-white hover:bg-orange-500/10 transition-colors duration-200 border-t border-orange-500/20"
+                                href="/profile"
+                                className="flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-orange-500/10 transition-colors duration-200"
                                 onClick={() => setProfileDropdownOpen(false)}
                               >
                                 <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
-                                <span className="font-semibold">Admin Panel</span>
+                                Profile
                               </Link>
-                            )}
+                              {/* Refer & Earn Button */}
+                              <button
+                                className="w-full flex items-center justify-center px-4 py-2 text-orange-400 hover:text-white hover:bg-orange-500/10 transition-colors duration-200 font-semibold border-b border-orange-500/20"
+                                onClick={handleOpenReferralModal}
+                              >
+                                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m4 4h-1v-4h-1m-4 4h-1v-4h-1" /></svg>
+                                Refer & Earn
+                              </button>
 
-                            <div className="border-t border-orange-500/20 mt-2 pt-2">
-                              <LogoutLink postLogoutRedirectURL={LOGOUT_REDIRECT_URL}>
-                                <div className="flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-red-500/10 transition-colors duration-200 w-full cursor-pointer">
+
+
+                              {/* Admin Panel Option - Only for authorized emails */}
+                              {user?.email === 'prince1362005@gmail.com' && (
+                                <Link
+                                  href="/admin/login"
+                                  className="flex items-center px-4 py-3 text-orange-400 hover:text-white hover:bg-orange-500/10 transition-colors duration-200 border-t border-orange-500/20"
+                                  onClick={() => setProfileDropdownOpen(false)}
+                                >
                                   <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                   </svg>
-                                  Logout
-                                </div>
-                              </LogoutLink>
+                                  <span className="font-semibold">Admin Panel</span>
+                                </Link>
+                              )}
+
+                              <div className="border-t border-orange-500/20 mt-2 pt-2">
+                                <LogoutLink postLogoutRedirectURL={LOGOUT_REDIRECT_URL}>
+                                  <div className="flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-red-500/10 transition-colors duration-200 w-full cursor-pointer">
+                                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                    </svg>
+                                    Logout
+                                  </div>
+                                </LogoutLink>
+                              </div>
                             </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ) : (
-                  <>
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <LoginLink>
-                        <div className="px-6 py-2 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-orange-600/20 transition-all duration-300">
-                          Login
-                        </div>
-                      </LoginLink>
-                    </motion.div>
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <RegisterLink>
-                        <div className="px-6 py-2 rounded-full bg-gradient-to-r from-pink-600 to-orange-500 text-white font-semibold text-sm border border-orange-400/30 hover:shadow-lg hover:shadow-pink-600/20 transition-all duration-300">
-                          Sign Up
-                        </div>
-                      </RegisterLink>
-                    </motion.div>
-                  </>
-                )
-              ) : (
-                // Loading state - show skeleton
-                <div className="flex items-center space-x-3">
-                  <div className="w-16 h-8 bg-gray-700/50 rounded-full animate-pulse"></div>
-                  <div className="w-16 h-8 bg-gray-700/50 rounded-full animate-pulse"></div>
-                </div>
-              )}
-              {/* Mobile Menu Button */}
-              <motion.button
-                className="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-orange-500/20 to-pink-600/20"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                whileTap={{ scale: 0.9 }}
-              >
-                <motion.div
-                  animate={{
-                    rotate: mobileMenuOpen ? 180 : 0
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {mobileMenuOpen ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                  )}
-                </motion.div>
-              </motion.button>
+                    <>
+                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                        <LoginLink>
+                          <div className="px-6 py-2 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-orange-600/20 transition-all duration-300">
+                            Login
+                          </div>
+                        </LoginLink>
+                      </motion.div>
+                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                        <RegisterLink>
+                          <div className="px-6 py-2 rounded-full bg-gradient-to-r from-pink-600 to-orange-500 text-white font-semibold text-sm border border-orange-400/30 hover:shadow-lg hover:shadow-pink-600/20 transition-all duration-300">
+                            Sign Up
+                          </div>
+                        </RegisterLink>
+                      </motion.div>
+                    </>
+                  )
+                ) : (
+                  // Loading state - show skeleton
+                  <div className="flex items-center space-x-3">
+                    <div className="w-16 h-8 bg-gray-700/50 rounded-full animate-pulse"></div>
+                    <div className="w-16 h-8 bg-gray-700/50 rounded-full animate-pulse"></div>
+                  </div>
+                )}
+                {/* Mobile Menu Button */}
+                <motion.button
+                  className="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-orange-500/20 to-pink-600/20"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <motion.div
+                    animate={{
+                      rotate: mobileMenuOpen ? 180 : 0
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {mobileMenuOpen ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                      </svg>
+                    )}
+                  </motion.div>
+                </motion.button>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </nav>
 
       {/* --- NAVBAR SEARCH BAR --- */}
-       <div className="bg-gradient-to-r from-black via-black/95 to-black/90 py-2 px-2 border-b border-orange-500/20 shadow-md">
+      <div className="bg-gradient-to-r from-black via-black/95 to-black/90 py-2 px-2 border-b border-orange-500/20 shadow-md">
         <div className="container mx-auto flex flex-col items-center justify-center relative">
           <div className="relative w-full max-w-2xl group z-50">
             <div className="absolute inset-0 rounded-full transition-all duration-500" />
