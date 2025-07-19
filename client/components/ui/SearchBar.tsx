@@ -8,16 +8,72 @@ import AnimatedEyes from "../ui/AnimatedEyes";
 const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
+  const [dropdownHovered, setDropdownHovered] = useState(false);
+  const brandsList = [
+    "Nike", "Adidas", "Biba", "Levis", "Fastrack", "Swiss Beauty", "Salty", "Lakme", "Puma", "Apple", "Dell", "HP", "Asus"
+  ];
   const router = useRouter();
 
+  // Enhanced search logic
   const handleSearch = () => {
-    if (searchQuery.trim()) {
-      router.push(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return;
+
+    // Route for 'clothes' or fashion keywords
+    if (["clothes", "fashion", "beauty", "apparel"].some(word => query.includes(word))) {
+      router.push("/fashion");
+      return;
     }
+    // Route for 'laptop' or tech keywords
+    if (["laptop", "tech", "technology", "tablet", "monitor"].some(word => query.includes(word))) {
+      router.push("/explore-products");
+      return;
+    }
+    // Route for top brands (example brands, add more as needed)
+    const brands = ["nike", "adidas", "biba", "levis", "fastrack", "swiss beauty", "salty", "lakme", "puma", "apple", "dell", "hp", "asus"];
+    if (brands.some(brand => query.includes(brand))) {
+      router.push("/top-brands");
+      return;
+    }
+    // Default: go to search results page
+    router.push(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
   };
 
   return (
     <div className="relative w-full max-w-2xl group z-50">
+      {/* Brand suggestions dropdown */}
+      {(searchFocused || dropdownHovered) && (
+        <div
+          className="absolute top-full left-0 w-full bg-black border border-orange-500/30 rounded-b-xl shadow-lg z-50"
+          onMouseEnter={() => setDropdownHovered(true)}
+          onMouseLeave={() => setDropdownHovered(false)}
+        >
+          <div className="py-2 px-4 text-orange-400 font-semibold text-sm">Popular Brands</div>
+          <ul>
+            {brandsList.filter(b => b.toLowerCase().includes(searchQuery.toLowerCase())).map((brand) => (
+              <li
+                key={brand}
+                className="px-4 py-2 cursor-pointer hover:bg-orange-500/10 text-white text-sm"
+                onClick={() => {
+                  setSearchQuery(brand);
+                  setSearchFocused(false);
+                  setDropdownHovered(false);
+                }}
+                tabIndex={0}
+                onKeyDown={e => {
+                  if (e.key === "Enter") {
+                    setSearchQuery(brand);
+                    setSearchFocused(false);
+                    setDropdownHovered(false);
+                  }
+                }}
+              >
+                {brand}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       {/* Background animation effect */}
       <div
         className={`absolute inset-0 rounded-full transition-all duration-500 ${searchFocused
@@ -54,7 +110,12 @@ const SearchBar = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setSearchFocused(true)}
-            onBlur={() => setSearchFocused(false)}
+            onBlur={() => {
+              // Only close if not hovering dropdown
+              setTimeout(() => {
+                if (!dropdownHovered) setSearchFocused(false);
+              }, 100);
+            }}
             onKeyDown={(e) => {
               if (e.key === "Enter") handleSearch();
             }}

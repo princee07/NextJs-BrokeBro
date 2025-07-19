@@ -56,7 +56,7 @@ const staticFashionCategories = [
     image: "/assets/levis/300x300.png",
     url: "https://track.vcommission.com/click?campaign_id=11501&pub_id=120422",
     brand: "Levis",
-    brandLogo: "/assets/afiliate/levis.png",
+    brandLogo: "/asset/fashion/levis.png",
     gradient: "from-blue-600 via-indigo-500 to-purple-600",
     icon: "FaGem",
     products: 89,
@@ -133,7 +133,7 @@ const staticFashionCategories = [
     id: "shoes",
     name: "Sneaker Street",
     description: "Latest sneaker drops and classics",
-    image: "/assets/nike/image.png",
+    image: "/assets/fashion/nike.png",
     url: "#",
     brand: "Nike",
     brandLogo: "/assets/afiliate/nike.png",
@@ -171,7 +171,7 @@ const staticFeaturedCollections = [
     title: "Levis Premium Denim",
     subtitle: "Iconic American style",
     description: "Classic fits reimagined for modern wardrobes",
-    image: "/assets/levis/336x280.jpg",
+    image: "/assets/fashion/levis.png",
     url: "https://track.vcommission.com/click?campaign_id=11501&pub_id=120422",
     price: "Starting at ₹2,499",
     originalPrice: "₹4,999",
@@ -189,7 +189,7 @@ const staticFeaturedCollections = [
     title: "Swiss Beauty Pro",
     subtitle: "Professional makeup",
     description: "Studio-quality cosmetics for everyday glamour",
-    image: "/assets/banners/swissbeauty.png",
+    image: "/assets/fashion/swissbeauty.png",
     url: "https://track.vcommission.com/click?campaign_id=12372&pub_id=120422",
     price: "Starting at ₹599",
     originalPrice: "₹1,299",
@@ -249,7 +249,7 @@ const staticTrendingProducts = [
     brand: "Fastrack",
     price: "₹1,299",
     originalPrice: "₹2,599",
-    image: "/assets/fastrack/Fastrack_CPS_Fastrack_Wrist_Takeover_Sale_50%_OFF_on_100+_styles_250x250.jpeg",
+    image: "/assets/fashion/fastrack.png",
     url: "https://track.vcommission.com/click?campaign_id=10742&pub_id=120422",
     rating: 4.5,
     reviews: 892,
@@ -306,7 +306,7 @@ const staticTrendingProducts = [
     brand: "Lakme",
     price: "₹649",
     originalPrice: "₹999",
-    image: "/assets/lakme/image2.png",
+    image: "/assets/fashion/lakme.png",
     url: "#",
     rating: 4.3,
     reviews: 567,
@@ -338,7 +338,7 @@ export default function FashionPage() {
   const [wishlist, setWishlist] = useState<number[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedFilter, setSelectedFilter] = useState('all');
-  
+
   // Modal states
   const [showBrandModal, setShowBrandModal] = useState(false);
 
@@ -354,16 +354,16 @@ export default function FashionPage() {
   const categoriesInView = useInView(categoriesRef, { once: true });
   const productsInView = useInView(productsRef, { once: true });
   const newsletterInView = useInView(newsletterRef, { once: true });
-   //const { isVerified } = useStudentVerification();
-   const { isAuthenticated, isLoading } = useKindeBrowserClient();
-   const { isVerified: userIsVerified } = useUserVerification();
-   const [showCouponModal, setShowCouponModal] = useState(false);
-   type FashionCategory = typeof staticFashionCategories[number];
-   const [selectedBrand, setSelectedBrand] = useState<FashionCategory | null>(null);
-   const router = useRouter();
+  //const { isVerified } = useStudentVerification();
+  const { isAuthenticated, isLoading } = useKindeBrowserClient();
+  const { isVerified: userIsVerified } = useUserVerification();
+  const [showCouponModal, setShowCouponModal] = useState(false);
+  type FashionCategory = typeof staticFashionCategories[number];
+  const [selectedBrand, setSelectedBrand] = useState<FashionCategory | null>(null);
+  const router = useRouter();
 
-   // 3-stage click handler
-   const handleBrandClick = (brand: FashionCategory) => {
+  // 3-stage click handler
+  const handleBrandClick = (brand: FashionCategory) => {
     if (isLoading) return; // Don't do anything while loading auth state
     if (!isAuthenticated) {
       router.push('/signup');
@@ -399,13 +399,13 @@ export default function FashionPage() {
       isExpired: false,
       timeLeft: null
     };
-    
+
     setCodeData(currentCodeData);
     setSelectedBrand({
       ...item,
       slug: item.brand?.toLowerCase() || item.name?.toLowerCase()
     });
-    setShowBrandModal(true);
+    setShowCouponModal(true);
   };
 
   // Trending Products: show all products by default, and allow filtering by brand only if user selects a filter
@@ -462,8 +462,8 @@ export default function FashionPage() {
         <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden pt-20">
           <div className="absolute inset-0">
             <motion.div
-              initial={{ scale: 1.1 }}
-              animate={heroInView ? { scale: 1 } : { scale: 1.1 }}
+              initial={{ scale: 1.03 }}
+              animate={heroInView ? { scale: 1 } : { scale: 1.03 }}
               transition={{ duration: 2, ease: "easeOut" }}
               className="w-full h-full"
             >
@@ -519,32 +519,7 @@ export default function FashionPage() {
                   </motion.p>
                 </div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.8, delay: 1 }}
-                  className="flex flex-wrap gap-4"
-                >
-                  <motion.button
-                    onClick={() => handleProductClick(staticFeaturedCollections[currentSlide])}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="group px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-semibold rounded-full shadow-2xl hover:shadow-pink-500/25 transition-all duration-300 flex items-center gap-3"
-                  >
-                    <FaShoppingBag className="text-lg" />
-                    Get Discount Code
-                    <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
-                  </motion.button>
-
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold rounded-full hover:bg-white/20 transition-all duration-300 flex items-center gap-3"
-                  >
-                    <FaPlay className="text-sm" />
-                    Watch Lookbook
-                  </motion.button>
-                </motion.div>
+                {/* Removed Get Discount Code and Watch Lookbook buttons as requested */}
 
                 {/* Collection Stats */}
                 <motion.div
@@ -648,7 +623,7 @@ export default function FashionPage() {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {staticFashionCategories.map((category, index) => (
                 <motion.div
                   key={category.id}
@@ -717,6 +692,7 @@ export default function FashionPage() {
                     <button
                       className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
                       onClick={() => handleBrandClick(category)}
+                      style={{ cursor: 'pointer' }}
                     >
                       Get Discount
                       <FaGift className="text-sm" />
@@ -785,7 +761,7 @@ export default function FashionPage() {
             </motion.div>
 
             <div className={`grid gap-8 ${viewMode === 'grid'
-              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
               : 'grid-cols-1'
               }`}>
               <AnimatePresence mode="wait">
@@ -796,12 +772,10 @@ export default function FashionPage() {
                     animate={productsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
-                    className={`group relative bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl overflow-hidden hover:border-white/40 transition-all duration-500 hover:scale-105 ${viewMode === 'list' ? 'flex items-center' : ''
-                      }`}
+                    className={`group relative bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl overflow-hidden hover:border-white/40 transition-all duration-500 hover:scale-105 ${viewMode === 'list' ? 'flex items-center' : ''}`}
                   >
-                    {/* Product Image */}
-                    <div className={`relative overflow-hidden ${viewMode === 'list' ? 'w-48 h-48' : 'h-64'
-                      }`}>
+                    {/* Background Image */}
+                    <div className={`relative h-64 overflow-hidden cursor-pointer w-full`} onClick={() => handleProductClick(product)}>
                       <Image
                         src={product.image || "/assets/placeholder.png"}
                         alt={product.name}
@@ -812,20 +786,21 @@ export default function FashionPage() {
                         }}
                         className="object-cover group-hover:scale-110 transition-transform duration-700"
                       />
-
-                      {/* Badges */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-30 group-hover:opacity-40 transition-opacity duration-500" />
+                      {/* Discount Badge */}
                       <div className="absolute top-4 left-4 space-y-2">
                         <span className="px-3 py-1 bg-gradient-to-r from-red-500 to-pink-600 text-white text-xs font-bold rounded-full">
                           {product.discount}
                         </span>
-                        <span className="block px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-medium rounded-full">
-                          {product.badge}
-                        </span>
+                        {product.badge && (
+                          <span className="block px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-medium rounded-full">
+                            {product.badge}
+                          </span>
+                        )}
                       </div>
-
                       {/* Wishlist Button */}
                       <button
-                        onClick={() => toggleWishlist(product.id)}
+                        onClick={(e) => { e.stopPropagation(); toggleWishlist(product.id); }}
                         className="absolute top-4 right-4 p-2 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-all duration-300"
                       >
                         {wishlist.includes(product.id) ?
@@ -833,83 +808,47 @@ export default function FashionPage() {
                           <HiOutlineHeart className="text-white text-xl" />
                         }
                       </button>
-
-                      {/* Quick Actions */}
-                      <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="flex gap-2">
-                          <button 
-                            onClick={() => handleProductClick(product)}
-                            className="flex-1 px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-xl hover:bg-white/30 transition-all duration-300 text-sm font-medium">
-                            Get Code
-                          </button>
-                          <button 
-                            onClick={() => handleProductClick(product)}
-                            className="flex-1 px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-xl hover:from-pink-700 hover:to-purple-700 transition-all duration-300 text-sm font-medium">
-                            Shop Now
-                          </button>
-                        </div>
-                      </div>
                     </div>
-
-                    {/* Product Info */}
-                    <div className={`p-6 space-y-4 ${viewMode === 'list' ? 'flex-1' : ''}`}>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-purple-400 flex items-center gap-2">
-                            {product.logo && (
-                              <span className="inline-block w-16 h-16 relative align-middle">
-                                <Image
-                                  src={product.logo}
-                                  alt={`${product.brand} logo`}
-                                  fill
-                                  className="object-contain rounded bg-white/10 shadow-lg border-2 border-white/30"
-                                />
-                              </span>
-                            )}
-                            {product.brand}
-                          </span>
-                          <div className="flex items-center gap-1">
-                            <FaStar className="text-yellow-400 text-sm" />
-                            <span className="text-sm font-medium">{product.rating}</span>
-                            <span className="text-xs text-gray-400">({product.reviews})</span>
-                          </div>
-                        </div>
-
-                        <h3 className="text-xl font-bold text-white">{product.name}</h3>
-
-                        <div className="flex items-center gap-3">
-                          <span className="text-2xl font-bold text-green-400">{product.price}</span>
-                          <span className="text-lg text-gray-400 line-through">{product.originalPrice}</span>
-                        </div>
-                      </div>
-
-                      {/* Color Options */}
-                      <div className="space-y-2">
-                        <p className="text-sm text-gray-400">Colors:</p>
-                        <div className="flex gap-2">
-                          {product.colors.map((color, colorIndex) => (
-                            <div
-                              key={colorIndex}
-                              className="w-6 h-6 rounded-full border-2 border-white/20 cursor-pointer hover:border-white/40 transition-all"
-                              style={{ backgroundColor: color }}
+                    {/* Content */}
+                    <div className="p-6 flex flex-col gap-2">
+                      <div className="flex items-center gap-3 mb-2">
+                        {product.logo && (
+                          <span className="inline-block w-12 h-12 relative align-middle">
+                            <Image
+                              src={product.logo}
+                              alt={`${product.brand} logo`}
+                              fill
+                              className="object-contain rounded bg-white/10 shadow-lg border-2 border-white/30"
                             />
-                          ))}
+                          </span>
+                        )}
+                        <span className="text-sm font-medium text-purple-400">{product.brand}</span>
+                        <div className="flex items-center gap-1 ml-auto">
+                          <FaStar className="text-yellow-400 text-sm" />
+                          <span className="text-sm font-medium">{product.rating}</span>
+                          <span className="text-xs text-gray-400">({product.reviews})</span>
                         </div>
                       </div>
-
-                      {/* Sizes */}
-                      <div className="space-y-2">
-                        <p className="text-sm text-gray-400">Sizes:</p>
-                        <div className="flex gap-2 flex-wrap">
-                          {product.sizes.map((size, sizeIndex) => (
-                            <span
-                              key={sizeIndex}
-                              className="px-3 py-1 bg-white/10 border border-white/20 rounded-lg text-sm hover:bg-white/20 cursor-pointer transition-all"
-                            >
-                              {size}
-                            </span>
-                          ))}
-                        </div>
+                      <h3 className="text-xl font-bold text-white mb-2">{product.name}</h3>
+                      <div className="flex gap-2 mt-auto">
+                        <button
+                          onClick={() => {
+                            if (isLoading) return;
+                            if (!isAuthenticated) {
+                              router.push('/signup');
+                              return;
+                            }
+                            if (!userIsVerified) {
+                              router.push('/student-verification');
+                              return;
+                            }
+                            handleProductClick(product);
+                          }}
+                          className="w-full px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-xl hover:from-pink-700 hover:to-purple-700 transition-all duration-300 text-sm font-semibold"
+                          style={{ cursor: 'pointer' }}
+                        >
+                          Get Discount
+                        </button>
                       </div>
                     </div>
                   </motion.div>
@@ -997,7 +936,7 @@ export default function FashionPage() {
             </div>
             <p className="text-gray-400 text-sm mb-2">Enter this code in the promotional code area during checkout to benefit from the student discount.</p>
             <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-mono text-xl font-bold py-2 px-4 rounded-lg tracking-wider mb-4">
-              STUDENT10
+              {selectedBrand.code || 'STUDENT10'}
             </div>
             <a href={selectedBrand.url || '#'} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
               Visit {selectedBrand.brand} website
@@ -1005,6 +944,6 @@ export default function FashionPage() {
           </div>
         )}
       </Modal>
-    </div>
-  );
+    </div>
+  );
 }
