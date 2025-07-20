@@ -21,13 +21,13 @@ const OfferSlider = () => {
   // For drag functionality
   const x = useMotionValue(0);
   const controls = useAnimation();
-  
+
   // Check if component is in view
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: false
   });
-  
+
   // Check if mobile on component mount
   useEffect(() => {
     setIsMobile(window.innerWidth < 768);
@@ -61,38 +61,29 @@ const OfferSlider = () => {
       bgStyle: "dots",
       type: "event"
     },
+
+
     {
-      icon: <HiLightningBolt className="text-yellow-200 text-3xl" />,
-      preTitle: "WEBINAR",
-      title: "BrokeBro Tech Fest Webinar",
-      subtitle: "Workshops, talks, networking & more!",
-      detailText: "Sept 5-12, 2025",
+      icon: <HiStar className="text-pink-200 text-3xl" />,
+      preTitle: "COMPETITION",
+      title: "BrokeBro Dance Competition",
+      subtitle: "Show your moves, win cash & fame!",
+      detailText: "Entries open till Aug 30, 2025",
       buttonText: "ENROLLMENT",
-      bgColorClass: "from-blue-600 via-indigo-600 to-violet-700",
-      bgStyle: "wave",
-      type: "webinar"
-    },
-    {
-      icon: <FaGift className="text-purple-200 text-3xl" />,
-      preTitle: "EVENT",
-      title: "Internship Fair",
-      subtitle: "Meet recruiters, land your dream internship!",
-      detailText: "Aug 25, 2025",
-      buttonText: "ENROLLMENT",
-      bgColorClass: "from-purple-600 via-violet-600 to-indigo-600",
-      bgStyle: "shine",
-      type: "event"
+      bgColorClass: "from-pink-600 via-orange-400 to-yellow-400",
+      bgStyle: "pulse",
+      type: "dance-competition"
     },
   ];
 
   // Auto advance slides if not hovering and in view
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
+
     if (!isHovering && inView) {
       // Reset progress
       setProgress(0);
-      
+
       // Progress animation
       const progressInterval = setInterval(() => {
         setProgress(prev => {
@@ -100,19 +91,19 @@ const OfferSlider = () => {
           return prev + 0.5;
         });
       }, 20);
-      
+
       // Slide change
       interval = setInterval(() => {
         setCurrentSlide(prev => (prev + 1) % offers.length);
         setProgress(0);
       }, 4000);
-      
+
       return () => {
         clearInterval(interval);
         clearInterval(progressInterval);
       };
     }
-    
+
     return () => {
       if (interval) clearInterval(interval);
     };
@@ -152,7 +143,7 @@ const OfferSlider = () => {
   const handleDragEnd = useCallback((event: any, info: any) => {
     const threshold = 100;
     const velocity = 0.5;
-    
+
     if (info.offset.x > threshold || info.velocity.x > velocity) {
       // Swiped right - go to previous
       prevSlide();
@@ -171,7 +162,7 @@ const OfferSlider = () => {
       case 'ripple':
         return (
           <div className="absolute inset-0 opacity-20 overflow-hidden">
-            <motion.div 
+            <motion.div
               className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/30"
               animate={{
                 scale: [1, 1.2, 1],
@@ -183,7 +174,7 @@ const OfferSlider = () => {
                 ease: "easeInOut"
               }}
             />
-            <motion.div 
+            <motion.div
               className="absolute bottom-5 left-1/4 w-24 h-24 rounded-full bg-white/20"
               animate={{
                 scale: [1, 1.3, 1],
@@ -196,7 +187,7 @@ const OfferSlider = () => {
                 ease: "easeInOut"
               }}
             />
-            <motion.div 
+            <motion.div
               className="absolute top-1/4 right-1/4 w-16 h-16 rounded-full bg-white/15"
               animate={{
                 scale: [1, 1.4, 1],
@@ -215,7 +206,7 @@ const OfferSlider = () => {
         return (
           <div className="absolute inset-0 overflow-hidden">
             {[...Array(3)].map((_, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 className="absolute h-12 bg-white/10 rounded-full"
                 style={{
@@ -227,9 +218,9 @@ const OfferSlider = () => {
                   x: [-300, 800],
                   y: [0, i * 5],
                 }}
-                transition={{ 
+                transition={{
                   duration: 8 + i,
-                  repeat: Infinity, 
+                  repeat: Infinity,
                   repeatType: 'loop',
                   ease: "easeInOut",
                   delay: i * 0.5
@@ -241,9 +232,9 @@ const OfferSlider = () => {
       case 'dots':
         return (
           <div className="absolute inset-0 opacity-20">
-            {Array.from({length: 30}).map((_, i) => (
-              <motion.div 
-                key={i} 
+            {Array.from({ length: 30 }).map((_, i) => (
+              <motion.div
+                key={i}
                 className="absolute w-2 h-2 md:w-3 md:h-3 rounded-full bg-white/40"
                 style={{
                   top: `${Math.random() * 100}%`,
@@ -266,20 +257,20 @@ const OfferSlider = () => {
       case 'shine':
         return (
           <div className="absolute inset-0 overflow-hidden">
-            <motion.div 
+            <motion.div
               className="absolute -inset-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
               animate={{
                 x: ['-100%', '200%']
               }}
-              transition={{ 
-                duration: 4, 
-                repeat: Infinity, 
+              transition={{
+                duration: 4,
+                repeat: Infinity,
                 repeatType: 'loop',
                 ease: "easeInOut",
                 repeatDelay: 2
               }}
             />
-            <motion.div 
+            <motion.div
               className="absolute inset-0"
               animate={{
                 background: [
@@ -288,10 +279,10 @@ const OfferSlider = () => {
                   'radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 50%)'
                 ]
               }}
-              transition={{ 
-                duration: 8, 
-                repeat: Infinity, 
-                ease: "easeInOut" 
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut"
               }}
             />
           </div>
@@ -299,35 +290,35 @@ const OfferSlider = () => {
       case 'pulse':
         return (
           <div className="absolute inset-0">
-            <motion.div 
+            <motion.div
               className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent rounded-full"
               animate={{
                 scale: [1, 1.2, 1],
                 opacity: [0.1, 0.2, 0.1],
                 rotate: [0, 5, 0]
               }}
-              transition={{ 
-                duration: 6, 
-                repeat: Infinity, 
-                ease: "easeInOut" 
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut"
               }}
             />
-            <motion.div 
+            <motion.div
               className="absolute inset-0 bg-gradient-to-l from-white/5 to-transparent rounded-full"
               animate={{
                 scale: [1, 1.15, 1],
                 opacity: [0.1, 0.15, 0.1],
                 rotate: [0, -5, 0]
               }}
-              transition={{ 
-                duration: 7, 
-                repeat: Infinity, 
+              transition={{
+                duration: 7,
+                repeat: Infinity,
                 ease: "easeInOut",
                 delay: 1
               }}
             />
             {[...Array(5)].map((_, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 className="absolute w-2 h-2 bg-white/20 rounded-full"
                 style={{
@@ -338,8 +329,8 @@ const OfferSlider = () => {
                   y: [0, -10, 0],
                   opacity: [0.5, 1, 0.5]
                 }}
-                transition={{ 
-                  duration: 2 + Math.random() * 2, 
+                transition={{
+                  duration: 2 + Math.random() * 2,
                   repeat: Infinity,
                   delay: Math.random() * 2
                 }}
@@ -353,7 +344,7 @@ const OfferSlider = () => {
   };
 
   return (
-    <div 
+    <div
       className="w-full py-8 md:py-12 bg-black/95 relative overflow-hidden backdrop-blur-sm shadow-xl"
       ref={ref}
     >
@@ -362,12 +353,12 @@ const OfferSlider = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-black via-gray-900 to-black"></div>
         <div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
         <div className="absolute bottom-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-        
+
         {/* Abstract geometric shapes in background */}
         <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-20 blur-2xl bg-gradient-to-br from-purple-700 to-pink-600"></div>
         <div className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full opacity-10 blur-3xl bg-gradient-to-br from-blue-700 to-teal-500"></div>
       </div>
-      
+
       <div className="container mx-auto px-4" ref={containerRef}>
         {/* Header for offer section */}
         <div className="flex justify-between items-center mb-4">
@@ -375,7 +366,7 @@ const OfferSlider = () => {
             <HiLightningBolt className="text-orange-500 text-xl" />
             <h3 className="text-white font-bold text-lg">Hot Offers</h3>
           </div>
-          
+
           {/* Navigation arrows for desktop */}
           <div className="hidden md:flex space-x-3">
             <motion.button
@@ -398,24 +389,24 @@ const OfferSlider = () => {
             </motion.button>
           </div>
         </div>
-        
-        <div 
+
+        <div
           className="relative w-full h-28 md:h-36 overflow-hidden rounded-xl shadow-2xl"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
           {/* Glass effect border */}
           <div className="absolute inset-0 rounded-xl border border-white/10 pointer-events-none"></div>
-          
+
           {/* Progress bar */}
           <div className="absolute bottom-0 left-0 w-full h-1 bg-white/10">
-            <motion.div 
+            <motion.div
               className="h-full bg-white/50"
               style={{ width: `${progress}%` }}
               transition={{ ease: "linear" }}
             />
           </div>
-          
+
           <motion.div
             drag={isMobile ? "x" : false}
             dragConstraints={{ left: 0, right: 0 }}
@@ -432,7 +423,7 @@ const OfferSlider = () => {
                     initial={{ x: 300, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     exit={{ x: -300, opacity: 0 }}
-                    transition={{ 
+                    transition={{
                       type: "spring",
                       stiffness: 100,
                       damping: 20
@@ -440,7 +431,7 @@ const OfferSlider = () => {
                   >
                     {/* Background patterns */}
                     {getBackgroundPattern(offer.bgStyle)}
-                    
+
                     {/* Offer content with enhanced layout */}
                     <div className="flex items-center space-x-4 z-10">
                       <div className="hidden md:flex flex-shrink-0 items-center justify-center w-16 h-16 rounded-full bg-black/30 backdrop-blur-md shadow-lg border border-white/20">
@@ -460,7 +451,7 @@ const OfferSlider = () => {
                           {offer.title}
                         </h3>
                         <p className="text-sm md:text-base font-medium text-white/90">{offer.subtitle}</p>
-                        
+
                         {/* Detail text with icon */}
                         <div className="flex items-center mt-1 text-xs md:text-sm text-white/70">
                           <FaRegClock className="mr-1" />
@@ -468,41 +459,93 @@ const OfferSlider = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     {/* CTA Button with enhanced effects */}
                     <div className="flex-shrink-0 z-10">
-                      <button
-                        className="relative bg-white text-gray-900 px-4 py-2 md:px-6 md:py-3 rounded-lg font-bold text-sm md:text-base flex items-center space-x-1 shadow-lg overflow-hidden group"
-                        onClick={() => setShowToast(true)}
-                      >
-                        {/* Button background animation */}
-                        <motion.div 
-                          className="absolute inset-0 bg-gradient-to-r from-white via-gray-100 to-white opacity-0 group-hover:opacity-100"
-                          animate={{
-                            x: ['-100%', '100%'],
-                          }}
-                          transition={{
-                            repeat: Infinity,
-                            repeatType: "loop",
-                            duration: 1.5,
-                            ease: "easeInOut"
-                          }}
-                        />
-                        <span className="relative z-10">{offer.buttonText}</span>
-                        <motion.span 
-                          className="relative z-10"
-                          animate={{ x: [0, 5, 0] }}
-                          transition={{ 
-                            repeat: Infinity, 
-                            duration: 1.5,
-                            repeatType: "loop"
-                          }}
+                      {offer.type === "event" ? (
+                        <Link href="/campus-ambassador" passHref legacyBehavior>
+                          <a className="relative bg-white text-gray-900 px-4 py-2 md:px-6 md:py-3 rounded-lg font-bold text-sm md:text-base flex items-center space-x-1 shadow-lg overflow-hidden group">
+                            {/* Button background animation */}
+                            <motion.div
+                              className="absolute inset-0 bg-gradient-to-r from-white via-gray-100 to-white opacity-0 group-hover:opacity-100"
+                              animate={{ x: ['-100%', '100%'] }}
+                              transition={{ repeat: Infinity, repeatType: "loop", duration: 1.5, ease: "easeInOut" }}
+                            />
+                            <span className="relative z-10">{offer.buttonText}</span>
+                            <motion.span
+                              className="relative z-10"
+                              animate={{ x: [0, 5, 0] }}
+                              transition={{ repeat: Infinity, duration: 1.5, repeatType: "loop" }}
+                            >
+                              <MdArrowForward className="ml-2" />
+                            </motion.span>
+                          </a>
+                        </Link>
+                      ) : offer.type === "dance-competition" ? (
+                        <a
+                          href="https://www.brokebro.in/events"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="relative bg-white text-gray-900 px-4 py-2 md:px-6 md:py-3 rounded-lg font-bold text-sm md:text-base flex items-center space-x-1 shadow-lg overflow-hidden group"
                         >
-                          <MdArrowForward className="ml-2" />
-                        </motion.span>
-                      </button>
+                          {/* Button background animation */}
+                          <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-white via-gray-100 to-white opacity-0 group-hover:opacity-100"
+                            animate={{ x: ['-100%', '100%'] }}
+                            transition={{ repeat: Infinity, repeatType: "loop", duration: 1.5, ease: "easeInOut" }}
+                          />
+                          <span className="relative z-10">{offer.buttonText}</span>
+                          <motion.span
+                            className="relative z-10"
+                            animate={{ x: [0, 5, 0] }}
+                            transition={{ repeat: Infinity, duration: 1.5, repeatType: "loop" }}
+                          >
+                            <MdArrowForward className="ml-2" />
+                          </motion.span>
+                        </a>
+                      ) : offer.type === "hackathon" ? (
+                        <button
+                          className="relative bg-white text-gray-900 px-4 py-2 md:px-6 md:py-3 rounded-lg font-bold text-sm md:text-base flex items-center space-x-1 shadow-lg overflow-hidden group"
+                          onClick={() => setShowToast(true)}
+                        >
+                          {/* Button background animation */}
+                          <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-white via-gray-100 to-white opacity-0 group-hover:opacity-100"
+                            animate={{ x: ['-100%', '100%'] }}
+                            transition={{ repeat: Infinity, repeatType: "loop", duration: 1.5, ease: "easeInOut" }}
+                          />
+                          <span className="relative z-10">{offer.buttonText}</span>
+                          <motion.span
+                            className="relative z-10"
+                            animate={{ x: [0, 5, 0] }}
+                            transition={{ repeat: Infinity, duration: 1.5, repeatType: "loop" }}
+                          >
+                            <MdArrowForward className="ml-2" />
+                          </motion.span>
+                        </button>
+                      ) : (
+                        <button
+                          className="relative bg-white text-gray-900 px-4 py-2 md:px-6 md:py-3 rounded-lg font-bold text-sm md:text-base flex items-center space-x-1 shadow-lg overflow-hidden group"
+                          onClick={() => setShowToast(true)}
+                        >
+                          {/* Button background animation */}
+                          <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-white via-gray-100 to-white opacity-0 group-hover:opacity-100"
+                            animate={{ x: ['-100%', '100%'] }}
+                            transition={{ repeat: Infinity, repeatType: "loop", duration: 1.5, ease: "easeInOut" }}
+                          />
+                          <span className="relative z-10">{offer.buttonText}</span>
+                          <motion.span
+                            className="relative z-10"
+                            animate={{ x: [0, 5, 0] }}
+                            transition={{ repeat: Infinity, duration: 1.5, repeatType: "loop" }}
+                          >
+                            <MdArrowForward className="ml-2" />
+                          </motion.span>
+                        </button>
+                      )}
                     </div>
-                    
+
                     {/* Success icon with enhanced animation */}
                     <motion.div
                       className="absolute -top-1 -right-1 md:top-3 md:right-3 text-white z-10"
@@ -518,22 +561,21 @@ const OfferSlider = () => {
             </AnimatePresence>
           </motion.div>
         </div>
-        
+
         {/* Enhanced indicators with animations */}
         <div className="flex justify-center items-center mt-4 space-x-3">
           {offers.map((_, index) => (
             <motion.button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`relative h-3 transition-all duration-300 rounded-full ${
-                currentSlide === index ? `w-6 bg-white` : `w-3 bg-gray-500`
-              }`}
+              className={`relative h-3 transition-all duration-300 rounded-full ${currentSlide === index ? `w-6 bg-white` : `w-3 bg-gray-500`
+                }`}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
               aria-label={`Go to slide ${index + 1}`}
             >
               {currentSlide === index && (
-                <motion.div 
+                <motion.div
                   className="absolute inset-0 rounded-full bg-white/50"
                   animate={{ scale: [1, 1.5, 1] }}
                   transition={{
@@ -546,7 +588,7 @@ const OfferSlider = () => {
             </motion.button>
           ))}
         </div>
-        
+
         {/* Helpful text below */}
         <div className="flex justify-center mt-2">
           <p className="text-gray-400 text-xs flex items-center">
@@ -554,7 +596,7 @@ const OfferSlider = () => {
             Swipe or use arrow keys to navigate offers
           </p>
         </div>
-        
+
         {/* Toast for ENROLLMENT button */}
         {showToast && (
           <div className="fixed top-8 left-1/2 -translate-x-1/2 z-50 bg-black/90 text-white px-6 py-3 rounded-full shadow-lg border border-orange-500 animate-fade-in-out">

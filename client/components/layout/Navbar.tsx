@@ -683,7 +683,8 @@ export default function NavbarClient({ user }: { user: any }) {
       </nav>
 
       {/* --- NAVBAR SEARCH BAR --- */}
-      <div className="bg-gradient-to-r from-black via-black/95 to-black/90 py-2 px-2 border-b border-orange-500/20 shadow-md">
+      {/* Desktop Search Bar - only visible on md+ screens */}
+      <div className="hidden md:block bg-gradient-to-r from-black via-black/95 to-black/90 py-2 px-2 border-b border-orange-500/20 shadow-md">
         <div className="container mx-auto flex flex-col items-center justify-center relative">
           <div className="relative w-full max-w-2xl group z-50">
             <div className="absolute inset-0 rounded-full transition-all duration-500" />
@@ -752,7 +753,50 @@ export default function NavbarClient({ user }: { user: any }) {
                     </div>
                   </Link>
                 </motion.div>
-              ))}              <div className="mt-6 pb-4 px-4 grid grid-cols-2 gap-3">
+              ))}
+
+              {/* Mobile Search Bar - appears after nav links */}
+              <div className="mt-4 mb-4 px-2">
+                <div className="bg-gradient-to-r from-black via-black/95 to-black/90 py-2 px-2 border-b border-orange-500/20 shadow-md rounded-xl">
+                  <div className="flex flex-col items-center justify-center relative">
+                    <div className="relative w-full group z-50">
+                      <div className="absolute inset-0 rounded-full transition-all duration-500" />
+                      <div className="relative bg-gradient-to-r p-[1.5px] rounded-full overflow-hidden from-orange-500/50 to-orange-600/50 transition-all duration-300">
+                        <div className="relative flex items-center bg-black rounded-full overflow-hidden">
+                          <div className="absolute left-2 z-10 cursor-pointer flex items-center justify-center h-full w-8"
+                            onClick={() => {
+                              if (searchQuery.trim()) router.push(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
+                            }}
+                            tabIndex={0} role="button" aria-label="Search">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 transition-colors duration-300 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                          </div>
+                          <input
+                            type="text"
+                            placeholder="Search brands, deals, categories"
+                            value={searchQuery}
+                            onChange={e => setSearchQuery(e.target.value)}
+                            onKeyDown={e => {
+                              if (e.key === "Enter" && searchQuery.trim()) {
+                                handleSmartSearch(searchQuery.trim());
+                              }
+                            }}
+                            className="w-full bg-transparent py-3 pl-10 pr-16 text-white placeholder-gray-400 focus:outline-none focus:placeholder-gray-300"
+                            autoFocus={false}
+                          />
+                          {/* Animated Eyes inside search bar at the right side */}
+                          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none z-20 flex items-center">
+                            <AnimatedEyes />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 pb-4 px-4 grid grid-cols-2 gap-3">
                 {shouldShowAuth ? (
                   user ? (
                     <LogoutLink postLogoutRedirectURL={LOGOUT_REDIRECT_URL}>
