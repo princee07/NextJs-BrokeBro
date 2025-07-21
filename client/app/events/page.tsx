@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import Image from 'next/image';
 import Modal from '../../components/ui/Modal';
-
+import { useUserVerification } from '@/hooks/useUserVerification';
 const initialEvents = [
   {
     id: 1,
@@ -41,6 +41,7 @@ export default function EventsPage() {
   const [danceModalOpen, setDanceModalOpen] = useState(false);
   const router = useRouter();
   const { isAuthenticated, isLoading } = useKindeBrowserClient();
+  const { isVerified: userIsVerified } = useUserVerification();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -50,7 +51,20 @@ export default function EventsPage() {
       price: name === 'isFree' && checked ? 'FREE' : prev.price,
     }));
   };
+  const handleEventClick = (event: typeof initialEvents[0]) => {
 
+    if (isLoading) return; // Don't do anything while loading auth state
+    if (!isAuthenticated) {
+      router.push('/signup');
+      return;
+    }
+    if (!userIsVerified) {
+      router.push('/student-verification');
+      return;
+    }
+    // You can open a modal, show details, or do anything else here
+    console.log(`Clicked on event: ${event.title}`);
+  };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
     if (file) {
@@ -117,6 +131,8 @@ export default function EventsPage() {
   const isRegistered = (eventId: number) => {
     return registerEventId && registrations[eventId]?.includes(registerName);
   };
+  // 3-stage click handler
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white pt-32">
@@ -249,7 +265,7 @@ export default function EventsPage() {
       </Modal>
 
       {/* Modal for Dance Competition Details */}
-      <Modal isOpen={danceModalOpen} onClose={() => setDanceModalOpen(false)}>
+      {isAuthenticated && <Modal isOpen={danceModalOpen} onClose={() => setDanceModalOpen(false)}>
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-center mb-2 bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">BrokeBro 1-Minute Dance Challenge</h2>
           <div className="text-center text-white">College Edition – Show your best moves!</div>
@@ -276,7 +292,7 @@ export default function EventsPage() {
             Click here to Register
           </a>
         </div>
-      </Modal>
+      </Modal>}
 
       {/* Filter/Search Bar */}
       <div className="container mx-auto px-4 mb-12">
@@ -335,6 +351,7 @@ export default function EventsPage() {
                 <div
                   key={event.id}
                   className="bg-gray-900 rounded-lg shadow-lg overflow-hidden flex md:flex-row flex-col group hover:shadow-xl hover:shadow-orange-500/30 transition-all border border-gray-800 min-h-[320px] md:min-h-[280px]"
+                  onClick={() => handleEventClick(event)}
                 >
                   <div className="relative w-full md:w-2/5 h-64 md:h-auto">
                     <Image
