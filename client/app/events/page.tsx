@@ -1,10 +1,10 @@
 "use client"
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import Image from 'next/image';
 import Modal from '../../components/ui/Modal';
-import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
-import { useRouter } from 'next/navigation';
 import { useUserVerification } from '@/hooks/useUserVerification';
 const initialEvents = [
   {
@@ -39,8 +39,10 @@ export default function EventsPage() {
   const [registerEventId, setRegisterEventId] = useState<number | null>(null);
   const [registrations, setRegistrations] = useState<{ [eventId: number]: string[] }>({});
   const [danceModalOpen, setDanceModalOpen] = useState(false);
+  const router = useRouter();
   const { isAuthenticated, isLoading } = useKindeBrowserClient();
   const { isVerified: userIsVerified } = useUserVerification();
+
   const router = useRouter();
   // Search/filter state
   const [searchText, setSearchText] = useState('');
@@ -54,20 +56,20 @@ export default function EventsPage() {
       price: name === 'isFree' && checked ? 'FREE' : prev.price,
     }));
   };
-const handleEventClick = (event: typeof initialEvents[0]) => {
+  const handleEventClick = (event: typeof initialEvents[0]) => {
 
-  if (isLoading) return; // Don't do anything while loading auth state
-  if (!isAuthenticated) {
-    router.push('/signup');
-    return;
-  }
-  if (!userIsVerified) {
-    router.push('/student-verification');
-    return;
-  }
-  // You can open a modal, show details, or do anything else here
-  console.log(`Clicked on event: ${event.title}`); 
-};
+    if (isLoading) return; // Don't do anything while loading auth state
+    if (!isAuthenticated) {
+      router.push('/signup');
+      return;
+    }
+    if (!userIsVerified) {
+      router.push('/student-verification');
+      return;
+    }
+    // You can open a modal, show details, or do anything else here
+    console.log(`Clicked on event: ${event.title}`);
+  };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
     if (file) {
@@ -134,8 +136,8 @@ const handleEventClick = (event: typeof initialEvents[0]) => {
   const isRegistered = (eventId: number) => {
     return registerEventId && registrations[eventId]?.includes(registerName);
   };
-   // 3-stage click handler
- 
+  // 3-stage click handler
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white pt-32">
@@ -305,8 +307,8 @@ const handleEventClick = (event: typeof initialEvents[0]) => {
         >
           <div className="flex items-center w-full md:w-1/3 bg-gray-900 rounded-lg px-3 py-2 border-2 border-transparent focus-within:border-orange-500 transition-all">
             <svg className="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8"/>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
             <input
               type="text"
@@ -318,7 +320,7 @@ const handleEventClick = (event: typeof initialEvents[0]) => {
           </div>
           <div className="flex items-center w-full md:w-1/4 bg-gray-900 rounded-lg px-3 py-2 border-2 border-transparent focus-within:border-orange-500 transition-all">
             <svg className="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z" />
             </svg>
             <input
               type="text"
@@ -330,8 +332,8 @@ const handleEventClick = (event: typeof initialEvents[0]) => {
           </div>
           <div className="flex items-center w-full md:w-1/4 bg-gray-900 rounded-lg px-3 py-2 border-2 border-transparent focus-within:border-orange-500 transition-all">
             <svg className="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <rect x="3" y="4" width="18" height="18" rx="2"/>
-              <path d="M16 2v4M8 2v4M3 10h18"/>
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <path d="M16 2v4M8 2v4M3 10h18" />
             </svg>
             <input
               type="date"
@@ -347,7 +349,7 @@ const handleEventClick = (event: typeof initialEvents[0]) => {
             tabIndex={-1}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z" />
             </svg>
             Search
           </button>
@@ -360,6 +362,95 @@ const handleEventClick = (event: typeof initialEvents[0]) => {
         <div className="flex-1">
           <h2 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">Upcoming Events</h2>
           <div className="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
+            {events.map(event => {
+              const regCount = registrations[event.id]?.length || 0;
+              const isUserRegistered = registrations[event.id]?.includes(registerName);
+              const isHost = event.hostName && event.hostName.trim().length > 0 && event.hostName === registerName && registerName.trim().length > 0;
+              return (
+                <div
+                  key={event.id}
+                  className="bg-gray-900 rounded-lg shadow-lg overflow-hidden flex md:flex-row flex-col group hover:shadow-xl hover:shadow-orange-500/30 transition-all border border-gray-800 min-h-[320px] md:min-h-[280px]"
+                  onClick={() => handleEventClick(event)}
+                >
+                  <div className="relative w-full md:w-2/5 h-64 md:h-auto">
+                    <Image
+                      src={event.image}
+                      alt={event.title}
+                      fill
+                      className="object-cover object-center group-hover:scale-105 transition-transform duration-300 rounded-l-lg"
+                    />
+                    <div className="absolute top-3 left-3 bg-gradient-to-r from-orange-500 to-pink-500 text-xs px-3 py-1 rounded-full font-semibold">
+                      {event.isFree ? 'FREE' : event.price}
+                    </div>
+                  </div>
+                  <div className="p-8 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-2xl font-semibold mb-3 flex items-center gap-2">
+                        {event.title}
+                        {regCount > 0 && (
+                          <span className="ml-2 bg-green-600 text-xs px-2 py-0.5 rounded-full animate-pulse">
+                            {regCount} Registered
+                          </span>
+                        )}
+                      </h3>
+                      <div className="flex items-center text-gray-400 text-base mb-4">
+                        <span className="mr-2">
+                          {event.date ? new Date(event.date).toLocaleDateString() : ''}
+                        </span>
+                        •
+                        <span className="ml-2">{event.location}</span>
+                      </div>
+                      <div className="text-base text-gray-400 mb-4">Host: {event.hostName || 'TBD'}</div>
+                    </div>
+                    <div className="mt-6">
+                      {isHost ? (
+                        <button
+                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base opacity-60 cursor-not-allowed"
+                          disabled
+                        >
+                          You are the Host
+                        </button>
+                      ) : isUserRegistered ? (
+                        <button
+                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base opacity-60 cursor-not-allowed"
+                          disabled
+                        >
+                          Registered
+                        </button>
+                      ) : event.title === 'Dance Competition' ? (
+                        <button
+                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition"
+                          onClick={() => {
+                            if (isLoading) return;
+                            if (!isAuthenticated) {
+                              router.push('/signup');
+                              return;
+                            }
+                            setDanceModalOpen(true);
+                          }}
+                        >
+                          Register
+                        </button>
+                      ) : (
+                        <button
+                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition"
+                          onClick={() => {
+                            if (isLoading) return;
+                            if (!isAuthenticated) {
+                              router.push('/signup');
+                              return;
+                            }
+                            window.open('https://forms.gle/KGuZFDbTqwWPhtYQ7', '_blank');
+                          }}
+                        >
+                          Register
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
             {events
               .filter(event => {
                 // Filter by search text (title)

@@ -4,6 +4,7 @@ import { saveVerification } from '@/lib/db/verifications';
 import { VerificationStatus } from '@/types/verification';
 import dbConnect from '@/app/lib/db/connect';
 import User from '@/app/lib/db/models/user.model';
+import nodemailer from 'nodemailer';
 
 // Add CORS headers for production
 function addCorsHeaders(response: NextResponse) {
@@ -121,10 +122,53 @@ export async function POST(request: NextRequest) {
             console.log('Using fallback storage...');
         }
 
-        // In a real implementation, you might:
-        // 1. Send notification to admin panel
-        // 2. Queue background job for document analysis
-        // 3. Send confirmation email to student
+
+        // Send email notification to all admins
+        try {
+            const adminEmails = [
+                'prince1362005@gmail.com',
+                'lavanya.varshney2104@gmail.com',
+                'vrindabindal1212@gmail.com'
+            ];
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.BROKEBRO_MAIL_USER || 'brokebroindia@gmail.com',
+                    pass: process.env.BROKEBRO_MAIL_PASS,
+                },
+            });
+            await transporter.sendMail({
+                from: `BrokeBro Admin <${process.env.BROKEBRO_MAIL_USER || 'brokebroindia@gmail.com'}>`,
+                to: adminEmails,
+                subject: '🔔 New Student Verification Request - BrokeBro',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #000; color: #fff; padding: 20px; border-radius: 10px;">
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <h1 style="color: #ff6b35; margin: 0;">🔔 New Verification Request</h1>
+                        </div>
+                        <div style="background-color: #1a1a1a; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                            <h3 style="color: #ff6b35; margin: 0 0 15px 0;">Student Details:</h3>
+                            <p style="color: #fff; margin: 5px 0;"><strong>Name:</strong> ${studentData.studentName}</p>
+                            <p style="color: #fff; margin: 5px 0;"><strong>College:</strong> ${studentData.collegeName}</p>
+                            <p style="color: #fff; margin: 5px 0;"><strong>Roll No:</strong> ${studentData.rollNo}</p>
+                            <p style="color: #fff; margin: 5px 0;"><strong>State:</strong> ${studentData.state}</p>
+                            <p style="color: #fff; margin: 5px 0;"><strong>Email:</strong> ${kindeUser.email}</p>
+                            <p style="color: #fff; margin: 5px 0;"><strong>Verification ID:</strong> ${verificationId}</p>
+                            <p style="color: #fff; margin: 5px 0;"><strong>Submitted:</strong> ${new Date().toLocaleString()}</p>
+                        </div>
+                        <div style="text-align: center; margin: 30px 0;">
+                            <a href="${process.env.KINDE_SITE_URL || 'https://brokebro.in'}/admin" 
+                               style="background-color: #ff6b35; color: #fff; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+                                Review in Admin Panel
+                            </a>
+                        </div>
+                    </div>
+                `
+            });
+            console.log('Admin notification email sent');
+        } catch (mailErr) {
+            console.error('Failed to send admin notification email:', mailErr);
+        }
 
         return addCorsHeaders(NextResponse.json({
             success: true,

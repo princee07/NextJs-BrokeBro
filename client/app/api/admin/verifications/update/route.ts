@@ -36,7 +36,11 @@ export async function PUT(request: NextRequest) {
         // Update verification status
         const updated = await updateVerificationStatus(verificationId, status, adminNotes);
 
+
         if (updated) {
+            // Always get the correct student email
+            const studentEmail = verification.userEmail || (verification.documents && verification.documents.studentEmail);
+
             // If approved, create verified user record and send welcome email
             if (status === 'approved') {
                 console.log('Processing approval for verification:', verificationId);
@@ -49,7 +53,7 @@ export async function PUT(request: NextRequest) {
                 try {
                     const verifiedUser = new VerifiedUser({
                         userId: verification.userId,
-                        userEmail: verification.userEmail,
+                        userEmail: studentEmail,
                         studentName: verification.studentData.studentName,
                         collegeName: verification.studentData.collegeName,
                         rollNo: verification.studentData.rollNo,
@@ -62,30 +66,30 @@ export async function PUT(request: NextRequest) {
                     await verifiedUser.save();
 
                     // Update user's verification status
-                    if (verification.userEmail) {
-                        const user = await User.findOne({ email: verification.userEmail });
+                    if (studentEmail) {
+                        const user = await User.findOne({ email: studentEmail });
                         if (user) {
                             await User.findOneAndUpdate(
-                                { email: verification.userEmail },
+                                { email: studentEmail },
                                 {
                                     isVerified: true,
                                     verificationDate: new Date(),
                                     verificationId: verification.id
                                 }
                             );
-                            console.log('User found and updated:', verification.userEmail);
+                            console.log('User found and updated:', studentEmail);
                         } else {
                             // Create user if not found
                             await User.create({
                                 name: verification.studentData.studentName || 'Unknown',
-                                email: verification.userEmail,
+                                email: studentEmail,
                                 isVerified: true,
                                 verificationDate: new Date(),
                                 verificationId: verification.id,
                                 referralCode: Math.random().toString(36).substring(2, 10),
                                 coins: 0
                             });
-                            console.log('User not found, created new user with isVerified: true:', verification.userEmail);
+                            console.log('User not found, created new user with isVerified: true:', studentEmail);
                         }
                     }
 
@@ -95,9 +99,9 @@ export async function PUT(request: NextRequest) {
                 }
 
                 // Send approval email
-                if (verification.userEmail) {
-                    console.log('Sending approval email to:', verification.userEmail);
-                    await sendApprovalEmail(verification.userEmail, verification.studentData.studentName);
+                if (studentEmail) {
+                    console.log('Sending approval email to:', studentEmail);
+                    await sendApprovalEmail(studentEmail, verification.studentData.studentName);
                 } else {
                     console.warn('No email found for verification:', verificationId);
                 }
@@ -106,9 +110,9 @@ export async function PUT(request: NextRequest) {
             // Send rejection email if verification is rejected
             if (status === 'rejected') {
                 console.log('Processing rejection for verification:', verificationId);
-                if (verification.userEmail) {
-                    console.log('Sending rejection email to:', verification.userEmail);
-                    await sendRejectionEmail(verification.userEmail, verification.studentData.studentName, adminNotes);
+                if (studentEmail) {
+                    console.log('Sending rejection email to:', studentEmail);
+                    await sendRejectionEmail(studentEmail, verification.studentData.studentName, adminNotes);
                 } else {
                     console.warn('No email found for verification:', verificationId);
                 }
