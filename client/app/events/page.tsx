@@ -161,7 +161,7 @@ export default function EventsPage() {
         </div>
       </div>
 
-    
+
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <h2 className="text-xl font-bold mb-4">Host an Event</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -344,7 +344,7 @@ export default function EventsPage() {
           <button
             type="button"
             className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-8 py-2 rounded-xl font-bold shadow-lg hover:from-orange-600 hover:to-pink-600 transition flex items-center gap-2"
-            onClick={e => {}}
+            onClick={e => { }}
             tabIndex={-1}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -361,95 +361,6 @@ export default function EventsPage() {
         <div className="flex-1">
           <h2 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">Upcoming Events</h2>
           <div className="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
-            {events.map(event => {
-              const regCount = registrations[event.id]?.length || 0;
-              const isUserRegistered = registrations[event.id]?.includes(registerName);
-              const isHost = event.hostName && event.hostName.trim().length > 0 && event.hostName === registerName && registerName.trim().length > 0;
-              return (
-                <div
-                  key={event.id}
-                  className="bg-gray-900 rounded-lg shadow-lg overflow-hidden flex md:flex-row flex-col group hover:shadow-xl hover:shadow-orange-500/30 transition-all border border-gray-800 min-h-[320px] md:min-h-[280px]"
-                  onClick={() => handleEventClick(event)}
-                >
-                  <div className="relative w-full md:w-2/5 h-64 md:h-auto">
-                    <Image
-                      src={event.image}
-                      alt={event.title}
-                      fill
-                      className="object-cover object-center group-hover:scale-105 transition-transform duration-300 rounded-l-lg"
-                    />
-                    <div className="absolute top-3 left-3 bg-gradient-to-r from-orange-500 to-pink-500 text-xs px-3 py-1 rounded-full font-semibold">
-                      {event.isFree ? 'FREE' : event.price}
-                    </div>
-                  </div>
-                  <div className="p-8 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-2xl font-semibold mb-3 flex items-center gap-2">
-                        {event.title}
-                        {regCount > 0 && (
-                          <span className="ml-2 bg-green-600 text-xs px-2 py-0.5 rounded-full animate-pulse">
-                            {regCount} Registered
-                          </span>
-                        )}
-                      </h3>
-                      <div className="flex items-center text-gray-400 text-base mb-4">
-                        <span className="mr-2">
-                          {event.date ? new Date(event.date).toLocaleDateString() : ''}
-                        </span>
-                        •
-                        <span className="ml-2">{event.location}</span>
-                      </div>
-                      <div className="text-base text-gray-400 mb-4">Host: {event.hostName || 'TBD'}</div>
-                    </div>
-                    <div className="mt-6">
-                      {isHost ? (
-                        <button
-                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base opacity-60 cursor-not-allowed"
-                          disabled
-                        >
-                          You are the Host
-                        </button>
-                      ) : isUserRegistered ? (
-                        <button
-                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base opacity-60 cursor-not-allowed"
-                          disabled
-                        >
-                          Registered
-                        </button>
-                      ) : event.title === 'Dance Competition' ? (
-                        <button
-                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition"
-                          onClick={() => {
-                            if (isLoading) return;
-                            if (!isAuthenticated) {
-                              router.push('/signup');
-                              return;
-                            }
-                            setDanceModalOpen(true);
-                          }}
-                        >
-                          Register
-                        </button>
-                      ) : (
-                        <button
-                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition"
-                          onClick={() => {
-                            if (isLoading) return;
-                            if (!isAuthenticated) {
-                              router.push('/signup');
-                              return;
-                            }
-                            window.open('https://forms.gle/KGuZFDbTqwWPhtYQ7', '_blank');
-                          }}
-                        >
-                          Register
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
             {events
               .filter(event => {
                 // Filter by search text (title)
