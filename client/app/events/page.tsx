@@ -43,7 +43,6 @@ export default function EventsPage() {
   const { isAuthenticated, isLoading } = useKindeBrowserClient();
   const { isVerified: userIsVerified } = useUserVerification();
 
-  const router = useRouter();
   // Search/filter state
   const [searchText, setSearchText] = useState('');
   const [searchLocation, setSearchLocation] = useState('');
@@ -162,7 +161,7 @@ export default function EventsPage() {
         </div>
       </div>
 
-      {/* Modal for Event Creation */}
+    
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <h2 className="text-xl font-bold mb-4">Host an Event</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
