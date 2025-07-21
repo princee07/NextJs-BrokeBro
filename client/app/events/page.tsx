@@ -1,6 +1,8 @@
 "use client"
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import Image from 'next/image';
 import Modal from '../../components/ui/Modal';
 
@@ -37,6 +39,8 @@ export default function EventsPage() {
   const [registerEventId, setRegisterEventId] = useState<number | null>(null);
   const [registrations, setRegistrations] = useState<{ [eventId: number]: string[] }>({});
   const [danceModalOpen, setDanceModalOpen] = useState(false);
+  const router = useRouter();
+  const { isAuthenticated, isLoading } = useKindeBrowserClient();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -279,8 +283,8 @@ export default function EventsPage() {
         <div className="bg-black rounded-2xl shadow-2xl flex flex-col md:flex-row items-center justify-between p-6 md:space-x-6 space-y-3 md:space-y-0 border-2 border-orange-500">
           <div className="flex items-center w-full md:w-1/3 bg-gray-900 rounded-lg px-3 py-2 border-2 border-transparent focus-within:border-orange-500 transition-all">
             <svg className="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8"/>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
             <input
               type="text"
@@ -290,7 +294,7 @@ export default function EventsPage() {
           </div>
           <div className="flex items-center w-full md:w-1/4 bg-gray-900 rounded-lg px-3 py-2 border-2 border-transparent focus-within:border-orange-500 transition-all">
             <svg className="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z" />
             </svg>
             <input
               type="text"
@@ -300,8 +304,8 @@ export default function EventsPage() {
           </div>
           <div className="flex items-center w-full md:w-1/4 bg-gray-900 rounded-lg px-3 py-2 border-2 border-transparent focus-within:border-orange-500 transition-all">
             <svg className="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <rect x="3" y="4" width="18" height="18" rx="2"/>
-              <path d="M16 2v4M8 2v4M3 10h18"/>
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <path d="M16 2v4M8 2v4M3 10h18" />
             </svg>
             <input
               type="date"
@@ -310,7 +314,7 @@ export default function EventsPage() {
           </div>
           <button className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-8 py-2 rounded-xl font-bold shadow-lg hover:from-orange-600 hover:to-pink-600 transition flex items-center gap-2">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z" />
             </svg>
             Search
           </button>
@@ -380,19 +384,31 @@ export default function EventsPage() {
                       ) : event.title === 'Dance Competition' ? (
                         <button
                           className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition"
-                          onClick={() => setDanceModalOpen(true)}
+                          onClick={() => {
+                            if (isLoading) return;
+                            if (!isAuthenticated) {
+                              router.push('/signup');
+                              return;
+                            }
+                            setDanceModalOpen(true);
+                          }}
                         >
                           Register
                         </button>
                       ) : (
-                        <a
-                          href="https://forms.gle/KGuZFDbTqwWPhtYQ7"
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <button
                           className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition"
+                          onClick={() => {
+                            if (isLoading) return;
+                            if (!isAuthenticated) {
+                              router.push('/signup');
+                              return;
+                            }
+                            window.open('https://forms.gle/KGuZFDbTqwWPhtYQ7', '_blank');
+                          }}
                         >
                           Register
-                        </a>
+                        </button>
                       )}
                     </div>
                   </div>

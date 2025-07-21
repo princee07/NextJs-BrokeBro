@@ -27,12 +27,12 @@ const categories = [
 const products = [
   {
     id: 1,
-    name: 'Jiva Fashion Collection',
+    name: 'Giva Fashion Collection',
     category: 'Fashion',
     price: '₹999 - ₹4,999',
     originalPrice: '₹2,999 - ₹7,999',
     discount: '30% OFF',
-    image: '/assets/jiva/image.png', // updated to use new image
+    image: '/assets/jiva/get Disocunt.png',
     brandLogo: '/assets/logos/jiva.png',
     color: ['bg-pink-200', 'bg-white', 'bg-gray-200'],
     size: 'large',
@@ -46,8 +46,8 @@ const products = [
     price: '₹1,29,900',
     originalPrice: '₹1,49,900',
     discount: '13% OFF',
-    image: '/assets/logos/apple.png',
-    brandLogo: '/assets/logos/apple.png',
+    image: '/assets/exploreproduct/id2.png',
+    brandLogo: '/assets/exploreproduct/id2.png',
     color: ['bg-gray-800', 'bg-gray-600'],
     size: 'medium',
     badge: 'Student Special'
@@ -85,7 +85,7 @@ const products = [
     price: '₹2,499',
     originalPrice: '₹3,999',
     discount: '37% OFF',
-    image: '/assets/nike/image.png', // updated to use new nike product image
+    image: '/assets/exploreproduct/nike.png', // updated to use new nike product image
     brandLogo: '/assets/logos/nike.png',
     color: ['bg-orange-200', 'bg-black', 'bg-white'],
     size: 'medium',
@@ -123,7 +123,7 @@ const products = [
     price: '₹449',
     originalPrice: '₹699',
     discount: '36% OFF',
-    image: '/assets/images/lakme.png',
+    image: '/assets/exploreproduct/lakme.png',
     brandLogo: '/assets/images/lakme.png',
     color: ['bg-purple-200', 'bg-pink-200'],
     size: 'small'
@@ -161,7 +161,7 @@ const products = [
     price: '₹1,799 - ₹5,999',
     originalPrice: '₹2,499 - ₹7,999',
     discount: '28% OFF',
-    image: '/assets/levis/336x280.jpg',
+    image: '/assets/exploreproduct/levis.png',
     brandLogo: '/assets/levis/300x300.png',
     color: ['bg-blue-200', 'bg-white', 'bg-indigo-200'],
     size: 'medium',
@@ -174,7 +174,7 @@ const products = [
     price: '₹999 - ₹3,499',
     originalPrice: '₹1,499 - ₹4,999',
     discount: '30% OFF',
-    image: '/assets/fastrack/image.png',
+    image: '/assets/exploreproduct/fastrack.png',
     brandLogo: '/assets/fastrack/logo.png',
     color: ['bg-gray-900', 'bg-yellow-200', 'bg-white'],
     size: 'small',
@@ -191,7 +191,7 @@ const promotions = [
     color: 'bg-gradient-to-r from-purple-600/20 to-pink-600/20',
     textColor: 'text-purple-400',
     size: 'large',
-    image: '/assets/jiva/jivaposter.png', // updated to use jivaposter for banner
+    image: '/assets/jiva/id1.png', // updated to use jivaposter for banner
     category: 'Fashion'
   },
   {
@@ -519,8 +519,7 @@ export default function ExploreProducts() {
                 initial={{ opacity: 0, y: 50 }}
                 animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
                 transition={{ duration: 0.5, delay: 0.4 + (index * 0.1) }}
-                className={`group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10 ${product.size === 'large' ? 'col-span-1 md:col-span-2 h-[400px]' : 'h-[350px]'
-                  } ${product.size === 'medium' ? 'row-span-1' : ''}`}
+                className={`group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10 ${product.size === 'large' ? 'col-span-1 md:col-span-2 h-[400px]' : product.id === 2 ? 'h-[420px]' : 'h-[350px]'} ${product.size === 'medium' ? 'row-span-1' : ''}`}
                 onClick={() => handleCardClick(product)}
                 style={{ cursor: 'pointer' }}
               >
@@ -537,12 +536,12 @@ export default function ExploreProducts() {
                   {/* Brand Logo */}
                   {product.brandLogo && (
                     <div className="absolute top-4 right-4 z-10">
-                      <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+                      <div className={`bg-white rounded-full flex items-center justify-center shadow-lg ${[5, 8, 11].includes(product.id) ? 'w-20 h-20 p-2' : 'w-12 h-12'}`}>
                         <Image
                           src={product.brandLogo}
                           alt={`${product.category} brand`}
-                          width={28}
-                          height={28}
+                          width={[5, 8, 11].includes(product.id) ? 60 : 28}
+                          height={[5, 8, 11].includes(product.id) ? 60 : 28}
                           style={{ objectFit: 'contain' }}
                         />
                       </div>
@@ -565,19 +564,19 @@ export default function ExploreProducts() {
                     </div>
                   </div>
 
-                  {/* Product Image - Enhanced */}
-                  <div className="relative flex-grow flex items-center justify-center mb-6 bg-white rounded-xl p-0 group-hover:bg-gray-100 transition-all duration-300 h-full w-full">
+                  {/* Product Image - Enhanced (Less Zoom for 5,8,11,12) */}
+                  <div className={`relative flex-grow flex items-center justify-center mb-6 rounded-xl p-0 transition-all duration-300 w-full overflow-hidden ${product.id === 5 ? 'h-[480px] md:h-[520px] lg:h-[560px]' : product.id === 8 ? 'h-[400px] md:h-[440px] lg:h-[480px]' : [2, 11].includes(product.id) ? 'h-[320px] md:h-[350px] lg:h-[380px]' : 'h-full'}`}>
                     <motion.div
                       whileHover={{ scale: 1.08, rotate: 1 }}
                       transition={{ type: 'spring', stiffness: 300, damping: 10 }}
-                      className={`relative w-full h-full`}
+                      className="absolute inset-0 w-full h-full z-0"
                     >
                       <Image
                         src={product.image}
                         alt={product.name}
                         fill
-                        style={{ objectFit: 'contain', background: '#fff' }}
-                        className="drop-shadow-xl group-hover:drop-shadow-2xl transition-all duration-300 rounded-xl"
+                        style={{ objectFit: 'cover', background: 'white' }}
+                        className={`rounded-xl ${[5, 8, 11, 12].includes(product.id) ? 'scale-100' : 'scale-110'}`}
                       />
                     </motion.div>
                   </div>
