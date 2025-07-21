@@ -375,11 +375,11 @@ export default function LifestylePage() {
   const [category, setCategory] = useState(categories[0]);
   const [price, setPrice] = useState(priceRanges[0]);
   const [duration, setDuration] = useState(durations[0]);
-const [showProductModal, setShowProductModal] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [showProductModal, setShowProductModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [productCodeData, setProductCodeData] = useState<any>(null);
-   // Add product click handler with debugging
- const userId=""
+  const userId = "";
   useEffect(() => {
     const interval = setInterval(() => {
       setProducts((prev) =>
@@ -397,20 +397,26 @@ const [showProductModal, setShowProductModal] = useState(false);
 
   const filterProducts = () => {
     let filtered = initialProducts;
-    if (category !== "All Categories") {
-      filtered = filtered.filter((p) => p.category === category);
-    }
-    if (price !== "Price Range") {
-      if (price === "Under $500") {
-        filtered = filtered.filter((p) => p.currentPrice < 500);
-      } else if (price === "$500 - $1000") {
-        filtered = filtered.filter((p) => p.currentPrice >= 500 && p.currentPrice <= 1000);
-      } else if (price === "$1000+") {
-        filtered = filtered.filter((p) => p.currentPrice > 1000);
+    if (searchText.trim() !== "") {
+      filtered = filtered.filter((p) =>
+        p.title.toLowerCase().startsWith(searchText.trim().toLowerCase())
+      );
+    } else {
+      if (category !== "All Categories") {
+        filtered = filtered.filter((p) => p.category === category);
       }
-    }
-    if (duration !== "Duration") {
-      filtered = filtered.filter((p) => p.duration === duration);
+      if (price !== "Price Range") {
+        if (price === "Under $500") {
+          filtered = filtered.filter((p) => p.currentPrice < 500);
+        } else if (price === "$500 - $1000") {
+          filtered = filtered.filter((p) => p.currentPrice >= 500 && p.currentPrice <= 1000);
+        } else if (price === "$1000+") {
+          filtered = filtered.filter((p) => p.currentPrice > 1000);
+        }
+      }
+      if (duration !== "Duration") {
+        filtered = filtered.filter((p) => p.duration === duration);
+      }
     }
     setProducts(filtered);
     setProductCount(filtered.length);
@@ -427,50 +433,9 @@ const [showProductModal, setShowProductModal] = useState(false);
 
   const handleAddToCart = (id: string) => {
     setAdded((prev) => ({ ...prev, [id]: true }));
-    setTimeout(() => {
-      setAdded((prev) => ({ ...prev, [id]: false }));
-    }, 2000);
+    setTimeout(() => setAdded((prev) => ({ ...prev, [id]: false })), 2000);
   };
 
-  useEffect(() => {
-    const cards = document.querySelectorAll<HTMLElement>(".product-card");
-    const enter = function (this: HTMLElement) {
-      this.style.transform = "translateY(-12px)";
-    };
-    const leave = function (this: HTMLElement) {
-      this.style.transform = "translateY(0)";
-    };
-    cards.forEach((card) => {
-      card.addEventListener("mouseenter", enter);
-      card.addEventListener("mouseleave", leave);
-    });
-    return () => {
-      cards.forEach((card) => {
-        card.removeEventListener("mouseenter", enter);
-        card.removeEventListener("mouseleave", leave);
-      });
-    };
-  }, [products]);
-const handleProductClick = (product: any) => {
-  console.log('Product clicked:', product); // Debug log
-  
-  // Generate or retrieve product-specific code data
-  const codeData = {
-    code: `${product.name.replace(/\s+/g, '').slice(0, 8).toUpperCase()}10`,
-    isExpired: false,
-    timeLeft: null,
-    isRevealed: false,
-    codeType: 'fixed' // You can make this dynamic based on product
-  };
-  
-  console.log('Generated code data:', codeData); // Debug log
-  
-  setProductCodeData(codeData);
-  setSelectedProduct(product);
-  setShowProductModal(true);
-  
-  console.log('Modal should be open now'); // Debug log
-};
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
       <nav className="bg-gradient-to-r from-gray-900 to-black py-4 px-4 sm:px-6 lg:px-8 shadow-lg">
@@ -501,99 +466,115 @@ const handleProductClick = (product: any) => {
         </div>
       </nav>
       <HeroSection />
-   <ProductsSection
-  products={products}
-  added={added}
-  handleAddToCart={handleAddToCart}
-  category={category}
-  setCategory={setCategory}
-  price={price}
-  setPrice={setPrice}
-  duration={duration}
-  setDuration={setDuration}
-  filterProducts={filterProducts}         // <-- add this
-  productCount={productCount}             // <-- and this
-/>
-<Modal isOpen={showProductModal} onClose={() => setShowProductModal(false)}>
-  {selectedProduct && productCodeData ? (
-    <div className="relative flex flex-col items-center text-center p-5 w-80 mx-auto bg-gray-900 rounded-2xl shadow-2xl">
-      {/* Close Button */}
-      <button
-        onClick={() => setShowProductModal(false)}
-        className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-white text-lg z-10"
-        aria-label="Close"
-      >
-        ×
-      </button>
-      {/* Product Image */}
-      <div className="w-24 h-20 bg-white rounded-lg flex items-center justify-center mb-3 shadow">
-        <Image
-          src={selectedProduct.image || selectedProduct.img}
-          alt={selectedProduct.name}
-          width={80}
-          height={60}
-          className="object-contain"
+
+      {/* Search bar above products section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-2">
+        <input
+          type="text"
+          placeholder="Search deals alphabetically by name..."
+          value={searchText}
+          onChange={e => {
+            setSearchText(e.target.value);
+            // Filter as user types
+            setTimeout(() => filterProducts(), 0);
+          }}
+          className="w-full md:w-1/2 px-5 py-3 rounded-full border border-orange-400 bg-black text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-lg"
         />
       </div>
-      {/* Product Name */}
-      <h2 className="text-base font-bold text-white mb-1">{selectedProduct.name}</h2>
-      {/* Price Row */}
-      <div className="flex items-center justify-center gap-2 mb-2">
-        {(selectedProduct.originalPrice || selectedProduct.oldPrice) && (
-          <span className="text-gray-400 line-through text-xs">
-            {selectedProduct.originalPrice || selectedProduct.oldPrice}
-          </span>
+
+      <ProductsSection
+        products={products}
+        added={added}
+        handleAddToCart={handleAddToCart}
+        category={category}
+        setCategory={setCategory}
+        price={price}
+        setPrice={setPrice}
+        duration={duration}
+        setDuration={setDuration}
+        filterProducts={filterProducts}
+        productCount={productCount}
+      />
+
+      <Modal isOpen={showProductModal} onClose={() => setShowProductModal(false)}>
+        {selectedProduct && productCodeData ? (
+          <div className="relative flex flex-col items-center text-center p-5 w-80 mx-auto bg-gray-900 rounded-2xl shadow-2xl">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowProductModal(false)}
+              className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-white text-lg z-10"
+              aria-label="Close"
+            >
+              ×
+            </button>
+            {/* Product Image */}
+            <div className="w-24 h-20 bg-white rounded-lg flex items-center justify-center mb-3 shadow">
+              <Image
+                src={selectedProduct.image || selectedProduct.img}
+                alt={selectedProduct.name}
+                width={80}
+                height={60}
+                className="object-contain"
+              />
+            </div>
+            {/* Product Name */}
+            <h2 className="text-base font-bold text-white mb-1">{selectedProduct.name}</h2>
+            {/* Price Row */}
+            <div className="flex items-center justify-center gap-2 mb-2">
+              {(selectedProduct.originalPrice || selectedProduct.oldPrice) && (
+                <span className="text-gray-400 line-through text-xs">
+                  {selectedProduct.originalPrice || selectedProduct.oldPrice}
+                </span>
+              )}
+              <span className="text-green-400 font-bold text-sm">
+                {selectedProduct.price}
+              </span>
+            </div>
+            {/* Discount Info */}
+            {(selectedProduct.originalPrice || selectedProduct.oldPrice) && (
+              <p className="text-green-400 text-xs font-medium mb-2">
+                Save {(() => {
+                  const old = parseFloat(
+                    (selectedProduct.originalPrice || selectedProduct.oldPrice).replace(/[^\d.]/g, '')
+                  );
+                  const current = parseFloat(
+                    selectedProduct.price.replace(/[^\d.]/g, '')
+                  );
+                  const savings = old - current;
+                  const percentage = Math.round((savings / old) * 100);
+                  return `₹${savings.toFixed(0)} (${percentage}% off)`;
+                })()}
+              </p>
+            )}
+            {/* Divider */}
+            <div className="w-full border-b border-gray-800 my-2"></div>
+            {/* Coupon Code Section */}
+            <div className="w-full mb-3">
+              <p className="text-gray-300 text-xs mb-2">Your student coupon code:</p>
+              <RevealCodeButton
+                code={productCodeData.code}
+                isRevealed={productCodeData.isRevealed}
+                brandSlug={selectedProduct.name.replace(/\s+/g, '').toLowerCase()}
+                userId={userId}
+                codeType={productCodeData.codeType}
+              />
+            </div>
+            {/* Visit Store Button */}
+            <a
+              href={selectedProduct.url || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-200 text-xs"
+            >
+              Visit Store
+            </a>
+          </div>
+        ) : (
+          <div className="p-4 text-white w-80 mx-auto bg-gray-900 rounded-2xl relative shadow-2xl">
+            <p className="text-sm mt-4">Loading...</p>
+          </div>
         )}
-        <span className="text-green-400 font-bold text-sm">
-          {selectedProduct.price}
-        </span>
-      </div>
-      {/* Discount Info */}
-      {(selectedProduct.originalPrice || selectedProduct.oldPrice) && (
-        <p className="text-green-400 text-xs font-medium mb-2">
-          Save {(() => {
-            const old = parseFloat(
-              (selectedProduct.originalPrice || selectedProduct.oldPrice).replace(/[^\d.]/g, '')
-            );
-            const current = parseFloat(
-              selectedProduct.price.replace(/[^\d.]/g, '')
-            );
-            const savings = old - current;
-            const percentage = Math.round((savings / old) * 100);
-            return `₹${savings.toFixed(0)} (${percentage}% off)`;
-          })()}
-        </p>
-      )}
-      {/* Divider */}
-      <div className="w-full border-b border-gray-800 my-2"></div>
-      {/* Coupon Code Section */}
-      <div className="w-full mb-3">
-        <p className="text-gray-300 text-xs mb-2">Your student coupon code:</p>
-        <RevealCodeButton
-          code={productCodeData.code}
-          isRevealed={productCodeData.isRevealed}
-          brandSlug={selectedProduct.name.replace(/\s+/g, '').toLowerCase()}
-          userId={userId}
-          codeType={productCodeData.codeType}
-        />
-      </div>
-      {/* Visit Store Button */}
-      <a
-        href={selectedProduct.url || "#"}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-2 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-200 text-xs"
-      >
-        Visit Store
-      </a>
-    </div>
-  ) : (
-    <div className="p-4 text-white w-80 mx-auto bg-gray-900 rounded-2xl relative shadow-2xl">
-      <p className="text-sm mt-4">Loading...</p>
-    </div>
-  )}
-</Modal>
-      
+      </Modal>
     </div>
   );
 }

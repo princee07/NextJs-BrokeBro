@@ -42,6 +42,10 @@ export default function EventsPage() {
   const { isAuthenticated, isLoading } = useKindeBrowserClient();
   const { isVerified: userIsVerified } = useUserVerification();
   const router = useRouter();
+  // Search/filter state
+  const [searchText, setSearchText] = useState('');
+  const [searchLocation, setSearchLocation] = useState('');
+  const [searchDate, setSearchDate] = useState('');
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setForm(prev => ({
@@ -295,7 +299,10 @@ const handleEventClick = (event: typeof initialEvents[0]) => {
 
       {/* Filter/Search Bar */}
       <div className="container mx-auto px-4 mb-12">
-        <div className="bg-black rounded-2xl shadow-2xl flex flex-col md:flex-row items-center justify-between p-6 md:space-x-6 space-y-3 md:space-y-0 border-2 border-orange-500">
+        <form
+          className="bg-black rounded-2xl shadow-2xl flex flex-col md:flex-row items-center justify-between p-6 md:space-x-6 space-y-3 md:space-y-0 border-2 border-orange-500"
+          onSubmit={e => e.preventDefault()}
+        >
           <div className="flex items-center w-full md:w-1/3 bg-gray-900 rounded-lg px-3 py-2 border-2 border-transparent focus-within:border-orange-500 transition-all">
             <svg className="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <circle cx="11" cy="11" r="8"/>
@@ -305,6 +312,8 @@ const handleEventClick = (event: typeof initialEvents[0]) => {
               type="text"
               placeholder="Search events..."
               className="bg-transparent text-white px-2 py-1 w-full focus:outline-none placeholder-gray-400"
+              value={searchText}
+              onChange={e => setSearchText(e.target.value)}
             />
           </div>
           <div className="flex items-center w-full md:w-1/4 bg-gray-900 rounded-lg px-3 py-2 border-2 border-transparent focus-within:border-orange-500 transition-all">
@@ -315,6 +324,8 @@ const handleEventClick = (event: typeof initialEvents[0]) => {
               type="text"
               placeholder="Location"
               className="bg-transparent text-white px-2 py-1 w-full focus:outline-none placeholder-gray-400"
+              value={searchLocation}
+              onChange={e => setSearchLocation(e.target.value)}
             />
           </div>
           <div className="flex items-center w-full md:w-1/4 bg-gray-900 rounded-lg px-3 py-2 border-2 border-transparent focus-within:border-orange-500 transition-all">
@@ -325,15 +336,22 @@ const handleEventClick = (event: typeof initialEvents[0]) => {
             <input
               type="date"
               className="bg-transparent text-white px-2 py-1 w-full focus:outline-none placeholder-gray-400 rounded-lg"
+              value={searchDate}
+              onChange={e => setSearchDate(e.target.value)}
             />
           </div>
-          <button className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-8 py-2 rounded-xl font-bold shadow-lg hover:from-orange-600 hover:to-pink-600 transition flex items-center gap-2">
+          <button
+            type="button"
+            className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-8 py-2 rounded-xl font-bold shadow-lg hover:from-orange-600 hover:to-pink-600 transition flex items-center gap-2"
+            onClick={e => {}}
+            tabIndex={-1}
+          >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/>
             </svg>
             Search
           </button>
-        </div>
+        </form>
       </div>
 
       {/* Main Content */}
@@ -342,83 +360,94 @@ const handleEventClick = (event: typeof initialEvents[0]) => {
         <div className="flex-1">
           <h2 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">Upcoming Events</h2>
           <div className="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
-            {events.map(event => {
-              const regCount = registrations[event.id]?.length || 0;
-              const isUserRegistered = registrations[event.id]?.includes(registerName);
-              const isHost = event.hostName && event.hostName.trim().length > 0 && event.hostName === registerName && registerName.trim().length > 0;
-              return (
-                <div
-                  key={event.id}
-                  className="bg-gray-900 rounded-lg shadow-lg overflow-hidden flex md:flex-row flex-col group hover:shadow-xl hover:shadow-orange-500/30 transition-all border border-gray-800 min-h-[320px] md:min-h-[280px]"
-                   onClick={() => handleEventClick(event)}
-                >
-                  <div className="relative w-full md:w-2/5 h-64 md:h-auto">
-                    <Image
-                      src={event.image}
-                      alt={event.title}
-                      fill
-                      className="object-cover object-center group-hover:scale-105 transition-transform duration-300 rounded-l-lg"
-                    />
-                    <div className="absolute top-3 left-3 bg-gradient-to-r from-orange-500 to-pink-500 text-xs px-3 py-1 rounded-full font-semibold">
-                      {event.isFree ? 'FREE' : event.price}
-                    </div>
-                  </div>
-                  <div className="p-8 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-2xl font-semibold mb-3 flex items-center gap-2">
-                        {event.title}
-                        {regCount > 0 && (
-                          <span className="ml-2 bg-green-600 text-xs px-2 py-0.5 rounded-full animate-pulse">
-                            {regCount} Registered
-                          </span>
-                        )}
-                      </h3>
-                      <div className="flex items-center text-gray-400 text-base mb-4">
-                        <span className="mr-2">
-                          {event.date ? new Date(event.date).toLocaleDateString() : ''}
-                        </span>
-                        •
-                        <span className="ml-2">{event.location}</span>
+            {events
+              .filter(event => {
+                // Filter by search text (title)
+                if (searchText && !event.title.toLowerCase().includes(searchText.toLowerCase())) return false;
+                // Filter by location
+                if (searchLocation && !event.location.toLowerCase().includes(searchLocation.toLowerCase())) return false;
+                // Filter by date (YYYY-MM-DD)
+                if (searchDate && event.date !== searchDate) return false;
+                return true;
+              })
+              .map(event => {
+                const regCount = registrations[event.id]?.length || 0;
+                const isUserRegistered = registrations[event.id]?.includes(registerName);
+                const isHost = event.hostName && event.hostName.trim().length > 0 && event.hostName === registerName && registerName.trim().length > 0;
+                return (
+                  <div
+                    key={event.id}
+                    className="bg-gray-900 rounded-lg shadow-lg overflow-hidden flex md:flex-row flex-col group hover:shadow-xl hover:shadow-orange-500/30 transition-all border border-gray-800 min-h-[320px] md:min-h-[280px]"
+                    onClick={() => handleEventClick(event)}
+                  >
+                    <div className="relative w-full md:w-2/5 h-64 md:h-auto">
+                      <Image
+                        src={event.image}
+                        alt={event.title}
+                        fill
+                        className="object-cover object-center group-hover:scale-105 transition-transform duration-300 rounded-l-lg"
+                      />
+                      <div className="absolute top-3 left-3 bg-gradient-to-r from-orange-500 to-pink-500 text-xs px-3 py-1 rounded-full font-semibold">
+                        {event.isFree ? 'FREE' : event.price}
                       </div>
-                      <div className="text-base text-gray-400 mb-4">Host: {event.hostName || 'TBD'}</div>
                     </div>
-                    <div className="mt-6">
-                      {isHost ? (
-                        <button
-                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base opacity-60 cursor-not-allowed"
-                          disabled
-                        >
-                          You are the Host
-                        </button>
-                      ) : isUserRegistered ? (
-                        <button
-                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base opacity-60 cursor-not-allowed"
-                          disabled
-                        >
-                          Registered
-                        </button>
-                      ) : event.title === 'Dance Competition' ? (
-                        <button
-                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition"
-                          onClick={() => setDanceModalOpen(true)}
-                        >
-                          Register
-                        </button>
-                      ) : (
-                        <a
-                          href="https://forms.gle/KGuZFDbTqwWPhtYQ7"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition"
-                        >
-                          Register
-                        </a>
-                      )}
+                    <div className="p-8 flex-1 flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-2xl font-semibold mb-3 flex items-center gap-2">
+                          {event.title}
+                          {regCount > 0 && (
+                            <span className="ml-2 bg-green-600 text-xs px-2 py-0.5 rounded-full animate-pulse">
+                              {regCount} Registered
+                            </span>
+                          )}
+                        </h3>
+                        <div className="flex items-center text-gray-400 text-base mb-4">
+                          <span className="mr-2">
+                            {event.date ? new Date(event.date).toLocaleDateString() : ''}
+                          </span>
+                          •
+                          <span className="ml-2">{event.location}</span>
+                        </div>
+                        <div className="text-base text-gray-400 mb-4">Host: {event.hostName || 'TBD'}</div>
+                      </div>
+                      <div className="mt-6">
+                        {isHost ? (
+                          <button
+                            className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base opacity-60 cursor-not-allowed"
+                            disabled
+                          >
+                            You are the Host
+                          </button>
+                        ) : isUserRegistered ? (
+                          <button
+                            className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base opacity-60 cursor-not-allowed"
+                            disabled
+                          >
+                            Registered
+                          </button>
+                        ) : event.title === 'Dance Competition' ? (
+                          <button
+                            className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition"
+                            onClick={e => { e.stopPropagation(); setDanceModalOpen(true); }}
+                          >
+                            Register
+                          </button>
+                        ) : (
+                          <a
+                            href="https://forms.gle/KGuZFDbTqwWPhtYQ7"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition"
+                            onClick={e => e.stopPropagation()}
+                          >
+                            Register
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
       </div>

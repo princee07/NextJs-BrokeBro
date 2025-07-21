@@ -338,6 +338,8 @@ export default function FashionPage() {
   const [wishlist, setWishlist] = useState<number[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedFilter, setSelectedFilter] = useState('all');
+  // Search bar state
+  const [searchText, setSearchText] = useState('');
 
   // Modal states
   const [showBrandModal, setShowBrandModal] = useState(false);
@@ -408,11 +410,15 @@ export default function FashionPage() {
     setShowCouponModal(true);
   };
 
-  // Trending Products: show all products by default, and allow filtering by brand only if user selects a filter
-  const filteredProducts = selectedFilter === 'all'
-    ? staticTrendingProducts
-    : staticTrendingProducts.filter(product =>
-      product.brand.toLowerCase() === selectedFilter.toLowerCase()
+  // Trending Products: filter by brand and search text
+  const filteredProducts = staticTrendingProducts
+    .filter(product =>
+      selectedFilter === 'all' || product.brand.toLowerCase() === selectedFilter.toLowerCase()
+    )
+    .filter(product =>
+      searchText.trim() === '' ||
+      product.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      product.brand.toLowerCase().includes(searchText.toLowerCase())
     );
 
   return (
@@ -759,6 +765,18 @@ export default function FashionPage() {
                 </div>
               </div>
             </motion.div>
+
+            {/* Search Bar for Trending Products */}
+            <div className="mb-8 flex items-center max-w-lg mx-auto bg-white/10 rounded-full px-4 py-2 gap-2">
+              <FaSearch className="text-gray-400 text-lg" />
+              <input
+                type="text"
+                placeholder="Search products or brands..."
+                className="flex-1 bg-transparent text-white placeholder-gray-400 focus:outline-none px-2 py-1"
+                value={searchText}
+                onChange={e => setSearchText(e.target.value)}
+              />
+            </div>
 
             <div className={`grid gap-8 ${viewMode === 'grid'
               ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'

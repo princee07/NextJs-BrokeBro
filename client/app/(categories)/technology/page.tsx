@@ -119,7 +119,7 @@ const EcommerceHero: React.FC = () => {
       description: "Upto 55% off on student laptop",
     },
      {
-      id: 8,
+      id: 9,
       name: "Apple MacBook Pro",
       price: 49.99,
       image: "https://images.seeklogo.com/logo-png/42/1/apple-logo-png_seeklogo-427436.png",
@@ -152,13 +152,37 @@ const EcommerceHero: React.FC = () => {
       cta: "View Best Sellers",
       background: "from-orange-600 to-pink-500",
     },
-  ]
+     ]
 
+  // Search bar state and filtering logic (must be after featuredProducts)
+  const [searchText, setSearchText] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(featuredProducts);
+
+  useEffect(() => {
+    if (!searchText.trim()) {
+      setFilteredProducts(featuredProducts);
+      return;
+    }
+    const text = searchText.trim().toLowerCase();
+    if (/^\d+$/.test(text)) {
+      setFilteredProducts(
+        featuredProducts.filter(
+          (p) => p.discount && p.discount.toString().startsWith(text)
+        )
+      );
+    } else {
+      setFilteredProducts(
+        featuredProducts.filter(
+          (p) => p.name.toLowerCase().startsWith(text) || p.name.toLowerCase().includes(text)
+        )
+      );
+    }
+  }, [searchText, featuredProducts]);
 
   // Modal state for coupon
-  const [showProductModal, setShowProductModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [productCodeData, setProductCodeData] = useState<{ code: string; isRevealed: boolean; codeType: string } | null>(null);
+    const [showProductModal, setShowProductModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [productCodeData, setProductCodeData] = useState<{ code: string; isRevealed: boolean; codeType: string } | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -305,6 +329,20 @@ const EcommerceHero: React.FC = () => {
       </div>
 
       {/* Featured Products Section */}
+      {/* Search Bar */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-2">
+        <input
+          type="text"
+          placeholder="Search by brand or discount..."
+          value={searchText}
+          onChange={e => setSearchText(e.target.value)}
+          className="w-full md:w-1/2 px-5 py-3 rounded-full border border-orange-400 bg-black text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-lg"
+        />
+        <div className="text-sm text-gray-400 mt-2">
+          Showing {filteredProducts.length} deals
+        </div>
+      </div>
+
       <div className="py-20 bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden">
         {/* Background decorations */}
         <div className="absolute inset-0 opacity-10">
@@ -327,7 +365,7 @@ const EcommerceHero: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProducts.map((product, index) => (
+            {filteredProducts.map((product, index) => (
               <VerificationGate key={product.id}>
                 <div
                   className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-gray-700/50 rounded-3xl shadow-2xl overflow-hidden group hover:shadow-3xl hover:border-orange-500/60 backdrop-blur-sm transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 animate-fade-in-up"
