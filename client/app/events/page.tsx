@@ -1,11 +1,9 @@
 "use client"
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import Image from 'next/image';
 import Modal from '../../components/ui/Modal';
-import { useUserVerification } from '@/hooks/useUserVerification';
+
 const initialEvents = [
   {
     id: 1,
@@ -39,14 +37,7 @@ export default function EventsPage() {
   const [registerEventId, setRegisterEventId] = useState<number | null>(null);
   const [registrations, setRegistrations] = useState<{ [eventId: number]: string[] }>({});
   const [danceModalOpen, setDanceModalOpen] = useState(false);
-  const router = useRouter();
-  const { isAuthenticated, isLoading } = useKindeBrowserClient();
-  const { isVerified: userIsVerified } = useUserVerification();
 
-  // Search/filter state
-  const [searchText, setSearchText] = useState('');
-  const [searchLocation, setSearchLocation] = useState('');
-  const [searchDate, setSearchDate] = useState('');
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setForm(prev => ({
@@ -55,20 +46,7 @@ export default function EventsPage() {
       price: name === 'isFree' && checked ? 'FREE' : prev.price,
     }));
   };
-  const handleEventClick = (event: typeof initialEvents[0]) => {
 
-    if (isLoading) return; // Don't do anything while loading auth state
-    if (!isAuthenticated) {
-      router.push('/signup');
-      return;
-    }
-    if (!userIsVerified) {
-      router.push('/student-verification');
-      return;
-    }
-    // You can open a modal, show details, or do anything else here
-    console.log(`Clicked on event: ${event.title}`);
-  };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
     if (file) {
@@ -135,8 +113,6 @@ export default function EventsPage() {
   const isRegistered = (eventId: number) => {
     return registerEventId && registrations[eventId]?.includes(registerName);
   };
-  // 3-stage click handler
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white pt-32">
@@ -161,7 +137,7 @@ export default function EventsPage() {
         </div>
       </div>
 
-
+      {/* Modal for Event Creation */}
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <h2 className="text-xl font-bold mb-4">Host an Event</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -269,7 +245,7 @@ export default function EventsPage() {
       </Modal>
 
       {/* Modal for Dance Competition Details */}
-      {isAuthenticated && <Modal isOpen={danceModalOpen} onClose={() => setDanceModalOpen(false)}>
+      <Modal isOpen={danceModalOpen} onClose={() => setDanceModalOpen(false)}>
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-center mb-2 bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">BrokeBro 1-Minute Dance Challenge</h2>
           <div className="text-center text-white">College Edition – Show your best moves!</div>
@@ -280,7 +256,7 @@ export default function EventsPage() {
             <div className="mb-2">🧾 E-certificates for all valid entries</div>
             <div className="font-bold mb-1">📅 Important Dates</div>
             <div>Submit by: 6 Aug</div>
-            <div>Voting: 1-15 Aug</div>
+            <div>Voting 10-15 Aug</div>
             <div className="mb-2">Results: 15 Aug, 6 PM</div>
             <div className="font-bold mb-1">✅ What to Do</div>
             <div>Upload a 60-sec dance video (MP4/MOV, ≤100MB)</div>
@@ -296,14 +272,11 @@ export default function EventsPage() {
             Click here to Register
           </a>
         </div>
-      </Modal>}
+      </Modal>
 
       {/* Filter/Search Bar */}
       <div className="container mx-auto px-4 mb-12">
-        <form
-          className="bg-black rounded-2xl shadow-2xl flex flex-col md:flex-row items-center justify-between p-6 md:space-x-6 space-y-3 md:space-y-0 border-2 border-orange-500"
-          onSubmit={e => e.preventDefault()}
-        >
+        <div className="bg-black rounded-2xl shadow-2xl flex flex-col md:flex-row items-center justify-between p-6 md:space-x-6 space-y-3 md:space-y-0 border-2 border-orange-500">
           <div className="flex items-center w-full md:w-1/3 bg-gray-900 rounded-lg px-3 py-2 border-2 border-transparent focus-within:border-orange-500 transition-all">
             <svg className="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <circle cx="11" cy="11" r="8" />
@@ -313,8 +286,6 @@ export default function EventsPage() {
               type="text"
               placeholder="Search events..."
               className="bg-transparent text-white px-2 py-1 w-full focus:outline-none placeholder-gray-400"
-              value={searchText}
-              onChange={e => setSearchText(e.target.value)}
             />
           </div>
           <div className="flex items-center w-full md:w-1/4 bg-gray-900 rounded-lg px-3 py-2 border-2 border-transparent focus-within:border-orange-500 transition-all">
@@ -325,8 +296,6 @@ export default function EventsPage() {
               type="text"
               placeholder="Location"
               className="bg-transparent text-white px-2 py-1 w-full focus:outline-none placeholder-gray-400"
-              value={searchLocation}
-              onChange={e => setSearchLocation(e.target.value)}
             />
           </div>
           <div className="flex items-center w-full md:w-1/4 bg-gray-900 rounded-lg px-3 py-2 border-2 border-transparent focus-within:border-orange-500 transition-all">
@@ -337,22 +306,15 @@ export default function EventsPage() {
             <input
               type="date"
               className="bg-transparent text-white px-2 py-1 w-full focus:outline-none placeholder-gray-400 rounded-lg"
-              value={searchDate}
-              onChange={e => setSearchDate(e.target.value)}
             />
           </div>
-          <button
-            type="button"
-            className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-8 py-2 rounded-xl font-bold shadow-lg hover:from-orange-600 hover:to-pink-600 transition flex items-center gap-2"
-            onClick={e => { }}
-            tabIndex={-1}
-          >
+          <button className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-8 py-2 rounded-xl font-bold shadow-lg hover:from-orange-600 hover:to-pink-600 transition flex items-center gap-2">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z" />
             </svg>
             Search
           </button>
-        </form>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -361,94 +323,82 @@ export default function EventsPage() {
         <div className="flex-1">
           <h2 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">Upcoming Events</h2>
           <div className="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
-            {events
-              .filter(event => {
-                // Filter by search text (title)
-                if (searchText && !event.title.toLowerCase().includes(searchText.toLowerCase())) return false;
-                // Filter by location
-                if (searchLocation && !event.location.toLowerCase().includes(searchLocation.toLowerCase())) return false;
-                // Filter by date (YYYY-MM-DD)
-                if (searchDate && event.date !== searchDate) return false;
-                return true;
-              })
-              .map(event => {
-                const regCount = registrations[event.id]?.length || 0;
-                const isUserRegistered = registrations[event.id]?.includes(registerName);
-                const isHost = event.hostName && event.hostName.trim().length > 0 && event.hostName === registerName && registerName.trim().length > 0;
-                return (
-                  <div
-                    key={event.id}
-                    className="bg-gray-900 rounded-lg shadow-lg overflow-hidden flex md:flex-row flex-col group hover:shadow-xl hover:shadow-orange-500/30 transition-all border border-gray-800 min-h-[320px] md:min-h-[280px]"
-                    onClick={() => handleEventClick(event)}
-                  >
-                    <div className="relative w-full md:w-2/5 h-64 md:h-auto">
-                      <Image
-                        src={event.image}
-                        alt={event.title}
-                        fill
-                        className="object-cover object-center group-hover:scale-105 transition-transform duration-300 rounded-l-lg"
-                      />
-                      <div className="absolute top-3 left-3 bg-gradient-to-r from-orange-500 to-pink-500 text-xs px-3 py-1 rounded-full font-semibold">
-                        {event.isFree ? 'FREE' : event.price}
-                      </div>
-                    </div>
-                    <div className="p-8 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-2xl font-semibold mb-3 flex items-center gap-2">
-                          {event.title}
-                          {regCount > 0 && (
-                            <span className="ml-2 bg-green-600 text-xs px-2 py-0.5 rounded-full animate-pulse">
-                              {regCount} Registered
-                            </span>
-                          )}
-                        </h3>
-                        <div className="flex items-center text-gray-400 text-base mb-4">
-                          <span className="mr-2">
-                            {event.date ? new Date(event.date).toLocaleDateString() : ''}
-                          </span>
-                          •
-                          <span className="ml-2">{event.location}</span>
-                        </div>
-                        <div className="text-base text-gray-400 mb-4">Host: {event.hostName || 'TBD'}</div>
-                      </div>
-                      <div className="mt-6">
-                        {isHost ? (
-                          <button
-                            className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base opacity-60 cursor-not-allowed"
-                            disabled
-                          >
-                            You are the Host
-                          </button>
-                        ) : isUserRegistered ? (
-                          <button
-                            className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base opacity-60 cursor-not-allowed"
-                            disabled
-                          >
-                            Registered
-                          </button>
-                        ) : event.title === 'Dance Competition' ? (
-                          <button
-                            className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition"
-                            onClick={e => { e.stopPropagation(); setDanceModalOpen(true); }}
-                          >
-                            Register
-                          </button>
-                        ) : (
-                          <a
-                            href="https://forms.gle/KGuZFDbTqwWPhtYQ7"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition"
-                            onClick={e => e.stopPropagation()}
-                          >
-                            Register
-                          </a>
-                        )}
-                      </div>
+            {events.map(event => {
+              const regCount = registrations[event.id]?.length || 0;
+              const isUserRegistered = registrations[event.id]?.includes(registerName);
+              const isHost = event.hostName && event.hostName.trim().length > 0 && event.hostName === registerName && registerName.trim().length > 0;
+              return (
+                <div
+                  key={event.id}
+                  className="bg-gray-900 rounded-lg shadow-lg overflow-hidden flex md:flex-row flex-col group hover:shadow-xl hover:shadow-orange-500/30 transition-all border border-gray-800 min-h-[320px] md:min-h-[280px]"
+                >
+                  <div className="relative w-full md:w-2/5 h-64 md:h-auto">
+                    <Image
+                      src={event.image}
+                      alt={event.title}
+                      fill
+                      className="object-cover object-center group-hover:scale-105 transition-transform duration-300 rounded-l-lg"
+                    />
+                    <div className="absolute top-3 left-3 bg-gradient-to-r from-orange-500 to-pink-500 text-xs px-3 py-1 rounded-full font-semibold">
+                      {event.isFree ? 'FREE' : event.price}
                     </div>
                   </div>
-                );
-              })}
+                  <div className="p-8 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-2xl font-semibold mb-3 flex items-center gap-2">
+                        {event.title}
+                        {regCount > 0 && (
+                          <span className="ml-2 bg-green-600 text-xs px-2 py-0.5 rounded-full animate-pulse">
+                            {regCount} Registered
+                          </span>
+                        )}
+                      </h3>
+                      <div className="flex items-center text-gray-400 text-base mb-4">
+                        <span className="mr-2">
+                          {event.date ? new Date(event.date).toLocaleDateString() : ''}
+                        </span>
+                        •
+                        <span className="ml-2">{event.location}</span>
+                      </div>
+                      <div className="text-base text-gray-400 mb-4">Host: {event.hostName || 'TBD'}</div>
+                    </div>
+                    <div className="mt-6">
+                      {isHost ? (
+                        <button
+                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base opacity-60 cursor-not-allowed"
+                          disabled
+                        >
+                          You are the Host
+                        </button>
+                      ) : isUserRegistered ? (
+                        <button
+                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base opacity-60 cursor-not-allowed"
+                          disabled
+                        >
+                          Registered
+                        </button>
+                      ) : event.title === 'Dance Competition' ? (
+                        <button
+                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition cursor-pointer"
+                          onClick={() => setDanceModalOpen(true)}
+                        >
+                          Register
+                        </button>
+                      ) : (
+                        <a
+                          href="https://forms.gle/KGuZFDbTqwWPhtYQ7"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition cursor-pointer"
+                        >
+                          Register
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

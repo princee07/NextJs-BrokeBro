@@ -1,0 +1,7 @@
+/* Force override any oklch color on the ID card and its children */
+#id-card,
+#id-card * {
+    color: #fff !important;
+    background: #000 !important;
+    border-color: #ff8800 !important;
+}

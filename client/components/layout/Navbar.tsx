@@ -590,10 +590,10 @@ export default function NavbarClient({ user }: { user: any }) {
                               </Link>
                               {/* Refer & Earn Button */}
                               <button
-                                className="w-full flex items-center justify-center px-4 py-2 text-orange-400 hover:text-white hover:bg-orange-500/10 transition-colors duration-200 font-semibold border-b border-orange-500/20"
+                                className="flex items-center px-4 py-3 text-green-400 hover:text-white hover:bg-green-600/10 transition-colors duration-200 font-semibold w-full"
                                 onClick={handleOpenReferralModal}
                               >
-                                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m4 4h-1v-4h-1m-4 4h-1v-4h-1" /></svg>
+                                <svg className="w-5 h-5 mr-3 text-green-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m4 4h-1v-4h-1m-4 4h-1v-4h-1" /></svg>
                                 Refer & Earn
                               </button>
 
