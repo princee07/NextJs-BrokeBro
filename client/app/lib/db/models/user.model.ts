@@ -17,6 +17,13 @@ export interface IUser extends Document {
   isVerified?: boolean;
   verificationDate?: Date;
   verificationId?: string;
+  // QR code data for ID card
+  qrCodeData?: {
+    studentId: string;
+    name: string;
+    generatedAt: string;
+    uniqueCode: string;
+  };
   // ...add other fields as needed
 }
 
@@ -39,6 +46,11 @@ const UserSchema: Schema = new Schema<IUser>({
   isVerified: { type: Boolean, default: false },
   verificationDate: { type: Date, default: null },
   verificationId: { type: String, default: null },
+  // QR code data for ID card
+  qrCodeData: {
+    type: Object,
+    default: null,
+  },
   // ...add other fields as needed
 }, {
   timestamps: true, // This adds createdAt and updatedAt automatically

@@ -37,6 +37,15 @@ export async function handleUserCreation({
     }
   }
 
+  // Generate unique QR code data
+  const uniqueCode = uuidv4();
+  const qrCodeData = {
+    studentId: user.id || user.sub || uuidv4(),
+    name: `${user.given_name} ${user.family_name}`.trim(),
+    generatedAt: new Date().toISOString(),
+    uniqueCode,
+  };
+
   // Create the new user in our database
   await User.create({
     name: `${user.given_name} ${user.family_name}`,
@@ -45,5 +54,6 @@ export async function handleUserCreation({
     coins: initialCoins,
     referredBy,
     referralCode: uuidv4().slice(0, 8), // Generate unique referral code
+    qrCodeData,
   });
 } 
