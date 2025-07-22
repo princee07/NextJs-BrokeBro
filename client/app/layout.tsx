@@ -3,9 +3,10 @@ import "./styles/global.css";
 import NavbarWrapper from "@/components/layout/NavbarWrapper";
 import Footer from "@/components/layout/Footer";
 import ReferralProcessor from "@/components/auth/ReferralProcessor";
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
 import Script from "next/script";
+import { SP } from "next/dist/shared/lib/utils";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -41,6 +42,7 @@ export default function RootLayout({
         <main>{children}</main>
         <Footer />
         <Analytics />
+        <SpeedInsights/>
         {/* Development Test Controls */}
       </body>
     </html>
