@@ -506,7 +506,13 @@ export default function NavbarClient({ user }: { user: any }) {
                       </Link>
                       {/* Dropdown for TECHNOLOGY */}
                       {category.dropdown && (hoveredCategory === category.name || activeCategory === category.name) && (
-                        <div className="absolute left-0 top-full mt-2 min-w-[160px] bg-gray-900 border border-gray-700 rounded-lg shadow-lg z-50">
+                        <div
+                          className="fixed min-w-[160px] bg-gray-900 border border-gray-700 rounded-lg shadow-lg z-[2000]"
+                          style={{
+                            left: (document.getElementById(`nav-${category.name}`)?.getBoundingClientRect().left ?? 0) + 'px',
+                            top: ((document.getElementById(`nav-${category.name}`)?.getBoundingClientRect().bottom ?? 0) + 8) + 'px',
+                          }}
+                        >
                           {category.dropdown.map((item, i) => (
                             <Link key={i} href={item.path} className="block px-4 py-2 text-sm text-gray-200 hover:bg-orange-500/80 hover:text-white rounded-lg">
                               {item.name}
