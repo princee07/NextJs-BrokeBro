@@ -1,12 +1,40 @@
+import "@/styles/fix-oklch.css";
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+import html2canvas from "html2canvas";
 import QRCode from "react-qr-code";
 import ReferralSection from "@/components/ReferralSection";
 import ProfileVerificationBadge from '@/components/ui/ProfileVerificationBadge';
 import { useStudentVerification } from '@/hooks/useStudentVerification';
 
 export default function ProfileClient({ user }: { user: any }) {
+  const idCardRef = useRef<HTMLDivElement>(null);
+  const [downloading, setDownloading] = useState(false);
+
+  // Download ID Card as image
+  const handleDownloadIdCard = async () => {
+    if (!idCardRef.current) return alert("ID Card not found. Please make sure it is visible.");
+    setDownloading(true);
+    try {
+      // Wait a tick to ensure rendering
+      await new Promise(res => setTimeout(res, 100));
+      const canvas = await html2canvas(idCardRef.current, { backgroundColor: "#fff", useCORS: true, logging: true });
+      const dataUrl = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = `BrokeBro_ID_Card_${user?.given_name || "user"}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      alert("ID Card downloaded successfully!");
+    } catch (err) {
+      alert("Failed to download ID Card. Please try again or check the console for errors.");
+      console.error("ID Card download error:", err);
+    } finally {
+      setDownloading(false);
+    }
+  };
   const [uploadedResume, setUploadedResume] = useState<File | null>(null);
   const [resumeUrl, setResumeUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -269,7 +297,7 @@ export default function ProfileClient({ user }: { user: any }) {
           <h3 className="text-xl font-bold text-white mb-4 text-center">Your BrokeBro ID Card</h3>
 
           {/* ID Card - Exact replica */}
-          <div className="relative bg-black rounded-2xl p-0 border-2 border-orange-500 shadow-2xl mx-auto max-w-sm aspect-[3/5] overflow-hidden">
+          <div id="id-card" ref={idCardRef} className="relative bg-black rounded-2xl p-0 border-2 border-orange-500 shadow-2xl mx-auto max-w-sm aspect-[3/5] overflow-hidden">
             {/* Inner orange border */}
             <div className="absolute inset-3 border-2 border-orange-500 rounded-xl"></div>
 
@@ -342,11 +370,15 @@ export default function ProfileClient({ user }: { user: any }) {
 
           {/* Download Button */}
           <div className="mt-6 text-center">
-            <button className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors text-sm flex items-center gap-2 mx-auto">
+            <button
+              className={`bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors text-sm flex items-center gap-2 mx-auto cursor-pointer ${downloading ? 'opacity-60 pointer-events-none' : ''}`}
+              onClick={handleDownloadIdCard}
+              disabled={downloading}
+            >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              Download ID Card
+              {downloading ? 'Downloading...' : 'Download ID Card'}
             </button>
           </div>
         </div>
