@@ -10,6 +10,7 @@ import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useRouter } from "next/navigation";
 import { useUserVerification } from '@/hooks/useUserVerification';
 import Modal from '../ui/Modal';
+import { getDailyCouponCode } from '@/utils/couponCode';
 
 // Category data based on available assets
 const categories = [
@@ -38,7 +39,7 @@ const products = [
     size: 'large',
     featured: true,
     badge: 'Trending',
-    code: 'GIVA30', 
+    code: 'GIVA30',
   },
   {
     id: 2,
@@ -52,7 +53,7 @@ const products = [
     color: ['bg-gray-800', 'bg-gray-600'],
     size: 'medium',
     badge: 'Student Special',
-    code: 'APPLE10', 
+    code: 'APPLE10',
   },
   {
     id: 3,
@@ -69,18 +70,18 @@ const products = [
   },
   {
     id: 4,
-    name: 'Dell Inspiron Laptop',
-    category: 'Tech',
+    name: 'Glued supercharged',
+    category: 'Gaming',
     price: '₹45,990',
     originalPrice: '₹65,990',
     discount: '30% OFF',
-    image: '/assets/laptops/laptopbanner.png',
-    brandLogo: '/assets/logos/dell.png',
+    image: '/assets/exploreproduct/glued.png',
+    brandLogo: '/assets/exploreproduct/glued.png',
     color: ['bg-blue-200', 'bg-gray-200'],
     size: 'large',
     featured: true,
     badge: 'Best Seller',
-    code: 'DELL30',
+    code: 'Brokebro20',
   },
   {
     id: 5,
@@ -94,7 +95,7 @@ const products = [
     color: ['bg-orange-200', 'bg-black', 'bg-white'],
     size: 'medium',
     badge: 'Sports Special',
-    code: 'NIKE20', 
+    code: 'NIKE20',
   },
   {
     id: 6,
@@ -233,15 +234,30 @@ export default function ExploreProducts() {
   const [inView, setInView] = useState(false);
   const sectionRef = useRef(null);
   const { isAuthenticated, isLoading } = useKindeBrowserClient();
-  const { isVerified } = useUserVerification();
+  const { isVerified, refetch: refetchVerification, loading: verificationLoading } = useUserVerification();
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const router = useRouter();
   const [showSignupModal, setShowSignupModal] = useState(false);
+  // Glued coupon code expiration state
+  const today = new Date().toISOString().slice(0, 10);
+  const expiredKey = `glued_coupon_expired_${today}`;
+  const [gluedExpired, setGluedExpired] = useState(false);
+  // Rating state for coupon modal
+  const [rating, setRating] = useState<null | 'up' | 'down'>(null);
+  useEffect(() => {
+    setGluedExpired(localStorage.getItem(expiredKey) === 'true');
+  }, [expiredKey, showCouponModal]);
+  // Reset rating when modal opens
+  useEffect(() => {
+    if (showCouponModal) setRating(null);
+  }, [showCouponModal]);
 
   // Handler for card click
-  const handleCardClick = (product: any) => {
-    if (isLoading) return;
+  const handleCardClick = async (product: any) => {
+    if (isLoading || verificationLoading) return;
+    // Always refetch verification status before checking
+    await refetchVerification();
     if (!isAuthenticated) {
       router.push('/signup');
       return;
@@ -743,12 +759,55 @@ export default function ExploreProducts() {
             <div className="w-full border-b border-gray-700 my-3"></div>
             <div className="flex items-center justify-center gap-3 mb-4">
               <span className="text-gray-300 text-sm mr-2">Rate this offer:</span>
-              <button className="text-2xl hover:scale-110 transition-transform">👎</button>
-              <button className="text-2xl hover:scale-110 transition-transform">👍</button>
+              <button
+                className={`text-2xl transition-transform ${rating === 'down' ? 'scale-125 text-red-500' : 'hover:scale-110'}`}
+                aria-label="Dislike"
+                onClick={() => setRating('down')}
+              >👎</button>
+              <button
+                className={`text-2xl transition-transform ${rating === 'up' ? 'scale-125 text-green-500' : 'hover:scale-110'}`}
+                aria-label="Like"
+                onClick={() => setRating('up')}
+              >👍</button>
             </div>
             <p className="text-gray-400 text-sm mb-2">Enter this code in the promotional code area during checkout to benefit from the student discount.</p>
-            <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-mono text-xl font-bold py-2 px-4 rounded-lg tracking-wider mb-4">
-             {selectedProduct.code}
+            <div className="flex flex-col items-center gap-2 mb-4">
+              <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-mono text-xl font-bold py-2 px-4 rounded-lg tracking-wider">
+                {/* Show daily-changing coupon code for Glued product, else show static code */}
+                {selectedProduct.id === 4
+                  ? getDailyCouponCode(selectedProduct.id, selectedProduct.code)
+                  : selectedProduct.code}
+              </div>
+              {selectedProduct.id === 4 ? (
+                <>
+                  <button
+                    className={`mt-1 px-3 py-1 bg-gray-800 text-white rounded text-sm font-medium border border-gray-600 ${gluedExpired ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-700'}`}
+                    onClick={() => {
+                      if (gluedExpired) return;
+                      const code = getDailyCouponCode(selectedProduct.id, selectedProduct.code);
+                      navigator.clipboard.writeText(code);
+                      localStorage.setItem(expiredKey, 'true');
+                      setGluedExpired(true);
+                    }}
+                    disabled={gluedExpired}
+                  >
+                    {gluedExpired ? 'Code Expired' : 'Copy Code'}
+                  </button>
+                  {gluedExpired && (
+                    <div className="text-xs text-gray-400 mt-1">A new coupon code will be available after 24 hours.</div>
+                  )}
+                </>
+              ) : (
+                <button
+                  className="mt-1 px-3 py-1 bg-gray-800 text-white rounded hover:bg-gray-700 text-sm font-medium border border-gray-600"
+                  onClick={() => {
+                    const code = selectedProduct.code;
+                    navigator.clipboard.writeText(code);
+                  }}
+                >
+                  Copy Code
+                </button>
+              )}
             </div>
             <a href="#" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
               Visit {selectedProduct.name} website

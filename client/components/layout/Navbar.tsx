@@ -247,9 +247,14 @@ export default function NavbarClient({ user }: { user: any }) {
     {
       name: 'TECHNOLOGY',
       path: '/technology',
-      icon: <HiOutlineDesktopComputer className="w-5 h-5" />
+      icon: <HiOutlineDesktopComputer className="w-5 h-5" />,
+      dropdown: [
+        {
+          name: 'Gaming',
+          path: '/categories/technology/gaming',
+        },
+      ],
     },
-
     {
       name: 'EVENTS',
       path: '/events',
@@ -483,6 +488,7 @@ export default function NavbarClient({ user }: { user: any }) {
                       whileHover={{ scale: showIconsOnly ? 1.15 : 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       transition={{ duration: showIconsOnly ? 0.15 : 0.3 }}
+                      className="relative"
                     >
                       <Link href={category.path}>
                         <div className={`relative px-2 py-2 rounded-full transition-all duration-300 ${activeCategory === category.name
@@ -498,6 +504,16 @@ export default function NavbarClient({ user }: { user: any }) {
                           )}
                         </div>
                       </Link>
+                      {/* Dropdown for TECHNOLOGY */}
+                      {category.dropdown && (hoveredCategory === category.name || activeCategory === category.name) && (
+                        <div className="absolute left-0 top-full mt-2 min-w-[160px] bg-gray-900 border border-gray-700 rounded-lg shadow-lg z-50">
+                          {category.dropdown.map((item, i) => (
+                            <Link key={i} href={item.path} className="block px-4 py-2 text-sm text-gray-200 hover:bg-orange-500/80 hover:text-white rounded-lg">
+                              {item.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
                     </motion.div>
                   ))}
                 </div>
