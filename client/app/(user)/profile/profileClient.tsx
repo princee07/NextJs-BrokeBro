@@ -1,5 +1,6 @@
-import "@/styles/fix-oklch.css";
+
 "use client";
+import "@/styles/fix-oklch.css";
 
 import { useState, useRef } from "react";
 import html2canvas from "html2canvas";
