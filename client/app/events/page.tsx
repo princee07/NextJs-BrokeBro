@@ -3,8 +3,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Modal from '../../components/ui/Modal';
-import { useRouter } from 'next/navigation';
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 const initialEvents = [
   {
@@ -20,8 +18,6 @@ const initialEvents = [
 ];
 
 export default function EventsPage() {
-  const router = useRouter();
-  const { isAuthenticated, isLoading } = useKindeBrowserClient();
   const [events, setEvents] = useState(initialEvents);
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState({
@@ -381,20 +377,22 @@ export default function EventsPage() {
                         >
                           Registered
                         </button>
-                      ) : (
+                      ) : event.title === 'Dance Competition' ? (
                         <button
-                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition"
-                          onClick={() => {
-                            if (isLoading) return;
-                            if (!isAuthenticated) {
-                              router.push('/signup');
-                              return;
-                            }
-                            openRegisterModal(event.id);
-                          }}
+                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition cursor-pointer"
+                          onClick={() => setDanceModalOpen(true)}
                         >
                           Register
                         </button>
+                      ) : (
+                        <a
+                          href="https://forms.gle/KGuZFDbTqwWPhtYQ7"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-lg font-semibold text-base hover:from-orange-600 hover:to-pink-600 transition cursor-pointer"
+                        >
+                          Register
+                        </a>
                       )}
                     </div>
                   </div>
