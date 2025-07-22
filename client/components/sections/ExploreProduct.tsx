@@ -37,7 +37,8 @@ const products = [
     color: ['bg-pink-200', 'bg-white', 'bg-gray-200'],
     size: 'large',
     featured: true,
-    badge: 'Trending'
+    badge: 'Trending',
+    code: 'GIVA30', 
   },
   {
     id: 2,
@@ -50,7 +51,8 @@ const products = [
     brandLogo: '/assets/exploreproduct/id2.png',
     color: ['bg-gray-800', 'bg-gray-600'],
     size: 'medium',
-    badge: 'Student Special'
+    badge: 'Student Special',
+    code: 'APPLE10', 
   },
   {
     id: 3,
@@ -62,7 +64,8 @@ const products = [
     image: '/assets/banners/swissbeauty.png',
     brandLogo: '/assets/images/swissbeauty.png',
     color: ['bg-pink-100', 'bg-rose-200'],
-    size: 'small'
+    size: 'small',
+    code: 'SWISSBEAUTY20',
   },
   {
     id: 4,
@@ -76,7 +79,8 @@ const products = [
     color: ['bg-blue-200', 'bg-gray-200'],
     size: 'large',
     featured: true,
-    badge: 'Best Seller'
+    badge: 'Best Seller',
+    code: 'DELL30',
   },
   {
     id: 5,
@@ -89,7 +93,8 @@ const products = [
     brandLogo: '/assets/logos/nike.png',
     color: ['bg-orange-200', 'bg-black', 'bg-white'],
     size: 'medium',
-    badge: 'Sports Special'
+    badge: 'Sports Special',
+    code: 'NIKE20', 
   },
   {
     id: 6,
@@ -101,7 +106,8 @@ const products = [
     image: '/assets/banners/soxytoes.png',
     brandLogo: '/assets/logos/soxytoes.png',
     color: ['bg-red-200', 'bg-blue-200', 'bg-green-200'],
-    size: 'small'
+    size: 'small',
+    code: 'SOXYTOES15',
   },
   {
     id: 7,
@@ -114,7 +120,8 @@ const products = [
     brandLogo: '/assets/logos/hp.png',
     color: ['bg-green-200', 'bg-black'],
     size: 'medium',
-    badge: 'Gaming Pro'
+    badge: 'Gaming Pro',
+    code: 'HPGAMING20',
   },
   {
     id: 8,
@@ -126,7 +133,8 @@ const products = [
     image: '/assets/exploreproduct/lakme.png',
     brandLogo: '/assets/images/lakme.png',
     color: ['bg-purple-200', 'bg-pink-200'],
-    size: 'small'
+    size: 'small',
+    code: 'LAKME20',
   },
   {
     id: 9,
@@ -139,7 +147,8 @@ const products = [
     brandLogo: '/assets/logos/microsoft.png',
     color: ['bg-blue-500', 'bg-orange-500'],
     size: 'small',
-    badge: 'Student License'
+    badge: 'Student License',
+    code: 'MSOFFICE20',
   },
   {
     id: 10,
@@ -152,7 +161,8 @@ const products = [
     brandLogo: '/assets/logos/lenovo.png',
     color: ['bg-red-200', 'bg-black'],
     size: 'medium',
-    badge: 'Professional'
+    badge: 'Professional',
+    code: 'LENOVO15',
   },
   {
     id: 11,
@@ -165,7 +175,8 @@ const products = [
     brandLogo: '/assets/levis/300x300.png',
     color: ['bg-blue-200', 'bg-white', 'bg-indigo-200'],
     size: 'medium',
-    badge: 'Classic Denim'
+    badge: 'Classic Denim',
+    code: 'LEVIS20',
   },
   {
     id: 12,
@@ -178,7 +189,8 @@ const products = [
     brandLogo: '/assets/fastrack/logo.png',
     color: ['bg-gray-900', 'bg-yellow-200', 'bg-white'],
     size: 'small',
-    badge: 'Trendy Picks'
+    badge: 'Trendy Picks',
+    code: 'FASTRACK20',
   }
 ];
 
@@ -736,7 +748,7 @@ export default function ExploreProducts() {
             </div>
             <p className="text-gray-400 text-sm mb-2">Enter this code in the promotional code area during checkout to benefit from the student discount.</p>
             <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-mono text-xl font-bold py-2 px-4 rounded-lg tracking-wider mb-4">
-              EXPLORE10
+             {selectedProduct.code}
             </div>
             <a href="#" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
               Visit {selectedProduct.name} website

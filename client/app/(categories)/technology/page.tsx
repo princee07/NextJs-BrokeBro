@@ -20,6 +20,8 @@ interface Product {
   isSale?: boolean
   discount?: number
   description?: string
+  code?:string
+  codeType?: string // 'fixed' or 'percentage'
 }
 
 const EcommerceHero: React.FC = () => {
@@ -41,6 +43,8 @@ const EcommerceHero: React.FC = () => {
       isSale: true,
       discount: 31,
       description: "Unlock premium features with Canva Pro for stunning designs.",
+      code: "CANVA10",
+      codeType: "fixed",
     },
     {
       id: 2,
@@ -53,6 +57,8 @@ const EcommerceHero: React.FC = () => {
       isSale: true,
       discount: 20,
       description: "25% off Grammarly premium for students",
+      code: "GRAMMARLY20",
+      codeType: "fixed",
     },
     {
       id: 3,
@@ -63,6 +69,8 @@ const EcommerceHero: React.FC = () => {
       reviews: 956,
       isNew: true,
       description: "Unlock 100% off on your Notion's workspace.",
+      code: "NOTION100",
+      codeType: "fixed",
     },
     {
       id: 4,
@@ -75,6 +83,8 @@ const EcommerceHero: React.FC = () => {
       isSale: true,
       discount: 30,
       description: "Get a 3-month free trial on Microsoft 365 Personal, then 50% off.",
+      code: "OFFICE36550",
+      codeType: "fixed",
     },
     {
       id: 5,
@@ -87,6 +97,8 @@ const EcommerceHero: React.FC = () => {
       isSale: true,
       discount: 20,
       description: "Get exclusive student offers on hp laptops",
+      code: "HPSTUDENT20",
+      codeType: "fixed",
     },
     {
       id: 6,
@@ -97,6 +109,8 @@ const EcommerceHero: React.FC = () => {
       reviews: 892,
       isNew: true,
       description: "Free figma Education plan to students and educators",
+      code: "FIGMAEDU",
+      codeType: "fixed",
     },
     {
       id: 7,
@@ -107,6 +121,8 @@ const EcommerceHero: React.FC = () => {
       reviews: 892,
       isNew: true,
       description: "Unlock special deals for students, parents, and education staff with exclusive vouchers",
+      code: "DELLSTUDENT",
+      codeType: "fixed",
     },
     {
       id: 8,
@@ -117,6 +133,8 @@ const EcommerceHero: React.FC = () => {
       reviews: 892,
       isNew: true,
       description: "Upto 55% off on student laptop",
+      code: "LENOVO55",
+      codeType: "fixed",
     },
      {
       id: 9,
@@ -127,6 +145,8 @@ const EcommerceHero: React.FC = () => {
       reviews: 892,
       isNew: true,
       description: "Save up to ₹10000 on select Mac or iPad with education pricing.",
+      code: "APPLEEDU",
+      codeType: "fixed",
     }    
     ]
 
@@ -482,7 +502,7 @@ const EcommerceHero: React.FC = () => {
             </div>
             <p className="text-gray-400 text-sm mb-2">Enter this code in the promotional code area during checkout to benefit from the student discount.</p>
             <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-mono text-xl font-bold py-2 px-4 rounded-lg tracking-wider mb-4">
-              TECHSTUDENT10
+             {selectedProduct.code}
             </div>
             <a href="#" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
               Visit {selectedProduct.name} website

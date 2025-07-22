@@ -20,7 +20,8 @@ type Product = {
   imageClass: string;
   category: string;
   duration: string;
-};
+  code:string;
+  };
 
 const initialProducts: Product[] = [
   {
@@ -35,6 +36,7 @@ const initialProducts: Product[] = [
     image: "https://vectorseek.com/wp-content/uploads/2023/09/Goibibo-Logo-Vector.svg-.png",
     category: "Beach Destinations",
     duration: "Week (4-7 days)",
+    code: "GOIBIBO10",
   },
   {
     id: "2",
@@ -48,6 +50,7 @@ const initialProducts: Product[] = [
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQ-kLKzM2sjd7pKVOjmaETC2tEDkZjlokSigLroQYAoW0PiHlQ-8wwvfDrB7KEprB2tvg&usqp=CAU",
     category: "Mountain Retreats",
     duration: "Extended (8+ days)",
+    code: "INDIGO10",
   },
   {
     id: "3",
@@ -61,6 +64,7 @@ const initialProducts: Product[] = [
     image: "/assets/logos/SpiceJet_logo.png",
     category: "City Breaks",
     duration: "Weekend (2-3 days)",
+    code: "SPICEJET10",
   },
   {
     id: "4",
@@ -74,6 +78,7 @@ const initialProducts: Product[] = [
     image: "https://upload.wikimedia.org/wikipedia/commons/f/f7/Air_India.svg",
     category: "Luxury Travel",
     duration: "Extended (8+ days)",
+    code: "AIRINDIA25",
   },
 ];
 
@@ -296,7 +301,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </div>
             <p className="text-gray-400 text-sm mb-2">Enter this code in the promotional code area during checkout to benefit from the student discount.</p>
             <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-mono text-xl font-bold py-2 px-4 rounded-lg tracking-wider mb-4">
-              TRAVELSTUDENT10
+              {selectedProduct.code}
             </div>
             <a href="#" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
               Visit {selectedProduct.title} website
