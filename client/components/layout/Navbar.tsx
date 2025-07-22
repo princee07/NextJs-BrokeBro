@@ -832,8 +832,8 @@ export default function NavbarClient({ user }: { user: any }) {
 
       {/* Referral Modal */}
       {showReferralModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-          <div className="bg-black rounded-lg p-8 w-[500px] border border-orange-500/30 shadow-lg relative">
+        <div className="fixed inset-0 z-50 flex justify-center bg-black/70" style={{ alignItems: 'flex-start' }}>
+          <div className="bg-black rounded-lg p-8 w-[500px] border border-orange-500/30 shadow-lg relative mt-16">
             <button
               className="absolute top-3 right-4 text-gray-400 hover:text-white text-2xl"
               onClick={() => setShowReferralModal(false)}
