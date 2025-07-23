@@ -25,6 +25,19 @@ const Hero = () => {
   //const [countdown, setCountdown] = useState<string>('');
 
   const router = useRouter();
+  // Ref for ExploreProducts section
+  const exploreRef = useRef<HTMLElement | null>(null);
+
+  // Listen for custom event to set ref from parent
+  useEffect(() => {
+    const handler = (e: any) => {
+      if (e.detail && e.detail.ref) {
+        exploreRef.current = e.detail.ref;
+      }
+    };
+    window.addEventListener('explore-products-ref', handler);
+    return () => window.removeEventListener('explore-products-ref', handler);
+  }, []);
   const { isVerified } = useStudentVerification();
   const { isAuthenticated, isLoading } = useKindeBrowserClient();
   const { isVerified: isUserVerified } = useUserVerification();
@@ -336,11 +349,19 @@ const Hero = () => {
           </div>
         </div> */}
         {/* CTA Button */}
-        <a href="/signup" className="w-full max-w-xs">
-          <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-orange-900 font-bold text-lg py-4 px-8 rounded-full shadow-lg transition-all duration-300 mb-3 animate-bounce focus:outline-none">
-            Start Saving Now
-          </button>
-        </a>
+        <button
+          className="w-full max-w-xs bg-yellow-400 hover:bg-yellow-500 text-orange-900 font-bold text-lg py-4 px-8 rounded-full shadow-lg transition-all duration-300 mb-3 animate-bounce focus:outline-none"
+          onClick={() => {
+            if (isAuthenticated) {
+              // Dispatch event to scroll to ExploreProducts
+              window.dispatchEvent(new CustomEvent('scroll-to-explore-products'));
+            } else {
+              router.push('/signup');
+            }
+          }}
+        >
+          Start Saving Now
+        </button>
       </div>
     </section>
   );

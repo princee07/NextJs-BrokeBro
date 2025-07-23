@@ -257,6 +257,13 @@ const EcommerceHero: React.FC = () => {
     <div className="min-h-screen  mt-35 bg-gradient-to-br from-gray-900 via-black to-gray-800">
       {/* Hero Section */}
       <div className="relative h-[70vh] overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black">
+        {/* Background Image */}
+        <img
+          src="https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg"
+          alt="Tech Hero Background"
+          className="absolute inset-0 w-full h-full object-cover object-center opacity-60 z-0"
+          style={{ filter: 'brightness(0.5)' }}
+        />
         {/* Background Slider */}
         <div className="absolute inset-0">
           {heroSlides.map((slide, index) => (
@@ -293,15 +300,7 @@ const EcommerceHero: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <button className="bg-gradient-to-r from-orange-500 to-pink-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-orange-500/25">
-                    <span>{heroSlides[currentSlide].cta}</span>
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
-                  <button className="border-2 border-orange-500 bg-gradient-to-r from-orange-500 to-pink-600 bg-clip-text text-transparent px-8 py-4 rounded-full font-semibold text-lg hover:bg-gradient-to-r hover:from-orange-500 hover:to-pink-600 hover:text-white hover:bg-clip-border transition-all duration-300">
-                    Learn More
-                  </button>
-                </div>
+                
 
                 {/* Features */}
                 <div className="flex flex-wrap gap-8 pt-8 justify-center">

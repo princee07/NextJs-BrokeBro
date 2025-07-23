@@ -223,22 +223,6 @@ const TopBrands = () => {
         </div>
 
         {/* CTA button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="mt-12 flex justify-center"
-        >
-          <Link href="/brands">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-medium rounded-full shadow-lg hover:shadow-orange-500/20 transition-all"
-            >
-              View All Brand Deals
-            </motion.button>
-          </Link>
-        </motion.div>
       </div>
 
       {/* Coupon Modal */}
