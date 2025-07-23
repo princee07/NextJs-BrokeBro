@@ -16,6 +16,7 @@
     "@types/qrcode.react": "^1.0.5",
     "@vercel/analytics": "^1.5.0",
     "@vercel/blob": "^1.1.1",
+    "@vercel/speed-insights": "^1.2.0",
     "autoprefixer": "^10.4.21",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
