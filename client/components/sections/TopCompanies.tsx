@@ -4,12 +4,12 @@ import React, { useRef } from "react";
 import Image from "next/image";
 
 const companies = [
+  { name: "BrokeBro ", logo: "/assets/internpage/brokebro.png" },
+  { name: "Pick n Treat", logo: "/assets/internpage/pnt.png" },
+  { name: "Urban pusle innovation pvt.ltd", logo: "/assets/internpage/upi.jpg" },
+  { name: "CIIS ", logo: "/assets/internpage/ciis.jpg" },
   { name: "BrokeBro Tech", logo: "/assets/internpage/brokebro.png" },
-  { name: "PNT Solutions", logo: "/assets/internpage/pnt.png" },
-  { name: "UPI Technologies", logo: "/assets/internpage/upi.jpg" },
-  { name: "CIIS Institute", logo: "/assets/internpage/ciis.jpg" },
-  { name: "BrokeBro Tech", logo: "/assets/internpage/brokebro.png" },
-  { name: "PNT Analytics", logo: "/assets/internpage/pnt.png" },
+  { name: "Pick n Treat", logo: "/assets/internpage/pnt.png" },
 ];
 
 const TopCompanies = () => {

@@ -490,19 +490,16 @@ export default function NavbarClient({ user }: { user: any }) {
                       transition={{ duration: showIconsOnly ? 0.15 : 0.3 }}
                       className="relative"
                     >
-                      <Link href={category.path}>
-                        <div className={`relative px-2 py-2 rounded-full transition-all duration-300 ${activeCategory === category.name
-                          ? 'text-white bg-gradient-to-r from-orange-500/20 to-pink-500/20'
-                          : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-pink-500/20'
-                          }`}>
-                          <span className="text-xs font-medium whitespace-nowrap">
-                            {category.name}
-                          </span>
-
-                          {(hoveredCategory === category.name || activeCategory === category.name) && (
-                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full w-3/5" />
-                          )}
-                        </div>
+                      <Link href={category.path} className={`relative px-2 py-2 rounded-full transition-all duration-300 ${activeCategory === category.name
+                        ? 'text-white bg-gradient-to-r from-orange-500/20 to-pink-500/20'
+                        : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-pink-500/20'
+                        }`}>
+                        <span className="text-xs font-medium whitespace-nowrap">
+                          {category.name}
+                        </span>
+                        {(hoveredCategory === category.name || activeCategory === category.name) && (
+                          <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full w-3/5" />
+                        )}
                       </Link>
                       {/* Dropdown for TECHNOLOGY */}
                       {category.dropdown && (hoveredCategory === category.name || activeCategory === category.name) && (
@@ -767,12 +764,12 @@ export default function NavbarClient({ user }: { user: any }) {
                     className="block py-3 px-4 text-gray-100 hover:text-white border-b border-orange-500/10 hover:bg-orange-500/5 rounded-lg transition-all duration-200"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="text-orange-400">
+                    <span className="flex items-center gap-3">
+                      <span className="text-orange-400">
                         {category.icon}
-                      </div>
+                      </span>
                       <span className="font-medium">{category.name}</span>
-                    </div>
+                    </span>
                   </Link>
                 </motion.div>
               ))}
