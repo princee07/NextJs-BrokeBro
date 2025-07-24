@@ -33,9 +33,15 @@ export default function NavbarClient({ user }: { user: any }) {
   const { usePathname } = require('next/navigation');
   const pathname = usePathname();
 
-  useEffect(() => {
+  // Helper to reset nav state
+  const resetNavState = () => {
     setActiveCategory(null);
     setHoveredCategory(null);
+    setMobileMenuOpen(false);
+  };
+
+  useEffect(() => {
+    resetNavState();
   }, [pathname]);
   const [scrolled, setScrolled] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
@@ -446,7 +452,7 @@ export default function NavbarClient({ user }: { user: any }) {
         <div className="container mx-auto px-2 py-2" ref={navContainerRef}>
           <div className="flex flex-col space-y-1">
             <div className="flex justify-between items-center h-full overflow-visible gap-2">
-              <Link href="/" className="relative flex items-center">
+              <Link href="/" className="relative flex items-center" onClick={resetNavState} prefetch={false}>
                 <motion.div
                   className="relative"
                   whileHover={{ scale: 1.05 }}
@@ -498,10 +504,15 @@ export default function NavbarClient({ user }: { user: any }) {
                       transition={{ duration: showIconsOnly ? 0.15 : 0.3 }}
                       className="relative"
                     >
-                      <Link href={category.path} className={`relative px-2 py-2 rounded-full transition-all duration-300 ${activeCategory === category.name
-                        ? 'text-white bg-gradient-to-r from-orange-500/20 to-pink-500/20'
-                        : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-pink-500/20'
-                        }`}>
+                      <Link
+                        href={category.path}
+                        className={`relative px-2 py-2 rounded-full transition-all duration-300 ${activeCategory === category.name
+                          ? 'text-white bg-gradient-to-r from-orange-500/20 to-pink-500/20'
+                          : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-pink-500/20'
+                        }`}
+                        onClick={resetNavState}
+                        prefetch={false}
+                      >
                         <span className="text-xs font-medium whitespace-nowrap">
                           {category.name}
                         </span>
@@ -519,7 +530,13 @@ export default function NavbarClient({ user }: { user: any }) {
                           }}
                         >
                           {category.dropdown.map((item, i) => (
-                            <Link key={i} href={item.path} className="block px-4 py-2 text-sm text-gray-200 hover:bg-orange-500/80 hover:text-white rounded-lg">
+                            <Link
+                              key={i}
+                              href={item.path}
+                              className="block px-4 py-2 text-sm text-gray-200 hover:bg-orange-500/80 hover:text-white rounded-lg"
+                              onClick={resetNavState}
+                              prefetch={false}
+                            >
                               {item.name}
                             </Link>
                           ))}
@@ -770,7 +787,8 @@ export default function NavbarClient({ user }: { user: any }) {
                   <Link
                     href={category.path}
                     className="block py-3 px-4 text-gray-100 hover:text-white border-b border-orange-500/10 hover:bg-orange-500/5 rounded-lg transition-all duration-200"
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={resetNavState}
+                    prefetch={false}
                   >
                     <span className="flex items-center gap-3">
                       <span className="text-orange-400">
