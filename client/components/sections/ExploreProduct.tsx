@@ -232,7 +232,7 @@ const promotions = [
 export default function ExploreProducts() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [inView, setInView] = useState(false);
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const { isAuthenticated, isLoading } = useKindeBrowserClient();
   const { isVerified, refetch: refetchVerification, loading: verificationLoading } = useUserVerification();
   const [showCouponModal, setShowCouponModal] = useState(false);
@@ -285,10 +285,17 @@ export default function ExploreProducts() {
       observer.observe(sectionRef.current);
     }
 
+    // Listen for scroll-to-explore-products event
+    const handleScrollToExplore = () => {
+      sectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+    window.addEventListener('scroll-to-explore-products', handleScrollToExplore);
+
     return () => {
       if (sectionRef.current) {
         observer.unobserve(sectionRef.current);
       }
+      window.removeEventListener('scroll-to-explore-products', handleScrollToExplore);
     };
   }, []);
 
