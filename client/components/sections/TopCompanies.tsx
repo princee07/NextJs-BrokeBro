@@ -9,7 +9,7 @@ const companies = [
   { name: "Urban pusle innovation pvt.ltd", logo: "/assets/internpage/upi.jpg" },
   { name: "CIIS ", logo: "/assets/internpage/ciis.jpg" },
   { name: "BrokeBro Tech", logo: "/assets/internpage/brokebro.png" },
-  { name: "Pick n Treat", logo: "/assets/internpage/pnt.png" },
+  // Removed duplicate: { name: "Pick n Treat", logo: "/assets/internpage/pnt.png" },
 ];
 
 const TopCompanies = () => {

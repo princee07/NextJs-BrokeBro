@@ -1,5 +1,7 @@
+
 "use client";
 
+import React from 'react';
 import { internships } from '@/lib/internship-data';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -8,12 +10,66 @@ import ApplicationActions from '@/components/ui/ApplicationActions';
 
 // Use 'any' for the props to bypass strict type errors
 export default function InternshipDetailPage(props: any) {
-    const { params } = props;
+    const params = React.use(props.params) as { slug: string };
     const internship = internships.find((i) => i.slug === params.slug);
+    const [activeTab, setActiveTab] = React.useState('Job Details');
 
     if (!internship) {
         notFound();
     }
+
+    // Tab content renderers
+    const renderTabContent = () => {
+        switch (activeTab) {
+            case 'Job Details':
+                return (
+                    <div className="mt-8 prose prose-invert max-w-none prose-li:my-1 text-gray-300">
+                        <h2 className="!text-xl !font-bold !text-gray-200">Key Responsibilities:</h2>
+                        <ul>
+                            {internship.responsibilities.map((resp, index) => <li key={index}>{resp}</li>)}
+                        </ul>
+                        {internship.skills.length > 0 && <>
+                            <h2 className="!text-xl !font-bold !text-gray-200 mt-6">Skills and Qualifications:</h2>
+                            <ul>
+                                {internship.skills.map((skill, index) => <li key={index}>{skill}</li>)}
+                            </ul>
+                        </>}
+                        {internship.coreSkills.length > 0 && <>
+                            <h2 className="!text-xl !font-bold !text-gray-200 mt-6">Core Skills:</h2>
+                            <ul>
+                                {internship.coreSkills.map((skill, index) => <li key={index}>{skill}</li>)}
+                            </ul>
+                        </>}
+                    </div>
+                );
+            case 'Dates & Deadlines':
+                return (
+                    <div className="mt-8 text-gray-300">
+                        <h2 className="!text-xl !font-bold !text-gray-200 mb-2">Dates & Deadlines</h2>
+                        <ul>
+                            <li>Application Deadline: <span className="font-semibold">{internship.updatedOn}</span></li>
+                            <li>Days Left: <span className="font-semibold">{internship.daysLeft}</span></li>
+                        </ul>
+                    </div>
+                );
+            case 'Reviews':
+                return (
+                    <div className="mt-8 text-gray-300">
+                        <h2 className="!text-xl !font-bold !text-gray-200 mb-2">Reviews</h2>
+                        <p>No reviews available yet.</p>
+                    </div>
+                );
+            case 'FAQs & Discussions':
+                return (
+                    <div className="mt-8 text-gray-300">
+                        <h2 className="!text-xl !font-bold !text-gray-200 mb-2">FAQs & Discussions</h2>
+                        <p>No FAQs or discussions available yet.</p>
+                    </div>
+                );
+            default:
+                return null;
+        }
+    };
 
     return (
         <main className="bg-gradient-to-b from-[#0d1117] to-[#010409] min-h-screen pt-56 pb-20">
@@ -48,32 +104,26 @@ export default function InternshipDetailPage(props: any) {
                         {/* Tabs */}
                         <div className="mt-8 border-b border-gray-800">
                             <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-                                <a href="#" className="border-blue-500 text-blue-500 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Job Details</a>
-                                <a href="#" className="border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-700 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Dates & Deadlines</a>
-                                <a href="#" className="border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-700 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Reviews</a>
-                                <a href="#" className="border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-700 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">FAQs & Discussions</a>
+                                {['Job Details', 'Dates & Deadlines', 'Reviews', 'FAQs & Discussions'].map(tab => (
+                                    <button
+                                        key={tab}
+                                        type="button"
+                                        onClick={() => setActiveTab(tab)}
+                                        className={
+                                            (activeTab === tab
+                                                ? 'border-blue-500 text-blue-500'
+                                                : 'border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-700') +
+                                            ' whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm focus:outline-none'
+                                        }
+                                    >
+                                        {tab}
+                                    </button>
+                                ))}
                             </nav>
                         </div>
 
-                        {/* Details Content */}
-                        <div className="mt-8 prose prose-invert max-w-none prose-li:my-1 text-gray-300">
-                            <h2 className="!text-xl !font-bold !text-gray-200">Key Responsibilities:</h2>
-                            <ul>
-                                {internship.responsibilities.map((resp, index) => <li key={index}>{resp}</li>)}
-                            </ul>
-                            {internship.skills.length > 0 && <>
-                                <h2 className="!text-xl !font-bold !text-gray-200 mt-6">Skills and Qualifications:</h2>
-                                <ul>
-                                    {internship.skills.map((skill, index) => <li key={index}>{skill}</li>)}
-                                </ul>
-                            </>}
-                            {internship.coreSkills.length > 0 && <>
-                                <h2 className="!text-xl !font-bold !text-gray-200 mt-6">Core Skills:</h2>
-                                <ul>
-                                    {internship.coreSkills.map((skill, index) => <li key={index}>{skill}</li>)}
-                                </ul>
-                            </>}
-                        </div>
+                        {/* Tab Content */}
+                        {renderTabContent()}
                     </div>
 
                     {/* Sidebar */}
