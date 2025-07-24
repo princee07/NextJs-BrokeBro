@@ -33,15 +33,7 @@ export default function Home() {
     <>
       <Hero />
 
-      {/* Show verified message if user is verified */}
-      {!loading && isVerified && (
-        <div className="flex items-center justify-center my-6">
-          <div className="bg-green-600/90 text-white px-6 py-3 rounded-lg shadow flex items-center gap-3">
-            <ShieldCheck className="w-6 h-6 text-white" />
-            <span className="font-semibold">You are verified now! Enjoy exclusive student benefits.</span>
-          </div>
-        </div>
-      )}
+      {/* Verified message removed as requested */}
       <OfferSlider />
       <TopBrands />
       <section ref={exploreRef}>

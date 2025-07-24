@@ -312,7 +312,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative w-full min-h-[70vh] flex flex-col justify-center items-center py-16 px-4 overflow-hidden pt-24 md:pt-32">
+    <section className="relative w-full min-h-[90vh] flex flex-col justify-center items-center py-16 px-4 overflow-hidden pt-24 md:pt-32">
       {/* Background image */}
       <div className="absolute inset-0 w-full h-full z-0">
         <img
