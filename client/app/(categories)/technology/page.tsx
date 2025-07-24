@@ -192,6 +192,7 @@ const EcommerceHero: React.FC = () => {
     { label: 'All' },
     { label: 'Skills' },
     { label: 'Laptop' },
+    { label: 'Gym' },
   ];
   const [activeFilter, setActiveFilter] = useState('All');
   let filteredProducts = featuredProducts;
@@ -206,6 +207,10 @@ const EcommerceHero: React.FC = () => {
       p.name.toLowerCase().includes('lenovo') ||
       p.name.toLowerCase().includes('dell') ||
       p.name.toLowerCase().includes('hp')
+    );
+  } else if (activeFilter === 'Gym') {
+    filteredProducts = featuredProducts.filter(p =>
+      p.name.toLowerCase().includes('gym')
     );
   }
 
