@@ -21,7 +21,7 @@ const categories = [
   'Lifestyle',
   'Gaming',
   'Health',
-  'Accessories',
+  'Gym',
 ];
 
 // Enhanced products with real brand images and better categorization

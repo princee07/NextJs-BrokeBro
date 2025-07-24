@@ -169,6 +169,7 @@ const animationStyles = `
 }
 `;
 
+
 export default function InternshipPage() {
     const heroRef = useScrollFadeIn(0);
     const heroImageRef = useScrollFadeIn(200);
@@ -183,6 +184,13 @@ export default function InternshipPage() {
         "Unlock Top-Tier Opportunities",
         "Kickstart Your Career",
     ];
+
+    // Scroll to Recommended Internships
+    const handleExploreClick = () => {
+        if (recommendedRef.current) {
+            recommendedRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -248,7 +256,7 @@ export default function InternshipPage() {
                     <p className="text-gray-300 text-base md:text-lg max-w-md">
                         Unlock exclusive internship opportunities with top companies and kickstart your career. Your future starts here with BrokeBro.
                     </p>
-                    <button className="px-7 py-3 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold shadow-lg hover:shadow-orange-500/50 transition-all text-base">
+                    <button className="px-7 py-3 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold shadow-lg hover:shadow-orange-500/50 transition-all text-base" onClick={handleExploreClick}>
                         Explore Internships
                     </button>
                     <div className="flex items-center gap-3 mt-2">

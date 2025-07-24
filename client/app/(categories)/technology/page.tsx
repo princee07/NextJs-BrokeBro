@@ -24,10 +24,23 @@ interface Product {
   codeType?: string // 'fixed' or 'percentage'
 }
 
+const heroBanners = [
+  { src: "/assets/technology/hp.png", alt: "HP Banner" },
+  { src: "/assets/technology/canva.png", alt: "Canva Banner" },
+  { src: "/assets/technology/figma.png", alt: "Figma Banner" },
+];
+
 const EcommerceHero: React.FC = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
   const [currentSlide, setCurrentSlide] = useState(0)
   const [showCouponModal, setShowCouponModal] = useState(false);
+  const [bannerIndex, setBannerIndex] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBannerIndex((prev) => (prev + 1) % heroBanners.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
   //const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const featuredProducts: Product[] = [
@@ -174,30 +187,27 @@ const EcommerceHero: React.FC = () => {
     },
      ]
 
-  // Search bar state and filtering logic (must be after featuredProducts)
-  const [searchText, setSearchText] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(featuredProducts);
-
-  useEffect(() => {
-    if (!searchText.trim()) {
-      setFilteredProducts(featuredProducts);
-      return;
-    }
-    const text = searchText.trim().toLowerCase();
-    if (/^\d+$/.test(text)) {
-      setFilteredProducts(
-        featuredProducts.filter(
-          (p) => p.discount && p.discount.toString().startsWith(text)
-        )
-      );
-    } else {
-      setFilteredProducts(
-        featuredProducts.filter(
-          (p) => p.name.toLowerCase().startsWith(text) || p.name.toLowerCase().includes(text)
-        )
-      );
-    }
-  }, [searchText, featuredProducts]);
+  // Filter bar state and logic
+  const filterOptions = [
+    { label: 'All' },
+    { label: 'Skills' },
+    { label: 'Laptop' },
+  ];
+  const [activeFilter, setActiveFilter] = useState('All');
+  let filteredProducts = featuredProducts;
+  if (activeFilter === 'Skills') {
+    filteredProducts = featuredProducts.filter(p =>
+      p.name.toLowerCase().includes('notion') ||
+      p.name.toLowerCase().includes('canva') ||
+      p.name.toLowerCase().includes('office')
+    );
+  } else if (activeFilter === 'Laptop') {
+    filteredProducts = featuredProducts.filter(p =>
+      p.name.toLowerCase().includes('lenovo') ||
+      p.name.toLowerCase().includes('dell') ||
+      p.name.toLowerCase().includes('hp')
+    );
+  }
 
   // Modal state for coupon
     const [showProductModal, setShowProductModal] = useState(false);
@@ -254,25 +264,127 @@ const EcommerceHero: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen  mt-35 bg-gradient-to-br from-gray-900 via-black to-gray-800">
+<div className="min-h-screen mt-35 bg-gradient-to-br from-gray-900 via-black to-gray-800">
       {/* Hero Section */}
-      <div className="relative h-[70vh] overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black">
+      <div className="relative min-h-[80vh] overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black mt-4">
+        {/* Animated Circles and Creative Elements */}
+        <div className="pointer-events-none select-none">
+          {/* Large animated circle top left */}
+          <div className="absolute top-[-60px] left-[-60px] w-48 h-48 bg-gradient-to-br from-orange-400/30 to-pink-500/20 rounded-full blur-2xl animate-pulse" style={{animationDuration:'4s'}} />
+          {/* Small pulsing circle top right */}
+          <div className="absolute top-16 right-24 w-10 h-10 bg-pink-400/60 rounded-full blur-sm animate-ping" style={{animationDuration:'2.5s'}} />
+          {/* Hollow animated circle bottom left */}
+          <div className="absolute bottom-24 left-20 w-16 h-16 border-4 border-orange-400/60 rounded-full animate-spin-slow" style={{animationDuration:'8s'}} />
+          {/* Bouncing dot bottom right */}
+          <div className="absolute bottom-16 right-16 w-6 h-6 bg-gradient-to-br from-pink-500 to-orange-400 rounded-full animate-bounce" />
+          {/* Creative SVG squiggle */}
+          <svg className="absolute top-32 left-1/2 -translate-x-1/2 w-32 h-8 opacity-40" viewBox="0 0 128 32" fill="none"><path d="M0 16 Q32 0 64 16 T128 16" stroke="#F472B6" strokeWidth="4" fill="none"/></svg>
+        </div>
         {/* Background Image */}
         <img
-          src="https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg"
+          src="https://i.pinimg.com/1200x/5d/46/76/5d46761d4f358e389108f2d6fe1eff80.jpg"
           alt="Tech Hero Background"
-          className="absolute inset-0 w-full h-full object-cover object-center opacity-60 z-0"
-          style={{ filter: 'brightness(0.5)' }}
+          className="absolute inset-0 w-full h-full object-cover object-center opacity-20 z-0"
+          style={{ filter: 'brightness(0.3)' }}
         />
-        {/* Background Slider */}
-        <div className="absolute inset-0">
-          {heroSlides.map((slide, index) => (
-            <div
-              key={index}
-              className={`absolute inset-0 bg-gradient-to-r ${slide.background} opacity-5 transition-opacity duration-1000 ${index === currentSlide ? "opacity-10" : "opacity-5"
-                }`}
-            />
-          ))}
+        {/* Hero Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-16">
+      {/* Custom Animations */}
+      <style>{`
+        @keyframes spin-slow { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
+        .animate-spin-slow { animation: spin-slow 8s linear infinite; }
+      `}</style>
+          {/* Main Hero Banner */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+            {/* Left Large Banner - Auto-changing Banner */}
+            {/* Main Hero Banner - Auto-changing Banner */}
+            <div className="lg:col-span-8 rounded-2xl p-0 text-white relative overflow-hidden min-h-[380px] flex flex-col justify-end" style={{background: 'none'}}>
+              {/* Auto-changing Banner Image */}
+              <div className="absolute inset-0 w-full h-full z-0">
+                {heroBanners.map((banner, i) => (
+                  <img
+                    key={banner.src}
+                    src={banner.src}
+                    alt={banner.alt}
+                    className={`w-full h-full object-contain object-center absolute inset-0 transition-opacity duration-700 ${i === bannerIndex ? 'opacity-100' : 'opacity-0'}`}
+                    style={{ borderRadius: '1rem', transitionProperty: 'opacity' }}
+                    aria-hidden={i !== bannerIndex}
+                  />
+                ))}
+              </div>
+              {/* Optional: Dots for navigation */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                {heroBanners.map((b, i) => (
+                  <button
+                    key={b.src}
+                    className={`w-3 h-3 rounded-full ${i === bannerIndex ? 'bg-orange-400' : 'bg-white/40'} border border-white/30 transition-all`}
+                    onClick={() => setBannerIndex(i)}
+                    aria-label={`Show banner ${i + 1}`}
+                    style={{ outline: 'none', border: 'none' }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Right Side Banners */}
+            <div className="lg:col-span-4 space-y-6">
+              {/* Top Right Banner - iPad Pro */}
+              <div className="bg-gradient-to-r from-purple-600 to-indigo-700 rounded-2xl p-6 text-white relative h-28">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10"></div>
+                <div className="relative z-10">
+                  <p className="text-xs font-medium opacity-90">Top Offer</p>
+                  <h3 className="text-xl font-bold">iPad Pro 2024</h3>
+                  <p className="text-sm opacity-80">Discount 30% Off Product</p>
+                </div>
+                <div className="absolute top-4 right-4">
+                  <img 
+                    src="/assets/logos/apple-logo.png" 
+                    alt="iPad" 
+                    className="w-12 h-12 object-contain opacity-80"
+                    onError={(e) => {
+                      e.currentTarget.src = "https://images.seeklogo.com/logo-png/42/1/apple-logo-png_seeklogo-427436.png";
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Bottom Right Banner - Gaming */}
+              <div className="bg-gradient-to-r from-red-500 to-pink-600 rounded-2xl p-6 text-white relative h-28">
+                <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
+                <div className="relative z-10">
+                  <p className="text-xs font-medium opacity-90">Gamepad</p>
+                  <h3 className="text-xl font-bold">Xbox Controller</h3>
+                  <p className="text-sm opacity-80">Best Gadget Of The Week</p>
+                </div>
+                <div className="absolute top-4 right-4">
+                  <Shield className="w-12 h-12 opacity-80" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Product Categories Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+            {[
+              { name: "MacBook Pro", icon: "💻", category: "Laptops" },
+              { name: "Studio Pro", icon: "🎧", category: "Headphones" },
+              { name: "iPhone 15", icon: "📱", category: "Smartphones" },
+              { name: "Surface Audi Pro", icon: "🎵", category: "Audio" },
+              { name: "Gameboy Console", icon: "🎮", category: "Gaming" },
+              { name: "Camera Vision", icon: "📷", category: "Cameras" },
+              { name: "Hacktech PC", icon: "🖥", category: "Desktops" },
+              { name: "Nexus Electronics", icon: "⌚", category: "Wearables" }
+            ].map((item, index) => (
+              <div key={index} className="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center text-white hover:bg-white/30 transition-all duration-300 cursor-pointer group">
+                <div className="text-2xl mb-2 group-hover:scale-110 transition-transform duration-300">{item.icon}</div>
+                <h4 className="font-semibold text-sm mb-1">{item.name}</h4>
+                <p className="text-xs opacity-80">{item.category}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA Section */}
+      
         </div>
 
         {/* Animated background elements */}
@@ -280,87 +392,11 @@ const EcommerceHero: React.FC = () => {
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-500/5 to-pink-600/5 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-pink-500/5 to-orange-500/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
-
-        {/* Content */}
-        <div className="relative z-10 h-full flex items-center">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="flex items-center justify-center">
-              {/* Center Content */}
-              <div className="text-center space-y-8 max-w-4xl">
-                <div className="space-y-4">
-                  <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-pink-600 rounded-full px-4 py-2 text-sm font-medium backdrop-blur-sm">
-                    <Zap className="w-4 h-4 text-white" />
-                    <span className="text-white">{heroSlides[currentSlide].subtitle}</span>
-                  </div>
-                  <h1 className="text-5xl lg:text-7xl font-bold leading-tight bg-gradient-to-r from-orange-400 via-pink-500 to-orange-400 bg-clip-text text-transparent">
-                    {heroSlides[currentSlide].title}
-                  </h1>
-                  <p className="text-xl lg:text-2xl bg-gradient-to-r from-orange-300 to-pink-400 bg-clip-text text-transparent max-w-3xl mx-auto">
-                    {heroSlides[currentSlide].description}
-                  </p>
-                </div>
-
-                
-
-                {/* Features */}
-                <div className="flex flex-wrap gap-8 pt-8 justify-center">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-gradient-to-r from-orange-500 to-pink-600 rounded-full backdrop-blur-sm">
-                      <Truck className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-sm font-medium bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">
-                      Free Shipping
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-gradient-to-r from-orange-500 to-pink-600 rounded-full backdrop-blur-sm">
-                      <Shield className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-sm font-medium bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">
-                      2 Year Warranty
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-gradient-to-r from-orange-500 to-pink-600 rounded-full backdrop-blur-sm">
-                      <ArrowRight className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-sm font-medium bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">
-                      Easy Returns
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Slide Indicators */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
-          {heroSlides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-colors duration-300 ${index === currentSlide ? "bg-gradient-to-r from-orange-500 to-pink-600" : "bg-gray-600"
-                }`}
-            />
-          ))}
-        </div>
       </div>
 
       {/* Featured Products Section */}
       {/* Search Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-2">
-        <input
-          type="text"
-          placeholder="Search by brand or discount..."
-          value={searchText}
-          onChange={e => setSearchText(e.target.value)}
-          className="w-full md:w-1/2 px-5 py-3 rounded-full border border-orange-400 bg-black text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-lg"
-        />
-        <div className="text-sm text-gray-400 mt-2">
-          Showing {filteredProducts.length} deals
-        </div>
-      </div>
+   
 
       <div className="py-20 bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden">
         {/* Background decorations */}
@@ -370,99 +406,120 @@ const EcommerceHero: React.FC = () => {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500/20 to-pink-500/20 backdrop-blur-sm border border-orange-500/30 rounded-full px-6 py-3 mb-6">
-              <Zap className="w-5 h-5 text-orange-400" />
-              <span className="text-orange-300 font-medium">Premium Tech Collection</span>
-            </div>
-            <h2 className="text-5xl lg:text-6xl font-bold bg-gradient-to-r from-orange-400 via-pink-500 to-orange-400 bg-clip-text text-transparent mb-6">
+          <div className="text-center mb-6 mt-2">
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-2">
               Featured Products
             </h2>
-            <p className="text-xl bg-gradient-to-r from-orange-300 to-pink-400 bg-clip-text text-transparent max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base text-gray-300 max-w-2xl mx-auto leading-relaxed mb-6">
               Discover our hand-picked selection of premium tech products with exclusive student discounts
             </p>
+            {/* Modern Filter Bar - styled as filter pills with spacing */}
+            {/* Filter Bar with working filter logic */}
+            <div className="flex justify-center items-center gap-3 mt-6 mb-8">
+              <div className="flex bg-white/10 rounded-full px-2 py-1 shadow-lg border border-white/10">
+                {filterOptions.map(opt => (
+                  <button
+                    key={opt.label}
+                    className={`px-5 py-2 rounded-full font-semibold text-sm focus:outline-none transition-all mx-1 ${activeFilter === opt.label ? 'bg-white text-gray-900 shadow font-bold' : 'text-white/80 hover:bg-white/20'}`}
+                    onClick={() => setActiveFilter(opt.label)}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+              <div className="flex items-center gap-2 ml-3">
+                <button className="w-9 h-9 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center text-gray-300 hover:bg-white/20 transition-all">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/></svg>
+                </button>
+                <button className="w-9 h-9 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center text-gray-300 hover:bg-white/20 transition-all">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="2"/><rect x="3" y="10" width="18" height="4" rx="2"/><rect x="3" y="16" width="18" height="4" rx="2"/></svg>
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProducts.map((product, index) => (
-              <VerificationGate key={product.id}>
-                <div
-                  className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-gray-700/50 rounded-3xl shadow-2xl overflow-hidden group hover:shadow-3xl hover:border-orange-500/60 backdrop-blur-sm transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 animate-fade-in-up"
-                  onMouseEnter={() => setHoveredCard(product.id)}
-                  onMouseLeave={() => setHoveredCard(null)}
-                  style={{
-                    animationDelay: `${index * 0.1}s`,
-                  }}
-                >
-                  <div className="relative overflow-hidden">
-                    <div className="aspect-w-16 aspect-h-12 bg-gradient-to-br from-gray-700 to-gray-800">
-                      <img
-                        src={product.image || "/placeholder.svg"}
-                        alt={product.name}
-                        className="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-700"
-                      />
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            {filteredProducts.map((product, index) => {
+              // Fill missing content
+              const description = product.description && product.description.trim().length > 0
+                ? product.description
+                : product.isSale && product.discount
+                  ? `Get ${product.discount}% off on this product for students!`
+                  : 'Exclusive student discount available!';
+              return (
+                <VerificationGate key={product.id}>
+                  <div
+                    className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-gray-700/50 rounded-3xl shadow-2xl overflow-hidden group hover:shadow-2xl hover:border-orange-500/60 backdrop-blur-sm transition-all duration-500 transform hover:-translate-y-2 hover:scale-110 animate-fade-in-up flex flex-col h-full"
+                    onMouseEnter={() => setHoveredCard(product.id)}
+                    onMouseLeave={() => setHoveredCard(null)}
+                    style={{
+                      animationDelay: `${index * 0.1}s`,
+                    }}
+                  >
+                    <div className="relative overflow-hidden">
+                      <div className="aspect-w-16 aspect-h-12 bg-gradient-to-br from-gray-700 to-gray-800">
+                        <img
+                          src={product.image || "/placeholder.svg"}
+                          alt={product.name}
+                          className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                      </div>
+
+                      {/* Enhanced Badges */}
+                      <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
+                        {product.isNew && (
+                          <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg backdrop-blur-sm border border-green-400/30">
+                            <span className="inline-block w-1.5 h-1.5 bg-white rounded-full mr-1 animate-pulse"></span>
+                            NEW
+                          </span>
+                        )}
+                        {product.isSale && (
+                          <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg backdrop-blur-sm border border-red-400/30">
+                            🔥 {product.discount}% OFF
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Professional Quick Actions */}
+                      <div className="absolute top-3 right-3 flex flex-col gap-2 z-10">
+                        <button className="p-2 bg-gray-900/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-gradient-to-r hover:from-orange-500 hover:to-pink-600 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                          <Heart className="w-4 h-4 text-gray-300 hover:text-white" />
+                        </button>
+                        <button className="p-2 bg-gray-900/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-gradient-to-r hover:from-orange-500 hover:to-pink-600 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300 delay-75">
+                          <Eye className="w-4 h-4 text-gray-300 hover:text-white" />
+                        </button>
+                      </div>
+
+                      {/* Premium Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                      
+                      {/* Removed duplicate Get Discount button over image */}
                     </div>
 
-                    {/* Enhanced Badges */}
-                    <div className="absolute top-6 left-6 flex flex-col gap-2 z-10">
-                      {product.isNew && (
-                        <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm px-4 py-2 rounded-full font-bold shadow-lg backdrop-blur-sm border border-green-400/30">
-                          <span className="inline-block w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
-                          NEW
-                        </span>
-                      )}
-                      {product.isSale && (
-                        <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm px-4 py-2 rounded-full font-bold shadow-lg backdrop-blur-sm border border-red-400/30">
-                          🔥 {product.discount}% OFF
-                        </span>
-                      )}
-                    </div>
+                    <div className="p-4 flex flex-col flex-1 justify-between">
+                      <div>
+                        <h3 className="text-lg font-bold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent mb-2 group-hover:from-orange-300 group-hover:to-pink-400 transition-all leading-tight">
+                          {product.name}
+                        </h3>
 
-                    {/* Professional Quick Actions */}
-                    <div className="absolute top-6 right-6 flex flex-col gap-3 z-10">
-                      <button className="p-3 bg-gray-900/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-gradient-to-r hover:from-orange-500 hover:to-pink-600 opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
-                        <Heart className="w-5 h-5 text-gray-300 hover:text-white" />
-                      </button>
-                      <button className="p-3 bg-gray-900/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-gradient-to-r hover:from-orange-500 hover:to-pink-600 opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300 delay-75">
-                        <Eye className="w-5 h-5 text-gray-300 hover:text-white" />
-                      </button>
-                    </div>
-
-                    {/* Premium Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                    
-                    {/* Enhanced Overlay CTA */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <button
-                        className="bg-gradient-to-r from-orange-500 to-pink-600 text-white px-8 py-4 rounded-full font-bold text-lg opacity-0 group-hover:opacity-100 transform translate-y-8 group-hover:translate-y-0 transition-all duration-500 flex items-center space-x-3 shadow-2xl hover:shadow-orange-500/50 hover:from-orange-600 hover:to-pink-700"
-                        onClick={() => handleGetDiscount(product)}
-                      >
-                        <ShoppingCart className="w-6 h-6" />
-                        <span>Get Discount</span>
-                      </button>
+                        <p className="text-xs text-gray-300 mb-3 line-clamp-2 leading-relaxed min-h-[32px]">
+                          {description}
+                        </p>
+                      </div>
+                      <div className="mt-auto">
+                        <button
+                          className="w-full bg-gradient-to-r from-orange-500 to-pink-600 text-white py-2 px-4 rounded-xl font-bold text-sm hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-md hover:shadow-orange-500/30 transform hover:scale-105"
+                          onClick={() => handleGetDiscount(product)}
+                        >
+                          <ShoppingCart className="w-4 h-4" />
+                          <span>Get Student Discount</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
-
-                  <div className="p-8">
-                    <h3 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent mb-4 group-hover:from-orange-300 group-hover:to-pink-400 transition-all leading-tight">
-                      {product.name}
-                    </h3>
-
-                    <p className="text-base text-gray-300 mb-6 line-clamp-2 leading-relaxed">
-                      {product.description}
-                    </p>
-
-                    <button
-                      className="w-full bg-gradient-to-r from-orange-500 to-pink-600 text-white py-4 px-6 rounded-2xl font-bold text-lg hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-3 shadow-lg hover:shadow-orange-500/30 transform hover:scale-105"
-                      onClick={() => handleGetDiscount(product)}
-                    >
-                      <ShoppingCart className="w-6 h-6" />
-                      <span>Get Student Discount</span>
-                    </button>
-                  </div>
-                </div>
-              </VerificationGate>
-            ))}
+                </VerificationGate>
+              );
+            })}
           </div>
 
           {/* Additional Professional Elements */}
@@ -509,7 +566,7 @@ const EcommerceHero: React.FC = () => {
           </div>
         )}
       </Modal>
-    </div>
+    </div>
   )
 }
 
