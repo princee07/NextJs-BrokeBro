@@ -345,7 +345,7 @@ const OfferSlider = () => {
 
   return (
     <div
-      className="w-full py-8 md:py-12 bg-black/95 relative overflow-hidden backdrop-blur-sm shadow-xl"
+      className="w-full py-4 sm:py-6 md:py-12 bg-black/95 relative overflow-hidden backdrop-blur-sm shadow-xl"
       ref={ref}
     >
       {/* Enhanced background elements */}
@@ -391,7 +391,7 @@ const OfferSlider = () => {
         </div>
 
         <div
-          className="relative w-full h-28 md:h-36 overflow-hidden rounded-xl shadow-2xl"
+          className="relative w-full h-40 sm:h-48 md:h-36 overflow-hidden rounded-xl shadow-2xl flex flex-col sm:flex-row"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
