@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./styles/global.css";
 import NavbarWrapper from "@/components/layout/NavbarWrapper";
 import Footer from "@/components/layout/Footer";
+import PageTransition from "@/components/layout/PageTransition";
 import ReferralProcessor from "@/components/auth/ReferralProcessor";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
@@ -39,7 +40,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReferralProcessor />
         <NavbarWrapper />
-        <main>{children}</main>
+        <main>
+          <PageTransition>{children}</PageTransition>
+        </main>
         <Footer />
         <Analytics />
         <SpeedInsights/>

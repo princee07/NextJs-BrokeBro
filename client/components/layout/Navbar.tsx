@@ -29,6 +29,14 @@ import SearchBar from '../ui/SearchBar';
 const popSoundPath = '/assets/sounds/pop.mp4';
 
 export default function NavbarClient({ user }: { user: any }) {
+  // Fix: Reset nav state on route change
+  const { usePathname } = require('next/navigation');
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setActiveCategory(null);
+    setHoveredCategory(null);
+  }, [pathname]);
   const [scrolled, setScrolled] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const lastScrollY = useRef(0);
