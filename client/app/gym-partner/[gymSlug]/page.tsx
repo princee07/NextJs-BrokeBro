@@ -1,6 +1,8 @@
+
 "use client";
 import React from 'react';
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 
 // Dummy data for demonstration
 interface GymDetail {
@@ -64,11 +66,15 @@ const gymDetails: { [key: string]: GymDetail } = {
     // Add more gyms as needed
 };
 
-export default function GymPartnerDetail({ params }: { params: { gymSlug: string } }) {
-    const gym: GymDetail | undefined = gymDetails[params.gymSlug];
+export default function GymPartnerDetail() {
+    const { gymSlug } = useParams<{ gymSlug: string }>();
+    const gym: GymDetail | undefined = gymDetails[gymSlug];
     if (!gym) {
         return <div className="p-8 text-center">Gym partner not found.</div>;
     }
+    // Replace these with your actual auth/verification logic
+    const isLoggedIn = true; // e.g. from user context/store
+    const isVerified = true; // e.g. from user context/store
     const [showCoupon, setShowCoupon] = React.useState(false);
     const [copied, setCopied] = React.useState(false);
     return (
@@ -89,27 +95,31 @@ export default function GymPartnerDetail({ params }: { params: { gymSlug: string
                     <div className="mb-4 w-full">
                         <span className="block text-gray-700 font-semibold">Discount Offers:</span>
                         <span className="block text-green-600 font-bold">{gym.discount ? gym.discount : 'Get up to 20% off on membership!'}</span>
-                        {!showCoupon ? (
-                            <button
-                                className="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition cursor-pointer"
-                                onClick={() => setShowCoupon(true)}
-                            >
-                                Reveal Coupon Code
-                            </button>
-                        ) : (
-                            <div className="mt-4 w-full flex items-center justify-between bg-gray-200 py-2 px-4 rounded border border-orange-400">
-                                <span className="text-lg font-bold text-orange-700">{gym.couponCode || 'COUPON2025'}</span>
+                        {isLoggedIn && isVerified ? (
+                            !showCoupon ? (
                                 <button
-                                    className="ml-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-1 px-3 rounded transition cursor-pointer"
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(gym.couponCode || 'COUPON2025');
-                                        setCopied(true);
-                                        setTimeout(() => setCopied(false), 1500);
-                                    }}
+                                    className="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition cursor-pointer"
+                                    onClick={() => setShowCoupon(true)}
                                 >
-                                    {copied ? 'Copied!' : 'Copy Code'}
+                                    Reveal Coupon Code
                                 </button>
-                            </div>
+                            ) : (
+                                <div className="mt-4 w-full flex items-center justify-between bg-gray-200 py-2 px-4 rounded border border-orange-400">
+                                    <span className="text-lg font-bold text-orange-700">{gym.couponCode || 'COUPON2025'}</span>
+                                    <button
+                                        className="ml-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-1 px-3 rounded transition cursor-pointer"
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(gym.couponCode || 'COUPON2025');
+                                            setCopied(true);
+                                            setTimeout(() => setCopied(false), 1500);
+                                        }}
+                                    >
+                                        {copied ? 'Copied!' : 'Copy Code'}
+                                    </button>
+                                </div>
+                            )
+                        ) : (
+                            <div className="mt-4 w-full text-center text-sm text-gray-500 font-semibold">Login and verify your account to access discount and coupon code.</div>
                         )}
                     </div>
                 </aside>
