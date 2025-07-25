@@ -259,6 +259,11 @@ export default function NavbarClient({ user }: { user: any }) {
       icon: <HiOutlineGlobeAlt className="w-5 h-5" />
     },
     {
+      name: 'GYM',
+      path: '/gym',
+      icon: <span className="w-5 h-5">🏋️</span>
+    },
+    {
       name: 'TECHNOLOGY',
       path: '/technology',
       icon: <HiOutlineDesktopComputer className="w-5 h-5" />,
@@ -509,7 +514,7 @@ export default function NavbarClient({ user }: { user: any }) {
                         className={`relative px-2 py-2 rounded-full transition-all duration-300 ${activeCategory === category.name
                           ? 'text-white bg-gradient-to-r from-orange-500/20 to-pink-500/20'
                           : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-pink-500/20'
-                        }`}
+                          }`}
                         onClick={resetNavState}
                         prefetch={false}
                       >
