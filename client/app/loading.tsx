@@ -10,7 +10,7 @@ export default function Loading() {
           autoPlay
           loop
           muted
-          className="w-40 h-40 object-contain mb-6 rounded-lg shadow-lg"
+          className="w-full max-w-xl h-auto aspect-video object-contain mb-6 rounded-2xl shadow-2xl"
         />
         {/* No loading text, only video is shown while loading */}
       </div>
