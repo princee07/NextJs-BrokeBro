@@ -58,7 +58,7 @@ const EcommerceHero: React.FC = () => {
     { label: 'All' },
     { label: 'Skills' },
     { label: 'Laptop' },
-    { label: 'Gym' },
+    { label: 'Game' },
   ];
   const [activeFilter, setActiveFilter] = useState('All');
   let filteredProducts = featuredProducts;
@@ -74,9 +74,9 @@ const EcommerceHero: React.FC = () => {
       p.name.toLowerCase().includes('dell') ||
       p.name.toLowerCase().includes('hp')
     );
-  } else if (activeFilter === 'Gym') {
+  } else if (activeFilter === 'Game') {
     filteredProducts = featuredProducts.filter(p =>
-      p.name.toLowerCase().includes('gym')
+      p.name.toLowerCase().includes('game')
     );
   }
 
@@ -217,7 +217,7 @@ const EcommerceHero: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-10">
             {filteredProducts.map((product, index) => {
               // Fill missing content
               const description = product.description && product.description.trim().length > 0
@@ -225,12 +225,19 @@ const EcommerceHero: React.FC = () => {
                 : product.isSale && product.discount
                   ? `Get ${product.discount}% off on this product for students!`
                   : 'Exclusive student discount available!';
+              // Build the discount page URL for this product
+              const productSlug = product.name.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '').toLowerCase();
+              const handleCardClick = () => {
+                // Navigate to the discount page for this product
+                router.push(`/technology/discount/${productSlug}`);
+              };
               return (
                 <VerificationGate key={product.id}>
                   <div
-                    className="bg-white border border-orange-100 rounded-3xl shadow-lg overflow-hidden group hover:shadow-xl hover:border-orange-300 transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 animate-fade-in-up flex flex-col h-full"
+                    className="bg-white border border-orange-100 rounded-3xl shadow-lg overflow-hidden group hover:shadow-xl hover:border-orange-300 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 animate-fade-in-up flex flex-col h-full min-h-[320px] md:min-h-[340px] xl:min-h-[360px] p-3 md:p-5 cursor-pointer"
                     onMouseEnter={() => setHoveredCard(product.id)}
                     onMouseLeave={() => setHoveredCard(null)}
+                    onClick={handleCardClick}
                     style={{
                       animationDelay: `${index * 0.1}s`,
                     }}
@@ -240,7 +247,7 @@ const EcommerceHero: React.FC = () => {
                         <img
                           src={product.image || "/placeholder.svg"}
                           alt={product.name}
-                          className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-700"
+                          className="w-full h-40 md:h-48 object-cover group-hover:scale-105 transition-transform duration-700"
                         />
                       </div>
 
@@ -274,22 +281,13 @@ const EcommerceHero: React.FC = () => {
 
                     <div className="p-4 flex flex-col flex-1 justify-between">
                       <div>
-                        <h3 className="text-lg font-bold text-orange-700 mb-2 group-hover:text-orange-900 transition-all leading-tight">
+                        <h3 className="text-lg font-bold text-black mb-2 group-hover:text-black transition-all leading-tight">
                           {product.name}
                         </h3>
 
                         <p className="text-xs text-orange-900/80 mb-3 line-clamp-2 leading-relaxed min-h-[32px]">
                           {description}
                         </p>
-                      </div>
-                      <div className="mt-auto">
-                        <button
-                          className="w-full bg-gradient-to-r from-[#6C1AFF] via-[#A259FF] to-[#6C1AFF] text-white py-2 px-4 rounded-xl font-bold text-sm hover:from-[#7B3EFF] hover:to-[#6C1AFF] transition-all duration-300 flex items-center justify-center space-x-2 shadow-md hover:shadow-[#A259FF]/30 transform hover:scale-105"
-                          onClick={() => handleGetDiscount(product)}
-                        >
-                          <ShoppingCart className="w-4 h-4" />
-                          <span>Get Student Discount</span>
-                        </button>
                       </div>
                     </div>
                   </div>
