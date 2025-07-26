@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useUserVerification } from "../../../../../hooks/useUserVerification";
 import { useParams } from "next/navigation";
 
 // Dummy data for demonstration; in real app, fetch by slug
@@ -43,6 +44,7 @@ const FlightDealPage = () => {
     const { flightSlug } = params;
     const [showCode, setShowCode] = useState(false);
     const [copied, setCopied] = useState(false);
+    const { isVerified, loading: verificationLoading } = useUserVerification();
 
     const deal = flightDeals[flightSlug as keyof typeof flightDeals];
     if (!deal) {
@@ -71,12 +73,18 @@ const FlightDealPage = () => {
                     <p className="text-[#555] text-center mb-6">{deal.description}</p>
                     <div className="flex flex-col items-center gap-3 w-full">
                         {!showCode ? (
-                            <button
-                                className="bg-gradient-to-r from-[#5B5BF6] to-[#7F5CFF] text-white font-bold py-3 px-8 rounded-xl text-lg shadow hover:from-[#7F5CFF] hover:to-[#5B5BF6] transition"
-                                onClick={() => setShowCode(true)}
-                            >
-                                Reveal Coupon Code
-                            </button>
+                            <>
+                                <button
+                                    className="bg-gradient-to-r from-[#5B5BF6] to-[#7F5CFF] text-white font-bold py-3 px-8 rounded-xl text-lg shadow hover:from-[#7F5CFF] hover:to-[#5B5BF6] transition disabled:opacity-60 disabled:cursor-not-allowed"
+                                    onClick={() => isVerified && setShowCode(true)}
+                                    disabled={verificationLoading || !isVerified}
+                                >
+                                    Reveal Coupon Code
+                                </button>
+                                {!verificationLoading && !isVerified && (
+                                    <div className="text-red-500 text-sm mt-2">Please log in and verify your account to reveal the coupon code.</div>
+                                )}
+                            </>
                         ) : (
                             <div className="flex items-center gap-2 mt-2">
                                 <span className="font-mono text-lg bg-gray-100 px-4 py-2 rounded-lg border border-gray-300 text-black">{deal.code}</span>
