@@ -1,28 +1,13 @@
-"use client"
-import type React from "react"
-import { useState, useEffect } from "react"
-import { ShoppingCart, Heart, Star, Eye, ArrowRight, Zap, Shield, Truck } from "lucide-react"
+
+"use client";
+import React, { useState, useEffect } from "react";
+import { ShoppingCart, Heart, Star, Eye, Zap, Shield, Truck } from "lucide-react";
 import VerificationGate from '@/components/ui/VerificationGate';
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 import { useUserVerification } from '@/hooks/useUserVerification';
 import { useRouter } from 'next/navigation';
 import Modal from '@/components/ui/Modal';
-
-interface Product {
-  id: number
-  name: string
-  price: number
-  originalPrice?: number
-  image: string
-  rating: number
-  reviews: number
-  isNew?: boolean
-  isSale?: boolean
-  discount?: number
-  description?: string
-  code?:string
-  codeType?: string // 'fixed' or 'percentage'
-}
+import featuredProducts, { Product } from './featuredProducts';
 
 const heroBanners = [
   { src: "/assets/technology/hp.png", alt: "HP Banner" },
@@ -43,125 +28,6 @@ const EcommerceHero: React.FC = () => {
   }, []);
   //const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const featuredProducts: Product[] = [
-    {
-      id: 1,
-      name: "Canva Pro Subscription",
-      price: 89.99,
-      originalPrice: 129.99,
-      image: '/assets/logos/canva-logo.png',
-      rating: 4.8,
-      reviews: 2847,
-      isNew: true,
-      isSale: true,
-      discount: 31,
-      description: "Unlock premium features with Canva Pro for stunning designs.",
-      code: "CANVA10",
-      codeType: "fixed",
-    },
-    {
-      id: 2,
-      name: "Grammarly Premium",
-      price: 199.99,
-      originalPrice: 249.99,
-      image: "/assets/logos/grammarly.png",
-      rating: 4.6,
-      reviews: 1923,
-      isSale: true,
-      discount: 20,
-      description: "25% off Grammarly premium for students",
-      code: "GRAMMARLY20",
-      codeType: "fixed",
-    },
-    {
-      id: 3,
-      name: "Notion Pro Plan",
-      price: 59.99,
-      image: "/assets/logos/notion (1).png",
-      rating: 4.9,
-      reviews: 956,
-      isNew: true,
-      description: "Unlock 100% off on your Notion's workspace.",
-      code: "NOTION100",
-      codeType: "fixed",
-    },
-    {
-      id: 4,
-      name: "Microsoft Office 365",
-      price: 34.99,
-      originalPrice: 49.99,
-      image: "/assets/logos/microsoft.png",
-      rating: 4.5,
-      reviews: 743,
-      isSale: true,
-      discount: 30,
-      description: "Get a 3-month free trial on Microsoft 365 Personal, then 50% off.",
-      code: "OFFICE36550",
-      codeType: "fixed",
-    },
-    {
-      id: 5,
-      name: "HP Laptop",
-      price: 79.99,
-      originalPrice: 99.99,
-      image: "https://logos-world.net/wp-content/uploads/2020/12/Hewlett-Packard-Logo-2009.png",
-      rating: 4.7,
-      reviews: 1456,
-      isSale: true,
-      discount: 20,
-      description: "Get exclusive student offers on hp laptops",
-      code: "HPSTUDENT20",
-      codeType: "fixed",
-    },
-    {
-      id: 6,
-      name: "Figma Professional",
-      price: 49.99,
-      image: "/assets/logos/figma.png",
-      rating: 4.8,
-      reviews: 892,
-      isNew: true,
-      description: "Free figma Education plan to students and educators",
-      code: "FIGMAEDU",
-      codeType: "fixed",
-    },
-    {
-      id: 7,
-      name: "Dell",
-      price: 49.99,
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTV6j9ncPmKx_M7HFjWoRe5xp_IhRm4Fdyw7w&s",
-      rating: 4.8,
-      reviews: 892,
-      isNew: true,
-      description: "Unlock special deals for students, parents, and education staff with exclusive vouchers",
-      code: "DELLSTUDENT",
-      codeType: "fixed",
-    },
-    {
-      id: 8,
-      name: "Lenovo",
-      price: 49.99,
-      image: "https://w7.pngwing.com/pngs/631/322/png-transparent-lenovo-logo-laptop-lenovo-thinkpad-thinkpad-x1-carbon-intel-dell-lenovo-logo-electronics-text-rectangle.png",
-      rating: 4.8,
-      reviews: 892,
-      isNew: true,
-      description: "Upto 55% off on student laptop",
-      code: "LENOVO55",
-      codeType: "fixed",
-    },
-     {
-      id: 9,
-      name: "Apple MacBook Pro",
-      price: 49.99,
-      image: "https://images.seeklogo.com/logo-png/42/1/apple-logo-png_seeklogo-427436.png",
-      rating: 4.8,
-      reviews: 892,
-      isNew: true,
-      description: "Save up to ₹10000 on select Mac or iPad with education pricing.",
-      code: "APPLEEDU",
-      codeType: "fixed",
-    }    
-    ]
 
   const heroSlides = [
     {
@@ -185,7 +51,7 @@ const EcommerceHero: React.FC = () => {
       cta: "View Best Sellers",
       background: "from-orange-600 to-pink-500",
     },
-     ]
+  ]
 
   // Filter bar state and logic
   const filterOptions = [
@@ -215,9 +81,9 @@ const EcommerceHero: React.FC = () => {
   }
 
   // Modal state for coupon
-    const [showProductModal, setShowProductModal] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-    const [productCodeData, setProductCodeData] = useState<{ code: string; isRevealed: boolean; codeType: string } | null>(null);
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [productCodeData, setProductCodeData] = useState<{ code: string; isRevealed: boolean; codeType: string } | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -269,163 +135,71 @@ const EcommerceHero: React.FC = () => {
   };
 
   return (
-<div className="min-h-screen mt-35 bg-gradient-to-br from-gray-900 via-black to-gray-800">
-      {/* Hero Section */}
-      <div className="relative min-h-[80vh] overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black mt-4">
-        {/* Animated Circles and Creative Elements */}
-        <div className="pointer-events-none select-none">
-          {/* Large animated circle top left */}
-          <div className="absolute top-[-60px] left-[-60px] w-48 h-48 bg-gradient-to-br from-orange-400/30 to-pink-500/20 rounded-full blur-2xl animate-pulse" style={{animationDuration:'4s'}} />
-          {/* Small pulsing circle top right */}
-          <div className="absolute top-16 right-24 w-10 h-10 bg-pink-400/60 rounded-full blur-sm animate-ping" style={{animationDuration:'2.5s'}} />
-          {/* Hollow animated circle bottom left */}
-          <div className="absolute bottom-24 left-20 w-16 h-16 border-4 border-orange-400/60 rounded-full animate-spin-slow" style={{animationDuration:'8s'}} />
-          {/* Bouncing dot bottom right */}
-          <div className="absolute bottom-16 right-16 w-6 h-6 bg-gradient-to-br from-pink-500 to-orange-400 rounded-full animate-bounce" />
-          {/* Creative SVG squiggle */}
-          <svg className="absolute top-32 left-1/2 -translate-x-1/2 w-32 h-8 opacity-40" viewBox="0 0 128 32" fill="none"><path d="M0 16 Q32 0 64 16 T128 16" stroke="#F472B6" strokeWidth="4" fill="none"/></svg>
+
+    <div className="min-h-screen mt-18 bg-gradient-to-br from-white via-rose-50 to-pink-50">
+      {/* New Hero Section */}
+      <div className="relative w-full overflow-hidden bg-gradient-to-br from-[#6C1AFF] via-[#A259FF] to-[#6C1AFF] min-h-[340px] flex flex-col justify-end pb-0">
+        {/* Hero Content Centered */}
+        <div className="relative z-10 flex flex-col items-center justify-center text-center pt-16 pb-0 px-4">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-2 drop-shadow-lg">
+            <span className="block">Why Pay More?</span>
+            <span className="block text-5xl md:text-6xl font-black text-white mt-2 mb-1">Upgrade with BrokeBro</span>
+            <span className="block text-lg md:text-xl font-semibold text-white/90 mt-2">Smart Tech. Smarter Prices.</span>
+          </h1>
         </div>
-        {/* Background Image */}
-        <img
-          src="https://i.pinimg.com/1200x/5d/46/76/5d46761d4f358e389108f2d6fe1eff80.jpg"
-          alt="Tech Hero Background"
-          className="absolute inset-0 w-full h-full object-cover object-center opacity-20 z-0"
-          style={{ filter: 'brightness(0.3)' }}
-        />
-        {/* Hero Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-16">
-      {/* Custom Animations */}
-      <style>{`
-        @keyframes spin-slow { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
-        .animate-spin-slow { animation: spin-slow 8s linear infinite; }
-      `}</style>
-          {/* Main Hero Banner */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
-            {/* Left Large Banner - Auto-changing Banner */}
-            {/* Main Hero Banner - Auto-changing Banner */}
-            <div className="lg:col-span-8 rounded-2xl p-0 text-white relative overflow-hidden min-h-[380px] flex flex-col justify-end" style={{background: 'none'}}>
-              {/* Auto-changing Banner Image */}
-              <div className="absolute inset-0 w-full h-full z-0">
-                {heroBanners.map((banner, i) => (
-                  <img
-                    key={banner.src}
-                    src={banner.src}
-                    alt={banner.alt}
-                    className={`w-full h-full object-contain object-center absolute inset-0 transition-opacity duration-700 ${i === bannerIndex ? 'opacity-100' : 'opacity-0'}`}
-                    style={{ borderRadius: '1rem', transitionProperty: 'opacity' }}
-                    aria-hidden={i !== bannerIndex}
-                  />
-                ))}
-              </div>
-              {/* Optional: Dots for navigation */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                {heroBanners.map((b, i) => (
-                  <button
-                    key={b.src}
-                    className={`w-3 h-3 rounded-full ${i === bannerIndex ? 'bg-orange-400' : 'bg-white/40'} border border-white/30 transition-all`}
-                    onClick={() => setBannerIndex(i)}
-                    aria-label={`Show banner ${i + 1}`}
-                    style={{ outline: 'none', border: 'none' }}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Right Side Banners */}
-            <div className="lg:col-span-4 space-y-6">
-              {/* Top Right Banner - iPad Pro */}
-              <div className="bg-gradient-to-r from-purple-600 to-indigo-700 rounded-2xl p-6 text-white relative h-28">
-                <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10"></div>
-                <div className="relative z-10">
-                  <p className="text-xs font-medium opacity-90">Top Offer</p>
-                  <h3 className="text-xl font-bold">iPad Pro 2024</h3>
-                  <p className="text-sm opacity-80">Discount 30% Off Product</p>
-                </div>
-                <div className="absolute top-4 right-4">
-                  <img 
-                    src="/assets/logos/apple-logo.png" 
-                    alt="iPad" 
-                    className="w-12 h-12 object-contain opacity-80"
-                    onError={(e) => {
-                      e.currentTarget.src = "https://images.seeklogo.com/logo-png/42/1/apple-logo-png_seeklogo-427436.png";
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Bottom Right Banner - Gaming */}
-              <div className="bg-gradient-to-r from-red-500 to-pink-600 rounded-2xl p-6 text-white relative h-28">
-                <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
-                <div className="relative z-10">
-                  <p className="text-xs font-medium opacity-90">Gamepad</p>
-                  <h3 className="text-xl font-bold">Xbox Controller</h3>
-                  <p className="text-sm opacity-80">Best Gadget Of The Week</p>
-                </div>
-                <div className="absolute top-4 right-4">
-                  <Shield className="w-12 h-12 opacity-80" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Product Categories Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-            {[
-              { name: "MacBook Pro", icon: "💻", category: "Laptops" },
-              { name: "Studio Pro", icon: "🎧", category: "Headphones" },
-              { name: "iPhone 15", icon: "📱", category: "Smartphones" },
-              { name: "Surface Audi Pro", icon: "🎵", category: "Audio" },
-              { name: "Gameboy Console", icon: "🎮", category: "Gaming" },
-              { name: "Camera Vision", icon: "📷", category: "Cameras" },
-              { name: "Hacktech PC", icon: "🖥", category: "Desktops" },
-              { name: "Nexus Electronics", icon: "⌚", category: "Wearables" }
-            ].map((item, index) => (
-              <div key={index} className="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center text-white hover:bg-white/30 transition-all duration-300 cursor-pointer group">
-                <div className="text-2xl mb-2 group-hover:scale-110 transition-transform duration-300">{item.icon}</div>
-                <h4 className="font-semibold text-sm mb-1">{item.name}</h4>
-                <p className="text-xs opacity-80">{item.category}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* CTA Section */}
-      
-        </div>
-
-        {/* Animated background elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-500/5 to-pink-600/5 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-pink-500/5 to-orange-500/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        {/* Wavy SVG Divider */}
+        <div className="w-full overflow-hidden -mb-1">
+          <svg viewBox="0 0 1440 90" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-20">
+            <path d="M0 60 Q360 0 720 60 T1440 60 V90 H0 V60Z" fill="#fff" />
+          </svg>
         </div>
       </div>
+      {/* Product Cards Row - now below the wave, not overlaying the purple */}
+      <div className="w-full flex flex-col items-center pb-8 bg-white">
+        <div className="flex flex-row justify-center gap-8 mt-8 mb-4 px-4 flex-wrap">
+          {/* Product cards, all below the wave */}
+          <div className="rounded-3xl bg-[#F7F6FB] shadow-1xl flex flex-col items-center w-40 h-40 p-2 mx-2">
+            <img src="/assets/technology/image.png" alt="Watch" className="w-52 h-52 object-contain mb-2" />
+          </div>
+          <div className="rounded-3xl bg-[#F7F6FB] shadow-1xl flex flex-col items-center w-48 h-48 p-2 mx-2"><img src="/assets/technology/image2.jpg" alt="Offer" className="w-40 h-40 object-contain mb-2" /></div>
+          <div className="rounded-3xl bg-[#F7F6FB] shadow-1xl flex flex-col items-center w-48 h-48 p-2 mx-2"><img src="/assets/technology/image3.png" alt="AirPods" className="w-40 h-40 object-contain mb-2" /></div>
+          <div className="rounded-3xl bg-[#F7F6FB] shadow-1xl flex flex-col items-center w-48 h-48 p-2 mx-2"><img src="/assets/technology/image4.png" alt="Gadgets" className="w-40 h-40 object-contain mb-2" /></div>
+        </div>
+      </div>
+      {/* Floating Explore Button */}
+      <button className="fixed bottom-8 right-8 bg-white text-[#6C1AFF] font-bold px-6 py-3 rounded-full shadow-lg flex items-center gap-2 z-50 border-2 border-[#6C1AFF] hover:bg-[#6C1AFF] hover:text-white transition-all">
+        Explore <span className="ml-1">&#8594;</span>
+      </button>
+
+      {/* ...existing code for featured products and the rest of the page... */}
 
       {/* Featured Products Section */}
       {/* Search Bar */}
-   
 
-      <div className="py-20 bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden">
-        {/* Background decorations */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full filter blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-72 h-72 bg-gradient-to-r from-pink-500 to-orange-500 rounded-full filter blur-3xl"></div>
+
+      <div className="py-20 bg-gradient-to-b from-white via-orange-50 to-pink-50 relative overflow-hidden">
+        {/* Light theme background decorations */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none select-none">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-orange-200 to-pink-200 rounded-full filter blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-72 h-72 bg-gradient-to-r from-pink-200 to-orange-200 rounded-full filter blur-3xl"></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-6 mt-2">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-2">
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
               Featured Products
             </h2>
-            <p className="text-base text-gray-300 max-w-2xl mx-auto leading-relaxed mb-6">
+            <p className="text-base text-gray-600 max-w-2xl mx-auto leading-relaxed mb-6">
               Discover our hand-picked selection of premium tech products with exclusive student discounts
             </p>
             {/* Modern Filter Bar - styled as filter pills with spacing */}
             {/* Filter Bar with working filter logic */}
             <div className="flex justify-center items-center gap-3 mt-6 mb-8">
-              <div className="flex bg-white/10 rounded-full px-2 py-1 shadow-lg border border-white/10">
+              <div className="flex bg-orange-100 rounded-full px-2 py-1 shadow-lg border border-orange-200">
                 {filterOptions.map(opt => (
                   <button
                     key={opt.label}
-                    className={`px-5 py-2 rounded-full font-semibold text-sm focus:outline-none transition-all mx-1 ${activeFilter === opt.label ? 'bg-white text-gray-900 shadow font-bold' : 'text-white/80 hover:bg-white/20'}`}
+                    className={`px-5 py-2 rounded-full font-semibold text-sm focus:outline-none transition-all mx-1 ${activeFilter === opt.label ? 'bg-white text-orange-600 shadow font-bold' : 'text-orange-600/80 hover:bg-white/60'}`}
                     onClick={() => setActiveFilter(opt.label)}
                   >
                     {opt.label}
@@ -433,11 +207,11 @@ const EcommerceHero: React.FC = () => {
                 ))}
               </div>
               <div className="flex items-center gap-2 ml-3">
-                <button className="w-9 h-9 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center text-gray-300 hover:bg-white/20 transition-all">
-                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/></svg>
+                <button className="w-9 h-9 rounded-xl bg-orange-100 border border-orange-200 flex items-center justify-center text-orange-400 hover:bg-orange-200 transition-all">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2" /><rect x="14" y="3" width="7" height="7" rx="2" /><rect x="14" y="14" width="7" height="7" rx="2" /><rect x="3" y="14" width="7" height="7" rx="2" /></svg>
                 </button>
-                <button className="w-9 h-9 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center text-gray-300 hover:bg-white/20 transition-all">
-                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="2"/><rect x="3" y="10" width="18" height="4" rx="2"/><rect x="3" y="16" width="18" height="4" rx="2"/></svg>
+                <button className="w-9 h-9 rounded-xl bg-orange-100 border border-orange-200 flex items-center justify-center text-orange-400 hover:bg-orange-200 transition-all">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="2" /><rect x="3" y="10" width="18" height="4" rx="2" /><rect x="3" y="16" width="18" height="4" rx="2" /></svg>
                 </button>
               </div>
             </div>
@@ -454,7 +228,7 @@ const EcommerceHero: React.FC = () => {
               return (
                 <VerificationGate key={product.id}>
                   <div
-                    className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-gray-700/50 rounded-3xl shadow-2xl overflow-hidden group hover:shadow-2xl hover:border-orange-500/60 backdrop-blur-sm transition-all duration-500 transform hover:-translate-y-2 hover:scale-110 animate-fade-in-up flex flex-col h-full"
+                    className="bg-white border border-orange-100 rounded-3xl shadow-lg overflow-hidden group hover:shadow-xl hover:border-orange-300 transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 animate-fade-in-up flex flex-col h-full"
                     onMouseEnter={() => setHoveredCard(product.id)}
                     onMouseLeave={() => setHoveredCard(null)}
                     style={{
@@ -462,7 +236,7 @@ const EcommerceHero: React.FC = () => {
                     }}
                   >
                     <div className="relative overflow-hidden">
-                      <div className="aspect-w-16 aspect-h-12 bg-gradient-to-br from-gray-700 to-gray-800">
+                      <div className="aspect-w-16 aspect-h-12 bg-gradient-to-br from-orange-50 to-pink-50">
                         <img
                           src={product.image || "/placeholder.svg"}
                           alt={product.name}
@@ -473,13 +247,13 @@ const EcommerceHero: React.FC = () => {
                       {/* Enhanced Badges */}
                       <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
                         {product.isNew && (
-                          <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg backdrop-blur-sm border border-green-400/30">
-                            <span className="inline-block w-1.5 h-1.5 bg-white rounded-full mr-1 animate-pulse"></span>
+                          <span className="bg-gradient-to-r from-green-200 to-emerald-200 text-green-900 text-xs px-2 py-1 rounded-full font-bold shadow border border-green-200">
+                            <span className="inline-block w-1.5 h-1.5 bg-green-400 rounded-full mr-1 animate-pulse"></span>
                             NEW
                           </span>
                         )}
                         {product.isSale && (
-                          <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg backdrop-blur-sm border border-red-400/30">
+                          <span className="bg-gradient-to-r from-orange-200 to-pink-200 text-orange-900 text-xs px-2 py-1 rounded-full font-bold shadow border border-orange-200">
                             🔥 {product.discount}% OFF
                           </span>
                         )}
@@ -487,33 +261,30 @@ const EcommerceHero: React.FC = () => {
 
                       {/* Professional Quick Actions */}
                       <div className="absolute top-3 right-3 flex flex-col gap-2 z-10">
-                        <button className="p-2 bg-gray-900/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-gradient-to-r hover:from-orange-500 hover:to-pink-600 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-                          <Heart className="w-4 h-4 text-gray-300 hover:text-white" />
+                        <button className="p-2 bg-orange-50 rounded-full shadow hover:bg-orange-100 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                          <Heart className="w-4 h-4 text-orange-400 hover:text-orange-600" />
                         </button>
-                        <button className="p-2 bg-gray-900/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-gradient-to-r hover:from-orange-500 hover:to-pink-600 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300 delay-75">
-                          <Eye className="w-4 h-4 text-gray-300 hover:text-white" />
+                        <button className="p-2 bg-orange-50 rounded-full shadow hover:bg-orange-100 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300 delay-75">
+                          <Eye className="w-4 h-4 text-orange-400 hover:text-orange-600" />
                         </button>
                       </div>
 
-                      {/* Premium Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                      
                       {/* Removed duplicate Get Discount button over image */}
                     </div>
 
                     <div className="p-4 flex flex-col flex-1 justify-between">
                       <div>
-                        <h3 className="text-lg font-bold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent mb-2 group-hover:from-orange-300 group-hover:to-pink-400 transition-all leading-tight">
+                        <h3 className="text-lg font-bold text-orange-700 mb-2 group-hover:text-orange-900 transition-all leading-tight">
                           {product.name}
                         </h3>
 
-                        <p className="text-xs text-gray-300 mb-3 line-clamp-2 leading-relaxed min-h-[32px]">
+                        <p className="text-xs text-orange-900/80 mb-3 line-clamp-2 leading-relaxed min-h-[32px]">
                           {description}
                         </p>
                       </div>
                       <div className="mt-auto">
                         <button
-                          className="w-full bg-gradient-to-r from-orange-500 to-pink-600 text-white py-2 px-4 rounded-xl font-bold text-sm hover:from-orange-600 hover:to-pink-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-md hover:shadow-orange-500/30 transform hover:scale-105"
+                          className="w-full bg-gradient-to-r from-[#6C1AFF] via-[#A259FF] to-[#6C1AFF] text-white py-2 px-4 rounded-xl font-bold text-sm hover:from-[#7B3EFF] hover:to-[#6C1AFF] transition-all duration-300 flex items-center justify-center space-x-2 shadow-md hover:shadow-[#A259FF]/30 transform hover:scale-105"
                           onClick={() => handleGetDiscount(product)}
                         >
                           <ShoppingCart className="w-4 h-4" />
@@ -563,7 +334,7 @@ const EcommerceHero: React.FC = () => {
             </div>
             <p className="text-gray-400 text-sm mb-2">Enter this code in the promotional code area during checkout to benefit from the student discount.</p>
             <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-mono text-xl font-bold py-2 px-4 rounded-lg tracking-wider mb-4">
-             {selectedProduct.code}
+              {selectedProduct.code}
             </div>
             <a href="#" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
               Visit {selectedProduct.name} website
@@ -571,7 +342,7 @@ const EcommerceHero: React.FC = () => {
           </div>
         )}
       </Modal>
-    </div>
+    </div >
   )
 }
 
