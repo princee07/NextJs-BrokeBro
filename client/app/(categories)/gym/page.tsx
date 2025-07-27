@@ -23,7 +23,7 @@ export default function GymHeroSection() {
     }, [banners.length]);
 
     return (
-        <main className="min-h-screen bg-white mt-25">
+        <main className="min-h-screen bg-white ">
             <section className="relative py-0 bg-black text-white mt-40 w-full max-w-none mb-0" style={{ padding: 0, margin: 0 }}>
                 <div className="relative w-full h-[320px] z-10">
                     <AnimatePresence mode="wait">

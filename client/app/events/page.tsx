@@ -115,7 +115,7 @@ export default function EventsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white pt-32">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white ">
       {/* Hero Section */}
       <div className="relative w-full h-[380px] flex items-center justify-center mb-8">
         <Image

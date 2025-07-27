@@ -207,8 +207,8 @@ export default function InternshipPage() {
       {/* Background Gradient */}
       <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white via-[#FAFAF6]/80 to-white z-0" />
 
-      {/* Increased top padding to avoid navbar overlap */}
-      <div className="pt-32 relative z-10">
+      {/* Removed pt-32, replaced with pt-0 */}
+      <div className="pt-0 relative z-10">
         {/* Hero Section */}
         <section ref={heroRef} className="relative w-full flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto pt-12 pb-12 px-4 md:px-8 fade-in-up bg-[#FAFAF6] rounded-3xl">
 
@@ -269,7 +269,7 @@ export default function InternshipPage() {
           </div>
 
           {/* Right Content: Hero Image */}
-          <div ref={heroImageRef} className="flex-1 flex items-center justify-center relative mt-12 md:mt-0 min-w-[320px] min-h-[400px] fade-in-up pr-10 md:pr-40">
+          <div ref={heroImageRef} className="flex-1 flex items-center justify-center relative md:mt-0 min-w-[320px] min-h-[400px] fade-in-up pr-10 md:pr-40">
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-[280px] h-[340px]">
               <div className="w-full h-full bg-purple-200/30 rounded-t-full" />
             </div>
@@ -312,7 +312,7 @@ export default function InternshipPage() {
         </div>
 
         {/* Features Section */}
-        <section ref={featuresRef} className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 my-16 px-4 md:px-0 fade-in-up">
+        <section ref={featuresRef} className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 my-16 px-4 md:px-0 fade-in-up">
           <h2 className="w-full text-3xl md:text-4xl font-extrabold text-black mb-8 text-center">Why Choose BrokeBro Internships?</h2>
           <div className="flex items-center gap-4 border border-black/10 rounded-2xl shadow-md px-6 py-4 w-full md:w-1/3 bg-white">
             <span className="bg-purple-100 rounded-xl p-3"><svg width="24" height="24" viewBox="0 0 24 24" fill="#A78BFA"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg></span>

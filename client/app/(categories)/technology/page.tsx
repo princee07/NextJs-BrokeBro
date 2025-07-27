@@ -136,7 +136,7 @@ const EcommerceHero: React.FC = () => {
 
   return (
 
-    <div className="min-h-screen mt-18 bg-gradient-to-br from-white via-rose-50 to-pink-50">
+    <div className="min-h-screen  bg-gradient-to-br from-white via-rose-50 to-pink-50">
       {/* New Hero Section */}
       <div className="relative w-full overflow-hidden bg-gradient-to-br from-[#6C1AFF] via-[#A259FF] to-[#6C1AFF] min-h-[340px] flex flex-col justify-end pb-0">
         {/* Hero Content Centered */}
