@@ -81,12 +81,12 @@ const TopBrands = () => {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-20 bg-black/95 relative overflow-hidden"
+      className="w-full py-20 bg-[#FAFAF6] relative overflow-hidden"
     >
       {/* Background elements */}
       <div className="absolute inset-0">
-        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-10 blur-3xl bg-gradient-to-r from-orange-500 to-pink-600"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-10 blur-3xl bg-gradient-to-r from-blue-600 to-purple-500"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-10 blur-3xl bg-gradient-to-r from-yellow-200 to-pink-200"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-10 blur-3xl bg-gradient-to-r from-blue-100 to-purple-100"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -97,10 +97,10 @@ const TopBrands = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black">
             Top <span className="bg-gradient-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent">Brands</span>
           </h2>
-          <p className="mt-4 text-gray-400 max-w-md mx-auto">
+          <p className="mt-4 text-gray-700 max-w-md mx-auto">
             Exclusive student discounts on leading tech and lifestyle brands
           </p>
         </motion.div>
@@ -129,15 +129,8 @@ const TopBrands = () => {
               {/* Double the items for seamless loop */}
               {[...topBrands[0], ...topBrands[0]].map((brand, index) => (
                 <button key={index} className="relative group bg-transparent border-none p-0 m-0" onClick={() => handleBrandClick(brand)}>
-                  <motion.div
-                    whileHover={{
-                      y: -10,
-                      boxShadow: "0 10px 30px -10px rgba(249, 115, 22, 0.4)"
-                    }}
-                    className="w-44 h-32 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative p-3"
-                  >
-                    {/* Brand logo */}
-                    <div className="relative w-28 h-16 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200 mb-2">
+                  <div className="w-40 h-32 flex flex-col items-center justify-center bg-white rounded-lg border border-gray-200 p-3 shadow-sm">
+                    <div className="relative w-28 h-16 flex items-center justify-center mb-2">
                       <Image
                         src={brand.logo}
                         alt={brand.name}
@@ -146,19 +139,9 @@ const TopBrands = () => {
                         className="p-1"
                       />
                     </div>
-
-                      {/* Brand name */}
-                      <p className="text-white font-medium text-xs text-center">{brand.name}</p>
-
-                    {/* Discount badge */}
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      whileHover={{ opacity: 1, scale: 1 }}
-                      className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full"
-                    >
-                      {brand.discount}
-                    </motion.div>
-                  </motion.div>
+                    <p className="text-black font-semibold text-xs text-center mb-1">{brand.name}</p>
+                    <span className="text-orange-500 text-xs font-bold">{brand.discount}</span>
+                  </div>
                 </button>
               ))}
             </motion.div>
@@ -186,15 +169,8 @@ const TopBrands = () => {
               {/* Double the items for seamless loop */}
               {[...topBrands[1], ...topBrands[1]].map((brand, index) => (
                 <button key={index} className="relative group bg-transparent border-none p-0 m-0" onClick={() => handleBrandClick(brand)}>
-                  <motion.div
-                    whileHover={{
-                      y: -10,
-                      boxShadow: "0 10px 30px -10px rgba(249, 115, 22, 0.4)"
-                    }}
-                    className="w-44 h-32 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden border border-gray-800 relative p-3"
-                  >
-                    {/* Brand logo */}
-                    <div className="relative w-28 h-16 flex items-center justify-center bg-white rounded-lg shadow border border-gray-200 mb-2">
+                  <div className="w-40 h-28 flex flex-col items-center justify-center bg-white rounded-lg border border-gray-200 p-3 shadow-sm">
+                    <div className="relative w-20 h-10 flex items-center justify-center mb-2">
                       <Image
                         src={brand.logo}
                         alt={brand.name}
@@ -203,19 +179,9 @@ const TopBrands = () => {
                         className="p-1"
                       />
                     </div>
-
-                      {/* Brand name */}
-                      <p className="text-white font-medium text-xs text-center">{brand.name}</p>
-
-                    {/* Discount badge */}
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      whileHover={{ opacity: 1, scale: 1 }}
-                      className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full"
-                    >
-                      {brand.discount}
-                    </motion.div>
-                  </motion.div>
+                    <p className="text-black font-semibold text-xs text-center mb-1">{brand.name}</p>
+                    <span className="text-orange-500 text-xs font-bold">{brand.discount}</span>
+                  </div>
                 </button>
               ))}
             </motion.div>
@@ -234,7 +200,7 @@ const TopBrands = () => {
             <h2 className="text-2xl font-extrabold mb-1 text-gray-100 drop-shadow">{selectedBrand.name} Student Discount</h2>
             <p className="text-lg font-semibold text-pink-400 mb-2">{selectedBrand.discount}</p>
             <div className="w-full border-b border-gray-700 my-3"></div>
-            
+
             <a href={selectedBrand.url || '#'} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
               Visit {selectedBrand.name} website
             </a>

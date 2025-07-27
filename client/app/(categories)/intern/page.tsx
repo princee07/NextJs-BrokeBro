@@ -201,16 +201,16 @@ export default function InternshipPage() {
   }, [headings.length]);
 
   return (
-    <main className="w-full min-h-screen bg-[#F9F9F6] relative overflow-x-hidden">
+    <main className="w-full min-h-screen bg-[#FAFAF6] relative overflow-x-hidden text-black">
       <style>{animationStyles}</style>
       <DecorativeElements />
       {/* Background Gradient */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white via-[#F9F9F6]/80 to-white z-0" />
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white via-[#FAFAF6]/80 to-white z-0" />
 
       {/* Increased top padding to avoid navbar overlap */}
       <div className="pt-32 relative z-10">
         {/* Hero Section */}
-        <section ref={heroRef} className="relative w-full flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto pt-12 pb-12 px-4 md:px-8 fade-in-up bg-[#FAF9F6] rounded-3xl">
+        <section ref={heroRef} className="relative w-full flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto pt-12 pb-12 px-4 md:px-8 fade-in-up bg-[#FAFAF6] rounded-3xl">
 
           <div className="absolute top-1/2 -left-20 -translate-y-1/2">
             <DotPattern className="opacity-50" />
@@ -252,7 +252,7 @@ export default function InternshipPage() {
                 </h1>
               ))}
             </div>
-            <p className="text-gray-700 text-base md:text-lg max-w-md">
+            <p className="text-gray-800 text-base md:text-lg max-w-md">
               Unlock exclusive internship opportunities with top companies and kickstart your career. Your future starts here with BrokeBro.
             </p>
             <button className="px-7 py-3 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold shadow-lg hover:shadow-orange-500/50 transition-all text-base" onClick={handleExploreClick}>
@@ -264,7 +264,7 @@ export default function InternshipPage() {
                 <Image src="/assets/images/hero-internship.png" alt="Student 2" width={32} height={32} className="rounded-full border-2 border-white/50" />
                 <Image src="/assets/images/hero-internship.png" alt="Student 3" width={32} height={32} className="rounded-full border-2 border-white/50" />
               </div>
-              <span className="text-xs text-gray-700 font-semibold">Trusted by 1,000+ Students</span>
+              <span className="text-xs text-gray-800 font-semibold">Trusted by 1,000+ Students</span>
             </div>
           </div>
 
@@ -293,7 +293,7 @@ export default function InternshipPage() {
                 <Image src="/assets/images/hero-internship.png" alt="Top Student" width={80} height={80} className="object-cover" />
               </div>
               <span className="text-2xl font-bold text-black mt-2">99%</span>
-              <span className="text-xs text-gray-700 text-center">Success Rate</span>
+              <span className="text-xs text-gray-800 text-center">Success Rate</span>
             </div>
           </div>
         </section>
@@ -318,21 +318,21 @@ export default function InternshipPage() {
             <span className="bg-purple-100 rounded-xl p-3"><svg width="24" height="24" viewBox="0 0 24 24" fill="#A78BFA"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg></span>
             <div>
               <span className="text-lg font-bold text-black">Exclusive Access</span>
-              <span className="block text-xs text-gray-600 mt-1">Get access to top-tier companies.</span>
+              <span className="block text-xs text-gray-700 mt-1">Get access to top-tier companies.</span>
             </div>
           </div>
           <div className="flex items-center gap-4 border border-black/10 rounded-2xl shadow-md px-6 py-4 w-full md:w-1/3 bg-white">
             <span className="bg-blue-100 rounded-xl p-3"><svg width="24" height="24" viewBox="0 0 24 24" fill="#60A5FA"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z" /></svg></span>
             <div>
               <span className="text-lg font-bold text-black">Career Guidance</span>
-              <span className="block text-xs text-gray-600 mt-1">Mentorship from industry experts.</span>
+              <span className="block text-xs text-gray-700 mt-1">Mentorship from industry experts.</span>
             </div>
           </div>
           <div className="flex items-center gap-4 border border-black/10 rounded-2xl shadow-md px-6 py-4 w-full md:w-1/3 bg-white">
             <span className="bg-orange-100 rounded-xl p-3"><svg width="24" height="24" viewBox="0 0 24 24" fill="#FBBF24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" /><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" /></svg></span>
             <div>
               <span className="text-lg font-bold text-black">Top Companies</span>
-              <span className="block text-xs text-gray-600 mt-1">Work with the best in the industry.</span>
+              <span className="block text-xs text-gray-700 mt-1">Work with the best in the industry.</span>
             </div>
           </div>
         </section>

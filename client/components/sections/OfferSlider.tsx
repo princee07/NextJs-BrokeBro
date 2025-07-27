@@ -345,12 +345,12 @@ const OfferSlider = () => {
 
   return (
     <div
-      className="w-full py-4 sm:py-6 md:py-12 bg-black/95 relative overflow-hidden backdrop-blur-sm shadow-xl"
+      className="w-full py-4 sm:py-6 md:py-12 bg-white relative overflow-hidden backdrop-blur-sm shadow-xl"
       ref={ref}
     >
       {/* Enhanced background elements */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-gray-900 to-black"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-white via-gray-100 to-white"></div>
         <div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
         <div className="absolute bottom-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
 

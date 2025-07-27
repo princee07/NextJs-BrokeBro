@@ -1,312 +1,120 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { RegisterLink, LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 const LOGOUT_REDIRECT_URL = "https://www.brokebro.in/";
-import { motion, AnimatePresence } from 'framer-motion';
-import AnimatedEyes from '../ui/AnimatedEyes';
-import { useRouter } from 'next/navigation';
-import Modal from '../ui/Modal';
-import VerificationModal from '../auth/VerificationModal';
-import BannerSection from '../sections/BannerSection';
-
-import NavbarUserMenu from './NavbarUserMenu';
-import VerifiedBadge from '../ui/VerifiedBadge';
-import { useStudentVerification } from '@/hooks/useStudentVerification';
+import { motion, AnimatePresence } from "framer-motion";
+import AnimatedEyes from "../ui/AnimatedEyes";
+import { useRouter, usePathname } from "next/navigation";
+import VerificationModal from "../auth/VerificationModal";
+import NavbarUserMenu from "./NavbarUserMenu";
+import VerifiedBadge from "../ui/VerifiedBadge";
+import { useStudentVerification } from "@/hooks/useStudentVerification";
 import { getUserReferralData } from "@/app/lib/actions/referral.actions";
 import {
   HiOutlineBriefcase,
   HiOutlineSparkles,
   HiOutlineGlobeAlt,
   HiOutlineDesktopComputer,
-  HiOutlineGift,
-  HiOutlineCalendar
-} from 'react-icons/hi';
-import SearchBar from '../ui/SearchBar';
-// Pop sound path
-const popSoundPath = '/assets/sounds/pop.mp4';
+  HiOutlineCalendar,
+} from "react-icons/hi";
 
 export default function NavbarClient({ user }: { user: any }) {
-  // Fix: Reset nav state on route change
-  const { usePathname } = require('next/navigation');
   const pathname = usePathname();
-
-  // Helper to reset nav state
-  const resetNavState = () => {
-    setActiveCategory(null);
-    setHoveredCategory(null);
-    setMobileMenuOpen(false);
-  };
-
-  useEffect(() => {
-    resetNavState();
-  }, [pathname]);
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const lastScrollY = useRef(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchFocused, setSearchFocused] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
   const [coins, setCoins] = useState<number | null>(null);
   const [showReferralModal, setShowReferralModal] = useState(false);
-  const [referralCode, setReferralCode] = useState('');
-  const [referralUrl, setReferralUrl] = useState('');
+  const [referralCode, setReferralCode] = useState("");
+  const [referralUrl, setReferralUrl] = useState("");
   const [referralLoading, setReferralLoading] = useState(false);
   const [showVerificationModal, setShowVerificationModal] = useState(false);
-  const [showIconsOnly, setShowIconsOnly] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navContainerRef = useRef<HTMLDivElement>(null);
   const navLinksRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
-
-  // Student verification state
   const { isVerified } = useStudentVerification();
+
+  const navCategories = [
+    { name: "INTERNSHIPS", path: "/intern", icon: <HiOutlineBriefcase className="w-5 h-5" /> },
+    { name: "FASHION & BEAUTY", path: "/fashion", icon: <HiOutlineSparkles className="w-5 h-5" /> },
+    { name: "TRAVEL", path: "/lifestyle", icon: <HiOutlineGlobeAlt className="w-5 h-5" /> },
+    { name: "GYM", path: "/gym", icon: <span className="w-5 h-5">🏋️</span> },
+    {
+      name: "TECHNOLOGY",
+      path: "/technology",
+      icon: <HiOutlineDesktopComputer className="w-5 h-5" />,
+      dropdown: [{ name: "Gaming", path: "/categories/technology/gaming" }],
+    },
+    { name: "EVENTS", path: "/events", icon: <HiOutlineCalendar className="w-5 h-5" /> },
+  ];
+
+  const resetNavState = () => {
+    setActiveCategory(null);
+    setHoveredCategory(null);
+    setMobileMenuOpen(false);
+    setProfileDropdownOpen(false);
+  };
+
+  useEffect(() => {
+    resetNavState();
+  }, [pathname]);
 
   useEffect(() => {
     setIsHydrated(true);
     console.log("user", user);
   }, [user]);
 
-  // Don't render auth section until hydrated to prevent flash
-  const shouldShowAuth = isHydrated;
-
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setScrolled(currentScrollY > 20);
       if (currentScrollY > lastScrollY.current && currentScrollY > 60) {
-        // Scrolling down
         setShowNavbar(false);
       } else {
-        // Scrolling up
         setShowNavbar(true);
       }
       lastScrollY.current = currentScrollY;
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Monitor navbar space and determine if we should show icons only
-  useEffect(() => {
-    const checkNavbarSpace = () => {
-      if (!navLinksRef.current || !navContainerRef.current) return;
-
-      const windowWidth = window.innerWidth;
-      const navContainer = navContainerRef.current;
-
-      // For very small screens (mobile), always show full text when there's space
-      if (windowWidth < 768) {
-        setShowIconsOnly(false);
-        return;
-      }
-
-      // Simple and reliable zoom detection using devicePixelRatio and window dimensions
-      // Get browser zoom level - this is more reliable than screen width comparison
-      const getBrowserZoom = () => {
-        // Method 1: Using outerWidth vs innerWidth (most reliable)
-        if (window.outerWidth && window.innerWidth) {
-          return Math.round((window.outerWidth / window.innerWidth) * 100);
-        }
-
-        // Method 2: Fallback using devicePixelRatio
-        const devicePixelRatio = window.devicePixelRatio || 1;
-        return Math.round(devicePixelRatio * 100);
-      };
-
-      const zoomLevel = getBrowserZoom();
-      console.log('Current zoom level:', zoomLevel + '%'); // Debug log
-
-      // Get the width of the navigation container
-      const containerWidth = navContainer.clientWidth;
-
-      // Calculate the width of other elements in the nav more accurately
-      const logoWidth = 220; // Logo area with some buffer
-      const searchWidth = windowWidth < 1024 ? 280 : 340; // Search area (responsive)
-      const authWidth = windowWidth < 1024 ? 180 : 220; // Auth buttons area (responsive)
-      const padding = 60; // Safety padding for breathing room
-
-      // Calculate available space for navigation links
-      const availableSpace = containerWidth - logoWidth - searchWidth - authWidth - padding;
-
-      // Calculate estimated width needed for all navigation links with full text
-      const estimatedTextWidth = navCategories.reduce((total, category) => {
-        // Estimate: ~8px per character + 32px padding + some buffer for font weight
-        return total + (category.name.length * 8) + 32;
-      }, 0);
-
-      // Calculate estimated width needed for icon-only display
-      const estimatedIconWidth = navCategories.length * (48 + 8); // 48px for icon container + 8px margin
-
-      // Primary zoom-based logic
-      if (zoomLevel <= 90) {
-        // At 90% zoom or lower (including 80%), show full text unless absolutely no space
-        if (availableSpace < estimatedTextWidth - 150) { // Give generous tolerance
-          setShowIconsOnly(true);
-        } else {
-          setShowIconsOnly(false);
-        }
-      } else if (zoomLevel >= 100) {
-        // At 100% zoom or higher, prefer icons for better space utilization
-        setShowIconsOnly(true);
-      } else {
-        // For zoom levels between 90% and 100%, use hybrid logic
-        if (availableSpace < estimatedTextWidth + 50) {
-          setShowIconsOnly(true);
-        } else {
-          setShowIconsOnly(false);
-        }
-      }
-
-      // Override: If even icons don't fit, force icons anyway (they're more compact)
-      if (estimatedIconWidth > availableSpace && windowWidth >= 768) {
-        setShowIconsOnly(true);
-      }
-    };
-
-    // Check on initial load with a delay to ensure DOM is ready
-    const initialCheck = () => {
-      setTimeout(checkNavbarSpace, 300);
-    };
-
-    initialCheck();
-
-    // Create ResizeObserver to watch for container size changes
-    let resizeObserver: ResizeObserver | null = null;
-
-    if (typeof ResizeObserver !== 'undefined' && navContainerRef.current) {
-      resizeObserver = new ResizeObserver(() => {
-        // Debounce the resize check
-        setTimeout(checkNavbarSpace, 100);
-      });
-      resizeObserver.observe(navContainerRef.current);
-    }
-
-    // Also listen to window resize as fallback
-    const debouncedResize = () => {
-      setTimeout(checkNavbarSpace, 100);
-    };
-
-    window.addEventListener('resize', debouncedResize);
-
-    return () => {
-      if (resizeObserver) {
-        resizeObserver.disconnect();
-      }
-      window.removeEventListener('resize', debouncedResize);
-    };
-  }, [showIconsOnly]); // Add showIconsOnly as dependency for hysteresis
-
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setProfileDropdownOpen(false);
       }
     };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  // Ad URLs for swiping/fading
-  // const ads = [
-  //   {
-  //     imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_1A_Website.png?v=1697116566&width=2000",
-  //     linkUrl: "https://www.myunidays.com/IN/en-IN"
-  //   },
-  //   {
-  //     imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_2A_Website.png?v=1697116587&width=2000",
-  //     linkUrl: "https://www.myunidays.com/IN/en-IN"
-  //   },
-  //   {
-  //     imageUrl: "https://soxytoes.com/cdn/shop/files/Theme_3_Website.png?v=1697116591&width=2000",
-  //     linkUrl: "https://www.myunidays.com/IN/en-IN"
-  //   }
-  // ];
-
-  // Auto-advance ads every 5 seconds
-  // useEffect(() => {
-  //   if (!showAd) return;
-  //   const timer = setTimeout(() => {
-  //     setAdIndex((prev) => (prev + 1) % ads.length);
-  //     const audio = new Audio(popSoundPath);
-  //     audio.play();
-  //   }, 5000);
-  //   return () => clearTimeout(timer);
-  // }, [adIndex, showAd]);
-
-  const navCategories = [
-    {
-      name: 'INTERNSHIPS',
-      path: '/intern',
-      icon: <HiOutlineBriefcase className="w-5 h-5" />
-    },
-    {
-      name: 'FASHION & BEAUTY',
-      path: '/fashion',
-      icon: <HiOutlineSparkles className="w-5 h-5" />
-    },
-    {
-      name: 'TRAVEL',
-      path: '/lifestyle',
-      icon: <HiOutlineGlobeAlt className="w-5 h-5" />
-    },
-    {
-      name: 'GYM',
-      path: '/gym',
-      icon: <span className="w-5 h-5">🏋️</span>
-    },
-    {
-      name: 'TECHNOLOGY',
-      path: '/technology',
-      icon: <HiOutlineDesktopComputer className="w-5 h-5" />,
-      dropdown: [
-        {
-          name: 'Gaming',
-          path: '/categories/technology/gaming',
-        },
-      ],
-    },
-    {
-      name: 'EVENTS',
-      path: '/events',
-      icon: <HiOutlineCalendar className="w-5 h-5" />
-    },
-  ];
 
   useEffect(() => {
     async function fetchCoins() {
       if (user?.email) {
         try {
-          // Fetch referral data using the same function as ReferralSection
-          console.log('Fetching referral data in Navbar...');
           const referralResult = await getUserReferralData();
-          console.log('Navbar referral result:', referralResult);
-
           if (referralResult.success && referralResult.data) {
             setReferralCode(referralResult.data.referralCode);
             setReferralUrl(referralResult.data.referralUrl);
-            setCoins(referralResult.data.coins); // Use coins from referral data
-            console.log('Navbar - Set referral code:', referralResult.data.referralCode);
-            console.log('Navbar - Set referral URL:', referralResult.data.referralUrl);
-            console.log('Navbar - Set coins from referral data:', referralResult.data.coins);
+            setCoins(referralResult.data.coins);
           } else {
-            console.error('Failed to get referral data in Navbar:', referralResult);
-            // Fallback to API endpoint
             const res = await fetch(`/api/user?email=${user.email}`);
             const data = await res.json();
             setCoins(data.coins ?? 0);
-            console.log('Navbar - Fallback coins from API:', data.coins);
           }
         } catch (error) {
-          console.error('Failed to fetch user data:', error);
+          console.error("Failed to fetch user data:", error);
           setCoins(0);
         }
       }
@@ -314,108 +122,69 @@ export default function NavbarClient({ user }: { user: any }) {
     fetchCoins();
   }, [user]);
 
-  // Function to refresh user data (coins and referral info)
   const refreshUserData = async () => {
     if (!user?.email) return;
-
     try {
-      console.log('Refreshing user data...');
-
-      // Refresh referral data (which includes coins)
       const referralResult = await getUserReferralData();
       if (referralResult.success && referralResult.data) {
         setReferralCode(referralResult.data.referralCode);
         setReferralUrl(referralResult.data.referralUrl);
-        setCoins(referralResult.data.coins); // Use coins from referral data
-        console.log('Refreshed coins from referral data:', referralResult.data.coins);
-        console.log('Refreshed referrals count:', referralResult.data.totalReferrals);
+        setCoins(referralResult.data.coins);
       } else {
-        // Fallback to API endpoint if referral data fails
         const res = await fetch(`/api/user?email=${user.email}`);
         const data = await res.json();
         setCoins(data.coins ?? 0);
-        console.log('Fallback - refreshed coins from API:', data.coins);
       }
     } catch (error) {
-      console.error('Failed to refresh user data:', error);
+      console.error("Failed to refresh user data:", error);
     }
   };
 
-  // Listen for referral events to refresh data
   useEffect(() => {
     const handleReferralProcessed = () => {
-      console.log('Referral processed event received, refreshing data...');
       refreshUserData();
     };
-
-    // Listen for custom event
-    window.addEventListener('referralProcessed', handleReferralProcessed);
-
-    // Also refresh data when window gains focus (user comes back to tab)
-    window.addEventListener('focus', refreshUserData);
-
+    window.addEventListener("referralProcessed", handleReferralProcessed);
+    window.addEventListener("focus", refreshUserData);
     return () => {
-      window.removeEventListener('referralProcessed', handleReferralProcessed);
-      window.removeEventListener('focus', refreshUserData);
+      window.removeEventListener("referralProcessed", handleReferralProcessed);
+      window.removeEventListener("focus", refreshUserData);
     };
   }, [user]);
 
-  // Auto-refresh every 10 seconds to catch any updates faster
   useEffect(() => {
     if (!user?.email) return;
-
     const interval = setInterval(() => {
-      console.log('Auto-refreshing user data...');
       refreshUserData();
-    }, 10000); // 10 seconds (faster updates)
-
+    }, 10000);
     return () => clearInterval(interval);
   }, [user]);
 
-  // Function to refetch referral data when modal opens
   const fetchReferralData = async () => {
     if (!user?.email) return;
-
     setReferralLoading(true);
     try {
-      console.log('Refetching referral data for modal...');
       const referralResult = await getUserReferralData();
-      console.log('Modal referral result:', referralResult);
-
       if (referralResult.success && referralResult.data) {
         setReferralCode(referralResult.data.referralCode);
         setReferralUrl(referralResult.data.referralUrl);
-        console.log('Modal - Set referral code:', referralResult.data.referralCode);
-        console.log('Modal - Set referral URL:', referralResult.data.referralUrl);
-      } else {
-        console.error('Failed to get referral data for modal:', referralResult);
       }
     } catch (error) {
-      console.error('Error fetching referral data for modal:', error);
+      console.error("Error fetching referral data for modal:", error);
     } finally {
       setReferralLoading(false);
     }
   };
 
-  // Fetch referral data when modal opens
   const handleOpenReferralModal = () => {
     setShowReferralModal(true);
     fetchReferralData();
   };
 
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      router.push(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
-    }
-  };
-
-  // Add this function inside the NavbarClient component, before the return statement:
-  function handleSmartSearch(query: string) {
-    // Lowercase for matching
+  const handleSmartSearch = (query: string) => {
     const q = query.toLowerCase();
-    // Example brand/category/product keywords
     if (["nike", "adidas", "puma", "shoes", "sneakers", "footwear"].some(word => q.includes(word))) {
-      router.push("/explore-products"); // Redirect to explore products section for any product/brand
+      router.push("/explore-products");
       return;
     }
     if (["fashion", "beauty", "clothes", "apparel"].some(word => q.includes(word))) {
@@ -438,338 +207,207 @@ export default function NavbarClient({ user }: { user: any }) {
       router.push("/special-deals");
       return;
     }
-    // Default: go to search results page
     router.push(`/search?query=${encodeURIComponent(query)}`);
-  }
+  };
 
   return (
-    <header className="fixed w-full z-50 flex flex-col transition-transform duration-500" style={{ transform: showNavbar ? 'translateY(0)' : 'translateY(-100%)' }}>
-      {/* Discount Bar at the very top */}
-
-      {/* Main Navbar */}
-      <nav
-        className={`w-full transition-all duration-500 relative ${scrolled
-          ? 'py-0 bg-black/90 backdrop-blur-md shadow-lg shadow-orange-900/10'
-          : 'py-0 bg-black'
-          }`}
-        style={{ height: 'auto' }}
-      >
-        <div className="container mx-auto px-2 py-2" ref={navContainerRef}>
-          <div className="flex flex-col space-y-1">
-            <div className="flex justify-between items-center h-full overflow-visible gap-2">
-              <Link href="/" className="relative flex items-center" onClick={resetNavState} prefetch={false}>
-                <motion.div
-                  className="relative"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                >
-                  <div className="relative h-[60px] w-[150px]">
-                    <Image
-                      src="/assets/images/brokebro.png"
-                      alt="BrokeBro Logo"
-                      fill
-                      style={{
-                        objectFit: 'contain',
-                        objectPosition: 'left center',
-                      }}
-                      priority
-                    />
-                  </div>
-                </motion.div>
-              </Link>
-
-              {/* Nav Links - Desktop */}
-              <div className="hidden md:flex items-center justify-center space-x-1 mx-auto">
-                <div className="relative flex items-center space-x-2 p-1 rounded-full bg-black/60" ref={navLinksRef}>
-                  {hoveredCategory && (
+    <header
+      className={`w-full z-50 bg-black border-b border-gray-200 transition-transform duration-500 ${showNavbar ? "translate-y-0" : "-translate-y-full"}`}
+    >
+      {/* Top Row: Logo, Country, Search, Auth */}
+      <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto" ref={navContainerRef}>
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2 select-none" onClick={resetNavState} prefetch={false}>
+          <motion.div
+            className="relative"
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <div className="relative h-[60px] w-[150px]">
+              <Image
+                src="/assets/images/brokebro.png"
+                alt="BrokeBro Logo"
+                fill
+                style={{ objectFit: "contain", objectPosition: "left center" }}
+                priority
+              />
+            </div>
+          </motion.div>
+        </Link>
+        {/* Search Bar */}
+        <div className="flex-1 flex justify-center mx-6">
+          <div className="w-full max-w-xl relative">
+            <input
+              type="text"
+              className="w-full bg-black border border-gray-700 rounded-full py-2 pl-10 pr-16 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-200 shadow-sm"
+              placeholder="Brands, items or categories"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && searchQuery.trim()) {
+                  handleSmartSearch(searchQuery.trim());
+                }
+              }}
+            />
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
+                <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </span>
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center">
+              <AnimatedEyes className="text-white" />
+            </div>
+          </div>
+        </div>
+        {/* Auth Buttons */}
+        <div className="flex items-center gap-3" ref={dropdownRef}>
+          {isHydrated ? (
+            user ? (
+              <>
+                <span className="text-black bg-white px-2 py-1 rounded hidden md:block">Hi, {user?.given_name}</span>
+                <NavbarUserMenu
+                  user={{
+                    name: `${user?.given_name || ""} ${user?.family_name || ""}`.trim() || "User",
+                    email: user?.email || "",
+                    avatar: user?.picture,
+                  }}
+                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                />
+                <AnimatePresence>
+                  {profileDropdownOpen && (
                     <motion.div
-                      className="absolute h-full rounded-full bg-gradient-to-r from-orange-600/20 to-pink-600/20 backdrop-blur-sm"
-                      layoutId="navHighlight"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 200,
-                        damping: 20
-                      }}
-                      style={{
-                        width: document.getElementById(`nav-${hoveredCategory}`)?.offsetWidth,
-                        left: document.getElementById(`nav-${hoveredCategory}`)?.offsetLeft,
-                      }}
-                    />
-                  )}
-                  {navCategories.map((category, index) => (
-                    <motion.div
-                      key={index}
-                      id={`nav-${category.name}`}
-                      onMouseEnter={() => setHoveredCategory(category.name)}
-                      onMouseLeave={() => setHoveredCategory(null)}
-                      whileHover={{ scale: showIconsOnly ? 1.15 : 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      transition={{ duration: showIconsOnly ? 0.15 : 0.3 }}
-                      className="relative"
+                      className="absolute right-0 top-full mt-2 w-64 bg-white backdrop-blur-md rounded-lg border border-orange-500/20 shadow-lg shadow-orange-500/10 z-50"
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
                     >
+                      {/* ...existing code... */}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </>
+            ) : (
+              <>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <LoginLink>
+                    <span className="text-base font-medium text-orange-500 hover:underline cursor-pointer">Login</span>
+                  </LoginLink>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <RegisterLink>
+                    <span className="px-6 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base transition-all">
+                      Register
+                    </span>
+                  </RegisterLink>
+                </motion.div>
+              </>
+            )
+          ) : (
+            <div className="flex items-center gap-3">
+              <div className="w-16 h-8 bg-gray-700/50 rounded-full animate-pulse"></div>
+              <div className="w-16 h-8 bg-gray-700/50 rounded-full animate-pulse"></div>
+            </div>
+          )}
+          {/* Mobile Menu Button */}
+          <motion.button
+            className="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-orange-500/20 to-pink-600/20"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            whileTap={{ scale: 0.9 }}
+          >
+            <motion.div
+              animate={{ rotate: mobileMenuOpen ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              {mobileMenuOpen ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-orange-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-orange-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </motion.div>
+          </motion.button>
+        </div>
+      </div>
+
+      {/* Second Row: Nav Links */}
+      <nav className="w-full bg-white border-t border-gray-200" ref={navLinksRef}>
+        <div className="flex items-center justify-center gap-8 px-8 py-2 max-w-7xl mx-auto">
+          {navCategories.map((category, index) => {
+            const dropdownRef = useRef<HTMLDivElement>(null);
+            useEffect(() => {
+              if (dropdownRef.current && (hoveredCategory === category.name || activeCategory === category.name)) {
+                const el = document.getElementById(`nav-${category.name}`);
+                if (el) {
+                  const rect = el.getBoundingClientRect();
+                  dropdownRef.current.style.left = `${rect.left}px`;
+                  dropdownRef.current.style.top = `${rect.bottom + 8}px`;
+                }
+              }
+            }, [hoveredCategory, activeCategory]);
+
+            return (
+              <motion.div
+                key={index}
+                id={`nav-${category.name}`}
+                onMouseEnter={() => setHoveredCategory(category.name)}
+                onMouseLeave={() => setHoveredCategory(null)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.3 }}
+                className="relative"
+              >
+                <Link
+                  href={category.path}
+                  className={`text-base font-extrabold tracking-wide uppercase text-black hover:text-orange-400 transition-colors ${activeCategory === category.name ? "text-orange-400" : ""}`}
+                  style={{ fontFamily: 'Inter, Segoe UI, Arial, sans-serif' }}
+                  onClick={resetNavState}
+                  prefetch={false}
+                >
+                  {category.name}
+                  {(hoveredCategory === category.name || activeCategory === category.name) && (
+                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full w-3/5" />
+                  )}
+                </Link>
+                {category.dropdown && (hoveredCategory === category.name || activeCategory === category.name) && (
+                  <div
+                    ref={dropdownRef}
+                    className="fixed min-w-[160px] bg-gray-900 border border-gray-700 rounded-lg shadow-lg z-[2000]"
+                  >
+                    {category.dropdown.map((item, i) => (
                       <Link
-                        href={category.path}
-                        className={`relative px-2 py-2 rounded-full transition-all duration-300 ${activeCategory === category.name
-                          ? 'text-white bg-gradient-to-r from-orange-500/20 to-pink-500/20'
-                          : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-pink-500/20'
-                          }`}
+                        key={i}
+                        href={item.path}
+                        className="block px-4 py-2 text-sm text-gray-200 hover:bg-orange-500/80 hover:text-white rounded-lg"
                         onClick={resetNavState}
                         prefetch={false}
                       >
-                        <span className="text-xs font-medium whitespace-nowrap">
-                          {category.name}
-                        </span>
-                        {(hoveredCategory === category.name || activeCategory === category.name) && (
-                          <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full w-3/5" />
-                        )}
+                        {item.name}
                       </Link>
-                      {/* Dropdown for TECHNOLOGY */}
-                      {category.dropdown && (hoveredCategory === category.name || activeCategory === category.name) && (
-                        <div
-                          className="fixed min-w-[160px] bg-gray-900 border border-gray-700 rounded-lg shadow-lg z-[2000]"
-                          style={{
-                            left: (document.getElementById(`nav-${category.name}`)?.getBoundingClientRect().left ?? 0) + 'px',
-                            top: ((document.getElementById(`nav-${category.name}`)?.getBoundingClientRect().bottom ?? 0) + 8) + 'px',
-                          }}
-                        >
-                          {category.dropdown.map((item, i) => (
-                            <Link
-                              key={i}
-                              href={item.path}
-                              className="block px-4 py-2 text-sm text-gray-200 hover:bg-orange-500/80 hover:text-white rounded-lg"
-                              onClick={resetNavState}
-                              prefetch={false}
-                            >
-                              {item.name}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-              {/* Authentication Buttons */}
-
-              <div className="flex items-center space-x-3">
-
-                {shouldShowAuth ? (
-                  user ? (
-                    <div className="relative flex items-center space-x-3" ref={dropdownRef}>
-                      <span className="text-amber-50">Hi, {user?.given_name}</span>
-
-                      {/* Profile Avatar - Clickable */}
-                      <NavbarUserMenu
-                        user={{
-                          name: `${user?.given_name || ''} ${user?.family_name || ''}`.trim() || 'User',
-                          email: user?.email || '',
-                          avatar: user?.picture
-                        }}
-                        onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                      />
-
-                      {/* Dropdown Menu */}
-                      <AnimatePresence>
-                        {profileDropdownOpen && (
-                          <motion.div
-                            className="absolute right-0 top-full mt-2 w-64 bg-black/95 backdrop-blur-md rounded-lg border border-orange-500/20 shadow-lg shadow-orange-500/10 z-50"
-                            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                            transition={{ duration: 0.2, ease: "easeOut" }}
-                          >
-                            {/* User Info Header */}
-                            <div className="p-4 border-b border-orange-500/20">
-                              <div className="flex items-center space-x-3">
-                                <div className="relative">
-                                  {user?.picture ? (
-                                    <Image
-                                      src={user.picture}
-                                      alt="User Avatar"
-                                      width={50}
-                                      height={50}
-                                      className="rounded-full"
-                                    />
-                                  ) : (
-                                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 flex items-center justify-center text-white font-semibold text-lg">
-                                      {user?.given_name?.charAt(0) || 'U'}
-                                    </div>
-                                  )}
-
-                                  {/* Verified Badge in Dropdown */}
-                                  {isVerified && (
-                                    <VerifiedBadge size="sm" />
-                                  )}
-                                </div>
-                                <div>
-                                  <p className="text-white font-semibold">{user?.given_name} {user?.family_name}</p>
-                                  <p className="text-gray-400 text-sm">{user?.email}</p>
-                                  {coins !== null && (
-                                    <button
-                                      onClick={() => {
-                                        console.log('Manual refresh triggered from coins display');
-                                        refreshUserData();
-                                      }}
-                                      className="mt-1 flex items-center text-amber-300 text-sm font-semibold hover:text-amber-200 transition-colors cursor-pointer"
-                                      title="Click to refresh coins"
-                                    >
-                                      <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" /></svg>
-                                      {coins} Coins
-                                      <svg className="w-3 h-3 ml-1 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                      </svg>
-                                    </button>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                            {/* Menu Items */}
-                            <div className="py-2">
-                              <Link
-                                href="/profile"
-                                className="flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-orange-500/10 transition-colors duration-200"
-                                onClick={() => setProfileDropdownOpen(false)}
-                              >
-                                <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                                Profile
-                              </Link>
-                              {/* Refer & Earn Button */}
-                              <button
-                                className="flex items-center px-4 py-3 text-green-400 hover:text-white hover:bg-green-600/10 transition-colors duration-200 font-semibold w-full"
-                                onClick={handleOpenReferralModal}
-                              >
-                                <svg className="w-5 h-5 mr-3 text-green-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m4 4h-1v-4h-1m-4 4h-1v-4h-1" /></svg>
-                                Refer & Earn
-                              </button>
-
-
-
-                              {/* Admin Panel Option - Only for authorized emails */}
-                              {user?.email === 'prince1362005@gmail.com' && (
-                                <Link
-                                  href="/admin/login"
-                                  className="flex items-center px-4 py-3 text-orange-400 hover:text-white hover:bg-orange-500/10 transition-colors duration-200 border-t border-orange-500/20"
-                                  onClick={() => setProfileDropdownOpen(false)}
-                                >
-                                  <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                  </svg>
-                                  <span className="font-semibold">Admin Panel</span>
-                                </Link>
-                              )}
-
-                              <div className="border-t border-orange-500/20 mt-2 pt-2">
-                                <LogoutLink postLogoutRedirectURL={LOGOUT_REDIRECT_URL}>
-                                  <div className="flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-red-500/10 transition-colors duration-200 w-full cursor-pointer">
-                                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    Logout
-                                  </div>
-                                </LogoutLink>
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  ) : (
-                    <>
-                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                        <LoginLink>
-                          <div className="px-6 py-2 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-orange-600/20 transition-all duration-300">
-                            Login
-                          </div>
-                        </LoginLink>
-                      </motion.div>
-                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                        <RegisterLink>
-                          <div className="px-6 py-2 rounded-full bg-gradient-to-r from-pink-600 to-orange-500 text-white font-semibold text-sm border border-orange-400/30 hover:shadow-lg hover:shadow-pink-600/20 transition-all duration-300">
-                            Sign Up
-                          </div>
-                        </RegisterLink>
-                      </motion.div>
-                    </>
-                  )
-                ) : (
-                  // Loading state - show skeleton
-                  <div className="flex items-center space-x-3">
-                    <div className="w-16 h-8 bg-gray-700/50 rounded-full animate-pulse"></div>
-                    <div className="w-16 h-8 bg-gray-700/50 rounded-full animate-pulse"></div>
+                    ))}
                   </div>
                 )}
-                {/* Mobile Menu Button */}
-                <motion.button
-                  className="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-orange-500/20 to-pink-600/20"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <motion.div
-                    animate={{
-                      rotate: mobileMenuOpen ? 180 : 0
-                    }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {mobileMenuOpen ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                      </svg>
-                    )}
-                  </motion.div>
-                </motion.button>
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            );
+          })}
         </div>
       </nav>
-
-      {/* --- NAVBAR SEARCH BAR --- */}
-      {/* Desktop Search Bar - only visible on md+ screens */}
-      <div className="hidden md:block bg-gradient-to-r from-black via-black/95 to-black/90 py-2 px-2 border-b border-orange-500/20 shadow-md">
-        <div className="container mx-auto flex flex-col items-center justify-center relative">
-          <div className="relative w-full max-w-2xl group z-50">
-            <div className="absolute inset-0 rounded-full transition-all duration-500" />
-            <div className="relative bg-gradient-to-r p-[1.5px] rounded-full overflow-hidden from-orange-500/50 to-orange-600/50 transition-all duration-300">
-              <div className="relative flex items-center bg-black rounded-full overflow-hidden">
-                <div className="absolute left-2 z-10 cursor-pointer flex items-center justify-center h-full w-8"
-                  onClick={() => {
-                    if (searchQuery.trim()) router.push(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
-                  }}
-                  tabIndex={0} role="button" aria-label="Search">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 transition-colors duration-300 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search brands, deals, categories"
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  onKeyDown={e => {
-                    if (e.key === "Enter" && searchQuery.trim()) {
-                      handleSmartSearch(searchQuery.trim());
-                    }
-                  }}
-                  className="w-full bg-transparent py-3 pl-10 pr-16 text-white placeholder-gray-400 focus:outline-none focus:placeholder-gray-300"
-                  autoFocus={false}
-                />
-                {/* Animated Eyes inside search bar at the right side */}
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none z-20 flex items-center">
-                  <AnimatedEyes />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Mobile Menu with Animations */}
       <AnimatePresence>
@@ -777,7 +415,7 @@ export default function NavbarClient({ user }: { user: any }) {
           <motion.div
             className="md:hidden bg-gradient-to-b from-black/95 to-black backdrop-blur-lg absolute w-full shadow-lg overflow-hidden"
             initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
+            animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
@@ -796,46 +434,69 @@ export default function NavbarClient({ user }: { user: any }) {
                     prefetch={false}
                   >
                     <span className="flex items-center gap-3">
-                      <span className="text-orange-400">
-                        {category.icon}
-                      </span>
+                      <span className="text-orange-400">{category.icon}</span>
                       <span className="font-medium">{category.name}</span>
                     </span>
                   </Link>
+                  {category.dropdown && (
+                    <div className="pl-8">
+                      {category.dropdown.map((item, i) => (
+                        <Link
+                          key={i}
+                          href={item.path}
+                          className="block py-2 px-4 text-sm text-gray-200 hover:bg-orange-500/10 hover:text-white rounded-lg"
+                          onClick={resetNavState}
+                          prefetch={false}
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </motion.div>
               ))}
-
-              {/* Mobile Search Bar - appears after nav links */}
               <div className="mt-4 mb-4 px-2">
                 <div className="bg-gradient-to-r from-black via-black/95 to-black/90 py-2 px-2 border-b border-orange-500/20 shadow-md rounded-xl">
                   <div className="flex flex-col items-center justify-center relative">
                     <div className="relative w-full group z-50">
-                      <div className="absolute inset-0 rounded-full transition-all duration-500" />
                       <div className="relative bg-gradient-to-r p-[1.5px] rounded-full overflow-hidden from-orange-500/50 to-orange-600/50 transition-all duration-300">
                         <div className="relative flex items-center bg-black rounded-full overflow-hidden">
-                          <div className="absolute left-2 z-10 cursor-pointer flex items-center justify-center h-full w-8"
+                          <div
+                            className="absolute left-2 z-10 cursor-pointer flex items-center justify-center h-full w-8"
                             onClick={() => {
                               if (searchQuery.trim()) router.push(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
                             }}
-                            tabIndex={0} role="button" aria-label="Search">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 transition-colors duration-300 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            tabIndex={0}
+                            role="button"
+                            aria-label="Search"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 text-gray-400 transition-colors duration-300 pointer-events-none"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                              />
                             </svg>
                           </div>
                           <input
                             type="text"
                             placeholder="Search brands, deals, categories"
                             value={searchQuery}
-                            onChange={e => setSearchQuery(e.target.value)}
-                            onKeyDown={e => {
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onKeyDown={(e) => {
                               if (e.key === "Enter" && searchQuery.trim()) {
                                 handleSmartSearch(searchQuery.trim());
                               }
                             }}
                             className="w-full bg-transparent py-3 pl-10 pr-16 text-white placeholder-gray-400 focus:outline-none focus:placeholder-gray-300"
-                            autoFocus={false}
                           />
-                          {/* Animated Eyes inside search bar at the right side */}
                           <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none z-20 flex items-center">
                             <AnimatedEyes />
                           </div>
@@ -845,15 +506,24 @@ export default function NavbarClient({ user }: { user: any }) {
                   </div>
                 </div>
               </div>
-
               <div className="mt-6 pb-4 px-4 grid grid-cols-2 gap-3">
-                {shouldShowAuth ? (
+                {isHydrated ? (
                   user ? (
-                    <LogoutLink postLogoutRedirectURL={LOGOUT_REDIRECT_URL}>
-                      <div className="block text-center py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm hover:from-orange-600 hover:to-orange-700 transition-colors duration-300 cursor-pointer">
+                    <>
+                      <Link
+                        href="/profile"
+                        className="block text-center py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm hover:from-orange-600 hover:to-orange-700 transition-colors duration-300"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Profile
+                      </Link>
+                      <LogoutLink
+                        postLogoutRedirectURL={LOGOUT_REDIRECT_URL}
+                        className="block text-center py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm hover:from-orange-600 hover:to-orange-700 transition-colors duration-300"
+                      >
                         Logout
-                      </div>
-                    </LogoutLink>
+                      </LogoutLink>
+                    </>
                   ) : (
                     <>
                       <LoginLink
@@ -871,7 +541,6 @@ export default function NavbarClient({ user }: { user: any }) {
                     </>
                   )
                 ) : (
-                  // Loading state for mobile
                   <div className="col-span-2 h-10 bg-gray-700/50 rounded-lg animate-pulse"></div>
                 )}
               </div>
@@ -882,7 +551,7 @@ export default function NavbarClient({ user }: { user: any }) {
 
       {/* Referral Modal */}
       {showReferralModal && (
-        <div className="fixed inset-0 z-50 flex justify-center bg-black/70" style={{ alignItems: 'flex-start' }}>
+        <div className="fixed inset-0 z-50 flex justify-center bg-black/70" style={{ alignItems: "flex-start" }}>
           <div className="bg-black rounded-lg p-8 w-[500px] border border-orange-500/30 shadow-lg relative mt-16">
             <button
               className="absolute top-3 right-4 text-gray-400 hover:text-white text-2xl"
@@ -890,14 +559,11 @@ export default function NavbarClient({ user }: { user: any }) {
             >
               &times;
             </button>
-
             <h2 className="text-2xl font-bold text-orange-400 mb-4">Refer & Earn</h2>
             <p className="text-gray-300 mb-6 text-base">
               Share your referral link with friends.<br />
               Both of you get <span className="text-amber-300 font-semibold">10 coins</span>!
             </p>
-
-            {/* Referral Code Display */}
             <div className="mb-4">
               <div className="text-gray-400 text-sm mb-2">Your Referral Code</div>
               <div className="flex items-center gap-3">
@@ -905,34 +571,36 @@ export default function NavbarClient({ user }: { user: any }) {
                   {referralLoading ? (
                     <div className="animate-pulse bg-gray-600 h-6 rounded w-24"></div>
                   ) : (
-                    referralCode || 'Loading...'
+                    referralCode || "Loading..."
                   )}
                 </code>
                 <button
                   onClick={() => {
-                    if (referralCode && typeof window !== 'undefined') {
+                    if (referralCode && typeof window !== "undefined") {
                       navigator.clipboard.writeText(referralCode);
                     }
                   }}
                   disabled={!referralCode || referralLoading}
                   className={`p-2 rounded transition-colors ${!referralCode || referralLoading
-                    ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                    : 'bg-orange-500 hover:bg-orange-600 text-white'
+                    ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                    : "bg-orange-500 hover:bg-orange-600 text-white"
                     }`}
                   title="Copy Code"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    />
                   </svg>
                 </button>
               </div>
             </div>
-
-            {/* Referral URL Display */}
             <div className="mb-6">
               <div className="text-gray-400 text-sm mb-2">Your Referral Link</div>
               <div className="space-y-3">
-                {/* URL Display Box */}
                 <div className="bg-gray-800 rounded-lg p-3 border border-gray-600">
                   <div className="text-white text-sm break-all font-mono leading-relaxed">
                     {referralLoading ? (
@@ -941,43 +609,45 @@ export default function NavbarClient({ user }: { user: any }) {
                         <div className="animate-pulse bg-gray-600 h-4 rounded w-3/4"></div>
                       </div>
                     ) : (
-                      referralUrl || `${typeof window !== 'undefined' ? window.location.origin : ''}/signup?ref=${referralCode}` || 'Loading...'
+                      referralUrl || `${typeof window !== "undefined" ? window.location.origin : ""}/signup?ref=${referralCode}` || "Loading..."
                     )}
                   </div>
                 </div>
-
-                {/* Action Buttons */}
                 <div className="flex gap-2">
                   <button
                     onClick={() => {
-                      if (typeof window !== 'undefined') {
+                      if (typeof window !== "undefined") {
                         const urlToCopy = referralUrl || `${window.location.origin}/signup?ref=${referralCode}`;
                         navigator.clipboard.writeText(urlToCopy);
                       }
                     }}
                     disabled={referralLoading || (!referralUrl && !referralCode)}
                     className={`flex-1 py-2 px-4 rounded-lg transition-colors text-sm font-medium flex items-center justify-center gap-2 ${referralLoading || (!referralUrl && !referralCode)
-                      ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                      : 'bg-orange-500 hover:bg-orange-600 text-white'
+                      ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                      : "bg-orange-500 hover:bg-orange-600 text-white"
                       }`}
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                      />
                     </svg>
-                    {referralLoading ? 'Loading...' : 'Copy Link'}
+                    {referralLoading ? "Loading..." : "Copy Link"}
                   </button>
-
                   <button
                     onClick={() => {
-                      const url = referralUrl || `${typeof window !== 'undefined' ? window.location.origin : ''}/signup?ref=${referralCode}`;
+                      const url = referralUrl || `${typeof window !== "undefined" ? window.location.origin : ""}/signup?ref=${referralCode}`;
                       const message = `🎉 Join BrokeBro with my referral link and we both get 10 coins! 💰\n\n${url}\n\nGet amazing student discounts and deals! 🎓`;
                       const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-                      window.open(whatsappUrl, '_blank');
+                      window.open(whatsappUrl, "_blank");
                     }}
                     disabled={referralLoading || (!referralUrl && !referralCode)}
                     className={`py-2 px-4 rounded-lg transition-colors text-sm font-medium flex items-center gap-2 ${referralLoading || (!referralUrl && !referralCode)
-                      ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                      : 'bg-green-600 hover:bg-green-700 text-white'
+                      ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                      : "bg-green-600 hover:bg-green-700 text-white"
                       }`}
                   >
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -988,12 +658,12 @@ export default function NavbarClient({ user }: { user: any }) {
                 </div>
               </div>
             </div>
-
-            {/* Debug Info (can be removed later) */}
             <div className="text-xs text-gray-500 mt-4 p-2 bg-gray-900 rounded">
-              <div>Code: {referralCode || 'Not loaded'}</div>
-              <div>URL: {referralUrl || 'Not loaded'}</div>
-              <div>Fallback: {`${typeof window !== 'undefined' ? window.location.origin : ''}/signup?ref=${referralCode}`}</div>
+              <div>Code: {referralCode || "Not loaded"}</div>
+              <div>URL: {referralUrl || "Not loaded"}</div>
+              <div>
+                Fallback: {`${typeof window !== "undefined" ? window.location.origin : ""}/signup?ref=${referralCode}`}
+              </div>
             </div>
           </div>
         </div>

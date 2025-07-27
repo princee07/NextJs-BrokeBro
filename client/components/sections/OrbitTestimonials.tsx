@@ -39,9 +39,9 @@ export default function TestimonialCarousel() {
   }, []);
 
   return (
-    <div className="relative w-full py-16 bg-gradient-to-br from-blue-500 via-green-400 to-yellow-300 dark:from-[#181824] dark:via-[#232946] dark:to-[#1a1a2e] transition-colors duration-500">
+    <div className="relative w-full py-16 bg-gradient-to-br from-yellow-100 via-green-100 to-blue-100 transition-colors duration-500">
       <div className="max-w-5xl mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 drop-shadow-lg text-white">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 drop-shadow-lg text-black">
           What Our Users Say
         </h2>
         <AnimatePresence mode="wait">
@@ -53,7 +53,7 @@ export default function TestimonialCarousel() {
             transition={{ duration: 0.5 }}
             className="flex flex-col items-center"
           >
-            <div className="bg-gradient-to-r from-blue-100 via-green-100 to-yellow-100 dark:from-[#232946]/80 dark:via-[#232946]/80 dark:to-[#1a1a2e]/80 rounded-2xl shadow-lg p-8 w-full max-w-2xl min-h-[120px] flex items-start">
+            <div className="bg-gradient-to-r from-yellow-50 via-green-50 to-blue-50 rounded-2xl shadow-lg p-8 w-full max-w-2xl min-h-[120px] flex items-start">
               <div className="flex items-start gap-6 w-full">
                 <img
                   src={TESTIMONIALS[currentIndex].img}
@@ -61,10 +61,10 @@ export default function TestimonialCarousel() {
                   className="w-16 h-16 rounded-full object-cover border-2 border-white dark:border-gray-600"
                 />
                 <div className="flex-1">
-                  <p className="text-gray-800 dark:text-gray-200 text-lg font-medium">
+                  <p className="text-gray-800 text-lg font-medium">
                     "{TESTIMONIALS[currentIndex].text}"
                   </p>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
+                  <p className="text-gray-600 text-sm mt-2">
                     — {TESTIMONIALS[currentIndex].name}
                   </p>
                 </div>
@@ -76,7 +76,7 @@ export default function TestimonialCarousel() {
           {TESTIMONIALS.map((_, index) => (
             <button
               key={index}
-              className={`w-3 h-3 rounded-full ${index === currentIndex ? 'bg-white' : 'bg-white/50'
+              className={`w-3 h-3 rounded-full ${index === currentIndex ? 'bg-yellow-400' : 'bg-yellow-200'
                 }`}
               onClick={() => setCurrentIndex(index)}
             />

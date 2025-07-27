@@ -4,10 +4,10 @@ import NavbarWrapper from "@/components/layout/NavbarWrapper";
 import Footer from "@/components/layout/Footer";
 import PageTransition from "@/components/layout/PageTransition";
 import ReferralProcessor from "@/components/auth/ReferralProcessor";
-import { SpeedInsights } from "@vercel/speed-insights/next"
-import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
-import { SP } from "next/dist/shared/lib/utils";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-            <head>
+      <head>
         {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-M844TQKBMV"
@@ -37,7 +37,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-transparent`}>
         <ReferralProcessor />
         <NavbarWrapper />
         <main>
@@ -45,7 +45,7 @@ export default function RootLayout({
         </main>
         <Footer />
         <Analytics />
-        <SpeedInsights/>
+        <SpeedInsights />
         {/* Development Test Controls */}
       </body>
     </html>

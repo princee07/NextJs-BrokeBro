@@ -1,14 +1,12 @@
 
-import NavbarWrapper from "../../components/layout/NavbarWrapper";
+// import NavbarWrapper from "../../components/layout/NavbarWrapper";
 export default function CategoriesLayout({ children }: { children: React.ReactNode }) {
-   
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto">
-     <NavbarWrapper />
         {children}
       </div>
-     
     </div>
   );
 }
