@@ -15,12 +15,12 @@ const companies = [
 const TopCompanies = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   return (
-    <section className="py-16 bg-transparent">
+    <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-extrabold text-center mb-2 text-white dark:text-white">
+        <h2 className="text-3xl font-extrabold text-center mb-2 text-black">
           Top Companies Listing on BrokeBro
         </h2>
-        <p className="text-center text-gray-400 mb-8">
+        <p className="text-center text-gray-600 mb-8">
           Find jobs and internships with the best companies on BrokeBro.
         </p>
         <div className="overflow-x-auto no-scrollbar scroll-smooth">
@@ -31,7 +31,7 @@ const TopCompanies = () => {
             {companies.map((company) => (
               <div
                 key={company.name}
-                className="flex-shrink-0 flex flex-col items-center bg-gradient-to-br from-[#181c24] to-[#23263a] border border-purple-700/30 rounded-2xl shadow-lg shadow-purple-900/30 p-6 w-48 h-32 justify-center transition-transform hover:scale-105"
+                className="flex-shrink-0 flex flex-col items-center bg-white border border-gray-200 rounded-2xl shadow-md p-6 w-48 h-32 justify-center transition-transform hover:scale-105"
               >
                 <div className="w-28 h-14 flex items-center justify-center mb-2">
                   <Image
@@ -42,7 +42,7 @@ const TopCompanies = () => {
                     className="object-contain max-h-14"
                   />
                 </div>
-                <span className="font-semibold text-white text-center text-base mt-1">
+                <span className="font-semibold text-gray-800 text-center text-base mt-1">
                   {company.name}
                 </span>
               </div>
