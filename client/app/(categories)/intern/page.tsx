@@ -210,7 +210,7 @@ export default function InternshipPage() {
       {/* Increased top padding to avoid navbar overlap */}
       <div className="pt-32 relative z-10">
         {/* Hero Section */}
-        <section ref={heroRef} className="relative w-full flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto pt-12 pb-12 px-4 md:px-8 fade-in-up">
+        <section ref={heroRef} className="relative w-full flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto pt-12 pb-12 px-4 md:px-8 fade-in-up bg-[#FAF9F6] rounded-3xl">
 
           <div className="absolute top-1/2 -left-20 -translate-y-1/2">
             <DotPattern className="opacity-50" />
@@ -269,7 +269,7 @@ export default function InternshipPage() {
           </div>
 
           {/* Right Content: Hero Image */}
-          <div ref={heroImageRef} className="flex-1 flex items-center justify-center relative mt-12 md:mt-0 min-w-[320px] min-h-[400px] fade-in-up pr-10 md:pr-24">
+          <div ref={heroImageRef} className="flex-1 flex items-center justify-center relative mt-12 md:mt-0 min-w-[320px] min-h-[400px] fade-in-up pr-10 md:pr-40">
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-[280px] h-[340px]">
               <div className="w-full h-full bg-purple-200/30 rounded-t-full" />
             </div>

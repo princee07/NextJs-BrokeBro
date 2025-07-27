@@ -95,8 +95,29 @@ const HiredInterns = () => {
     }
   };
   return (
-    <section className="py-20 bg-gradient-to-br from-white via-purple-50 to-orange-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 bg-gradient-to-br from-white via-purple-50 to-orange-50 relative overflow-hidden">
+      {/* Decorative Elements */}
+      <div className="pointer-events-none select-none">
+        {/* Dots top left */}
+        <div className="absolute top-8 left-8 z-0 opacity-30">
+          <svg width="60" height="24" fill="none"><g><circle cx="8" cy="8" r="3" fill="#A78BFA" /><circle cx="28" cy="8" r="3" fill="#A78BFA" /><circle cx="48" cy="8" r="3" fill="#A78BFA" /><circle cx="18" cy="18" r="3" fill="#FBBF24" /><circle cx="38" cy="18" r="3" fill="#FBBF24" /></g></svg>
+        </div>
+        {/* Squiggle bottom right */}
+        <div className="absolute bottom-8 right-8 z-0 opacity-20">
+          <svg width="80" height="32" fill="none"><path d="M0,16 Q20,0 40,16 T80,16" stroke="#F472B6" strokeWidth="4" strokeLinecap="round" /></svg>
+        </div>
+        {/* Hollow circle mid left */}
+        <div className="absolute top-1/2 left-0 -translate-y-1/2 z-0">
+          <div className="w-8 h-8 border-2 border-cyan-400 rounded-full opacity-20" />
+        </div>
+        {/* Small yellow dot bottom left */}
+        <div className="absolute bottom-12 left-16 w-3 h-3 bg-yellow-300 rounded-full opacity-30" />
+        {/* Pink arc top right */}
+        <div className="absolute top-10 right-24 z-0 opacity-20">
+          <svg width="48" height="24" fill="none"><path d="M0,24 A24,24 0 0,1 48,24" stroke="#F472B6" strokeWidth="4" strokeLinecap="round" /></svg>
+        </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-extrabold text-black sm:text-4xl">
             Our Success Stories
@@ -165,11 +186,11 @@ const HiredInterns = () => {
             </div>
           </div>
           <div className="absolute top-1/2 -translate-y-1/2 flex justify-between w-full left-0">
-            <button onClick={scrollPrev} className="-ml-6 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 focus:outline-none z-10 transition-colors">
-              <ChevronLeft className="w-6 h-6" />
+            <button onClick={scrollPrev} className="-ml-6 bg-black hover:bg-gray-800 text-white rounded-full p-2 focus:outline-none z-10 transition-colors shadow-lg">
+              <ChevronLeft className="w-6 h-6 text-white" />
             </button>
-            <button onClick={scrollNext} className="-mr-6 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 focus:outline-none z-10 transition-colors">
-              <ChevronRight className="w-6 h-6" />
+            <button onClick={scrollNext} className="-mr-6 bg-black hover:bg-gray-800 text-white rounded-full p-2 focus:outline-none z-10 transition-colors shadow-lg">
+              <ChevronRight className="w-6 h-6 text-white" />
             </button>
           </div>
         </div >

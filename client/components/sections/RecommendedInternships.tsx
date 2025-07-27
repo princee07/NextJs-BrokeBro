@@ -130,11 +130,11 @@ const RecommendedInternships = () => {
           </div >
 
           <div className="absolute top-1/2 -translate-y-1/2 flex justify-between w-full left-0">
-            <button onClick={scrollPrev} className="-ml-6 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 focus:outline-none z-10 transition-colors">
-              <ChevronLeft className="w-6 h-6" />
+            <button onClick={scrollPrev} className="-ml-6 bg-black hover:bg-gray-800 text-white rounded-full p-2 focus:outline-none z-10 transition-colors shadow-lg">
+              <ChevronLeft className="w-6 h-6 text-white" />
             </button>
-            <button onClick={scrollNext} className="-mr-6 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 focus:outline-none z-10 transition-colors">
-              <ChevronRight className="w-6 h-6" />
+            <button onClick={scrollNext} className="-mr-6 bg-black hover:bg-gray-800 text-white rounded-full p-2 focus:outline-none z-10 transition-colors shadow-lg">
+              <ChevronRight className="w-6 h-6 text-white" />
             </button>
           </div>
         </div >
