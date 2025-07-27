@@ -112,10 +112,10 @@ export default function ApplicationActions({
                         onClick={handleQuickApply}
                         disabled={isApplying || applicationSuccess}
                         className={`w-full font-bold py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 ${applicationSuccess
-                                ? 'bg-green-600 text-white cursor-not-allowed'
-                                : isApplying
-                                    ? 'bg-blue-500 text-white cursor-not-allowed'
-                                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                            ? 'bg-green-600 text-white cursor-not-allowed'
+                            : isApplying
+                                ? 'bg-blue-500 text-white cursor-not-allowed'
+                                : 'bg-blue-600 text-white hover:bg-blue-700'
                             }`}
                     >
                         {isApplying ? (
@@ -154,8 +154,8 @@ export default function ApplicationActions({
                 <>
                     <UploadForm />
 
-                    <div className="p-3 bg-yellow-900/30 border border-yellow-600 rounded-lg">
-                        <p className="text-yellow-300 text-sm">
+                    <div className="p-3 bg-yellow-100 border border-red-400 rounded-lg">
+                        <p className="text-red-600 text-sm">
                             Upload your resume to enable Quick Apply for internships.
                         </p>
                     </div>
