@@ -1,7 +1,9 @@
+"use client";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-
+import { useState } from "react";
 import { offers } from "@/data/offers";
+import { useUserVerification } from "@/hooks/useUserVerification";
 
 function slugify(str: string) {
   return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -12,7 +14,20 @@ export default function BrandCouponPage({ params }: { params: { brandSlug: strin
     (o) => slugify(o.brand) === params.brandSlug
   );
 
+  const { isVerified, loading: verificationLoading } = useUserVerification();
+  const [revealed, setRevealed] = useState(false);
+  const [copied, setCopied] = useState(false);
+
   if (!offer) return notFound();
+
+  const handleReveal = () => setRevealed(true);
+  const handleCopy = () => {
+    if (offer.coupon) {
+      navigator.clipboard.writeText(offer.coupon);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#fafaf7] flex flex-col items-center justify-center py-10 px-2">
@@ -26,8 +41,36 @@ export default function BrandCouponPage({ params }: { params: { brandSlug: strin
             </div>
             <h2 className="text-3xl font-extrabold text-gray-800 mb-2 text-center">{offer.brand.toUpperCase()}</h2>
             <div className="text-xl font-semibold text-gray-700 mb-2">{offer.discount}</div>
-            <button className="bg-purple-500 hover:bg-purple-600 text-white text-lg font-bold px-8 py-3 rounded-xl mb-4 transition-all">Reveal Coupon Code</button>
-            <div className="text-red-500 text-base font-medium mb-4">Please log in to reveal the coupon code.</div>
+            {!isVerified ? (
+              <div className="mb-4">
+                <button
+                  className="bg-purple-300 text-white text-lg font-bold px-8 py-3 rounded-xl mb-2 cursor-not-allowed opacity-60"
+                  disabled
+                >
+                  Reveal Coupon Code
+                </button>
+                <div className="text-red-500 text-base font-medium">Please log in and verify your account to reveal the coupon code.</div>
+              </div>
+            ) : !revealed ? (
+              <button
+                className="bg-purple-500 hover:bg-purple-600 text-white text-lg font-bold px-8 py-3 rounded-xl mb-4 transition-all"
+                onClick={handleReveal}
+              >
+                Reveal Coupon Code
+              </button>
+            ) : (
+              <div className="flex flex-col items-center mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-mono bg-gray-100 px-4 py-2 rounded-lg border border-gray-300 select-all text-black">{offer.coupon || "N/A"}</span>
+                  <button
+                    className="ml-2 px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold text-sm transition-all"
+                    onClick={handleCopy}
+                  >
+                    {copied ? "Copied!" : "Copy"}
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="text-left w-full max-w-xs mx-auto">
               <div className="font-bold text-gray-700 mb-1">Terms & Conditions:</div>
               <ul className="text-gray-600 text-sm list-disc pl-5">

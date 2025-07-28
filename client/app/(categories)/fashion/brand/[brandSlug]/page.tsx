@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useParams } from "next/navigation";
 import { allBrands } from "../brandData";
 import { useUserVerification } from "@/hooks/useUserVerification";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 const BrandPage: React.FC = () => {
     const { brandSlug } = useParams();
@@ -10,7 +11,7 @@ const BrandPage: React.FC = () => {
     const [showCode, setShowCode] = useState(false);
     const [copied, setCopied] = useState(false);
     const { isVerified, loading } = useUserVerification();
-    const isLoggedIn = typeof window !== 'undefined' && localStorage.getItem('isLoggedIn') === 'true';
+    const { isAuthenticated } = useKindeBrowserClient();
 
     if (!brand) return <div className="text-center py-20 text-2xl">Brand not found.</div>;
 
@@ -34,15 +35,15 @@ const BrandPage: React.FC = () => {
                     {!showCode ? (
                         <>
                             <button
-                                className={`bg-[#6C1AFF] text-white px-6 py-3 rounded-lg font-bold text-lg mb-4 hover:bg-[#4B0FBF] transition ${(!isLoggedIn || !isVerified) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                onClick={() => (isLoggedIn && isVerified) && setShowCode(true)}
-                                disabled={!isLoggedIn || !isVerified || loading}
+                                className={`bg-[#6C1AFF] text-white px-6 py-3 rounded-lg font-bold text-lg mb-4 hover:bg-[#4B0FBF] transition ${(!isAuthenticated || !isVerified) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                onClick={() => (isAuthenticated && isVerified) && setShowCode(true)}
+                                disabled={!isAuthenticated || !isVerified || loading}
                             >
                                 Reveal Coupon Code
                             </button>
-                            {(!isLoggedIn || !isVerified) && !loading && (
+                            {(!isAuthenticated || !isVerified) && !loading && (
                                 <div className="text-sm text-red-500 mb-2 text-center max-w-xs">
-                                    {!isLoggedIn ? 'Please log in to reveal the coupon code.' : 'Please verify your account to reveal the coupon code.'}
+                                    {!isAuthenticated ? 'Please log in to reveal the coupon code.' : 'Please verify your account to reveal the coupon code.'}
                                 </div>
                             )}
                         </>
