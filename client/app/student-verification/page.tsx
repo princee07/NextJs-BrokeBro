@@ -47,9 +47,9 @@ export default function StudentVerificationPage() {
     };
 
     return (
-        <div className="min-h-screen bg-black text-white">
+        <div className="min-h-screen bg-gray-50 text-black">
             {/* Hero Section */}
-            <section className="relative overflow-hidden pt-40 pb-20 px-4 md:px-8 lg:px-12">
+            <section className="relative overflow-hidden pt-40 pb-20 px-4 md:px-8 lg:px-12 bg-gray-50">
                 <div className="container mx-auto max-w-6xl">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
                         {/* Left Content */}
@@ -70,7 +70,7 @@ export default function StudentVerificationPage() {
                                 </span>
                             </h1>
 
-                            <p className="text-gray-400 text-lg mb-8 leading-relaxed">
+                            <p className="text-gray-600 text-lg mb-8 leading-relaxed">
                                 Unlock exclusive student discounts and benefits across top brands.
                                 Quick 3-step verification process completed within 24 hours.
                             </p>
@@ -89,7 +89,7 @@ export default function StudentVerificationPage() {
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="border border-gray-600 hover:border-gray-500 text-white font-semibold py-4 px-8 rounded-lg transition-all duration-200"
+                                    className="border border-gray-300 hover:border-gray-400 text-black font-semibold py-4 px-8 rounded-lg transition-all duration-200"
                                 >
                                     Learn More
                                 </motion.button>
@@ -103,38 +103,38 @@ export default function StudentVerificationPage() {
                             transition={{ duration: 0.6, delay: 0.2 }}
                             className="relative"
                         >
-                            <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 border border-gray-700">
+                            <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
                                 <div className="flex items-center gap-4 mb-6">
-                                    <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-amber-600 rounded-full flex items-center justify-center">
+                                    <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-amber-600 rounded-full flex items-center justify-center shadow-md">
                                         <GraduationCap className="w-6 h-6 text-white" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-bold text-white">Quick Verification</h3>
-                                        <p className="text-gray-400">3 simple steps</p>
+                                        <h3 className="text-xl font-bold text-black">Quick Verification</h3>
+                                        <p className="text-gray-600">3 simple steps</p>
                                     </div>
                                 </div>
 
                                 <div className="space-y-4">
-                                    <div className="flex items-center gap-3 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
-                                        <span className="text-white">Enter student information</span>
+                                    <div className="flex items-center gap-3 p-4 bg-blue-100 border-2 border-blue-300 rounded-lg hover:bg-blue-200 transition-colors">
+                                        <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm">1</div>
+                                        <span className="text-gray-800 font-medium">Enter student information</span>
                                     </div>
 
-                                    <div className="flex items-center gap-3 p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
-                                        <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
-                                        <span className="text-white">Upload documents or use student email</span>
+                                    <div className="flex items-center gap-3 p-4 bg-purple-100 border-2 border-purple-300 rounded-lg hover:bg-purple-200 transition-colors">
+                                        <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm">2</div>
+                                        <span className="text-gray-800 font-medium">Upload documents or use student email</span>
                                     </div>
 
-                                    <div className="flex items-center gap-3 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
-                                        <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
-                                        <span className="text-white">Get approved within 24 hours</span>
+                                    <div className="flex items-center gap-3 p-4 bg-green-100 border-2 border-green-300 rounded-lg hover:bg-green-200 transition-colors">
+                                        <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm">3</div>
+                                        <span className="text-gray-800 font-medium">Get approved within 24 hours</span>
                                     </div>
                                 </div>
 
-                                <div className="mt-6 pt-6 border-t border-gray-700">
-                                    <div className="flex items-center gap-3">
-                                        <CheckCircle className="w-5 h-5 text-green-400" />
-                                        <span className="text-green-400 font-medium">Get verified student badge</span>
+                                <div className="mt-6 pt-6 border-t border-gray-300">
+                                    <div className="flex items-center gap-3 p-4 bg-green-100 border-2 border-green-300 rounded-lg">
+                                        <CheckCircle className="w-5 h-5 text-green-600" />
+                                        <span className="text-green-800 font-semibold">Get verified student badge</span>
                                     </div>
                                 </div>
                             </div>
@@ -144,7 +144,7 @@ export default function StudentVerificationPage() {
             </section>
 
             {/* Benefits Section */}
-            <section className="py-20 px-4 md:px-8 lg:px-12 bg-gray-900/50">
+            <section className="py-20 px-4 md:px-8 lg:px-12 bg-gray-50">
                 <div className="container mx-auto max-w-6xl">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
@@ -152,10 +152,10 @@ export default function StudentVerificationPage() {
                         transition={{ duration: 0.6 }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                        <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
                             Why Verify Your Student Status?
                         </h2>
-                        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+                        <p className="text-gray-800 text-lg max-w-2xl mx-auto">
                             Join thousands of verified students who are already saving big on their favorite brands
                         </p>
                     </motion.div>
@@ -167,13 +167,13 @@ export default function StudentVerificationPage() {
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                                className="bg-gray-800/50 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-colors"
+                                className="bg-white rounded-xl p-6 border-2 border-gray-300 hover:border-gray-500 hover:shadow-xl hover:bg-gray-50 transition-all duration-300 shadow-lg"
                             >
-                                <div className={`w-12 h-12 bg-gradient-to-r ${benefit.color} rounded-lg flex items-center justify-center mb-4`}>
+                                <div className={`w-12 h-12 bg-gradient-to-r ${benefit.color} rounded-lg flex items-center justify-center mb-4 shadow-lg`}>
                                     <benefit.icon className="w-6 h-6 text-white" />
                                 </div>
-                                <h3 className="text-white font-semibold mb-2">{benefit.title}</h3>
-                                <p className="text-gray-400 text-sm">{benefit.description}</p>
+                                <h3 className="text-black font-bold mb-2 text-lg">{benefit.title}</h3>
+                                <p className="text-gray-800 text-sm leading-relaxed">{benefit.description}</p>
                             </motion.div>
                         ))}
                     </div>
@@ -181,17 +181,18 @@ export default function StudentVerificationPage() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-20 px-4 md:px-8 lg:px-12">
+            <section className="py-20 px-4 md:px-8 lg:px-12 bg-gray-50">
                 <div className="container mx-auto max-w-4xl text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
+                        className="bg-white rounded-2xl p-12 border border-gray-200 shadow-lg"
                     >
-                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                        <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
                             Ready to Start Saving?
                         </h2>
-                        <p className="text-gray-400 text-lg mb-8">
+                        <p className="text-gray-600 text-lg mb-8 max-w-2xl mx-auto">
                             Verification processed within 24 hours. Start unlocking exclusive student discounts today!
                         </p>
 
@@ -199,7 +200,7 @@ export default function StudentVerificationPage() {
                             onClick={() => setShowVerification(true)}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-semibold py-4 px-8 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 mx-auto"
+                            className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-semibold py-4 px-8 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 mx-auto shadow-lg hover:shadow-xl"
                         >
                             <GraduationCap className="w-5 h-5" />
                             Verify Student Status
