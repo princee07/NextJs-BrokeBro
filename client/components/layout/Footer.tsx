@@ -14,7 +14,7 @@ export default function Footer() {
     >
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
         {/* Logo & Description */}
-        <div className="flex flex-col items-start md:col-span-2 mb-8 md:mb-0">
+        <div className="flex flex-col items-start md:items-start md:col-span-2 mb-8 md:mb-0 pl-4 md:pl-8">
           <Link href="/" className="mb-4 block">
             <img
               src="/assets/images/remove.png"

@@ -236,12 +236,8 @@ export default function NavbarClient({ user }: { user: any }) {
 
   return (
     <header
-<<<<<<< HEAD
       className={`w-full z-50  bobg-gradient-to-r from-orange-400 via-yellow-300 to-orange-400 text-black shadow-md
 rder-b border-gray-200 transition-transform duration-500 ${showNavbar ? "translate-y-0" : "-translate-y-full"}`}
-=======
-      className={`w-full z-[9999] bg-black border-b border-gray-200 transition-transform duration-500 ${showNavbar ? "translate-y-0" : "-translate-y-full"}`}
->>>>>>> 721e3fbd4ca4a5879056906cb5ea16d449e574cc
     >
       {/* Top Row: Logo, Country, Search, Auth */}
       <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto" ref={navContainerRef}>
