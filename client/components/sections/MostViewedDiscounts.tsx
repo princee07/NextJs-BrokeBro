@@ -1,42 +1,7 @@
 import { useRef } from "react";
 import Image from "next/image";
-
-const mostViewed = [
-    {
-        title: "Biba Discount",
-        brand: "Biba",
-        description: "For everyone • Online • Courses",
-        image: "/assets/mostviewed/biba-carrd.png",
-        logo: "/assets/mostviewed/bibalogo.png",
-        badge: "Popular",
-    },
-   
-    {
-        title: "glued Discount",
-        brand: "glued",
-        description: "For gamers • Online • Gaming",
-        image: "/assets/mostviewed/gllued.png",
-        logo: "/assets/mostviewed/glued-logo.png",
-        badge: "Top Rated",
-    },
-    {
-        title: "muscle junkie Discount",
-        brand: "muscle junkie",
-        description: "For students gym-goers • Online • Fitness",
-        image: "/assets/mostviewed/musclejunkie.png",
-        logo: "/assets/mostviewed/musclejunkielogo.png",
-        badge: null,
-    },
-     {
-        title: "soxytoes Discount",
-        brand: "soxytoes",
-        description: "For students only • Online • Music",
-        image: "/assets/mostviewed/soxytoes.jpg",
-        logo: "/assets/mostviewed/soxytoes-logo.png",
-        badge: null,
-    },
-   
-];
+import Link from "next/link";
+import { offers } from "@/data/offers";
 
 export default function MostViewedDiscounts() {
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -51,6 +16,10 @@ export default function MostViewedDiscounts() {
             });
         }
     };
+
+    // Helper to create a slug from brand name
+    const slugify = (str: string) =>
+        str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
     return (
         <section className="w-full bg-white pt-4 pb-8">
@@ -79,10 +48,11 @@ export default function MostViewedDiscounts() {
                     className="flex gap-6 overflow-x-auto scrollbar-hide pb-2"
                     style={{ scrollSnapType: 'x mandatory' }}
                 >
-                    {mostViewed.map((item, idx) => (
-                        <div
+                    {offers.map((item, idx) => (
+                        <Link
                             key={idx}
-                            className="min-w-[340px] max-w-xs bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col flex-shrink-0"
+                            href={`/brands/${slugify(item.brand)}`}
+                            className="min-w-[340px] max-w-xs bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col flex-shrink-0 cursor-pointer transition-transform hover:scale-105"
                             style={{ scrollSnapAlign: 'start' }}
                         >
                             <div className="relative w-full h-48">
@@ -116,7 +86,7 @@ export default function MostViewedDiscounts() {
                                     <div className="text-gray-500 text-xs mb-4">{item.description}</div>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>

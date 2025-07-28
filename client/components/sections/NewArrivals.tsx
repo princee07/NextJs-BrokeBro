@@ -1,49 +1,7 @@
 import { useRef } from "react";
 import Image from "next/image";
-
-const newArrivals = [
-    {
-        title: "Lakme Salon Discount",
-        brand: "Lakme Salon",
-        description: "For anyone to use • Online • Study & Stationery",
-        image: "/assets/newarrivals/lakmesalon.jpg",
-        logo: "/assets/newarrivals/lakmelogo.png",
-        badge: "Only on brokeBro",
-    },
-    {
-        title: "soxytoes Discount",
-        brand: "soxytoes",
-        description: "For students only ",
-        image: "/assets/newarrivals/soxytoes.jpg",
-        logo: "/assets/newarrivals/soxytoes-logo.png",
-        badge: null,
-    },
-    {
-        title: "lakme Discount",
-        brand: "Lakme",
-        description: "For students • Online • Beauty & Personal Care",
-        image: "/assets/newarrivals/lakme.png",
-        logo: "/assets/newarrivals/lakmelogo.png",
-        badge: "Student Exclusive",
-    },
-    {
-        title: "salty Discount",
-        brand: "Salty",
-        description: "For students & educators • Online • Fashion",
-        image: "/assets/newarrivals/salty-card.png",
-        logo: "/assets/newarrivals/salty-logo.png",
-        badge: null,
-    },
-    {
-        title: "Nike Discount",
-        brand: "Nike",
-        description: "For students only • Online • Fashion",
-        image: "/assets/newarrivals/nike-card.png",
-        logo: "/assets/newarrivals/nike-logo.png",
-        badge: "Limited Time",
-    },
-   
-];
+import Link from "next/link";
+import { offers } from "@/data/offers";
 
 
 export default function NewArrivals() {
@@ -59,6 +17,10 @@ export default function NewArrivals() {
             });
         }
     };
+
+    // Helper to create a slug from brand name
+    const slugify = (str: string) =>
+        str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
     return (
         <section className="w-full bg-white pt-4 pb-8 mt-14">
@@ -87,10 +49,11 @@ export default function NewArrivals() {
                     className="flex gap-6 overflow-x-auto scrollbar-hide pb-2"
                     style={{ scrollSnapType: 'x mandatory' }}
                 >
-                    {newArrivals.map((item, idx) => (
-                        <div
+                    {offers.map((item, idx) => (
+                        <Link
                             key={idx}
-                            className="min-w-[340px] max-w-xs bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col flex-shrink-0"
+                            href={`/brands/${slugify(item.brand)}`}
+                            className="min-w-[340px] max-w-xs bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col flex-shrink-0 cursor-pointer transition-transform hover:scale-105"
                             style={{ scrollSnapAlign: 'start' }}
                         >
                             <div className="relative w-full h-48">
@@ -124,7 +87,7 @@ export default function NewArrivals() {
                                     <div className="text-gray-500 text-xs mb-4">{item.description}</div>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
