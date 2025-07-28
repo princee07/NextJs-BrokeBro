@@ -1,4 +1,3 @@
-
 "use client"
 
 import React, { useRef, useEffect, useState } from 'react';
@@ -125,7 +124,7 @@ const AnimatedEyes: React.FC<AnimatedEyesProps> = ({ className = '', size = 'md'
       className={`flex items-center ${sizeStyles.container} ${className}`}
     >
       {/* Left Eye */}
-      <div className={`relative ${sizeStyles.eye} rounded-full overflow-hidden flex items-center justify-center`}>
+      <div className={`relative ${sizeStyles.eye} rounded-full overflow-hidden flex items-center justify-center border border-black`}>
         {/* Split background - top orange, bottom white */}
         <div className="absolute inset-0 bg-gradient-to-b from-orange-500 from-50% to-white to-50%"></div>
 
@@ -145,7 +144,7 @@ const AnimatedEyes: React.FC<AnimatedEyesProps> = ({ className = '', size = 'md'
       <div className={sizeStyles.spacing}></div>
 
       {/* Right Eye */}
-      <div className={`relative ${sizeStyles.eye} rounded-full overflow-hidden flex items-center justify-center`}>
+      <div className={`relative ${sizeStyles.eye} rounded-full overflow-hidden flex items-center justify-center border border-black`}>
         {/* Split background - top orange, bottom white */}
         <div className="absolute inset-0 bg-gradient-to-b from-orange-500 from-50% to-white to-50%"></div>
 

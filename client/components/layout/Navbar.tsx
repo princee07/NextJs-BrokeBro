@@ -297,7 +297,7 @@ export default function NavbarClient({ user }: { user: any }) {
           {isHydrated ? (
             user ? (
               <>
-                <span className="text-black bg-white px-2 py-1 rounded hidden md:block">Hi, {user?.given_name}</span>
+                <span className="text-black px-2 py-1 rounded hidden md:block">Hi, {user?.given_name}</span>
                 <div ref={userMenuRef}>
                   <NavbarUserMenu
                     user={{
