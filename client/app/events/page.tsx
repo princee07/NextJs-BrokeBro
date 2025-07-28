@@ -131,6 +131,25 @@ export default function EventsPage() {
       
       </div>
 
+      {/* Verification Banner for Unverified Users */}
+      {/*
+        Example usage:
+        Show this block only if user is logged in but not verified.
+        Replace the condition below with your actual auth/verification logic.
+      */}
+      {/*
+      {isLoggedIn && !isVerified && (
+        <div className="w-full flex flex-col items-center justify-center py-4 bg-yellow-50 border-b border-yellow-300 mb-6">
+          <span className="text-red-600 font-semibold mb-2">Please verify your account to access all features.</span>
+          <a
+            href="/student-verification"
+            className="inline-block px-6 py-2 bg-gradient-to-r from-orange-400 to-pink-400 text-white rounded-lg font-semibold hover:from-orange-500 hover:to-pink-500 transition"
+          >
+            Verify Now
+          </a>
+        </div>
+      )}
+      */}
       {/* Modal for Event Creation */}
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <h2 className="text-xl font-bold mb-4">Host an Event</h2>

@@ -74,6 +74,18 @@ const FlightDealPage = () => {
                     <div className="flex flex-col items-center gap-3 w-full">
                         {!showCode ? (
                             <>
+                                {/* Verification Banner for Unverified Users */}
+                                {!verificationLoading && !isVerified && (
+                                    <div className="w-full flex flex-col items-center justify-center py-2 bg-yellow-50 border border-yellow-300 mb-2 rounded-lg">
+                                        <span className="text-red-600 font-semibold mb-2 text-center">Please verify your account to reveal the coupon code.</span>
+                                        <a
+                                            href="/student-verification"
+                                            className="inline-block px-6 py-2 bg-gradient-to-r from-orange-400 to-pink-400 text-white rounded-lg font-semibold hover:from-orange-500 hover:to-pink-500 transition"
+                                        >
+                                            Verify Now
+                                        </a>
+                                    </div>
+                                )}
                                 <button
                                     className="bg-gradient-to-r from-[#5B5BF6] to-[#7F5CFF] text-white font-bold py-3 px-8 rounded-xl text-lg shadow hover:from-[#7F5CFF] hover:to-[#5B5BF6] transition disabled:opacity-60 disabled:cursor-not-allowed"
                                     onClick={() => isVerified && setShowCode(true)}

@@ -3,6 +3,8 @@
 import React from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
+import { useUserVerification } from '@/hooks/useUserVerification';
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 
 // Dummy data for demonstration
 interface GymDetail {
@@ -72,9 +74,8 @@ export default function GymPartnerDetail() {
     if (!gym) {
         return <div className="p-8 text-center">Gym partner not found.</div>;
     }
-    // Replace these with your actual auth/verification logic
-    const isLoggedIn = true; // e.g. from user context/store
-    const isVerified = true; // e.g. from user context/store
+    const { isVerified, loading } = useUserVerification();
+    const { isAuthenticated } = useKindeBrowserClient();
     const [showCoupon, setShowCoupon] = React.useState(false);
     const [copied, setCopied] = React.useState(false);
     return (
@@ -95,31 +96,47 @@ export default function GymPartnerDetail() {
                     <div className="mb-4 w-full">
                         <span className="block text-gray-700 font-semibold">Discount Offers:</span>
                         <span className="block text-green-600 font-bold">{gym.discount ? gym.discount : 'Get up to 20% off on membership!'}</span>
-                        {isLoggedIn && isVerified ? (
-                            !showCoupon ? (
+                        {!showCoupon ? (
+                            <>
+                                {/* Verification Banner for Unverified Users */}
+                                {isAuthenticated && !isVerified && !loading && (
+                                    <div className="w-full flex flex-col items-center justify-center py-2 bg-yellow-50 border border-yellow-300 mb-2 rounded-lg">
+                                        <span className="text-red-600 font-semibold mb-2 text-center">Please verify your account to reveal the coupon code.</span>
+                                        <a
+                                            href="/student-verification"
+                                            className="inline-block px-6 py-2 bg-gradient-to-r from-orange-400 to-pink-400 text-white rounded-lg font-semibold hover:from-orange-500 hover:to-pink-500 transition"
+                                        >
+                                            Verify Now
+                                        </a>
+                                    </div>
+                                )}
                                 <button
-                                    className="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition cursor-pointer"
-                                    onClick={() => setShowCoupon(true)}
+                                    className={`mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition cursor-pointer ${(!isAuthenticated || !isVerified) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    onClick={() => (isAuthenticated && isVerified) && setShowCoupon(true)}
+                                    disabled={!isAuthenticated || !isVerified || loading}
                                 >
                                     Reveal Coupon Code
                                 </button>
-                            ) : (
-                                <div className="mt-4 w-full flex items-center justify-between bg-gray-200 py-2 px-4 rounded border border-orange-400">
-                                    <span className="text-lg font-bold text-orange-700">{gym.couponCode || 'COUPON2025'}</span>
-                                    <button
-                                        className="ml-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-1 px-3 rounded transition cursor-pointer"
-                                        onClick={() => {
-                                            navigator.clipboard.writeText(gym.couponCode || 'COUPON2025');
-                                            setCopied(true);
-                                            setTimeout(() => setCopied(false), 1500);
-                                        }}
-                                    >
-                                        {copied ? 'Copied!' : 'Copy Code'}
-                                    </button>
-                                </div>
-                            )
+                                {(!isAuthenticated || !isVerified) && !loading && (
+                                    <div className="text-red-500 text-sm mt-2 text-center max-w-xs">
+                                        {!isAuthenticated ? 'Please log in to reveal the coupon code.' : 'Please verify your account to reveal the coupon code.'}
+                                    </div>
+                                )}
+                            </>
                         ) : (
-                            <div className="mt-4 w-full text-center text-sm text-gray-500 font-semibold">Login and verify your account to access discount and coupon code.</div>
+                            <div className="mt-4 w-full flex items-center justify-between bg-gray-200 py-2 px-4 rounded border border-orange-400">
+                                <span className="text-lg font-bold text-orange-700">{gym.couponCode || 'COUPON2025'}</span>
+                                <button
+                                    className="ml-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-1 px-3 rounded transition cursor-pointer"
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(gym.couponCode || 'COUPON2025');
+                                        setCopied(true);
+                                        setTimeout(() => setCopied(false), 1500);
+                                    }}
+                                >
+                                    {copied ? 'Copied!' : 'Copy Code'}
+                                </button>
+                            </div>
                         )}
                     </div>
                 </aside>

@@ -11,10 +11,26 @@ export interface Offer {
 }
 
 export const offers: Offer[] = [
+   {
+    title: "Desert free for Couple on bill 3k",
+    brand: "one8",
+    description: "Exclusive discount for couples • Online • Food & Drinks",
+    image: "/assets/newarrivals/one.png",
+    logo: "/assets/newarrivals/one.jpg",
+    badge: "New Arrival",
+    discount: "Special Intro Offer",
+    coupon: "ONE8LAUNCH",
+    terms: [
+      "Coupon valid for a limited time only.",
+      "Applicable only on select products/categories.",
+      "Cannot be combined with other offers.",
+      "See brand website for full details."
+    ]
+  },
   {
     title: "Lakme Salon Discount",
     brand: "Lakme Salon",
-    description: "For anyone to use • Online • Study & Stationery",
+    description: "salon services • Online • Beauty & Personal Care",
     image: "/assets/newarrivals/lakmesalon.jpg",
     logo: "/assets/newarrivals/lakmelogo.png",
     badge: "Only on brokeBro",
@@ -155,5 +171,6 @@ export const offers: Offer[] = [
       "See brand website for full details."
     ]
   },
+ 
   // Add more offers as needed
 ];

@@ -2,7 +2,8 @@
 import React, { useState } from "react";
 import { useParams } from "next/navigation";
 import featuredProducts, { Product } from '../../featuredProducts';
-import VerificationGate from '@/components/ui/VerificationGate';
+import { useUserVerification } from '@/hooks/useUserVerification';
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 
 const ProductDiscountPage = () => {
     const params = useParams();
@@ -26,10 +27,9 @@ const ProductDiscountPage = () => {
 
     // Coupon reveal state
     const [isRevealed, setIsRevealed] = useState(false);
-    // Simulate user state: set to true for demo, replace with real logic
-    const [isLoggedIn, setIsLoggedIn] = useState(true); // true for demo
-    const [isVerified, setIsVerified] = useState(true); // true for demo
     const [copied, setCopied] = useState(false);
+    const { isVerified, loading } = useUserVerification();
+    const { isAuthenticated } = useKindeBrowserClient();
 
     // Suggest 4 other products (excluding current)
     const suggestions = featuredProducts.filter((p: Product) => p !== product).slice(0, 4);
@@ -58,15 +58,27 @@ const ProductDiscountPage = () => {
                     <p className="text-base font-semibold text-[#39396a] mb-3 text-center">{product.isSale && product.discount ? `${product.discount}% Off Sitewide*` : 'Exclusive Student Offer*'}</p>
                     {!isRevealed ? (
                         <>
+                            {/* Verification Banner for Unverified Users */}
+                            {isAuthenticated && !isVerified && !loading && (
+                                <div className="w-full flex flex-col items-center justify-center py-2 bg-yellow-50 border border-yellow-300 mb-2 rounded-lg">
+                                    <span className="text-red-600 font-semibold mb-2 text-center">Please verify your account to reveal the coupon code.</span>
+                                    <a
+                                        href="/student-verification"
+                                        className="inline-block px-6 py-2 bg-gradient-to-r from-orange-400 to-pink-400 text-white rounded-lg font-semibold hover:from-orange-500 hover:to-pink-500 transition"
+                                    >
+                                        Verify Now
+                                    </a>
+                                </div>
+                            )}
                             <button
-                                className="bg-[#a78bfa] hover:bg-[#7c3aed] text-white font-bold text-lg px-8 py-3 rounded-lg mb-3 transition-all"
-                                onClick={() => (isLoggedIn && isVerified) ? setIsRevealed(true) : null}
-                                disabled={!(isLoggedIn && isVerified)}
+                                className={`bg-[#a78bfa] hover:bg-[#7c3aed] text-white font-bold text-lg px-8 py-3 rounded-lg mb-3 transition-all ${(!isAuthenticated || !isVerified) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                onClick={() => (isAuthenticated && isVerified) && setIsRevealed(true)}
+                                disabled={!isAuthenticated || !isVerified || loading}
                             >
                                 Reveal Coupon Code
                             </button>
-                            {!(isLoggedIn && isVerified) && (
-                                <p className="text-red-500 font-medium mb-2">Please log in and verify to reveal the coupon code.</p>
+                            {(!isAuthenticated || !isVerified) && !loading && (
+                                <p className="text-red-500 font-medium mb-2">{!isAuthenticated ? 'Please log in to reveal the coupon code.' : 'Please verify your account to reveal the coupon code.'}</p>
                             )}
                         </>
                     ) : (

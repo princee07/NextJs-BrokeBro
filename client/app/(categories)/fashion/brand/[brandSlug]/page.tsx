@@ -34,6 +34,18 @@ const BrandPage: React.FC = () => {
                     <div className="text-lg mb-4 text-[#222] text-center">{brand.offer}</div>
                     {!showCode ? (
                         <>
+                            {/* Verification Banner for Unverified Users */}
+                            {isAuthenticated && !isVerified && !loading && (
+                                <div className="w-full flex flex-col items-center justify-center py-2 bg-yellow-50 border border-yellow-300 mb-4 rounded-lg">
+                                    <span className="text-red-600 font-semibold mb-2 text-center">Please verify your account to reveal the coupon code.</span>
+                                    <a
+                                        href="/student-verification"
+                                        className="inline-block px-6 py-2 bg-gradient-to-r from-orange-400 to-pink-400 text-white rounded-lg font-semibold hover:from-orange-500 hover:to-pink-500 transition"
+                                    >
+                                        Verify Now
+                                    </a>
+                                </div>
+                            )}
                             <button
                                 className={`bg-[#6C1AFF] text-white px-6 py-3 rounded-lg font-bold text-lg mb-4 hover:bg-[#4B0FBF] transition ${(!isAuthenticated || !isVerified) ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 onClick={() => (isAuthenticated && isVerified) && setShowCode(true)}

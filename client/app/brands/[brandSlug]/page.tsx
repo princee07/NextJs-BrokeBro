@@ -46,7 +46,17 @@ export default function BrandCouponPage() {
             <h2 className="text-3xl font-extrabold text-gray-800 mb-2 text-center">{offer.brand.toUpperCase()}</h2>
             <div className="text-xl font-semibold text-gray-700 mb-2">{offer.discount}</div>
             {!isVerified ? (
-              <div className="mb-4">
+              <div className="mb-4 w-full flex flex-col items-center">
+                {/* Verification Banner for Unverified Users */}
+                <div className="w-full flex flex-col items-center justify-center py-2 bg-yellow-50 border border-yellow-300 mb-2 rounded-lg">
+                  <span className="text-red-600 font-semibold mb-2 text-center">Please verify your account to reveal the coupon code.</span>
+                  <a
+                    href="/student-verification"
+                    className="inline-block px-6 py-2 bg-gradient-to-r from-orange-400 to-pink-400 text-white rounded-lg font-semibold hover:from-orange-500 hover:to-pink-500 transition"
+                  >
+                    Verify Now
+                  </a>
+                </div>
                 <button
                   className="bg-purple-300 text-white text-lg font-bold px-8 py-3 rounded-xl mb-2 cursor-not-allowed opacity-60"
                   disabled
