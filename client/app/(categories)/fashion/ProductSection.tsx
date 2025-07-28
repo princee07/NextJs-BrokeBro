@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import { useClickTracker } from "@/hooks/useClickTracker";
 
 // Example product data, replace with real data as needed
 const products = [
@@ -52,6 +53,45 @@ const products = [
 ];
 
 const ProductSection: React.FC = () => {
+    const { trackClick } = useClickTracker();
+
+    const handleProductClick = (product: any, index: number) => {
+        trackClick('product', `product-${product.brand}-${index}`, {
+            // Basic product info
+            brand: product.brand,
+            image: product.image,
+            offer: product.offer,
+            title: product.brand,
+            type: 'product',
+            category: 'fashion',
+            
+            // Additional product details
+            productId: `prod_${product.brand.toLowerCase().replace(/\s+/g, '_')}_${index}`,
+            position: `grid_position_${index}`,
+            availability: 'In Stock',
+            
+            // Extract discount from offer text
+            discount: product.offer.includes('%') ? 
+                product.offer.match(/(\d+)%/)?.[1] + '%' : 'N/A',
+            
+            // Product tags based on brand
+            tags: [
+                'fashion',
+                'brand',
+                product.brand.toLowerCase(),
+                ...(product.brand.includes('BEAUTY') ? ['beauty', 'cosmetics'] : []),
+                ...(product.brand.includes('NIKE') || product.brand.includes('FAST TRACK') ? ['sports', 'accessories'] : []),
+                ...(product.brand.includes('LEVIS') || product.brand.includes('DENIM') ? ['clothing', 'apparel'] : [])
+            ],
+            
+            // Card styling info
+            colSpan: 'col-span-1',
+            rowSpan: 'row-span-1',
+            bg: 'bg-white',
+            textColor: 'text-black'
+        });
+    };
+
     return (
         <div className="w-full bg-[#F9F9F6] py-8 mb-12">
             <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
@@ -60,6 +100,7 @@ const ProductSection: React.FC = () => {
                         key={idx}
                         href={`/fashion/brand/${product.brand.toLowerCase().replace(/\s+/g, "-")}`}
                         className="flex flex-col items-center justify-center p-6 rounded-2xl bg-white shadow-md transition-transform duration-200 hover:scale-105 cursor-pointer min-h-[210px] min-w-[240px] no-underline"
+                        onClick={() => handleProductClick(product, idx)}
                     >
                         <img
                             src={product.image}

@@ -40,7 +40,7 @@ export default function RootLayout({
       <body className={`${inter.className} bg-transparent`}>
         <ReferralProcessor />
         <NavbarWrapper />
-        <main>
+        <main className="pt-[70px] md:pt-0">
           <PageTransition>{children}</PageTransition>
         </main>
         <Footer />

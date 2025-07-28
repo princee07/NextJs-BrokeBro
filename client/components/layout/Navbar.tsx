@@ -13,6 +13,7 @@ import NavbarUserMenu from "./NavbarUserMenu";
 import VerifiedBadge from "../ui/VerifiedBadge";
 import { useStudentVerification } from "@/hooks/useStudentVerification";
 import { getUserReferralData } from "@/app/lib/actions/referral.actions";
+import { createPortal } from "react-dom";
 import {
   HiOutlineBriefcase,
   HiOutlineSparkles,
@@ -39,9 +40,11 @@ export default function NavbarClient({ user }: { user: any }) {
   const [referralUrl, setReferralUrl] = useState("");
   const [referralLoading, setReferralLoading] = useState(false);
   const [showVerificationModal, setShowVerificationModal] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navContainerRef = useRef<HTMLDivElement>(null);
   const navLinksRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const { isVerified } = useStudentVerification();
 
   const navCategories = [
@@ -181,6 +184,27 @@ export default function NavbarClient({ user }: { user: any }) {
     fetchReferralData();
   };
 
+  // Calculate dropdown position
+  const updateDropdownPosition = () => {
+    if (userMenuRef.current) {
+      const rect = userMenuRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + 8,
+        right: window.innerWidth - rect.right
+      });
+    }
+  };
+
+  // Update position when dropdown opens
+  useEffect(() => {
+    if (profileDropdownOpen) {
+      updateDropdownPosition();
+      const handleResize = () => updateDropdownPosition();
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, [profileDropdownOpen]);
+
   const handleSmartSearch = (query: string) => {
     const q = query.toLowerCase();
     if (["nike", "adidas", "puma", "shoes", "sneakers", "footwear"].some(word => q.includes(word))) {
@@ -212,8 +236,12 @@ export default function NavbarClient({ user }: { user: any }) {
 
   return (
     <header
+<<<<<<< HEAD
       className={`w-full z-50  bobg-gradient-to-r from-orange-400 via-yellow-300 to-orange-400 text-black shadow-md
 rder-b border-gray-200 transition-transform duration-500 ${showNavbar ? "translate-y-0" : "-translate-y-full"}`}
+=======
+      className={`w-full z-[9999] bg-black border-b border-gray-200 transition-transform duration-500 ${showNavbar ? "translate-y-0" : "-translate-y-full"}`}
+>>>>>>> 721e3fbd4ca4a5879056906cb5ea16d449e574cc
     >
       {/* Top Row: Logo, Country, Search, Auth */}
       <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto" ref={navContainerRef}>
@@ -267,27 +295,16 @@ rder-b border-gray-200 transition-transform duration-500 ${showNavbar ? "transla
             user ? (
               <>
                 <span className="text-black bg-white px-2 py-1 rounded hidden md:block">Hi, {user?.given_name}</span>
-                <NavbarUserMenu
-                  user={{
-                    name: `${user?.given_name || ""} ${user?.family_name || ""}`.trim() || "User",
-                    email: user?.email || "",
-                    avatar: user?.picture,
-                  }}
-                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                />
-                <AnimatePresence>
-                  {profileDropdownOpen && (
-                    <motion.div
-                      className="absolute right-0 top-full mt-2 w-64 bg-white backdrop-blur-md rounded-lg border border-orange-500/20 shadow-lg shadow-orange-500/10 z-50"
-                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                      transition={{ duration: 0.2, ease: "easeOut" }}
-                    >
-                      {/* ...existing code... */}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div ref={userMenuRef}>
+                  <NavbarUserMenu
+                    user={{
+                      name: `${user?.given_name || ""} ${user?.family_name || ""}`.trim() || "User",
+                      email: user?.email || "",
+                      avatar: user?.picture,
+                    }}
+                    onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  />
+                </div>
               </>
             ) : (
               <>
@@ -348,6 +365,7 @@ rder-b border-gray-200 transition-transform duration-500 ${showNavbar ? "transla
       </div>
 
       {/* Second Row: Nav Links */}
+      {/* Desktop Nav Links */}
       <nav className="w-full bg-white border-t border-gray-200" ref={navLinksRef}>
         <div className="flex items-center justify-center gap-8 px-8 py-2 max-w-7xl mx-auto">
           {navCategories.map((category, index) => {
@@ -376,7 +394,7 @@ rder-b border-gray-200 transition-transform duration-500 ${showNavbar ? "transla
               >
                 <Link
                   href={category.path}
-                  className={`text-base font-extrabold tracking-wide uppercase text-black hover:text-orange-400 transition-colors ${activeCategory === category.name ? "text-orange-400" : ""}`}
+                  className={`text-base font-extrabold tracking-wide uppercase text-black hover:text-orange-400 transition-colors ${activeCategory === category.name ? "text-orange-400" : ""} hidden md:block`}
                   style={{ fontFamily: 'Inter, Segoe UI, Arial, sans-serif' }}
                   onClick={resetNavState}
                   prefetch={false}
@@ -414,9 +432,9 @@ rder-b border-gray-200 transition-transform duration-500 ${showNavbar ? "transla
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            className="md:hidden bg-gradient-to-b from-black/95 to-black backdrop-blur-lg absolute w-full shadow-lg overflow-hidden"
+            className="fixed inset-0 md:hidden bg-gradient-to-b from-black/95 to-black backdrop-blur-lg w-full h-full z-[9999] shadow-lg overflow-y-auto"
             initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
+            animate={{ height: "100%", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
@@ -672,6 +690,139 @@ rder-b border-gray-200 transition-transform duration-500 ${showNavbar ? "transla
 
       {/* Verification Modal */}
       <VerificationModal isOpen={showVerificationModal} onClose={() => setShowVerificationModal(false)} />
+
+      {/* Profile Dropdown Portal */}
+      {profileDropdownOpen && typeof window !== 'undefined' && createPortal(
+        <AnimatePresence>
+          <motion.div
+            ref={dropdownRef}
+            className="fixed w-64 bg-white backdrop-blur-md rounded-lg border border-orange-500/20 shadow-lg shadow-orange-500/10"
+            style={{ 
+              top: dropdownPosition.top,
+              right: dropdownPosition.right,
+              zIndex: 999999
+            }}
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+          >
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 flex items-center justify-center text-white font-semibold">
+                  {user?.given_name?.charAt(0)?.toUpperCase() || 'U'}
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-gray-900 text-sm">
+                    {`${user?.given_name || ""} ${user?.family_name || ""}`.trim() || "User"}
+                  </p>
+                  <p className="text-xs text-gray-600 truncate">{user?.email}</p>
+                </div>
+                {isVerified && <VerifiedBadge size="sm" />}
+              </div>
+            </div>
+
+            <div className="p-2">
+              {/* Coins Display */}
+              <div className="px-3 py-2 mb-2 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg border border-amber-200">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-amber-800">Your Coins</span>
+                  <span className="text-lg font-bold text-amber-600">
+                    {coins !== null ? coins : '...'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Profile Link */}
+              <Link
+                href="/profile"
+                className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-orange-50 rounded-lg transition-colors"
+                onClick={() => setProfileDropdownOpen(false)}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Profile
+              </Link>
+
+              {/* Settings Link */}
+              <Link
+                href="/settings"
+                className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-orange-50 rounded-lg transition-colors"
+                onClick={() => setProfileDropdownOpen(false)}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Settings
+              </Link>
+
+              {/* Favourites Link */}
+              <Link
+                href="/favourites"
+                className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-orange-50 rounded-lg transition-colors"
+                onClick={() => setProfileDropdownOpen(false)}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                Favourites
+              </Link>
+
+              {/* Refer & Earn Button */}
+              <button
+                onClick={() => {
+                  setProfileDropdownOpen(false);
+                  handleOpenReferralModal();
+                }}
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-orange-50 rounded-lg transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                </svg>
+                Refer & Earn
+                <span className="ml-auto text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">
+                  10 coins
+                </span>
+              </button>
+
+              {/* Student Verification */}
+              {!isVerified && (
+                <button
+                  onClick={() => {
+                    setProfileDropdownOpen(false);
+                    setShowVerificationModal(true);
+                  }}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Verify Student Status
+                  <span className="ml-auto text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">
+                    New
+                  </span>
+                </button>
+              )}
+
+              <hr className="my-2 border-gray-200" />
+
+              {/* Logout */}
+              <LogoutLink
+                postLogoutRedirectURL={LOGOUT_REDIRECT_URL}
+                className="flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Logout
+              </LogoutLink>
+            </div>
+          </motion.div>
+        </AnimatePresence>,
+        document.body
+      )}
     </header>
   );
 }

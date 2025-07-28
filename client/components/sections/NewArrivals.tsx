@@ -1,56 +1,7 @@
 import { useRef } from "react";
 import Image from "next/image";
-
-const newArrivals = [
-    {
-        title: "3 month subscription giveaway",
-        brand: "Coursera",
-        description: "For anyone to use • Online • Study & Stationery",
-        image: "/assets/newarrivals/coursera-card.png",
-        logo: "/assets/newarrivals/coursera-logo.png",
-        badge: "Only on SB",
-    },
-    {
-        title: "15% off MSL+",
-        brand: "My Study Life",
-        description: "For students only • Online • Tech & Mobile",
-        image: "/assets/newarrivals/msl-card.png",
-        logo: "/assets/newarrivals/msl-logo.png",
-        badge: null,
-    },
-    {
-        title: "Free 1 Year Grammarly Premium",
-        brand: "Grammarly",
-        description: "For students • Online • Writing Tools",
-        image: "/assets/newarrivals/grammarly-card.png",
-        logo: "/assets/newarrivals/grammarly-logo.png",
-        badge: "Student Exclusive",
-    },
-    {
-        title: "20% off Canva Pro",
-        brand: "Canva",
-        description: "For students & educators • Online • Design",
-        image: "/assets/newarrivals/canva-card.png",
-        logo: "/assets/newarrivals/canva-logo.png",
-        badge: null,
-    },
-    {
-        title: "Amazon Prime Student Offer",
-        brand: "Amazon Prime",
-        description: "For students only • Online • Entertainment",
-        image: "/assets/newarrivals/prime-card.png",
-        logo: "/assets/newarrivals/prime-logo.png",
-        badge: "Limited Time",
-    },
-    {
-        title: "50% off Skillshare Annual Plan",
-        brand: "Skillshare",
-        description: "For anyone • Online • Courses",
-        image: "/assets/newarrivals/skillshare-card.png",
-        logo: "/assets/newarrivals/skillshare-logo.png",
-        badge: null,
-    },
-];
+import Link from "next/link";
+import { offers } from "@/data/offers";
 
 
 export default function NewArrivals() {
@@ -67,8 +18,12 @@ export default function NewArrivals() {
         }
     };
 
+    // Helper to create a slug from brand name
+    const slugify = (str: string) =>
+        str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
     return (
-        <section className="w-full bg-white pt-4 pb-8 -mt-6">
+        <section className="w-full bg-white pt-4 pb-8 mt-14">
             <div className="max-w-7xl mx-auto px-4">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">New Arrivals</h2>
@@ -94,10 +49,11 @@ export default function NewArrivals() {
                     className="flex gap-6 overflow-x-auto scrollbar-hide pb-2"
                     style={{ scrollSnapType: 'x mandatory' }}
                 >
-                    {newArrivals.map((item, idx) => (
-                        <div
+                    {offers.map((item, idx) => (
+                        <Link
                             key={idx}
-                            className="min-w-[340px] max-w-xs bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col flex-shrink-0"
+                            href={`/brands/${slugify(item.brand)}`}
+                            className="min-w-[340px] max-w-xs bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col flex-shrink-0 cursor-pointer transition-transform hover:scale-105"
                             style={{ scrollSnapAlign: 'start' }}
                         >
                             <div className="relative w-full h-48">
@@ -131,7 +87,7 @@ export default function NewArrivals() {
                                     <div className="text-gray-500 text-xs mb-4">{item.description}</div>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
