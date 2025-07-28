@@ -362,67 +362,77 @@ rder-b border-gray-200 transition-transform duration-500 ${showNavbar ? "transla
 
       {/* Second Row: Nav Links */}
       {/* Desktop Nav Links */}
-      <nav className="w-full bg-white border-t border-gray-200" ref={navLinksRef}>
-        <div className="flex items-center justify-center gap-8 px-8 py-2 max-w-7xl mx-auto">
-          {navCategories.map((category, index) => {
-            const dropdownRef = useRef<HTMLDivElement>(null);
-            useEffect(() => {
-              if (dropdownRef.current && (hoveredCategory === category.name || activeCategory === category.name)) {
-                const el = document.getElementById(`nav-${category.name}`);
-                if (el) {
-                  const rect = el.getBoundingClientRect();
-                  dropdownRef.current.style.left = `${rect.left}px`;
-                  dropdownRef.current.style.top = `${rect.bottom + 8}px`;
-                }
-              }
-            }, [hoveredCategory, activeCategory]);
+<nav
+  className="w-full bg-gradient-to-r from-orange-50 via-orange-100 to-pink-50 border-t border-orange-200 shadow-inner rounded-t-2xl"
+  ref={navLinksRef}
+>
+  <div className="flex items-center justify-center gap-8 px-8 py-2 max-w-7xl mx-auto">
+    {navCategories.map((category, index) => {
+      const dropdownRef = useRef<HTMLDivElement>(null);
 
-            return (
-              <motion.div
-                key={index}
-                id={`nav-${category.name}`}
-                onMouseEnter={() => setHoveredCategory(category.name)}
-                onMouseLeave={() => setHoveredCategory(null)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className="relative"
+      useEffect(() => {
+        if (
+          dropdownRef.current &&
+          (hoveredCategory === category.name || activeCategory === category.name)
+        ) {
+          const el = document.getElementById(`nav-${category.name}`);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            dropdownRef.current.style.left = `${rect.left}px`;
+            dropdownRef.current.style.top = `${rect.bottom + 8}px`;
+          }
+        }
+      }, [hoveredCategory, activeCategory]);
+
+      return (
+        <motion.div
+          key={index}
+          id={`nav-${category.name}`}
+          onMouseEnter={() => setHoveredCategory(category.name)}
+          onMouseLeave={() => setHoveredCategory(null)}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.3 }}
+          className="relative"
+        >
+          <Link
+            href={category.path}
+            className={`text-base font-extrabold tracking-wide uppercase text-black hover:text-orange-600 hover:drop-shadow-md transition-all duration-200 ${activeCategory === category.name ? "text-orange-700" : ""} hidden md:block`}
+            style={{ fontFamily: 'Inter, Segoe UI, Arial, sans-serif' }}
+            onClick={resetNavState}
+            prefetch={false}
+          >
+            {category.name}
+            {(hoveredCategory === category.name || activeCategory === category.name) && (
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-orange-400 to-pink-400 rounded-full w-3/5" />
+            )}
+          </Link>
+
+          {category.dropdown &&
+            (hoveredCategory === category.name || activeCategory === category.name) && (
+              <div
+                ref={dropdownRef}
+                className="fixed min-w-[160px] backdrop-blur-sm bg-white/80 border border-orange-200 rounded-xl shadow-xl z-[2000]"
               >
-                <Link
-                  href={category.path}
-                  className={`text-base font-extrabold tracking-wide uppercase text-black hover:text-orange-400 transition-colors ${activeCategory === category.name ? "text-orange-400" : ""} hidden md:block`}
-                  style={{ fontFamily: 'Inter, Segoe UI, Arial, sans-serif' }}
-                  onClick={resetNavState}
-                  prefetch={false}
-                >
-                  {category.name}
-                  {(hoveredCategory === category.name || activeCategory === category.name) && (
-                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full w-3/5" />
-                  )}
-                </Link>
-                {category.dropdown && (hoveredCategory === category.name || activeCategory === category.name) && (
-                  <div
-                    ref={dropdownRef}
-                    className="fixed min-w-[160px] bg-gray-900 border border-gray-700 rounded-lg shadow-lg z-[2000]"
+                {category.dropdown.map((item, i) => (
+                  <Link
+                    key={i}
+                    href={item.path}
+                    className="block px-4 py-2 text-sm text-black hover:bg-orange-100 hover:text-orange-600 rounded-lg transition"
+                    onClick={resetNavState}
+                    prefetch={false}
                   >
-                    {category.dropdown.map((item, i) => (
-                      <Link
-                        key={i}
-                        href={item.path}
-                        className="block px-4 py-2 text-sm text-gray-200 hover:bg-orange-500/80 hover:text-white rounded-lg"
-                        onClick={resetNavState}
-                        prefetch={false}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </motion.div>
-            );
-          })}
-        </div>
-      </nav>
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+        </motion.div>
+      );
+    })}
+  </div>
+</nav>
+
 
       {/* Mobile Menu with Animations */}
       <AnimatePresence>
