@@ -24,13 +24,13 @@ const heroCards = [
     subtitle: "Keep it casual",
     bg: "bg-[#E6D6F7]",
     textColor: "text-black",
-    image: "/assets/fashion/levis.png",
+    image: "/assets/fashion/ad1.png",
     colSpan: "col-span-1",
     rowSpan: "row-span-2",
   },
   {
     type: "image",
-    image: "/assets/fashion/shoes1.png",
+    image: "/assets/fashion/ad2.png",
     alt: "Adidas Originals LXCON 94 trainers in white",
     bg: "bg-white",
     colSpan: "col-span-1",
@@ -38,7 +38,7 @@ const heroCards = [
   },
   {
     type: "image",
-    image: "/assets/fashion/shoes2.png",
+    image: "/assets/fashion/ad3.png",
     alt: "Lightweight super skinny joggers in light khaki",
     bg: "bg-white",
     colSpan: "col-span-1",
@@ -46,7 +46,7 @@ const heroCards = [
   },
   {
     type: "image",
-    image: "/assets/fashion/scarf.png",
+    image: "/assets/fashion/ad4.png",
     alt: "Scarf Model",
     bg: "bg-white",
     colSpan: "col-span-1",
@@ -54,7 +54,7 @@ const heroCards = [
   },
   {
     type: "image",
-    image: "/assets/fashion/shoes3.png",
+    image: "/assets/fashion/nike.png",
     alt: "Sneakers",
     bg: "bg-white",
     colSpan: "col-span-1",
@@ -76,7 +76,7 @@ const heroCards = [
     subtitle: "",
     bg: "bg-[#F7C6D9]",
     textColor: "text-black",
-    image: "/assets/fashion/textures.png",
+    image: "/assets/fashion/ad5.png",
     colSpan: "col-span-1",
     rowSpan: "row-span-1",
   },
@@ -151,52 +151,37 @@ const FashionHero: React.FC = () => {
       <div className=" flex flex-col items-center py-8 w-full">
         <div className="w-full max-w-6xl grid grid-cols-2 md:grid-cols-4 gap-5 auto-rows-[140px] md:auto-rows-[180px]">
           {heroCards.map((card, idx) => {
-            if (card.type === "banner") {
-              return (
-                <div 
-                  key={idx} 
-                  className={`rounded-2xl flex items-center justify-center font-extrabold text-2xl md:text-3xl ${card.bg} ${card.textColor} ${card.colSpan} ${card.rowSpan} relative overflow-hidden shadow-lg cursor-pointer transition-transform hover:scale-105`}
-                  onClick={() => handleCardClick(card, idx)}
-                >
-                  {card.icon && (
-                    <span className="absolute left-4 top-4 text-3xl">⚡</span>
+            // Use card.image for all types, fallback to a default ad image if missing
+            const bgImage = card.image || '/assets/fashion/ad-default.png';
+            return (
+              <div
+                key={idx}
+                className={`rounded-2xl relative overflow-hidden shadow-lg cursor-pointer transition-transform hover:scale-105 flex items-center justify-center ${card.colSpan} ${card.rowSpan}`}
+                style={{ background: `url('${bgImage}') center/cover no-repeat` }}
+                onClick={() => handleCardClick(card, idx)}
+              >
+                <div className="absolute inset-0 bg-black/10" />
+                <div className="relative z-10 w-full h-full flex flex-col justify-center items-center p-4">
+                  {/* Overlay text/icons for each card type */}
+                  {card.type === 'banner' && (
+                    <>
+                      {card.icon && <span className="absolute left-4 top-4 text-3xl">⚡</span>}
+                      <span className="font-extrabold text-2xl md:text-3xl text-black text-center drop-shadow-lg">{card.text}</span>
+                      {card.icon && <span className="absolute right-4 bottom-4 text-3xl">⚡</span>}
+                    </>
                   )}
-                  <span className="z-10">{card.text}</span>
-                  {card.icon && (
-                    <span className="absolute right-4 bottom-4 text-3xl">⚡</span>
+                  {card.type === 'card' && (
+                    <>
+                      <div className="font-bold text-lg md:text-xl mb-1 text-black drop-shadow-lg text-center w-full">{card.title}</div>
+                      <div className="text-sm md:text-base opacity-80 text-black text-center w-full">{card.subtitle}</div>
+                    </>
                   )}
-                </div>
-              );
-            }
-            if (card.type === "card") {
-              return (
-                <div 
-                  key={idx} 
-                  className={`rounded-2xl flex flex-col justify-between p-4 ${card.bg} ${card.textColor} ${card.colSpan} ${card.rowSpan} shadow-lg relative overflow-hidden cursor-pointer transition-transform hover:scale-105`}
-                  onClick={() => handleCardClick(card, idx)}
-                >
-                  <div>
-                    <div className="font-bold text-lg md:text-xl mb-1">{card.title}</div>
-                    <div className="text-sm md:text-base opacity-70">{card.subtitle}</div>
-                  </div>
-                  {card.image && (
-                    <img src={card.image} alt={card.title} className="absolute right-2 bottom-2 w-20 h-20 md:w-24 md:h-24 object-contain" />
+                  {card.type === 'image' && card.alt && (
+                    <span className="text-black font-semibold text-lg text-center drop-shadow-lg w-full">{card.alt}</span>
                   )}
                 </div>
-              );
-            }
-            if (card.type === "image") {
-              return (
-                <div 
-                  key={idx} 
-                  className={`rounded-2xl flex items-center justify-center ${card.bg} ${card.colSpan} ${card.rowSpan} shadow-lg overflow-hidden cursor-pointer transition-transform hover:scale-105`}
-                  onClick={() => handleCardClick(card, idx)}
-                >
-                  <img src={card.image} alt={card.alt} className="w-full h-full object-contain" />
-                </div>
-              );
-            }
-            return null;
+              </div>
+            );
           })}
         </div>
         {/* Floating Explore Button */}
