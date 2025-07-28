@@ -6,23 +6,16 @@ const mostViewed = [
         title: "Biba Discount",
         brand: "Biba",
         description: "For everyone • Online • Courses",
-        image: "/assets/mostviewed/biba.png",
+        image: "/assets/mostviewed/biba-carrd.png",
         logo: "/assets/mostviewed/bibalogo.png",
         badge: "Popular",
     },
-    {
-        title: "soxytoes Discount",
-        brand: "soxytoes",
-        description: "For students only • Online • Music",
-        image: "/assets/mostviewed/spotify-card.png",
-        logo: "/assets/mostviewed/spotify-logo.png",
-        badge: null,
-    },
+   
     {
         title: "glued Discount",
         brand: "glued",
         description: "For gamers • Online • Gaming",
-        image: "/assets/mostviewed/glued.png",
+        image: "/assets/mostviewed/gllued.png",
         logo: "/assets/mostviewed/glued-logo.png",
         badge: "Top Rated",
     },
@@ -30,18 +23,19 @@ const mostViewed = [
         title: "muscle junkie Discount",
         brand: "muscle junkie",
         description: "For students gym-goers • Online • Fitness",
-        image: "/assets/mostviewed/muscle-junkie-card.png",
-        logo: "/assets/mostviewed/muscle-junkie-logo.png",
+        image: "/assets/mostviewed/musclejunkie.png",
+        logo: "/assets/mostviewed/musclejunkielogo.png",
         badge: null,
     },
-    {
-        title: "Swiggy One Student Plan",
-        brand: "Swiggy",
-        description: "For students only • Online • Food & Dining",
-        image: "/assets/mostviewed/swiggy-card.png",
-        logo: "/assets/mostviewed/swiggy-logo.png",
+     {
+        title: "soxytoes Discount",
+        brand: "soxytoes",
+        description: "For students only • Online • Music",
+        image: "/assets/mostviewed/soxytoes.jpg",
+        logo: "/assets/mostviewed/soxytoes-logo.png",
         badge: null,
     },
+   
 ];
 
 export default function MostViewedDiscounts() {
