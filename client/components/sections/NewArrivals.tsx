@@ -3,27 +3,27 @@ import Image from "next/image";
 
 const newArrivals = [
     {
-        title: "3 month subscription giveaway",
-        brand: "Coursera",
+        title: "Lakme Salon Discount",
+        brand: "Lakme Salon",
         description: "For anyone to use • Online • Study & Stationery",
-        image: "/assets/newarrivals/coursera-card.png",
-        logo: "/assets/newarrivals/coursera-logo.png",
-        badge: "Only on SB",
+        image: "/assets/newarrivals/lakmesalon.jpg",
+        logo: "/assets/newarrivals/lakmelogo.png",
+        badge: "Only on brokeBro",
     },
     {
-        title: "15% off MSL+",
-        brand: "My Study Life",
-        description: "For students only • Online • Tech & Mobile",
-        image: "/assets/newarrivals/msl-card.png",
-        logo: "/assets/newarrivals/msl-logo.png",
+        title: "soxytoes Discount",
+        brand: "soxytoes",
+        description: "For students only ",
+        image: "/assets/newarrivals/soxytoes.jpg",
+        logo: "/assets/newarrivals/soxytoes-logo.png",
         badge: null,
     },
     {
-        title: "Free 1 Year Grammarly Premium",
-        brand: "Grammarly",
-        description: "For students • Online • Writing Tools",
-        image: "/assets/newarrivals/grammarly-card.png",
-        logo: "/assets/newarrivals/grammarly-logo.png",
+        title: "lakme Discount",
+        brand: "Lakme",
+        description: "For students • Online • Beauty & Personal Care",
+        image: "/assets/newarrivals/lakme.png",
+        logo: "/assets/newarrivals/lakmelogo.png",
         badge: "Student Exclusive",
     },
     {
@@ -68,7 +68,7 @@ export default function NewArrivals() {
     };
 
     return (
-        <section className="w-full bg-white pt-4 pb-8 -mt-6">
+        <section className="w-full bg-white pt-4 pb-8 mt-14">
             <div className="max-w-7xl mx-auto px-4">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">New Arrivals</h2>

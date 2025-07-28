@@ -213,6 +213,7 @@ export default function NavbarClient({ user }: { user: any }) {
   return (
     <header
       className={`w-full z-50 bg-black border-b border-gray-200 transition-transform duration-500 ${showNavbar ? "translate-y-0" : "-translate-y-full"}`}
+      style={{ position: 'sticky', top: 0 }}
     >
       {/* Top Row: Logo, Country, Search, Auth */}
       <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto" ref={navContainerRef}>
@@ -347,6 +348,7 @@ export default function NavbarClient({ user }: { user: any }) {
       </div>
 
       {/* Second Row: Nav Links */}
+      {/* Desktop Nav Links */}
       <nav className="w-full bg-white border-t border-gray-200" ref={navLinksRef}>
         <div className="flex items-center justify-center gap-8 px-8 py-2 max-w-7xl mx-auto">
           {navCategories.map((category, index) => {
@@ -375,7 +377,7 @@ export default function NavbarClient({ user }: { user: any }) {
               >
                 <Link
                   href={category.path}
-                  className={`text-base font-extrabold tracking-wide uppercase text-black hover:text-orange-400 transition-colors ${activeCategory === category.name ? "text-orange-400" : ""}`}
+                  className={`text-base font-extrabold tracking-wide uppercase text-black hover:text-orange-400 transition-colors ${activeCategory === category.name ? "text-orange-400" : ""} hidden md:block`}
                   style={{ fontFamily: 'Inter, Segoe UI, Arial, sans-serif' }}
                   onClick={resetNavState}
                   prefetch={false}
@@ -413,9 +415,9 @@ export default function NavbarClient({ user }: { user: any }) {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            className="md:hidden bg-gradient-to-b from-black/95 to-black backdrop-blur-lg absolute w-full shadow-lg overflow-hidden"
+            className="fixed inset-0 md:hidden bg-gradient-to-b from-black/95 to-black backdrop-blur-lg w-full h-full z-[9999] shadow-lg overflow-y-auto"
             initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
+            animate={{ height: "100%", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
