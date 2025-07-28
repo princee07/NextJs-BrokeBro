@@ -28,6 +28,24 @@ export const offers: Offer[] = [
     ]
   },
   {
+  title: "Rikhi Ram Instrument Offers",
+  brand: "Rikhi Ram",
+  description: "Indian musical instruments • In-store & Online • Music & Accessories",
+  image: "/assets/newarrivals/rikhiram.jpg",
+  logo: "/assets/newarrivals/rikhiramlogo.png",
+  badge: "Only on brokeBro",
+  discount: "Up to 15% off + Free Accessories",
+  coupon: "RIKHI15",
+  terms: [
+    "Get 10% off on purchases above ₹3000.",
+    "Get 15% off on Indian instruments purchase above ₹5000.",
+    "Free guitar accessories with every guitar purchase.",
+    "Offer valid for a limited time only.",
+    "Cannot be combined with other ongoing offers."
+  ]
+}
+
+  {
     title: "Lakme Salon Discount",
     brand: "Lakme Salon",
     description: "salon services • Online • Beauty & Personal Care",
