@@ -212,7 +212,8 @@ export default function NavbarClient({ user }: { user: any }) {
 
   return (
     <header
-      className={`w-full z-50 bg-black border-b border-gray-200 transition-transform duration-500 ${showNavbar ? "translate-y-0" : "-translate-y-full"}`}
+      className={`w-full z-50  bobg-gradient-to-r from-orange-400 via-yellow-300 to-orange-400 text-black shadow-md
+rder-b border-gray-200 transition-transform duration-500 ${showNavbar ? "translate-y-0" : "-translate-y-full"}`}
     >
       {/* Top Row: Logo, Country, Search, Auth */}
       <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto" ref={navContainerRef}>
@@ -225,7 +226,7 @@ export default function NavbarClient({ user }: { user: any }) {
           >
             <div className="relative h-[60px] w-[150px]">
               <Image
-                src="/assets/images/brokebro.png"
+                src="/assets/images/remove.png"
                 alt="BrokeBro Logo"
                 fill
                 style={{ objectFit: "contain", objectPosition: "left center" }}
