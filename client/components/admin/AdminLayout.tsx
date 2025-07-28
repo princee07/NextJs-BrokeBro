@@ -13,7 +13,8 @@ import {
     Shield,
     BarChart3,
     FileText,
-    Bell
+    Bell,
+    MousePointer
 } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -58,6 +59,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             href: '/admin/verification',
             icon: Users,
             current: pathname === '/admin/verification'
+        },
+        {
+            name: 'Click Analytics',
+            href: '/admin/click-analytics',
+            icon: MousePointer,
+            current: pathname === '/admin/click-analytics'
         },
         {
             name: 'Analytics',

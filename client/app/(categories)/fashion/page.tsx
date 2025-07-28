@@ -6,6 +6,7 @@ import ProductSection from "./ProductSection";
 import MensFashionSection from "./MensFashionSection";
 import WomensFashionSection from "./WomensFashionSection";
 import BeautySection from "./BeautySection";
+import { useClickTracker } from "@/hooks/useClickTracker";
 
 const heroCards = [
   {
@@ -82,6 +83,69 @@ const heroCards = [
 ];
 
 const FashionHero: React.FC = () => {
+  const { trackClick } = useClickTracker();
+
+  const handleCardClick = (card: any, index: number) => {
+    const cardIdentifier = card.type === 'banner' 
+      ? `banner-${index}`
+      : card.type === 'card' 
+        ? `card-${card.title || index}`
+        : `image-${card.alt || index}`;
+
+    trackClick('hero', cardIdentifier, {
+      // Basic card info
+      title: card.title || card.text,
+      subtitle: card.subtitle,
+      image: card.image,
+      type: card.type,
+      category: 'fashion',
+      
+      // Card styling and layout
+      bg: card.bg,
+      textColor: card.textColor,
+      icon: card.icon,
+      colSpan: card.colSpan,
+      rowSpan: card.rowSpan,
+      alt: card.alt,
+      
+      // Position and context
+      position: `hero_position_${index}`,
+      cardSize: `${card.colSpan}_${card.rowSpan}`,
+      
+      // Additional metadata based on card type
+      ...(card.type === 'banner' && {
+        bannerText: card.text,
+        bannerType: 'promotional',
+        hasLightningIcon: card.icon,
+      }),
+      
+      ...(card.type === 'card' && {
+        cardTitle: card.title,
+        cardSubtitle: card.subtitle,
+        theme: card.title?.includes('Winter') ? 'seasonal' : 
+               card.title?.includes('Knitwear') ? 'clothing' :
+               card.title?.includes('Textures') ? 'material' : 'general'
+      }),
+      
+      ...(card.type === 'image' && {
+        imageAlt: card.alt,
+        productType: card.alt?.includes('shoes') ? 'footwear' :
+                    card.alt?.includes('trainers') ? 'sports' :
+                    card.alt?.includes('joggers') ? 'activewear' :
+                    card.alt?.includes('Scarf') ? 'accessories' : 'unknown'
+      }),
+      
+      // Tags for categorization
+      tags: [
+        'hero-section',
+        'fashion',
+        card.type,
+        ...(card.title ? [card.title.toLowerCase().replace(/\s+/g, '-')] : []),
+        ...(card.alt ? [card.alt.toLowerCase().replace(/\s+/g, '-')] : [])
+      ].filter(Boolean)
+    });
+  };
+
   return (
     <div className="min-h-screen bg-[#FFFCF7] w-full flex flex-col items-center">
       <div className=" flex flex-col items-center py-8 w-full">
@@ -89,7 +153,11 @@ const FashionHero: React.FC = () => {
           {heroCards.map((card, idx) => {
             if (card.type === "banner") {
               return (
-                <div key={idx} className={`rounded-2xl flex items-center justify-center font-extrabold text-2xl md:text-3xl ${card.bg} ${card.textColor} ${card.colSpan} ${card.rowSpan} relative overflow-hidden shadow-lg`}>
+                <div 
+                  key={idx} 
+                  className={`rounded-2xl flex items-center justify-center font-extrabold text-2xl md:text-3xl ${card.bg} ${card.textColor} ${card.colSpan} ${card.rowSpan} relative overflow-hidden shadow-lg cursor-pointer transition-transform hover:scale-105`}
+                  onClick={() => handleCardClick(card, idx)}
+                >
                   {card.icon && (
                     <span className="absolute left-4 top-4 text-3xl">⚡</span>
                   )}
@@ -102,7 +170,11 @@ const FashionHero: React.FC = () => {
             }
             if (card.type === "card") {
               return (
-                <div key={idx} className={`rounded-2xl flex flex-col justify-between p-4 ${card.bg} ${card.textColor} ${card.colSpan} ${card.rowSpan} shadow-lg relative overflow-hidden`}>
+                <div 
+                  key={idx} 
+                  className={`rounded-2xl flex flex-col justify-between p-4 ${card.bg} ${card.textColor} ${card.colSpan} ${card.rowSpan} shadow-lg relative overflow-hidden cursor-pointer transition-transform hover:scale-105`}
+                  onClick={() => handleCardClick(card, idx)}
+                >
                   <div>
                     <div className="font-bold text-lg md:text-xl mb-1">{card.title}</div>
                     <div className="text-sm md:text-base opacity-70">{card.subtitle}</div>
@@ -115,7 +187,11 @@ const FashionHero: React.FC = () => {
             }
             if (card.type === "image") {
               return (
-                <div key={idx} className={`rounded-2xl flex items-center justify-center ${card.bg} ${card.colSpan} ${card.rowSpan} shadow-lg overflow-hidden`}>
+                <div 
+                  key={idx} 
+                  className={`rounded-2xl flex items-center justify-center ${card.bg} ${card.colSpan} ${card.rowSpan} shadow-lg overflow-hidden cursor-pointer transition-transform hover:scale-105`}
+                  onClick={() => handleCardClick(card, idx)}
+                >
                   <img src={card.image} alt={card.alt} className="w-full h-full object-contain" />
                 </div>
               );
