@@ -241,7 +241,7 @@ export default function NavbarClient({ user }: { user: any }) {
 
   return (
     <header
-      className={`w-full z-50 bg-[#FAFAF7] text-black shadow-md border-b border-gray-200 transition-transform duration-500 ${
+      className={`w-full z-50 bg-gradient-to-br from-[#fff8f0] via-[#fff0e6] to-[#ffeedd] text-black shadow-md border-b border-gray-200 transition-transform duration-500 ${
         showNavbar ? "translate-y-0" : "-translate-y-full"
       }`}
     >
@@ -266,31 +266,30 @@ export default function NavbarClient({ user }: { user: any }) {
           </motion.div>
         </Link>
         {/* Search Bar */}
-        <div className="flex-1 flex justify-center mx-6">
-          <div className="w-full max-w-xl relative">
-            <input
-              type="text"
-              className="w-full bg-gray-200 border border-gray-700 rounded-full py-2 pl-10 pr-16 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-200 shadow-sm"
-              placeholder="Brands, items or categories"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && searchQuery.trim()) {
-                  handleSmartSearch(searchQuery.trim());
-                }
-              }}
-            />
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
-                <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            </span>
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center">
-              <AnimatedEyes className="text-white" />
-            </div>
-          </div>
-        </div>
+         <div className="w-full max-w-xl relative">
+    <input
+      type="text"
+      className="w-full bg-white border border-orange-500 rounded-full py-2 pl-10 pr-16 text-black placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-200 shadow-sm"
+      placeholder="Brands, items or categories"
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && searchQuery.trim()) {
+          handleSmartSearch(searchQuery.trim());
+        }
+      }}
+    />
+    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-black">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
+        <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    </span>
+    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center">
+      <AnimatedEyes className="text-black" />
+    </div>
+  </div>
+</div>
         {/* Auth Buttons */}
         <div className="flex items-center gap-3" ref={dropdownRef}>
           {isHydrated ? (
@@ -364,12 +363,12 @@ export default function NavbarClient({ user }: { user: any }) {
             </motion.div>
           </motion.button>
         </div>
-      </div>
+      
 
       {/* Second Row: Nav Links */}
       {/* Desktop Nav Links */}
 <nav
-  className="w-full bg-gradient-to-r from-orange-50 via-orange-100 to-pink-50 border-t border-orange-200 shadow-inner rounded-t-2xl"
+  className="w-full bg-gradient-to-r from-orange-50 via-orange-100 to-pink-50 border-t border-orange-200 shadow-inner"
   ref={navLinksRef}
 >
   <div className="flex items-center justify-center gap-8 px-8 py-2 max-w-7xl mx-auto">
@@ -424,7 +423,7 @@ export default function NavbarClient({ user }: { user: any }) {
                   <Link
                     key={i}
                     href={item.path}
-                    className="block px-4 py-2 text-sm text-black hover:bg-orange-100 hover:text-orange-600 rounded-lg transition"
+                    className="block px-4 py-2 text-sm text-black hover:bg-orange-100 hover:text-orange-600 transition"
                     onClick={resetNavState}
                     prefetch={false}
                   >
