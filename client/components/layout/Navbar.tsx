@@ -783,24 +783,7 @@ rder-b border-gray-200 transition-transform duration-500 ${showNavbar ? "transla
                 </span>
               </button>
 
-              {/* Student Verification */}
-              {!isVerified && (
-                <button
-                  onClick={() => {
-                    setProfileDropdownOpen(false);
-                    setShowVerificationModal(true);
-                  }}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Verify Student Status
-                  <span className="ml-auto text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">
-                    New
-                  </span>
-                </button>
-              )}
+              {/* Student Verification removed as requested */}
 
               <hr className="my-2 border-gray-200" />
 
