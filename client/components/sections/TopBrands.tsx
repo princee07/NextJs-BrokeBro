@@ -140,7 +140,6 @@ const TopBrands = () => {
                       />
                     </div>
                     <p className="text-black font-semibold text-xs text-center mb-1">{brand.name}</p>
-                    <span className="text-orange-500 text-xs font-bold">{brand.discount}</span>
                   </div>
                 </button>
               ))}
@@ -180,7 +179,6 @@ const TopBrands = () => {
                       />
                     </div>
                     <p className="text-black font-semibold text-xs text-center mb-1">{brand.name}</p>
-                    <span className="text-orange-500 text-xs font-bold">{brand.discount}</span>
                   </div>
                 </button>
               ))}
@@ -197,8 +195,7 @@ const TopBrands = () => {
           <div className="flex flex-col items-center text-center p-4">
             <div className="w-full max-w-xs h-40 bg-white rounded-xl flex items-center justify-center mb-4 shadow-lg">
             </div>
-            <h2 className="text-2xl font-extrabold mb-1 text-gray-100 drop-shadow">{selectedBrand.name} Student Discount</h2>
-            <p className="text-lg font-semibold text-pink-400 mb-2">{selectedBrand.discount}</p>
+            <h2 className="text-2xl font-extrabold mb-1 text-gray-100 drop-shadow">{selectedBrand.name}</h2>
             <div className="w-full border-b border-gray-700 my-3"></div>
 
             <a href={selectedBrand.url || '#'} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-200">
