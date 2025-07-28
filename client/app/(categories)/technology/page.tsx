@@ -177,7 +177,7 @@ const EcommerceHero: React.FC = () => {
       {/* Search Bar */}
 
 
-      <div className="py-20 bg-gradient-to-b from-white via-orange-50 to-pink-50 relative overflow-hidden">
+      <div className="mt-10 py-20 bg-gradient-to-b from-white via-orange-50 to-pink-50 relative overflow-hidden">
         {/* Light theme background decorations */}
         <div className="absolute inset-0 opacity-10 pointer-events-none select-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-orange-200 to-pink-200 rounded-full filter blur-3xl"></div>

@@ -1,48 +1,7 @@
 import { useRef } from "react";
 import Image from "next/image";
-
-const mostViewed = [
-    {
-        title: "Flat 40% Off on Udemy",
-        brand: "Udemy",
-        description: "For everyone • Online • Courses",
-        image: "/assets/mostviewed/udemy-card.png",
-        logo: "/assets/mostviewed/udemy-logo.png",
-        badge: "Popular",
-    },
-    {
-        title: "Spotify Premium Student Plan",
-        brand: "Spotify",
-        description: "For students only • Online • Music",
-        image: "/assets/mostviewed/spotify-card.png",
-        logo: "/assets/mostviewed/spotify-logo.png",
-        badge: null,
-    },
-    {
-        title: "50% Off Adobe Creative Cloud",
-        brand: "Adobe",
-        description: "For students & teachers • Online • Design",
-        image: "/assets/mostviewed/adobe-card.png",
-        logo: "/assets/mostviewed/adobe-logo.png",
-        badge: "Top Rated",
-    },
-    {
-        title: "Zomato Pro Student Offer",
-        brand: "Zomato",
-        description: "For students only • Online • Food & Dining",
-        image: "/assets/mostviewed/zomato-card.png",
-        logo: "/assets/mostviewed/zomato-logo.png",
-        badge: null,
-    },
-    {
-        title: "Swiggy One Student Plan",
-        brand: "Swiggy",
-        description: "For students only • Online • Food & Dining",
-        image: "/assets/mostviewed/swiggy-card.png",
-        logo: "/assets/mostviewed/swiggy-logo.png",
-        badge: null,
-    },
-];
+import Link from "next/link";
+import { mostViewed } from "@/data/mostViewed";
 
 export default function MostViewedDiscounts() {
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -57,6 +16,10 @@ export default function MostViewedDiscounts() {
             });
         }
     };
+
+    // Helper to create a slug from brand name
+    const slugify = (str: string) =>
+        str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
     return (
         <section className="w-full bg-white pt-4 pb-8">
@@ -86,9 +49,10 @@ export default function MostViewedDiscounts() {
                     style={{ scrollSnapType: 'x mandatory' }}
                 >
                     {mostViewed.map((item, idx) => (
-                        <div
+                        <Link
                             key={idx}
-                            className="min-w-[340px] max-w-xs bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col flex-shrink-0"
+                            href={`/brands/${slugify(item.brand)}`}
+                            className="min-w-[340px] max-w-xs bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col flex-shrink-0 cursor-pointer transition-transform hover:scale-105"
                             style={{ scrollSnapAlign: 'start' }}
                         >
                             <div className="relative w-full h-48">
@@ -122,7 +86,7 @@ export default function MostViewedDiscounts() {
                                     <div className="text-gray-500 text-xs mb-4">{item.description}</div>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
