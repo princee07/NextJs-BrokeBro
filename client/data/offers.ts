@@ -11,7 +11,7 @@ export interface Offer {
 }
 
 export const offers: Offer[] = [
-   {
+  {
     title: "Desert free for Couple on bill 3k",
     brand: "one8",
     description: "Exclusive discount for couples • Online • Food & Drinks",
@@ -28,22 +28,22 @@ export const offers: Offer[] = [
     ]
   },
   {
-  title: "Rikhi Ram Instrument Offers",
-  brand: "Rikhi Ram",
-  description: "Indian musical instruments • In-store & Online • Music & Accessories",
-  image: "/assets/newarrivals/rikhiram.jpg",
-  logo: "/assets/newarrivals/rikhiramlogo.png",
-  badge: "Only on brokeBro",
-  discount: "Up to 15% off + Free Accessories",
-  coupon: "RIKHI15",
-  terms: [
-    "Get 10% off on purchases above ₹3000.",
-    "Get 15% off on Indian instruments purchase above ₹5000.",
-    "Free guitar accessories with every guitar purchase.",
-    "Offer valid for a limited time only.",
-    "Cannot be combined with other ongoing offers."
-  ]
-},
+    title: "Rikhi Ram Instrument Offers",
+    brand: "Rikhi Ram",
+    description: "Indian musical instruments • In-store & Online • Music & Accessories",
+    image: "/assets/newarrivals/rikhiram.png",
+    logo: "/assets/newarrivals/rikhiram-card.png",
+    badge: "Only on brokeBro",
+    discount: "Up to 15% off + Free Accessories",
+    coupon: "RIKHI15",
+    terms: [
+      "Get 10% off on purchases above ₹3000.",
+      "Get 15% off on Indian instruments purchase above ₹5000.",
+      "Free guitar accessories with every guitar purchase.",
+      "Offer valid for a limited time only.",
+      "Cannot be combined with other ongoing offers."
+    ]
+  },
 
   {
     title: "Lakme Salon Discount",
@@ -189,6 +189,6 @@ export const offers: Offer[] = [
       "See brand website for full details."
     ]
   },
- 
+
   // Add more offers as needed
 ];
