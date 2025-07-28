@@ -2,6 +2,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import { offers } from "@/data/offers";
 import { useUserVerification } from "@/hooks/useUserVerification";
 
@@ -9,9 +10,12 @@ function slugify(str: string) {
   return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
-export default function BrandCouponPage({ params }: { params: { brandSlug: string } }) {
+export default function BrandCouponPage() {
+  const params = useParams();
+  const brandSlug = params.brandSlug as string;
+  
   const offer = offers.find(
-    (o) => slugify(o.brand) === params.brandSlug
+    (o) => slugify(o.brand) === brandSlug
   );
 
   const { isVerified, loading: verificationLoading } = useUserVerification();
