@@ -102,11 +102,11 @@ export default function StudentInfoForm({ initialData, onSubmit }: StudentInfoFo
             className="space-y-6"
         >
             <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                     <User className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">Student Information</h3>
-                <p className="text-gray-400">
+                <h3 className="text-2xl font-bold text-black mb-2">Student Information</h3>
+                <p className="text-gray-600">
                     Please provide your basic student details to begin the verification process
                 </p>
             </div>
@@ -115,21 +115,21 @@ export default function StudentInfoForm({ initialData, onSubmit }: StudentInfoFo
                 {/* Input Fields */}
                 {inputFields.map((field) => (
                     <div key={field.key} className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-300">
+                        <label className="block text-sm font-medium text-gray-700">
                             {field.label}
                         </label>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <field.icon className="h-5 w-5 text-gray-400" />
+                                <field.icon className="h-5 w-5 text-gray-500" />
                             </div>
                             <input
                                 type={field.type}
                                 value={formData[field.key]}
                                 onChange={(e) => handleInputChange(field.key, e.target.value)}
                                 placeholder={field.placeholder}
-                                className={`w-full pl-10 pr-4 py-3 bg-gray-800 border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${errors[field.key]
-                                        ? 'border-red-500 focus:ring-red-500'
-                                        : 'border-gray-600 hover:border-gray-500'
+                                className={`w-full pl-10 pr-4 py-3 bg-white border-2 rounded-lg text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm ${errors[field.key]
+                                        ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+                                        : 'border-gray-300 hover:border-gray-400'
                                     }`}
                             />
                         </div>
@@ -137,7 +137,7 @@ export default function StudentInfoForm({ initialData, onSubmit }: StudentInfoFo
                             <motion.p
                                 initial={{ opacity: 0, y: -5 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="text-red-400 text-sm"
+                                className="text-red-600 text-sm"
                             >
                                 {errors[field.key]}
                             </motion.p>
@@ -147,24 +147,24 @@ export default function StudentInfoForm({ initialData, onSubmit }: StudentInfoFo
 
                 {/* State Dropdown */}
                 <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-300">
+                    <label className="block text-sm font-medium text-gray-700">
                         State
                     </label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <MapPin className="h-5 w-5 text-gray-400" />
+                            <MapPin className="h-5 w-5 text-gray-500" />
                         </div>
                         <select
                             value={formData.state}
                             onChange={(e) => handleInputChange('state', e.target.value)}
-                            className={`w-full pl-10 pr-4 py-3 bg-gray-800 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none ${errors.state
-                                    ? 'border-red-500 focus:ring-red-500'
-                                    : 'border-gray-600 hover:border-gray-500'
+                            className={`w-full pl-10 pr-4 py-3 bg-white border-2 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all appearance-none shadow-sm ${errors.state
+                                    ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+                                    : 'border-gray-300 hover:border-gray-400'
                                 }`}
                         >
-                            <option value="" className="text-gray-500">Select your state</option>
+                            <option value="" className="text-gray-400">Select your state</option>
                             {indianStates.map((state) => (
-                                <option key={state} value={state} className="text-white">
+                                <option key={state} value={state} className="text-black">
                                     {state}
                                 </option>
                             ))}
@@ -174,7 +174,7 @@ export default function StudentInfoForm({ initialData, onSubmit }: StudentInfoFo
                         <motion.p
                             initial={{ opacity: 0, y: -5 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-red-400 text-sm"
+                            className="text-red-600 text-sm"
                         >
                             {errors.state}
                         </motion.p>
@@ -186,7 +186,7 @@ export default function StudentInfoForm({ initialData, onSubmit }: StudentInfoFo
                     type="submit"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 group"
+                    className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 group shadow-lg hover:shadow-xl"
                 >
                     Continue to Document Upload
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -194,14 +194,14 @@ export default function StudentInfoForm({ initialData, onSubmit }: StudentInfoFo
             </form>
 
             {/* Info Box */}
-            <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 shadow-sm">
                 <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
                         <User className="w-3 h-3 text-white" />
                     </div>
                     <div>
-                        <h4 className="text-blue-400 font-medium mb-1">Why do we need this information?</h4>
-                        <p className="text-gray-400 text-sm">
+                        <h4 className="text-blue-700 font-medium mb-1">Why do we need this information?</h4>
+                        <p className="text-gray-600 text-sm">
                             This information helps us verify your student status and provide you with exclusive
                             student discounts and benefits. All information is kept secure and confidential.
                         </p>

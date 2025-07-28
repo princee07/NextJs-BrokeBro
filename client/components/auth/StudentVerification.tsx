@@ -185,28 +185,28 @@ export default function StudentVerification({
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="bg-gray-900 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden border border-gray-700"
+                className="bg-gray-50 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden border-2 border-gray-300 shadow-2xl"
             >
                 {/* Header */}
                 <div className="bg-gradient-to-r from-orange-500 to-amber-600 p-6">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                            <div className="w-12 h-12 bg-white/30 rounded-full flex items-center justify-center shadow-md">
                                 <GraduationCap className="w-6 h-6 text-white" />
                             </div>
                             <div>
                                 <h2 className="text-2xl font-bold text-white">Student Verification</h2>
-                                <p className="text-white/80">Verify your student status for exclusive benefits</p>
+                                <p className="text-white/90">Verify your student status for exclusive benefits</p>
                             </div>
                         </div>
                         <button
                             onClick={onClose}
-                            className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+                            className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white hover:bg-white/30 transition-colors shadow-sm"
                         >
                             <XCircle className="w-5 h-5" />
                         </button>
@@ -214,13 +214,13 @@ export default function StudentVerification({
                 </div>
 
                 {/* Progress Bar */}
-                <div className="px-6 py-4 bg-gray-800/50">
+                <div className="px-6 py-4 bg-white border-b border-gray-200">
                     <div className="flex items-center justify-between mb-4">
                         {stages.map((stage, index) => (
                             <div key={stage.stage} className="flex items-center">
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${currentStage >= stage.stage
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all shadow-sm ${currentStage >= stage.stage
                                     ? 'border-orange-500 bg-orange-500 text-white'
-                                    : 'border-gray-600 bg-gray-700 text-gray-400'
+                                    : 'border-gray-400 bg-gray-100 text-gray-600'
                                     }`}>
                                     {currentStage > stage.stage ? (
                                         <CheckCircle className="w-5 h-5" />
@@ -229,24 +229,24 @@ export default function StudentVerification({
                                     )}
                                 </div>
                                 {index < stages.length - 1 && (
-                                    <div className={`w-20 h-1 mx-2 rounded-full transition-all ${currentStage > stage.stage ? 'bg-orange-500' : 'bg-gray-600'
+                                    <div className={`w-20 h-1 mx-2 rounded-full transition-all ${currentStage > stage.stage ? 'bg-orange-500' : 'bg-gray-300'
                                         }`} />
                                 )}
                             </div>
                         ))}
                     </div>
                     <div className="text-center">
-                        <h3 className="text-white font-semibold">
+                        <h3 className="text-black font-semibold">
                             {stages[currentStage - 1]?.title}
                         </h3>
-                        <p className="text-gray-400 text-sm">
+                        <p className="text-gray-600 text-sm">
                             {stages[currentStage - 1]?.description}
                         </p>
                     </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-6 max-h-[60vh] overflow-y-auto">
+                <div className="p-6 max-h-[60vh] overflow-y-auto bg-gray-50">
                     <AnimatePresence mode="wait">
                         {currentStage === 1 && (
                             <StudentInfoForm
