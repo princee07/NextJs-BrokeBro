@@ -289,7 +289,7 @@ export default function NavbarClient({ user }: { user: any }) {
       <AnimatedEyes className="text-black" />
     </div>
   </div>
-</div>
+
         {/* Auth Buttons */}
         <div className="flex items-center gap-3" ref={dropdownRef}>
           {isHydrated ? (
@@ -363,7 +363,7 @@ export default function NavbarClient({ user }: { user: any }) {
             </motion.div>
           </motion.button>
         </div>
-      
+      </div>
 
       {/* Second Row: Nav Links */}
       {/* Desktop Nav Links */}
