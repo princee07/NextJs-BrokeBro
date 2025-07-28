@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { offers } from "@/data/offers";
+import { mostViewed } from "@/data/mostViewed";
 
 export default function MostViewedDiscounts() {
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -48,7 +48,7 @@ export default function MostViewedDiscounts() {
                     className="flex gap-6 overflow-x-auto scrollbar-hide pb-2"
                     style={{ scrollSnapType: 'x mandatory' }}
                 >
-                    {offers.map((item, idx) => (
+                    {mostViewed.map((item, idx) => (
                         <Link
                             key={idx}
                             href={`/brands/${slugify(item.brand)}`}

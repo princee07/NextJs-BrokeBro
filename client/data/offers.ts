@@ -91,5 +91,69 @@ export const offers: Offer[] = [
       "See brand website for full details."
     ]
   },
+  {
+    title: "Biba Discount",
+    brand: "Biba",
+    description: "For everyone • Online • Courses",
+    image: "/assets/mostviewed/biba-carrd.png",
+    logo: "/assets/mostviewed/bibalogo.png",
+    badge: "Popular",
+    discount: "10% off",
+    coupon: "BIBA10",
+    terms: [
+      "Coupon valid for a limited time only.",
+      "Applicable only on select products/categories.",
+      "Cannot be combined with other offers.",
+      "See brand website for full details."
+    ]
+  },
+  {
+    title: "glued Discount",
+    brand: "glued",
+    description: "For gamers • Online • Gaming",
+    image: "/assets/mostviewed/gllued.png",
+    logo: "/assets/mostviewed/glued-logo.png",
+    badge: "Top Rated",
+    discount: "15% off",
+    coupon: "GLUED15",
+    terms: [
+      "Coupon valid for a limited time only.",
+      "Applicable only on select products/categories.",
+      "Cannot be combined with other offers.",
+      "See brand website for full details."
+    ]
+  },
+  {
+    title: "muscle junkie Discount",
+    brand: "muscle junkie",
+    description: "For students gym-goers • Online • Fitness",
+    image: "/assets/mostviewed/musclejunkie.png",
+    logo: "/assets/mostviewed/musclejunkielogo.png",
+    badge: null,
+    discount: "8% off",
+    coupon: "MUSCLE8",
+    terms: [
+      "Coupon valid for a limited time only.",
+      "Applicable only on select products/categories.",
+      "Cannot be combined with other offers.",
+      "See brand website for full details."
+    ]
+  },
+  {
+    title: "soxytoes Discount",
+    brand: "soxytoes",
+    description: "For students only • Online • Music",
+    image: "/assets/mostviewed/soxytoes.jpg",
+    logo: "/assets/mostviewed/soxytoes-logo.png",
+    badge: null,
+    discount: "10% off",
+    coupon: "SOXY10",
+    terms: [
+      "Coupon valid for a limited time only.",
+      "Applicable only on select products/categories.",
+      "Cannot be combined with other offers.",
+      "See brand website for full details."
+    ]
+  },
   // Add more offers as needed
 ];
