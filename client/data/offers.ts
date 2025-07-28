@@ -43,7 +43,7 @@ export const offers: Offer[] = [
     "Offer valid for a limited time only.",
     "Cannot be combined with other ongoing offers."
   ]
-}
+},
 
   {
     title: "Lakme Salon Discount",

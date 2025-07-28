@@ -261,8 +261,8 @@ export default function EventsPage() {
       <Modal isOpen={danceModalOpen} onClose={() => setDanceModalOpen(false)}>
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-center mb-2 bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">BrokeBro 1-Minute Dance Challenge</h2>
-          <div className="text-center text-gray-900">College Edition – Show your best moves!</div>
-          <div className="text-left text-gray-900">
+          <div className="text-center text-white">College Edition – Show your best moves!</div>
+          <div className="text-left text-white">
             <div className="font-bold mb-1">🏆 Prizes</div>
             <div>🥇 Solo: ₹3,000 + Merch</div>
             <div>🥇 Group: ₹5,000 + Merch</div>
