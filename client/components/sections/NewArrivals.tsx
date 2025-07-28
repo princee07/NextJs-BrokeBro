@@ -27,29 +27,22 @@ const newArrivals = [
         badge: "Student Exclusive",
     },
     {
-        title: "20% off Canva Pro",
-        brand: "Canva",
-        description: "For students & educators • Online • Design",
-        image: "/assets/newarrivals/canva-card.png",
-        logo: "/assets/newarrivals/canva-logo.png",
+        title: "salty Discount",
+        brand: "Salty",
+        description: "For students & educators • Online • Fashion",
+        image: "/assets/newarrivals/salty-card.png",
+        logo: "/assets/newarrivals/salty-logo.png",
         badge: null,
     },
     {
-        title: "Amazon Prime Student Offer",
-        brand: "Amazon Prime",
-        description: "For students only • Online • Entertainment",
-        image: "/assets/newarrivals/prime-card.png",
-        logo: "/assets/newarrivals/prime-logo.png",
+        title: "Nike Discount",
+        brand: "Nike",
+        description: "For students only • Online • Fashion",
+        image: "/assets/newarrivals/nike-card.png",
+        logo: "/assets/newarrivals/nike-logo.png",
         badge: "Limited Time",
     },
-    {
-        title: "50% off Skillshare Annual Plan",
-        brand: "Skillshare",
-        description: "For anyone • Online • Courses",
-        image: "/assets/newarrivals/skillshare-card.png",
-        logo: "/assets/newarrivals/skillshare-logo.png",
-        badge: null,
-    },
+   
 ];
 
 
