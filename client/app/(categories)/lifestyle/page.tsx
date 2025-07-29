@@ -6,10 +6,10 @@ import DreamDestinationSection from "./DreamDestinationSection";
 
 const LifestyleHero = () => (
   <section className="relative w-full min-h-[60vh] flex items-center justify-center bg-gradient-to-br from-[#5B5BF6] to-[#7F5CFF] overflow-hidden pb-0">
-    <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-between px-6 py-16 mx-auto">
+    <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-between px-6 py-0 mt-0 mb-0 mx-auto">
       {/* Left: Text */}
       <div className="flex-1 text-left z-10">
-        <h1 className="text-2xl md:text-5xl font-extrabold text-white leading-tight mb-6 drop-shadow-lg mt-18">
+        <h1 className="text-2xl md:text-5xl font-extrabold text-white leading-tight mb-6 drop-shadow-lg mt-14">
           Discover, Experience & Live<br />
           Your Best Life with<br />
           <span className="text-yellow-300">BrokeBro</span>
@@ -17,11 +17,11 @@ const LifestyleHero = () => (
 
       </div>
       {/* Right: Image/Decor */}
-      <div className="flex-1 flex items-center justify-center relative mt-10 md:mt-0">
+      <div className="flex-1 flex items-center justify-center relative mt-0 md:mt-0">
         <img
           src="/assets/lifestyle/hero.png"
           alt="Travel Lifestyle"
-          className="w-[340px] md:w-[420px] h-auto z-10 drop-shadow-2xl"
+          className="w-[260px] md:w-[340px] h-auto z-10 drop-shadow-2xl"
         />
         {/* Decorative elements (optional) */}
         <div className="absolute left-0 top-0 w-40 h-40 bg-white/10 rounded-full blur-2xl -z-1" />
