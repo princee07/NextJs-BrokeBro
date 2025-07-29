@@ -8,7 +8,7 @@ const initialEvents = [
   {
     id: 1,
     title: 'Dance Competition',
-    date: '5-august-2025',
+    date: '5-August-2025',
     location: 'BrokeBro Venue',
     price: 'FREE',
     image: '/assets/dance/image.png',
