@@ -72,7 +72,12 @@ export default function GymProductsSection() {
                             <Image src={product.image} alt={product.name} layout="fill" objectFit="contain" className="rounded-lg" />
                         </div>
                         <span className="text-base text-gray-700 font-medium mb-2 tracking-wide">Brand: {product.brand}</span>
-                        <button className="mt-3 px-6 py-2 bg-yellow-400 text-black rounded-lg font-semibold shadow cursor-pointer text-lg hover:bg-yellow-500 transition-colors">Get Discount</button>
+                        <button
+                            className="mt-3 px-6 py-2 bg-yellow-400 text-black rounded-lg font-semibold shadow cursor-pointer text-lg hover:bg-yellow-500 transition-colors"
+                            onClick={() => window.open('https://nutrabay.goaffpro.com/', '_blank')}
+                        >
+                            Get Discount
+                        </button>
                     </div>
                 ))}
             </div>
