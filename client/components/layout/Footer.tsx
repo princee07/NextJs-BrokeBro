@@ -9,10 +9,12 @@ export default function Footer() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="bg-gradient-to-br from-[#fff8f0] via-[#fff0e6] to-[#ffeedd] text-gray-800 border-t border-orange-200 pt-12 pb-8 px-6 mt-12"
+      className="border-t border-orange-200 pt-20 pb-0 px-0 mt-12 w-full min-h-[400px]"
       role="contentinfo"
     >
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
+      {/* Upper section: black background */}
+      <div className="bg-black text-white w-full py-10">
+        <div className="w-full grid grid-cols-1 md:grid-cols-5 gap-12 px-12">
         {/* Logo & Description */}
         <div className="flex flex-col items-start md:items-start md:col-span-2 mb-8 md:mb-0 pl-4 md:pl-8">
           <Link href="/" className="mb-4 block">
@@ -23,15 +25,13 @@ export default function Footer() {
               style={{ objectFit: "contain" }}
             />
           </Link>
-          <p className="text-sm text-gray-700 max-w-xs leading-relaxed">
-            BrokeBro is India's student-first platform for internships, deals,
-            and career resources. Empowering students to hustle, save, and grow
-            smarter every day.
+          <p className="text-sm text-white max-w-xs leading-relaxed font-medium">
+            Welcome to BrokeBro – India's #1 student platform for internships, deals, and career resources. Join our community to hustle, save, and grow smarter every day. Your journey to success starts here!
           </p>
         </div>
 
         {/* Footer Links */}
-        <div className="md:col-span-3 md:col-start-3 grid grid-cols-1 sm:grid-cols-3 gap-8">
+      <div className="md:col-span-3 md:col-start-3 grid grid-cols-1 sm:grid-cols-3 gap-8">
           {/* About Us */}
           <div>
             <h3 className="text-lg font-semibold text-orange-600 mb-4 uppercase tracking-wide">
@@ -157,8 +157,12 @@ export default function Footer() {
         </div>
       </div>
 
-     <motion.div
-  className="text-center text-gray-700 text-sm mt-12 border-t border-[#ff9933] pt-6"
+      </div>
+      {/* Yellow line separator */}
+      <div className="border-t border-[#ff9933]" />
+      {/* Lower section: dark gray background */}
+      <motion.div
+        className="bg-[#222] text-white text-center text-sm pt-4 pb-6 w-full"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}

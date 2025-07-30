@@ -186,7 +186,6 @@ export default function NavbarClient({ user }: { user: any }) {
     fetchReferralData();
   };
 
-  // Calculate dropdown position
   const updateDropdownPosition = () => {
     if (userMenuRef.current) {
       const rect = userMenuRef.current.getBoundingClientRect();
@@ -197,7 +196,6 @@ export default function NavbarClient({ user }: { user: any }) {
     }
   };
 
-  // Update position when dropdown opens or page scrolls
   useEffect(() => {
     if (profileDropdownOpen) {
       updateDropdownPosition();
@@ -242,10 +240,9 @@ export default function NavbarClient({ user }: { user: any }) {
 
   return (
     <header
-      className={`w-full z-50 bg-black text-white shadow-md border-b border-gray-200 transition-transform duration-500 ${showNavbar ? "translate-y-0" : "-translate-y-full"
-        }`}
+      className={`fixed top-0 left-0 w-full z-[1050] bg-black text-white shadow-md border-b border-gray-200 transition-transform duration-500 ${showNavbar ? "translate-y-0" : "-translate-y-full"}`}
     >
-      {/* Top Row: Logo, Country, Search, Auth */}
+      {/* Top Row: Logo, Search, Auth */}
       <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto" ref={navContainerRef}>
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 select-none min-w-[120px] md:min-w-[150px]" onClick={resetNavState} prefetch={false}>
@@ -367,7 +364,7 @@ export default function NavbarClient({ user }: { user: any }) {
       {/* Second Row: Nav Links */}
       {/* Desktop Nav Links */}
       <nav
-        className="w-full bg-[#e0e0e0] border-t border-orange-200 shadow-inner"
+        className="w-full bg-[#e0e0e0] border-t border-orange-200 shadow-inner z-50"
         ref={navLinksRef}
       >
         <div className="flex items-center justify-center gap-16 px-8 py-2 max-w-7xl mx-auto">
@@ -437,145 +434,91 @@ export default function NavbarClient({ user }: { user: any }) {
         </div>
       </nav>
 
-
-
       {/* Mobile Menu with Animations */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div
-            className="fixed inset-0 md:hidden bg-[#f9f6f2] backdrop-blur-lg w-full h-full z-[9999] shadow-lg overflow-y-auto"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "100%", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+          <motion.aside
+            className="fixed top-0 left-0 h-screen w-[80vw] max-w-xs z-[1000] bg-white shadow-2xl md:hidden flex flex-col"
+            initial={{ x: '-100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '-100%' }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
-            <div className="container mx-auto px-4 py-3">
+            <div className="flex flex-col py-6 px-4 gap-2 h-full overflow-y-auto">
               {navCategories.map((category, index) => (
-                <motion.div
+                <Link
                   key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  href={category.path}
+                  className="font-bold text-base py-3 px-2 text-black hover:text-orange-600 border-b border-gray-200 hover:bg-orange-50 rounded transition-all duration-200"
+                  onClick={resetNavState}
+                  prefetch={false}
                 >
-                  <Link
-                    href={category.path}
-                    className="block py-3 px-4 text-gray-100 hover:text-white border-b border-orange-500/10 hover:bg-orange-500/5 rounded-lg transition-all duration-200"
-                    onClick={resetNavState}
-                    prefetch={false}
-                  >
-                    <span className="flex items-center gap-3">
-                      <span className="text-orange-400">{category.icon}</span>
-                      <span className="font-medium">{category.name}</span>
-                    </span>
-                  </Link>
-                  {category.dropdown && (
-                    <div className="pl-8">
-                      {category.dropdown.map((item, i) => (
-                        <Link
-                          key={i}
-                          href={item.path}
-                          className="block py-2 px-4 text-sm text-gray-200 hover:bg-orange-500/10 hover:text-white rounded-lg"
-                          onClick={resetNavState}
-                          prefetch={false}
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </motion.div>
+                  {category.name}
+                </Link>
               ))}
-              <div className="mt-4 mb-4 px-2">
-                <div className="bg-gradient-to-r from-black via-black/95 to-black/90 py-2 px-2 border-b border-orange-500/20 shadow-md rounded-xl">
-                  <div className="flex flex-col items-center justify-center relative">
-                    <div className="relative w-full group z-50">
-                      <div className="relative bg-gradient-to-r p-[1.5px] rounded-full overflow-hidden from-orange-500/50 to-orange-600/50 transition-all duration-300">
-                        <div className="relative flex items-center bg-black rounded-full overflow-hidden">
-                          <div
-                            className="absolute left-2 z-10 cursor-pointer flex items-center justify-center h-full w-8"
-                            onClick={() => {
-                              if (searchQuery.trim()) router.push(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
-                            }}
-                            tabIndex={0}
-                            role="button"
-                            aria-label="Search"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5 text-gray-400 transition-colors duration-300 pointer-events-none"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                              />
-                            </svg>
-                          </div>
-                          <input
-                            type="text"
-                            placeholder="Search brands, deals, categories"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter" && searchQuery.trim()) {
-                                handleSmartSearch(searchQuery.trim());
-                              }
-                            }}
-                            className="w-full bg-transparent py-3 pl-10 pr-16 text-white placeholder-gray-400 focus:outline-none focus:placeholder-gray-300"
-                          />
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none z-20 flex items-center">
-                            <AnimatedEyes />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-6 pb-4 px-4 grid grid-cols-2 gap-3">
-                {isHydrated ? (
-                  user ? (
-                    <>
+              <hr className="my-3 border-gray-300" />
+              {isHydrated ? (
+                user ? (
+                  <>
+                    <Link
+                      href="/profile"
+                      className="font-bold text-base py-3 px-2 text-black hover:text-orange-600 border-b border-gray-200 hover:bg-orange-50 rounded transition-all duration-200"
+                      onClick={resetNavState}
+                    >
+                      Account
+                    </Link>
+                    {['prince1362005@gmail.com','lavanya.varshney2104@gmail.com','vrindabindal1212@gmail.com','pickntreatindia@gmail.com','brokebrooindia@gmail.com'].includes(user?.email) && (
                       <Link
-                        href="/profile"
-                        className="block text-center py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm hover:from-orange-600 hover:to-orange-700 transition-colors duration-300"
-                        onClick={() => setMobileMenuOpen(false)}
+                        href="/admin"
+                        className="font-bold text-base py-3 px-2 text-orange-700 border-b border-gray-200 hover:bg-orange-50 rounded transition-all duration-200"
+                        onClick={resetNavState}
                       >
-                        Profile
+                        Admin Panel
                       </Link>
-                      <LogoutLink
-                        postLogoutRedirectURL={LOGOUT_REDIRECT_URL}
-                        className="block text-center py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm hover:from-orange-600 hover:to-orange-700 transition-colors duration-300"
-                      >
-                        Logout
-                      </LogoutLink>
-                    </>
-                  ) : (
-                    <>
-                      <LoginLink
-                        className="block text-center py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm hover:from-orange-600 hover:to-orange-700 transition-colors duration-300"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        Login
-                      </LoginLink>
-                      <RegisterLink
-                        className="block text-center py-2 rounded-lg bg-gradient-to-r from-pink-500 to-pink-600 text-white font-semibold text-sm hover:from-pink-600 hover:to-pink-700 transition-colors duration-300"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        Sign Up
-                      </RegisterLink>
-                    </>
-                  )
+                    )}
+                    <Link
+                      href="/support"
+                      className="font-bold text-base py-3 px-2 text-black hover:text-orange-600 border-b border-gray-200 hover:bg-orange-50 rounded transition-all duration-200"
+                      onClick={resetNavState}
+                    >
+                      Support
+                    </Link>
+                    <Link
+                      href="/about"
+                      className="font-bold text-base py-3 px-2 text-black hover:text-orange-600 border-b border-gray-200 hover:bg-orange-50 rounded transition-all duration-200"
+                      onClick={resetNavState}
+                    >
+                      About
+                    </Link>
+                    <LogoutLink
+                      postLogoutRedirectURL={LOGOUT_REDIRECT_URL}
+                      className="font-bold text-base py-3 px-2 text-red-600 hover:bg-red-50 rounded transition-all duration-200"
+                      onClick={resetNavState}
+                    >
+                      Log out
+                    </LogoutLink>
+                  </>
                 ) : (
-                  <div className="col-span-2 h-10 bg-gray-700/50 rounded-lg animate-pulse"></div>
-                )}
-              </div>
+                  <>
+                    <LoginLink
+                      className="font-bold text-base py-3 px-2 text-black hover:text-orange-600 border-b border-gray-200 hover:bg-orange-50 rounded transition-all duration-200"
+                      onClick={resetNavState}
+                    >
+                      Login
+                    </LoginLink>
+                    <RegisterLink
+                      className="font-bold text-base py-3 px-2 text-black hover:text-orange-600 border-b border-gray-200 hover:bg-orange-50 rounded transition-all duration-200"
+                      onClick={resetNavState}
+                    >
+                      Sign Up
+                    </RegisterLink>
+                  </>
+                )
+              ) : (
+                <div className="h-10 bg-gray-700/50 rounded-lg animate-pulse"></div>
+              )}
             </div>
-          </motion.div>
+          </motion.aside>
         )}
       </AnimatePresence>
 
