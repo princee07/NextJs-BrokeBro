@@ -262,8 +262,8 @@ export default function NavbarClient({ user }: { user: any }) {
             </div>
           </motion.div>
         </Link>
-        {/* Search Bar */}
-        <div className="w-full max-w-xs md:max-w-xl relative flex-shrink">
+        {/* Search Bar - hidden on mobile, visible on md and up */}
+        <div className="w-full max-w-xs md:max-w-xl relative flex-shrink hidden md:block">
           <div className="relative bb-search-bar">
             <BrandSearchBar
               onSelect={(brand) => handleSmartSearch(brand)}
