@@ -28,7 +28,7 @@ export const offers: Offer[] = [
     ]
   },
   {
-  title: "Book an appointment 1000 for any nail service 20% for other services",
+  title: "Book an appointment 1000 for any nail services 20% for other services",
     brand: "Minou Nails",
     description: "Exclusive offer for beauty lovers • In-Store • Nails & Beauty",
     image: "/assets/newarrivals/minousnails.png",
