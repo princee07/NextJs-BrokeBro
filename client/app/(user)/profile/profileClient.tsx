@@ -1,13 +1,11 @@
-
 "use client";
 import "@/styles/fix-oklch.css";
-
 import { useState, useRef } from "react";
 import html2canvas from "html2canvas";
-import QRCode from "react-qr-code";
 import ReferralSection from "@/components/ReferralSection";
 import ProfileVerificationBadge from '@/components/ui/ProfileVerificationBadge';
 import { useStudentVerification } from '@/hooks/useStudentVerification';
+import QRCode from 'react-qr-code';
 
 export default function ProfileClient({ user }: { user: any }) {
   const idCardRef = useRef<HTMLDivElement>(null);
@@ -43,20 +41,24 @@ export default function ProfileClient({ user }: { user: any }) {
   // Get verification status
   const { isVerified } = useStudentVerification();
 
-  // Use the persisted qrCodeData from the user object if available, otherwise generate fallback
-  // Encode as a URL for maximum QR scanner compatibility
-  const qrCodeData = (() => {
-    const data = user?.qrCodeData || {
-      studentId: user?.id,
-      uniqueCode: "fallback",
-    };
-    // Use your actual domain in production
-    const baseUrl = "https://brokebro.com/verify";
-    const params = new URLSearchParams({
-      studentId: data.studentId || "",
-      code: data.uniqueCode || "",
-    });
-    return `${baseUrl}?${params.toString()}`;
+  // Generate a unique verification URL with the user's ID for QR code
+  const generateUniqueVerificationURL = () => {
+    const uniqueID = user?.id || 'demo-user-id';
+    return `${window.location.origin}/verify/${uniqueID}`;
+  };
+
+  // Get the verification URL for QR code
+  const verificationURL = typeof window !== 'undefined' ? generateUniqueVerificationURL() : '';
+
+  // Generate a unique profile link for the user (legacy - kept for compatibility)
+  const userProfileLink = (() => {
+    const name = `${user?.given_name || ''} ${user?.family_name || ''}`.trim() || 'Student';
+    const studentId = user?.id?.slice(-9) || '123456789';
+    const encodedName = encodeURIComponent(name.toLowerCase().replace(/\s+/g, '-'));
+    const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    
+    // Create unique profile URL with name, ID, and date
+    return `https://brokebro.com/profile/${encodedName}-${studentId}-${currentDate}`;
   })();
 
   // Handle resume upload
@@ -128,6 +130,46 @@ export default function ProfileClient({ user }: { user: any }) {
     } catch (error) {
       console.error('Resume removal failed:', error);
       alert('Failed to remove resume. Please try again.');
+    }
+  };
+
+  // Generate verification code for manual entry
+  const generateVerificationCode = () => {
+    const studentId = user?.id?.slice(-9) || '123456789';
+    const date = new Date().toISOString().split('T')[0].replace(/-/g, '');
+    
+    // Super simple: Just date + last 3 digits of student ID
+    const simpleCode = date.slice(-4) + studentId.slice(-3); // MMDD + 3 digits = 7 digits total
+    
+    return simpleCode;
+  };
+
+  const verificationCode = generateVerificationCode();
+
+  // Handle verification code copy
+  const handleCopyVerificationCode = () => {
+    const codeInfo = `BrokeBro Student Verification
+Name: ${user?.given_name} ${user?.family_name}
+Code: ${verificationCode}
+Status: ${isVerified ? 'VERIFIED' : 'PENDING'}
+Valid: ${new Date().toLocaleDateString()}`;
+
+    navigator.clipboard.writeText(codeInfo).then(() => {
+      alert(`Verification details copied to clipboard:\n\n${codeInfo}`);
+    }).catch(() => {
+      alert(`Verification Code: ${verificationCode}\n\nManually copy this code for verification.`);
+    });
+    console.log('Verification Code:', verificationCode);
+  };
+
+  // Handle QR code link copy
+  const handleCopyQRLink = () => {
+    if (verificationURL) {
+      navigator.clipboard.writeText(verificationURL).then(() => {
+        alert(`QR Code link copied to clipboard:\n\n${verificationURL}`);
+      }).catch(() => {
+        alert(`QR Code Link: ${verificationURL}\n\nManually copy this link.`);
+      });
     }
   };
 
@@ -306,37 +348,61 @@ export default function ProfileClient({ user }: { user: any }) {
           <h3 className="text-xl font-bold text-white mb-4 text-center">Your BrokeBro ID Card</h3>
 
           {/* ID Card - Exact replica */}
-          <div id="id-card" ref={idCardRef} className="relative bg-orange-500 rounded-2xl p-0 border-2 border-white shadow-2xl mx-auto max-w-sm aspect-[3/5] overflow-hidden flex flex-col items-center justify-between">
+          <div id="id-card" ref={idCardRef} className="relative bg-orange-500 rounded-2xl p-0 border-2 border-white shadow-2xl mx-auto max-w-sm aspect-[3/5] flex flex-col items-center justify-between">
             {/* BrokeBro Logo Image */}
-            <img src="/assets/internpage/brokebro.png" alt="BrokeBro Logo" className="w-56 mx-auto mt-8 mb-4" style={{ objectFit: 'contain' }} />
+            <img src="/assets/internpage/brokebro.png" alt="BrokeBro Logo" className="w-48 mx-auto mt-6 mb-2" style={{ objectFit: 'contain' }} />
             {/* User Name */}
-            <div className="text-center w-full px-4 mt-8">
-              <div className="text-white font-bold text-xl leading-tight break-words">
+            <div className="text-center w-full px-4 mt-4">
+              <div className="text-white font-bold text-lg leading-tight break-words">
                 {`${user?.given_name || ''} ${user?.family_name || ''}`.trim() || 'Full Name'}
               </div>
             </div>
             {/* Student ID */}
-            <div className="text-center w-full px-4 mt-6">
-              <div className="text-white text-sm font-bold uppercase tracking-wider mb-2">STUDENT ID</div>
-              <div className="text-white font-bold text-lg">
+            <div className="text-center w-full px-4 mt-4">
+              <div className="text-white text-xs font-bold uppercase tracking-wider mb-1">STUDENT ID</div>
+              <div className="text-white font-bold text-base">
                 {user?.id?.slice(-9) || '123456789'}
               </div>
             </div>
-            {/* QR Code Centered */}
-            <div className="flex-1 flex flex-col justify-center items-center w-full mt-8 mb-6">
-              <div className="flex justify-center items-center mt-4 mb-2">
-                <div className="bg-white flex justify-center items-center border-4 border-orange-700 rounded-xl p-4" style={{ width: 170, height: 170 }}>
-                  <QRCode
-                    value={qrCodeData}
-                    size={130}
-                    title="QR Code"
-                    style={{ width: 130, height: 130, display: 'block', background: 'white' }}
-                    bgColor="#ffffff"
-                    fgColor="#000000"
-                    level="H"
-                  />
+            {/* Verification Code Display */}
+            <div className="text-center w-full px-4 mt-3">
+              <div className="text-white text-xs font-bold uppercase tracking-wider mb-1">VERIFICATION CODE</div>
+              <div className="text-white font-bold text-lg tracking-wider">
+                {verificationCode}
+              </div>
+              <div className="text-white text-xs opacity-80 mt-1">
+                Valid: {new Date().toLocaleDateString()}
+              </div>
+            </div>
+            {/* Digital Badge Section with QR Code */}
+            <div className="flex-1 flex flex-col justify-center items-center w-full mt-4 mb-4">
+              <div className="flex justify-center items-center">
+                <div className="bg-white flex flex-col justify-center items-center border-2 border-orange-700 rounded-lg p-4 text-center" style={{ width: 140, height: 140 }}>
+                  <div className="text-orange-600 font-bold text-xs mb-2">QR VERIFICATION</div>
+                  {verificationURL ? (
+                    <div className="flex flex-col items-center">
+                      <QRCode
+                        value={verificationURL}
+                        size={80}
+                        style={{ height: "auto", maxWidth: "80px", width: "80px" }}
+                        viewBox="0 0 256 256"
+                      />
+                      <div className="text-xs text-gray-600 mt-1">Scan to Verify</div>
+                    </div>
+                  ) : (
+                    <div className="text-gray-600 text-center">
+                      <svg className="w-8 h-8 mx-auto mb-1" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM12 12h1.5v1.5H12zM12 15h1.5v1.5H12zM15 12h1.5v1.5H15zM18 12h1.5v1.5H18zM12 18h1.5v1.5H12zM15 15h1.5v1.5H15zM18 15h1.5v1.5H18zM15 18h1.5v1.5H15zM18 18h1.5v1.5H18z"/>
+                      </svg>
+                      <div className="text-xs font-bold">QR CODE</div>
+                      <div className="text-xs">Loading...</div>
+                    </div>
+                  )}
                 </div>
               </div>
+              <p className="text-white text-xs text-center mt-2 px-2">
+                Scan QR code for instant verification
+              </p>
             </div>
             {/* Bottom Banner */}
             <div className="absolute bottom-0 left-0 right-0 bg-orange-500 text-black text-center py-3 font-black text-sm tracking-[0.2em] uppercase">
@@ -346,17 +412,88 @@ export default function ProfileClient({ user }: { user: any }) {
         </div>
 
         {/* Download Button */}
-        <div className="mt-6 text-center">
-          <button
-            className={`bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors text-sm flex items-center gap-2 mx-auto cursor-pointer ${downloading ? 'opacity-60 pointer-events-none' : ''}`}
-            onClick={handleDownloadIdCard}
-            disabled={downloading}
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            {downloading ? 'Downloading...' : 'Download ID Card'}
-          </button>
+        <div className="mt-6 space-y-3">
+          <div className="flex gap-3 justify-center">
+            <button
+              className={`bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors text-sm flex items-center gap-2 cursor-pointer ${downloading ? 'opacity-60 pointer-events-none' : ''}`}
+              onClick={handleDownloadIdCard}
+              disabled={downloading}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              {downloading ? 'Downloading...' : 'Download ID'}
+            </button>
+            
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm flex items-center gap-2"
+              onClick={handleCopyVerificationCode}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v-2l-4.257-2.257A6 6 0 0117 9a2 2 0 012 2z" />
+              </svg>
+              Get Code
+            </button>
+
+            <button
+              className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm flex items-center gap-2"
+              onClick={handleCopyQRLink}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+              QR Link
+            </button>
+          </div>
+          
+          <p className="text-gray-400 text-xs text-center max-w-sm mx-auto">
+            QR Code: Instant verification • 7-digit code: Manual backup • Link: Share verification
+          </p>
+          
+          {/* QR Code Verification Flow Guide */}
+          <div className="bg-gray-800 rounded-lg p-4 mt-4">
+            <h4 className="text-white font-medium mb-3 text-sm">🔄 QR Code Verification Flow</h4>
+            <div className="text-gray-400 text-xs space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">1</span>
+                <span><strong>Generate Unique QR Code:</strong> Points to /verify/{user?.id?.slice(-9) || 'ID'}</span>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <span className="bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">2</span>
+                <span><strong>User Scans QR Code:</strong> Opens verification URL</span>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <span className="bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">3</span>
+                <span><strong>Redirect to BrokeBro Page:</strong> /verify/{user?.id?.slice(-9) || 'ID'}</span>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <span className="bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">4</span>
+                <span><strong>Backend Checks Database:</strong> Is ID verified?</span>
+              </div>
+              
+              <div className="bg-gray-700 p-2 rounded ml-6 mt-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-green-400">✅</span>
+                  <span className="text-green-400"><strong>YES:</strong> Show "Verified by BrokeBro" page</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-red-400">❌</span>
+                  <span className="text-red-400"><strong>NO:</strong> Show "Not Verified" error page</span>
+                </div>
+              </div>
+              
+              <div className="text-yellow-400 mt-3 text-center">
+                <strong>Try it:</strong> {verificationURL ? (
+                  <a href={verificationURL} target="_blank" rel="noopener noreferrer" className="underline">
+                    Test verification page
+                  </a>
+                ) : 'Loading verification URL...'}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
