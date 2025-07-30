@@ -1,15 +1,16 @@
-
 "use client";
 import React from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useUserVerification } from '@/hooks/useUserVerification';
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
+import { motion } from 'framer-motion';
 
 // Dummy data for demonstration
 interface GymDetail {
     name: string;
-    image: string;
+    image: string; // Main page image (e.g., card image)
+    slugImage: string; // Slug page image
     location: string;
     address: string;
     about: string;
@@ -22,7 +23,8 @@ interface GymDetail {
 const gymDetails: { [key: string]: GymDetail } = {
     'anytime-fitness': {
         name: 'Anytime Fitness',
-        image: '/assets/gym/anytime.png',
+        image: '/assets/gym/anytime.png', // Main page image
+        slugImage: '/assets/gym/anytimefitness.png', // Slug page image
         location: 'Delhi',
         address: 'Green Park, Safdarjung, Basant Kunj, Patel Nagar',
         about: 'Anytime Fitness is a global leader in 24/7 fitness, offering state-of-the-art equipment, certified trainers, and a welcoming environment for all fitness levels. Members enjoy access to personalized training programs, group classes, and modern amenities designed to help you achieve your health goals. With a focus on convenience and community, Anytime Fitness empowers you to work out on your schedule and stay motivated every step of the way.',
@@ -36,7 +38,8 @@ const gymDetails: { [key: string]: GymDetail } = {
     },
     'hr-7': {
         name: 'HR 7',
-        image: '/assets/gym/HR.png',
+        image: '/assets/gym/HR.png', // Main page image
+        slugImage: '/assets/gym/hr.jpg', // Slug page image
         location: 'Delhi',
         address: '2/11,Basement, Main, Road, near Metro Station Patel Nagar, opp. Pillar no.189, Block 2, East Patel Nagar, Patel Nagar, New Delhi, Delhi 110008',
         about: 'HR 7 is known for its vibrant community and modern facilities. The gym offers a wide range of equipment, group classes, and personal training options to help members reach their fitness goals. Located conveniently near the metro station, HR 7 is perfect for those seeking a motivating and supportive environment.',
@@ -48,7 +51,8 @@ const gymDetails: { [key: string]: GymDetail } = {
     },
     'muscle-junkie': {
         name: 'Muscle Junkie',
-        image: '/assets/gym/musclejunkie.png',
+        image: '/assets/gym/musclejunkie.png', // Main page image
+        slugImage: '/assets/gym/musclejun.png', // Slug page image
         location: 'Delhi',
         address: 'patel nagaar',
         about: 'Muscle Junkie specializes in strength training and bodybuilding, offering top-notch equipment and expert trainers. The gym is popular among fitness enthusiasts for its energetic atmosphere and commitment to helping members achieve their muscle-building goals.',
@@ -60,7 +64,8 @@ const gymDetails: { [key: string]: GymDetail } = {
     },
     'pro-ultimate': {
         name: 'Pro Ultimate Gym',
-        image: '/assets/gym/proultimate.png',
+        image: '/assets/gym/proultimate.png', // Main page image
+        slugImage: '/assets/gym/proul.png', // Slug page image
         location: 'Delhi',
         address: 'N0. 340, Basai Darapur Rd, opp. Metro Pillar, Kailash Park, Basai Dara pur, Ramesh Nagar, New Delhi, Delhi, 110015',
         about: 'Pro Ultimate Gym offers a comprehensive fitness experience with advanced equipment, certified trainers, and a variety of workout programs. The gym is dedicated to providing a clean, safe, and motivating environment for all members.',
@@ -88,9 +93,15 @@ export default function GymPartnerDetail() {
             <div className="max-w-5xl mx-auto flex flex-col gap-8">
                 {/* Top Brand Info Row (no map) */}
                 <div className="flex flex-col md:flex-row bg-white rounded-2xl shadow-lg p-8 gap-8 items-center md:items-start">
-                    {/* Brand Image - Larger */}
-                    <div className="flex-shrink-0 flex justify-center items-center">
-                        <Image src={gym.image} alt={gym.name} width={400} height={400} className="rounded-3xl object-contain bg-gray-100 shadow-xl" />
+                    {/* Brand Image - Larger with Zoom (using slugImage) */}
+                    <div className="flex-shrink-0 flex justify-center items-center overflow-hidden">
+                        <motion.div
+                            whileHover={{ scale: 1.1 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="relative"
+                        >
+                            <Image src={gym.slugImage} alt={gym.name} width={320} height={320} className="rounded-3xl object-contain bg-gray-100 shadow-xl w-[320px] h-[320px] md:w-[260px] md:h-[260px]" />
+                        </motion.div>
                     </div>
                     {/* Brand Info */}
                     <div className="flex flex-col flex-1 justify-center">
