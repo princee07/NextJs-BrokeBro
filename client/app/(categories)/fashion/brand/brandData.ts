@@ -55,12 +55,12 @@ export const allBrands = [
     },
     {
         slug: "lakme-salon",
-        brand: "LAKME SALON",
+        brand: "LAKME SALON Gurugram",
         image: "/assets/fashion/lakmesalon.png",
-        offer: "15% Off",
-        code: "LAKME15",
-        about: "Lakme Salon provides premium beauty services and products for students.",
-        discount: "15% off on all services"
+        offer: "Flat 30% Off on all services",
+        code: "LAKME30",
+        about: "Lakme Salon Gurugram offers premium beauty and grooming services. Enjoy a flat 30% off on all services for a limited time!",
+        discount: "30% off on all services"
     },
     {
         slug: "salty",

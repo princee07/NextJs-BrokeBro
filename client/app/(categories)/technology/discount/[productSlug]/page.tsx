@@ -9,10 +9,13 @@ const ProductDiscountPage = () => {
     const params = useParams();
     // params.productSlug is the dynamic slug from the URL
     const { productSlug } = params;
-    // Find the product by slug
-    const product = featuredProducts.find((p: Product) =>
-        p.name.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '').toLowerCase() === productSlug
-    );
+    // Find the product by slug (prefer slug property if present)
+    const product = featuredProducts.find((p: Product) => {
+        const pSlug = (p.slug && typeof p.slug === 'string' && p.slug.length > 0)
+            ? p.slug.toLowerCase().replace(/[^a-z0-9\-]/g, '')
+            : p.name.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
+        return pSlug === productSlug;
+    });
 
     if (!product) {
         return (
@@ -68,7 +71,30 @@ const ProductDiscountPage = () => {
                 <div className="bg-white rounded-xl shadow p-6 flex-1 flex flex-col items-center justify-center md:items-start w-full">
                     <div className="mb-4 w-full flex flex-col items-center">
                         <span className="block text-gray-700 font-semibold">Discount Offer:</span>
-                        <span className="block font-bold text-[#a78bfa] px-4 py-2 rounded-lg mb-2">{product.isSale && product.discount ? `${product.discount}% Off Sitewide*` : 'Exclusive Student Offer*'}</span>
+                        <span className="block font-bold text-[#a78bfa] px-4 py-2 rounded-lg mb-2">{product.isSale ? 'Exclusive Student Offer*' : 'Student Offer*'}</span>
+                        {product.offerDetails && (
+                            <div className="w-full mt-2 mb-4">
+                                <h3 className="font-bold text-orange-700 mb-1">Offer Details</h3>
+                                <div className="mb-2">
+                                    <span className="font-semibold text-gray-700">Eligibility:</span>
+                                    <span className="ml-2 text-gray-800">{product.offerDetails.eligibility}</span>
+                                </div>
+                                <div className="mb-2">
+                                    <span className="font-semibold text-gray-700">Steps:</span>
+                                    <ul className="list-disc pl-6 text-gray-800">
+                                        {product.offerDetails.steps.map((step, idx) => (
+                                            <li key={idx}>{step}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                {product.offerDetails.note && (
+                                    <div className="mb-2">
+                                        <span className="font-semibold text-gray-700">Note:</span>
+                                        <span className="ml-2 text-gray-800">{product.offerDetails.note}</span>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                         {!isRevealed ? (
                             <>
                                 {/* Verification Banner for Unverified Users */}
@@ -120,27 +146,36 @@ const ProductDiscountPage = () => {
                     </div>
                 </div>
                 {/* Suggestions */}
-                <div className="w-full md:w-[500px] flex flex-col items-center">
+                {/* Suggestions */}
+                <div className="w-full md:w-[900px] flex flex-col items-center">
                     <h2 className="text-lg font-bold text-[#39396a] mb-3 text-center">You may also like</h2>
-                    <div className="grid grid-cols-2 gap-x-10 gap-y-8 w-full">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-8 w-full">
                         {suggestions.map((s) => {
-                            const sSlug = s.name.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '').toLowerCase();
+                            const sSlug = (s.slug && typeof s.slug === 'string' && s.slug.length > 0)
+                                ? s.slug.toLowerCase().replace(/[^a-z0-9\-]/g, '')
+                                : s.name.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
+
                             return (
                                 <a
                                     key={s.name}
                                     href={`/technology/discount/${sSlug}`}
-                                    className="bg-white rounded-xl shadow p-6 flex flex-col items-center hover:shadow-lg transition-all border border-gray-100 min-w-[200px]"
+                                    className="bg-white rounded-xl shadow p-6 flex flex-col items-center hover:shadow-lg transition-all border border-gray-100"
                                 >
-                                    <img src={s.image || "/placeholder.svg"} alt={s.name} className="w-32 h-20 object-contain mb-4 rounded" />
+                                    <img
+                                        src={s.image || "/placeholder.svg"}
+                                        alt={s.name}
+                                        className="w-32 h-20 object-contain mb-4 rounded"
+                                    />
                                     <div className="font-bold text-[#39396a] text-lg text-center mb-2">{s.name}</div>
                                     <div className="text-gray-500 text-sm text-center">
-                                        {s.isSale && s.discount ? `Flat ${s.discount}% Off` : s.description || 'Student offer'}
+                                        {s.isSale ? s.description || 'Student offer' : 'Student offer'}
                                     </div>
                                 </a>
                             );
                         })}
                     </div>
                 </div>
+
             </div>
         </div>
     );

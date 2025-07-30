@@ -1,139 +1,297 @@
 // featuredProducts.ts
-// Exporting featured products array for use in EcommerceHero
 
 export interface Product {
     id: number;
     name: string;
-    price: number;
+    price?: number;
     originalPrice?: number;
     image: string;
     rating: number;
     reviews: number;
     isNew?: boolean;
     isSale?: boolean;
-    discount?: number;
     description?: string;
     code?: string;
+    slug?: string;
     codeType?: string; // 'fixed' or 'percentage'
+    offerDetails?: {
+        eligibility: string;
+        steps: string[];
+        note: string;
+    };
 }
 
 const featuredProducts: Product[] = [
     {
         id: 1,
-        name: "Canva Pro Subscription",
-        price: 89.99,
-        originalPrice: 129.99,
-        image: '/assets/logos/canva-logo.png',
-        rating: 4.8,
-        reviews: 2847,
+        name: "Microsoft 365 Student Offer",
+        price: 0,
+        originalPrice: 1899,
+        image: "/assets/technology/microsoft.png",
+        rating: 4.9,
+        reviews: 4213,
         isNew: true,
         isSale: true,
-        discount: 31,
-        description: "Unlock premium features with Canva Pro for stunning designs.",
-        code: "CANVA10",
-        codeType: "fixed",
+        description: "Students enjoy 3 months of Microsoft 365 Personal for free...",
+        code: undefined,
+        codeType: undefined,
+        offerDetails: {
+            eligibility: "College students with valid .edu or college-issued email",
+            steps: [
+                "Visit the Microsoft 365 College Student Pricing page",
+                "Sign in or create a Microsoft account",
+                "Verify student status via college email",
+                "Start your 3-month free trial"
+            ],
+            note: "A valid payment method is required..."
+        }
     },
     {
         id: 2,
-        name: "Grammarly Premium",
-        price: 199.99,
-        originalPrice: 249.99,
-        image: "/assets/logos/grammarly.png",
-        rating: 4.6,
-        reviews: 1923,
+        name: "Notion for Students",
+        price: 0,
+        originalPrice: 500,
+        image: "/assets/technology/notion.png",
+        rating: 4.8,
+        reviews: 3121,
+        isNew: true,
         isSale: true,
-        discount: 20,
-        description: "25% off Grammarly premium for students",
-        code: "GRAMMARLY20",
-        codeType: "fixed",
+        description: "Free Plus Plan for students, with 50% off Notion AI...",
+        code: undefined,
+        codeType: undefined,
+        offerDetails: {
+            eligibility: "Students and educators at accredited colleges and universities",
+            steps: [
+                "Sign up or log in to Notion using your school email",
+                "Go to Settings → Billing → Change Plan",
+                "Select 'Get free Education plan'"
+            ],
+            note: "Institution must be listed in the WHED database..."
+        }
     },
     {
         id: 3,
-        name: "Notion Pro Plan",
-        price: 59.99,
-        image: "/assets/logos/notion (1).png",
+        name: "Canva for Education",
+        price: 0,
+        originalPrice: 3999,
+        image: "/assets/technology/canva.png",
         rating: 4.9,
-        reviews: 956,
-        isNew: true,
-        description: "Unlock 100% off on your Notion's workspace.",
-        code: "NOTION100",
-        codeType: "fixed",
+        reviews: 2756,
+        isNew: false,
+        isSale: true,
+        description: "Free Canva Pro access for certified K–12 teachers...",
+        code: undefined,
+        codeType: undefined,
+        offerDetails: {
+            eligibility: "Certified K–12 teachers...",
+            steps: [
+                "Visit the Canva for Education page",
+                "Click 'Get verified' and follow the instructions"
+            ],
+            note: "Not available for higher education institutions."
+        }
     },
     {
         id: 4,
-        name: "Microsoft Office 365",
-        price: 34.99,
-        originalPrice: 49.99,
-        image: "/assets/logos/microsoft.png",
-        rating: 4.5,
-        reviews: 743,
+        name: "Spotify Premium Student",
+        price: 59,
+        originalPrice: 119,
+        image: "/assets/technology/spotify.png",
+        rating: 4.7,
+        reviews: 6832,
+        isNew: false,
         isSale: true,
-        discount: 30,
-        description: "Get a 3-month free trial on Microsoft 365 Personal, then 50% off.",
-        code: "OFFICE36550",
-        codeType: "fixed",
+        description: "Enjoy ad-free music, offline listening...",
+        code: undefined,
+        codeType: undefined,
+        offerDetails: {
+            eligibility: "Students enrolled in accredited colleges or universities",
+            steps: [
+                "Visit the Spotify Student Discount page",
+                "Sign in or create a Spotify account",
+                "Verify student status"
+            ],
+            note: "1-month free then ₹59/month..."
+        }
     },
     {
         id: 5,
-        name: "HP Laptop",
-        price: 79.99,
-        originalPrice: 99.99,
-        image: "https://logos-world.net/wp-content/uploads/2020/12/Hewlett-Packard-Logo-2009.png",
-        rating: 4.7,
-        reviews: 1456,
+        name: "Adobe Creative Cloud Student Plan",
+        price: 1999,
+        originalPrice: 5744,
+        image: "/assets/technology/adobe.png",
+        rating: 4.6,
+        reviews: 3419,
+        isNew: false,
         isSale: true,
-        discount: 20,
-        description: "Get exclusive student offers on hp laptops",
-        code: "HPSTUDENT20",
-        codeType: "fixed",
+        description: "Get access to 20+ Adobe apps like Photoshop...",
+        code: undefined,
+        codeType: undefined,
+        offerDetails: {
+            eligibility: "Students with valid school ID",
+            steps: [
+                "Go to the Adobe Student Plan page",
+                "Click on 'Buy Now'",
+                "Sign in and provide proof of student status"
+            ],
+            note: "Discount subject to verification..."
+        }
     },
     {
         id: 6,
-        name: "Figma Professional",
-        price: 49.99,
-        image: "/assets/logos/figma.png",
-        rating: 4.8,
-        reviews: 892,
-        isNew: true,
-        description: "Free figma Education plan to students and educators",
-        code: "FIGMAEDU",
-        codeType: "fixed",
+        name: "Apple Music Student Plan",
+        price: 59,
+        originalPrice: 119,
+        image: "/assets/technology/applemusic.png",
+        rating: 4.7,
+        reviews: 4992,
+        isNew: false,
+        isSale: true,
+        description: "Get Apple Music at ₹59/month with free Apple TV+...",
+        code: undefined,
+        codeType: undefined,
+        offerDetails: {
+            eligibility: "Verified college students",
+            steps: [
+                "Open Apple Music app",
+                "Go to 'Listen Now'",
+                "Verify via SheerID"
+            ],
+            note: "Apple TV+ included..."
+        }
     },
     {
         id: 7,
-        name: "Dell",
-        price: 49.99,
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTV6j9ncPmKx_M7HFjWoRe5xp_IhRm4Fdyw7w&s",
-        rating: 4.8,
-        reviews: 892,
-        isNew: true,
-        description: "Unlock special deals for students, parents, and education staff with exclusive vouchers",
-        code: "DELLSTUDENT",
-        codeType: "fixed",
+        name: "Grammarly for Students",
+        price: 0,
+        originalPrice: 999,
+        image: "/assets/technology/grammarly.png",
+        rating: 4.5,
+        reviews: 3887,
+        isNew: false,
+        isSale: true,
+        description: "Improve your writing with Grammarly Free...",
+        code: undefined,
+        codeType: undefined,
+        offerDetails: {
+            eligibility: "Students with a valid school email",
+            steps: [
+                "Visit the Grammarly for Students page",
+                "Sign up using your school email"
+            ],
+            note: "Free version includes limited features..."
+        }
     },
     {
         id: 8,
-        name: "Lenovo",
-        price: 49.99,
-        image: "https://w7.pngwing.com/pngs/631/322/png-transparent-lenovo-logo-laptop-lenovo-thinkpad-thinkpad-x1-carbon-intel-dell-lenovo-logo-electronics-text-rectangle.png",
-        rating: 4.8,
-        reviews: 892,
-        isNew: true,
-        description: "Upto 55% off on student laptop",
-        code: "LENOVO55",
-        codeType: "fixed",
+        name: "Lenovo Student Store",
+        image: "/assets/technology/lenovo.png",
+        rating: 4.4,
+        reviews: 1621,
+        isNew: false,
+        isSale: true,
+        description: "Save on laptops and accessories at Lenovo...",
+        code: undefined,
+        codeType: undefined,
+        offerDetails: {
+            eligibility: "Verified students via SheerID",
+            steps: [
+                "Visit the Lenovo Student Store",
+                "Add products to cart",
+                "Verify student status at checkout"
+            ],
+            note: "Extra savings on select models."
+        }
     },
     {
         id: 9,
-        name: "Apple MacBook Pro",
-        price: 49.99,
-        image: "https://images.seeklogo.com/logo-png/42/1/apple-logo-png_seeklogo-427436.png",
-        rating: 4.8,
-        reviews: 892,
+        name: "Realme Student Program",
+        image: "/assets/technology/relame.png",
+        rating: 4.3,
+        reviews: 1342,
         isNew: true,
-        description: "Save up to ₹10000 on select Mac or iPad with education pricing.",
-        code: "APPLEEDU",
-        codeType: "fixed",
+        isSale: true,
+        description: "Exclusive offers on Realme smartphones...",
+        code: undefined,
+        codeType: undefined,
+        offerDetails: {
+            eligibility: "Students with verified status",
+            steps: [
+                "Visit the Realme Student Discount Program page",
+                "Verify your student status",
+                "Access special discounts"
+            ],
+            note: "Discounts may vary..."
+        }
+    },
+    {
+        id: 10,
+        name: "Dell Student Offers",
+        image: "/assets/technology/dell.png", // Add this image
+        rating: 4.4,
+        reviews: 2104,
+        isNew: false,
+        isSale: true,
+        description: "Access exclusive deals on Dell laptops...",
+        code: undefined,
+        codeType: undefined,
+        offerDetails: {
+            eligibility: "College/university students",
+            steps: [
+                "Visit the Dell Student Offers page",
+                "Select your product and verify status"
+            ],
+            note: "Offers vary depending on product..."
+        }
+    },
+    {
+        id: 11,
+        name: "HP Student Store",
+        image: "/assets/technology/Hp.png",
+        rating: 4.4,
+        reviews: 1932,
+        isNew: false,
+        isSale: true,
+        description: "Get up to ₹8000 off and cashback on laptops...",
+        code: undefined,
+        codeType: undefined,
+        offerDetails: {
+            eligibility: "Students with school email",
+            steps: [
+                "Go to the HP Student Store",
+                "Register with school email",
+                "Browse and buy products"
+            ],
+            note: "Cashback may apply on select models..."
+        }
+    },
+    {
+        id: 12,
+        name: "GluedRC Game Student Offer",
+        price: 0,
+        originalPrice: 999,
+        image: "/assets/mostviewed/gllued.png",
+        rating: 4.5,
+        reviews: 1200,
+        isNew: true,
+        isSale: true,
+        description: "Choose from two exclusive GluedRC combos...",
+        code: undefined,
+        codeType: undefined,
+        offerDetails: {
+            eligibility: "Students with valid school email. BrokeBro users only.",
+            steps: [
+                "1. Swipe & Strike Combo (Rs 399 | Mon-Fri):",
+                "- 1 Game of Bowling",
+                "- 5 Arcade Game Swipes",
+                "- 1 Welcome Drink",
+                "2. Play, Bite, Repeat (Rs 699 | Mon-Fri):",
+                "- 3 Hours of Unlimited Gaming",
+                "- 1 Veg Burger",
+                "- 1 Welcome Drink"
+            ],
+            note: "Capped at 1 ticket/day/user. BrokeBro users only."
+        }
     }
 ];
 
