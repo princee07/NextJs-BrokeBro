@@ -147,7 +147,50 @@ const FashionHero: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFCF7] w-full flex flex-col items-center mt-[140px]">
+    <div className="min-h-screen bg-[#FFFCF7] w-full flex flex-col items-center mt-[140px] relative">
+      {/* Brand Info Card Section */}
+      <div className="w-full flex justify-center mb-8">
+        <div className="flex flex-row items-start bg-white rounded-2xl shadow-lg p-8 gap-8 max-w-4xl w-full">
+          {/* Brand Logo */}
+          <div className="flex-shrink-0">
+            <img src="/assets/fashion/squarespace-logo.png" alt="Squarespace" className="w-52 h-52 object-contain rounded-xl bg-black" />
+          </div>
+          {/* Brand Info */}
+          <div className="flex flex-col flex-1">
+            <h2 className="text-2xl font-bold text-[#3D375A] mb-2">Squarespace Student Discounts</h2>
+            <p className="text-base text-gray-700 mb-2">Stand out online with a professional website, online store, or portfolio. With Squarespace, you can turn any idea into a reality. When you create a website with Squarespace, you get free unlimited hosting, top-of-the-line security, and dependable resources to help you succeed. You can count on personalized support around the clock by email, live chat, or by joining a live webinar. Start with award-winning templates, then customize to fit your style and professional needs...</p>
+            <a href="#" className="text-[#6C1AFF] font-semibold hover:underline mb-2">Read more</a>
+            <div className="flex items-center gap-6 mt-2">
+              <span className="font-bold text-[#3D375A]">1</span>
+              <span className="text-gray-600">Student Discounts</span>
+              <span className="font-bold text-[#3D375A] ml-6">12</span>
+              <span className="text-gray-600">Similar discounts</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Decorative Elements - Left Side */}
+      <svg className="absolute left-0 top-16 w-24 h-24 text-pink-300 opacity-40" fill="none" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="8" />
+      </svg>
+      <div className="absolute left-8 top-40 w-8 h-8 bg-yellow-300 rounded-full opacity-30" />
+      <svg className="absolute left-16 top-72 w-16 h-8 text-purple-300 opacity-30" fill="none" viewBox="0 0 60 30">
+        <path d="M0,30 A30,30 0 0,1 60,30" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+      </svg>
+      {/* Bag image on left */}
+      <img src="/assets/fashion/bag.png" alt="Bag" className="absolute left-4 top-1/2 transform -translate-y-1/2 w-52 h-52 object-contain z-10" />
+
+      {/* Decorative Elements - Right Side */}
+      <svg className="absolute right-0 top-24 w-20 h-20 text-blue-200 opacity-30" fill="none" viewBox="0 0 80 80">
+        <rect x="10" y="10" width="60" height="60" rx="16" stroke="currentColor" strokeWidth="6" />
+      </svg>
+      <div className="absolute right-8 top-56 w-6 h-6 bg-pink-400 rounded-full opacity-30" />
+      <svg className="absolute right-16 top-80 w-12 h-12 text-green-300 opacity-30" fill="none" viewBox="0 0 48 48">
+        <polygon points="24,4 44,44 4,44" stroke="currentColor" strokeWidth="4" fill="none" />
+      </svg>
+      {/* e1 image on right */}
+      <img src="/assets/fashion/e1.png" alt="Element" className="absolute right-4 top-1/2 transform -translate-y-1/2 w-52 h-52 object-contain z-10" />
+
       <div className=" flex flex-col items-center py-8 w-full">
         <div className="w-full max-w-6xl grid grid-cols-2 md:grid-cols-4 gap-5 auto-rows-[140px] md:auto-rows-[180px]">
           {heroCards.map((card, idx) => {
