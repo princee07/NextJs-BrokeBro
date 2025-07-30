@@ -755,6 +755,19 @@ export default function NavbarClient({ user }: { user: any }) {
                 </svg>
                 Profile
               </Link>
+              {/* Admin Panel Link for Admin Users */}
+              {['prince1362005@gmail.com','lavanya.varshney2104@gmail.com','vrindabindal1212@gmail.com','pickntreatindia@gmail.com','brokebrooindia@gmail.com'].includes(user?.email) && (
+                <Link
+                  href="/admin"
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-orange-700 hover:bg-orange-50 rounded-lg transition-colors font-bold"
+                  onClick={() => setProfileDropdownOpen(false)}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11V7m0 4v4m0-4h4m-4 0H8" />
+                  </svg>
+                  Admin Panel
+                </Link>
+              )}
 
               {/* Settings Link */}
               <Link
