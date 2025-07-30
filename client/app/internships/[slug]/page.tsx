@@ -72,7 +72,7 @@ export default function InternshipDetailPage(props: any) {
     };
 
     return (
-        <main className="bg-gradient-to-b from-[#FAFAF6] to-[#F9F9F6] min-h-screen pt-56 pb-20">
+        <main className="bg-gradient-to-b from-[#FAFAF6] to-[#F9F9F6] min-h-screen mt-[140px] pb-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="lg:grid lg:grid-cols-3 lg:gap-8">
                     {/* Main Content */}

@@ -31,7 +31,7 @@ export default function Home() {
   }, []);
 
   return (
-    <>
+    <div className="mt-[135px]">
       <Hero />
       <NewArrivals />
       <MostViewedDiscounts />
@@ -39,6 +39,6 @@ export default function Home() {
       <AboutBrokeBro />
       <OrbitTestimonials />
       <VerificationTestControls />
-    </>
+    </div>
   );
 }

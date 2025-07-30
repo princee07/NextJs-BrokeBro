@@ -37,7 +37,7 @@ export default function ShippingPage() {
     ];
 
     return (
-        <main className="bg-gradient-to-b from-[#0d1117] to-[#010409] min-h-screen pt-20">
+        <main className="bg-gradient-to-b from-[#0d1117] to-[#010409] min-h-screen mt-[140px]">
             {/* Hero Section */}
             <section className="py-20 px-4">
                 <div className="max-w-6xl mx-auto text-center">

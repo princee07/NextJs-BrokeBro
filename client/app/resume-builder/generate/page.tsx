@@ -212,7 +212,7 @@ export default function ResumeBuilder() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#0d1117] to-[#010409] flex pt-40 pb-10">
+    <main className="min-h-screen bg-gradient-to-b from-[#0d1117] to-[#010409] flex mt-[140px] pb-10">
       {/* Left Sidebar */}
       <aside className="w-80 bg-[#181c23] border-r border-gray-800 p-6 flex flex-col gap-6 ml-8">
         <div>

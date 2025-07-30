@@ -147,7 +147,7 @@ const FashionHero: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFCF7] w-full flex flex-col items-center">
+    <div className="min-h-screen bg-[#FFFCF7] w-full flex flex-col items-center mt-[140px]">
       <div className=" flex flex-col items-center py-8 w-full">
         <div className="w-full max-w-6xl grid grid-cols-2 md:grid-cols-4 gap-5 auto-rows-[140px] md:auto-rows-[180px]">
           {heroCards.map((card, idx) => {

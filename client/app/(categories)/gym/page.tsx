@@ -25,7 +25,7 @@ export default function GymHeroSection() {
     }, [banners.length]);
 
     return (
-        <main className="min-h-screen bg-white w-full">
+        <main className="min-h-screen bg-white w-full mt-[140px]">
             {/* HERO SECTION */}
             <section className="relative py-0 pt-0 bg-black text-white w-full max-w-none mt-0">
                 <div className="relative w-full h-[320px] z-10">

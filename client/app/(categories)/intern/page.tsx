@@ -201,7 +201,7 @@ export default function InternshipPage() {
   }, [headings.length]);
 
   return (
-    <main className="w-full min-h-screen bg-[#FAFAF6] relative overflow-x-hidden text-black">
+    <main className="w-full min-h-screen bg-[#FAFAF6] relative overflow-x-hidden text-black mt-[140px]">
       <style>{animationStyles}</style>
       <DecorativeElements />
       {/* Background Gradient */}

@@ -6,7 +6,7 @@ import DotPattern from "@/components/ui/DotPattern";
 
 export default function ContactPage() {
   return (
-    <main className="relative min-h-screen pt-32 pb-10 px-2 sm:px-4 flex flex-col items-center justify-start bg-gradient-to-br from-[#18181b] via-[#23272f] to-[#1a1a1a] overflow-hidden">
+    <main className="relative min-h-screen mt-[140px] pb-10 px-2 sm:px-4 flex flex-col items-center justify-start bg-gradient-to-br from-[#18181b] via-[#23272f] to-[#1a1a1a] overflow-hidden">
       {/* Decorative Dots */}
       <div className="absolute left-0 top-10 opacity-40 z-0">
         <DotPattern />

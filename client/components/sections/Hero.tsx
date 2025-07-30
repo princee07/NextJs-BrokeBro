@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    <section className="relative w-full flex flex-col items-center justify-center h-[220px] xs:h-[260px] sm:h-[300px] md:h-[420px] lg:h-[480px] !m-0 !p-0 !border-0 z-0 mt-[64px]">
+    <section className="relative w-full flex flex-col items-center justify-center h-[220px] xs:h-[260px] sm:h-[300px] md:h-[420px] lg:h-[480px] !m-0 !p-0 !border-0 z-0 mt-[84px]">
       {/* Background image overlay */}
       <Image
         src="/assets/heromain.png"
