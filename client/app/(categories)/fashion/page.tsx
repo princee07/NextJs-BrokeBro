@@ -148,27 +148,8 @@ const FashionHero: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#FFFCF7] w-full flex flex-col items-center mt-[140px] relative">
-      {/* Brand Info Card Section */}
-      <div className="w-full flex justify-center mb-8">
-        <div className="flex flex-row items-start bg-white rounded-2xl shadow-lg p-8 gap-8 max-w-4xl w-full">
-          {/* Brand Logo */}
-          <div className="flex-shrink-0">
-            <img src="/assets/fashion/squarespace-logo.png" alt="Squarespace" className="w-52 h-52 object-contain rounded-xl bg-black" />
-          </div>
-          {/* Brand Info */}
-          <div className="flex flex-col flex-1">
-            <h2 className="text-2xl font-bold text-[#3D375A] mb-2">Squarespace Student Discounts</h2>
-            <p className="text-base text-gray-700 mb-2">Stand out online with a professional website, online store, or portfolio. With Squarespace, you can turn any idea into a reality. When you create a website with Squarespace, you get free unlimited hosting, top-of-the-line security, and dependable resources to help you succeed. You can count on personalized support around the clock by email, live chat, or by joining a live webinar. Start with award-winning templates, then customize to fit your style and professional needs...</p>
-            <a href="#" className="text-[#6C1AFF] font-semibold hover:underline mb-2">Read more</a>
-            <div className="flex items-center gap-6 mt-2">
-              <span className="font-bold text-[#3D375A]">1</span>
-              <span className="text-gray-600">Student Discounts</span>
-              <span className="font-bold text-[#3D375A] ml-6">12</span>
-              <span className="text-gray-600">Similar discounts</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Bag image on left of hero section */}
+      <img src="/assets/fashion/bag.png" alt="Bag" className="absolute left-0 top-1/2 transform -translate-y-1/2 w-52 h-52 object-contain z-20" />
       {/* Decorative Elements - Left Side */}
       <svg className="absolute left-0 top-16 w-24 h-24 text-pink-300 opacity-40" fill="none" viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="8" />
