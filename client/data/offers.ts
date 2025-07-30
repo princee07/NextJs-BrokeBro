@@ -28,8 +28,8 @@ export const offers: Offer[] = [
     ]
   },
   {
-    title: "Free Nail Art for Bills Above ₹2000",
-    brand: "Minous Nails",
+  title: "Book an appointment 1000 for any nail service 20% for other services",
+    brand: "Minou Nails",
     description: "Exclusive offer for beauty lovers • In-Store • Nails & Beauty",
     image: "/assets/newarrivals/minousnails.png",
     logo: "/assets/newarrivals/nails.png",
@@ -38,7 +38,7 @@ export const offers: Offer[] = [
     coupon: "MINOUS2000",
     terms: [
       "Offer valid for a limited time only.",
-      "Minimum bill amount of ₹2000 required.",
+   
       "Applicable only on nail services.",
       "Cannot be combined with other discounts.",
       "Visit Minous Nails for full offer details."
