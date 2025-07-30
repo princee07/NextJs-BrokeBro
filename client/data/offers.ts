@@ -32,7 +32,7 @@ export const offers: Offer[] = [
     brand: "Minous Nails",
     description: "Exclusive offer for beauty lovers • In-Store • Nails & Beauty",
     image: "/assets/newarrivals/minousnails.png",
-    logo: "/assets/newarrivals/minouslogo.png",
+    logo: "/assets/newarrivals/nails.png",
     badge: "New Arrival",
     discount: "Special Launch Offer",
     coupon: "MINOUS2000",
