@@ -28,6 +28,24 @@ export const offers: Offer[] = [
     ]
   },
   {
+    title: "Free Nail Art for Bills Above ₹2000",
+    brand: "Minous Nails",
+    description: "Exclusive offer for beauty lovers • In-Store • Nails & Beauty",
+    image: "/assets/newarrivals/minousnails.png",
+    logo: "/assets/newarrivals/nails.png",
+    badge: "New Arrival",
+    discount: "Special Launch Offer",
+    coupon: "MINOUS2000",
+    terms: [
+      "Offer valid for a limited time only.",
+      "Minimum bill amount of ₹2000 required.",
+      "Applicable only on nail services.",
+      "Cannot be combined with other discounts.",
+      "Visit Minous Nails for full offer details."
+    ]
+  },
+
+  {
     title: "Rikhi Ram Instrument Offers",
     brand: "Rikhi Ram",
     description: "Indian musical instruments • In-store & Online • Music & Accessories",

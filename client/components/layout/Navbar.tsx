@@ -186,7 +186,6 @@ export default function NavbarClient({ user }: { user: any }) {
     fetchReferralData();
   };
 
-  // Calculate dropdown position
   const updateDropdownPosition = () => {
     if (userMenuRef.current) {
       const rect = userMenuRef.current.getBoundingClientRect();
@@ -197,7 +196,6 @@ export default function NavbarClient({ user }: { user: any }) {
     }
   };
 
-  // Update position when dropdown opens or page scrolls
   useEffect(() => {
     if (profileDropdownOpen) {
       updateDropdownPosition();
@@ -242,10 +240,9 @@ export default function NavbarClient({ user }: { user: any }) {
 
   return (
     <header
-      className={`w-full z-50 bg-black text-white shadow-md border-b border-gray-200 transition-transform duration-500 ${showNavbar ? "translate-y-0" : "-translate-y-full"
-        }`}
+      className={`fixed top-0 left-0 w-full z-[1050] bg-black text-white shadow-md border-b border-gray-200 transition-transform duration-500 ${showNavbar ? "translate-y-0" : "-translate-y-full"}`}
     >
-      {/* Top Row: Logo, Country, Search, Auth */}
+      {/* Top Row: Logo, Search, Auth */}
       <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto" ref={navContainerRef}>
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 select-none min-w-[120px] md:min-w-[150px]" onClick={resetNavState} prefetch={false}>
@@ -265,8 +262,8 @@ export default function NavbarClient({ user }: { user: any }) {
             </div>
           </motion.div>
         </Link>
-        {/* Search Bar */}
-        <div className="w-full max-w-xs md:max-w-xl relative flex-shrink">
+        {/* Search Bar - hidden on mobile, visible on md and up */}
+        <div className="w-full max-w-xs md:max-w-xl relative flex-shrink hidden md:block">
           <div className="relative bb-search-bar">
             <BrandSearchBar
               onSelect={(brand) => handleSmartSearch(brand)}
@@ -370,7 +367,7 @@ export default function NavbarClient({ user }: { user: any }) {
       {/* Second Row: Nav Links */}
       {/* Desktop Nav Links */}
       <nav
-        className="w-full bg-[#e0e0e0] border-t border-orange-200 shadow-inner"
+        className="w-full bg-[#e0e0e0] border-t border-orange-200 shadow-inner z-50"
         ref={navLinksRef}
       >
         <div className="flex items-center justify-center gap-16 px-8 py-2 max-w-7xl mx-auto">
@@ -440,239 +437,91 @@ export default function NavbarClient({ user }: { user: any }) {
         </div>
       </nav>
 
-
-
-      {/* Mobile Sidebar Menu */}
+      {/* Mobile Menu with Animations */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              className="fixed inset-0 md:hidden bg-black/50 backdrop-blur-sm z-[99998]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              onClick={resetNavState}
-            />
-            
-            {/* Sidebar */}
-            <motion.div
-              className="fixed top-0 left-0 md:hidden bg-white w-80 h-full z-[99999] shadow-xl overflow-y-auto"
-              initial={{ x: -320 }}
-              animate={{ x: 0 }}
-              exit={{ x: -320 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-            >
-              {/* Sidebar Header */}
-              <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-6 text-white">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="relative h-10 w-24">
-                      <Image
-                        src="/assets/images/remove.png"
-                        alt="BrokeBro Logo"
-                        fill
-                        style={{ objectFit: "contain", objectPosition: "left center" }}
-                        className="brightness-0 invert"
-                      />
-                    </div>
-                  </div>
-                  <button
-                    onClick={resetNavState}
-                    className="p-2 hover:bg-white/20 rounded-full transition-colors"
-                  >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-                
-                {/* User Info in Sidebar */}
-                {isHydrated && user && (
-                  <div className="mt-4 pt-4 border-t border-white/20">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-white font-semibold text-lg">
-                        {user?.given_name?.charAt(0)?.toUpperCase() || "U"}
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-semibold text-white">
-                          {`${user?.given_name || ""} ${user?.family_name || ""}`.trim() || "User"}
-                        </p>
-                        <p className="text-xs text-white/80 truncate">{user?.email}</p>
-                        {coins !== null && (
-                          <p className="text-sm text-amber-200 font-medium">
-                            💰 {coins} coins
-                          </p>
-                        )}
-                      </div>
-                      {isVerified && <VerifiedBadge size="sm" />}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Navigation Links */}
-              <div className="p-4">
-                <div className="space-y-2">
-                  {navCategories.map((category, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
+          <motion.aside
+            className="fixed top-0 left-0 h-screen w-[80vw] max-w-xs z-[1000] bg-white shadow-2xl md:hidden flex flex-col"
+            initial={{ x: '-100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '-100%' }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            <div className="flex flex-col py-6 px-4 gap-2 h-full overflow-y-auto">
+              {navCategories.map((category, index) => (
+                <Link
+                  key={index}
+                  href={category.path}
+                  className="font-bold text-base py-3 px-2 text-black hover:text-orange-600 border-b border-gray-200 hover:bg-orange-50 rounded transition-all duration-200"
+                  onClick={resetNavState}
+                  prefetch={false}
+                >
+                  {category.name}
+                </Link>
+              ))}
+              <hr className="my-3 border-gray-300" />
+              {isHydrated ? (
+                user ? (
+                  <>
+                    <Link
+                      href="/profile"
+                      className="font-bold text-base py-3 px-2 text-black hover:text-orange-600 border-b border-gray-200 hover:bg-orange-50 rounded transition-all duration-200"
+                      onClick={resetNavState}
                     >
+                      Account
+                    </Link>
+                    {['prince1362005@gmail.com','lavanya.varshney2104@gmail.com','vrindabindal1212@gmail.com','pickntreatindia@gmail.com','brokebrooindia@gmail.com'].includes(user?.email) && (
                       <Link
-                        href={category.path}
-                        className="flex items-center gap-4 py-3 px-4 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-all duration-200 group"
+                        href="/admin"
+                        className="font-bold text-base py-3 px-2 text-orange-700 border-b border-gray-200 hover:bg-orange-50 rounded transition-all duration-200"
                         onClick={resetNavState}
-                        prefetch={false}
                       >
-                        <span className="text-orange-500 group-hover:text-orange-600 transition-colors">
-                          {category.icon}
-                        </span>
-                        <span className="font-medium">{category.name}</span>
-                        <svg className="w-4 h-4 ml-auto text-gray-400 group-hover:text-orange-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
+                        Admin Panel
                       </Link>
-                      
-                      {/* Dropdown items */}
-                      {category.dropdown && (
-                        <div className="ml-6 pl-4 border-l-2 border-gray-200">
-                          {category.dropdown.map((item, i) => (
-                            <Link
-                              key={i}
-                              href={item.path}
-                              className="block py-2 px-4 text-sm text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
-                              onClick={resetNavState}
-                              prefetch={false}
-                            >
-                              {item.name}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* Search Section */}
-                <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                  <h3 className="text-sm font-semibold text-gray-700 mb-3">Quick Search</h3>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="Search brands, deals..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && searchQuery.trim()) {
-                          handleSmartSearch(searchQuery.trim());
-                          resetNavState();
-                        }
-                      }}
-                      className="w-full bg-white border border-gray-300 rounded-lg py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    />
-                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </div>
-                </div>
-
-                {/* User Actions */}
-                {isHydrated && (
-                  <div className="mt-6 space-y-2">
-                    {user ? (
-                      <>
-                        <Link
-                          href="/profile"
-                          className="flex items-center gap-3 py-3 px-4 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
-                          onClick={resetNavState}
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                          </svg>
-                          <span className="font-medium">Profile</span>
-                        </Link>
-                        
-                        <Link
-                          href="/settings"
-                          className="flex items-center gap-3 py-3 px-4 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
-                          onClick={resetNavState}
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          </svg>
-                          <span className="font-medium">Settings</span>
-                        </Link>
-                        
-                        <Link
-                          href="/favourites"
-                          className="flex items-center gap-3 py-3 px-4 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
-                          onClick={resetNavState}
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                          </svg>
-                          <span className="font-medium">Favourites</span>
-                        </Link>
-                        
-                        <button
-                          onClick={() => {
-                            resetNavState();
-                            handleOpenReferralModal();
-                          }}
-                          className="w-full flex items-center gap-3 py-3 px-4 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                          </svg>
-                          <span className="font-medium">Refer & Earn</span>
-                          <span className="ml-auto text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">
-                            10 coins
-                          </span>
-                        </button>
-                        
-                        <hr className="my-3 border-gray-200" />
-                        
-                        <LogoutLink
-                          postLogoutRedirectURL={LOGOUT_REDIRECT_URL}
-                          className="flex items-center gap-3 py-3 px-4 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5" />
-                          </svg>
-                          <span className="font-medium">Logout</span>
-                        </LogoutLink>
-                      </>
-                    ) : (
-                      <>
-                        <LoginLink className="block w-full">
-                          <div className="flex items-center justify-center gap-2 py-3 px-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors">
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                            </svg>
-                            Login
-                          </div>
-                        </LoginLink>
-                        
-                        <RegisterLink className="block w-full">
-                          <div className="flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold rounded-lg transition-colors">
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                            </svg>
-                            Sign Up
-                          </div>
-                        </RegisterLink>
-                      </>
                     )}
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          </>
+                    <Link
+                      href="/support"
+                      className="font-bold text-base py-3 px-2 text-black hover:text-orange-600 border-b border-gray-200 hover:bg-orange-50 rounded transition-all duration-200"
+                      onClick={resetNavState}
+                    >
+                      Support
+                    </Link>
+                    <Link
+                      href="/about"
+                      className="font-bold text-base py-3 px-2 text-black hover:text-orange-600 border-b border-gray-200 hover:bg-orange-50 rounded transition-all duration-200"
+                      onClick={resetNavState}
+                    >
+                      About
+                    </Link>
+                    <LogoutLink
+                      postLogoutRedirectURL={LOGOUT_REDIRECT_URL}
+                      className="font-bold text-base py-3 px-2 text-red-600 hover:bg-red-50 rounded transition-all duration-200"
+                      onClick={resetNavState}
+                    >
+                      Log out
+                    </LogoutLink>
+                  </>
+                ) : (
+                  <>
+                    <LoginLink
+                      className="font-bold text-base py-3 px-2 text-black hover:text-orange-600 border-b border-gray-200 hover:bg-orange-50 rounded transition-all duration-200"
+                      onClick={resetNavState}
+                    >
+                      Login
+                    </LoginLink>
+                    <RegisterLink
+                      className="font-bold text-base py-3 px-2 text-black hover:text-orange-600 border-b border-gray-200 hover:bg-orange-50 rounded transition-all duration-200"
+                      onClick={resetNavState}
+                    >
+                      Sign Up
+                    </RegisterLink>
+                  </>
+                )
+              ) : (
+                <div className="h-10 bg-gray-700/50 rounded-lg animate-pulse"></div>
+              )}
+            </div>
+          </motion.aside>
         )}
       </AnimatePresence>
 
@@ -852,6 +701,19 @@ export default function NavbarClient({ user }: { user: any }) {
                 </svg>
                 Profile
               </Link>
+              {/* Admin Panel Link for Admin Users */}
+              {['prince1362005@gmail.com','lavanya.varshney2104@gmail.com','vrindabindal1212@gmail.com','pickntreatindia@gmail.com','brokebrooindia@gmail.com'].includes(user?.email) && (
+                <Link
+                  href="/admin"
+                  className="flex items-center gap-3 px-3 py-2 text-sm text-orange-700 hover:bg-orange-50 rounded-lg transition-colors font-bold"
+                  onClick={() => setProfileDropdownOpen(false)}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11V7m0 4v4m0-4h4m-4 0H8" />
+                  </svg>
+                  Admin Panel
+                </Link>
+              )}
 
               {/* Settings Link */}
               <Link

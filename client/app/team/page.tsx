@@ -89,7 +89,7 @@ export default function TeamPage() {
 		visible: { y: 0, opacity: 1, transition: { duration: 0.5 } },
 	};
 	return (
-		<main className="bg-gradient-to-b from-[#0d1117] to-[#010409] min-h-screen pt-32">
+<main className="bg-gradient-to-b from-[#0d1117] to-[#010409] min-h-screen mt-[140px]">
 			<section className="py-20 px-4">
 				<div className="max-w-6xl mx-auto text-center">
 					<motion.h1

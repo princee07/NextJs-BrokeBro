@@ -5,7 +5,9 @@ import { womensFashion } from "./data/womensFashionData";
 
 const WomensFashionSection: React.FC = () => {
     return (
-        <div className="w-full my-12 bg-gradient-to-br from-[#FFF0F6] to-[#FFFCF7] py-8 px-0">
+        <div className="w-full my-12 bg-gradient-to-br from-[#FFF0F6] to-[#FFFCF7] py-8 px-0 relative">
+            {/* Decorative modal3 image on right side */}
+            <img src="/assets/fashion/modal3.png" alt="Modal 3" className="absolute right-0 top-1/2 transform -translate-y-1/2 w-80 h-80 object-contain z-10" />
             <div className="max-w-6xl mx-auto">
                 <h2 className="text-2xl md:text-3xl font-extrabold text-center mb-6 text-[#3D375A]">Women's Fashion</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
