@@ -95,9 +95,10 @@ async function getUserVerificationStatus(userId: string) {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const { id } = params;
 
     if (!id) {
@@ -152,9 +153,10 @@ export async function GET(
 // POST method for manual verification checks
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const { id } = params;
     const body = await request.json();
 

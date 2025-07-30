@@ -1,9 +1,9 @@
 import { notFound } from 'next/navigation';
 
 interface VerifyPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // Mock database check - replace with your actual database logic
@@ -59,7 +59,8 @@ async function getUserDetails(userId: string) {
 }
 
 export default async function VerifyPage({ params }: VerifyPageProps) {
-  const { id } = params;
+  const resolvedParams = await params;
+  const { id } = resolvedParams;
 
   if (!id) {
     notFound();

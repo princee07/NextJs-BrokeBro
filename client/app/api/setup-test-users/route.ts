@@ -2,9 +2,10 @@ import dbConnect from '@/app/lib/db/connect';
 import User from '@/app/lib/db/models/user.model';
 import VerifiedUser from '@/app/lib/db/models/verifiedUser.model';
 
+// This is a helper script to add some test verified users to your database
+// You can run this once to populate test data, then delete this file
 
-
-export async function populateTestVerifiedUsers() {
+async function populateTestVerifiedUsers() {
   try {
     await dbConnect();
 
