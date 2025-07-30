@@ -15,17 +15,17 @@ const AnimatedEyes: React.FC<AnimatedEyesProps> = ({ className = '', size = 'md'
   // Define size-specific styles with circular eyes and reduced spacing
   const sizeStyles = size === 'sm' ? {
     container: 'w-13.5 h-6.5', // Adjusted container width to account for reduced spacing
-    eye: 'w-6.5 h-6.5', // Equal width and height for circular eyes
-    pupil: 'w-3.25 h-3.25', // Proportional pupil size, circular
+    eye: 'w-3.5 h-5.5', // Equal width and height for circular eyes
+    pupil: 'w-3.15 h-3.15', // Proportional pupil size, circular
     reflection: 'w-1.6 h-1.6', // Proportional reflection dot, circular
     spacing: 'w-1', // Reduced spacing between eyes
     maxMove: 6.5, // Movement range consistent with previous size
   } : {
     container: 'w-18.5 h-9', // Adjusted container width to account for reduced spacing
-    eye: 'w-9 h-9', // Equal width and height for circular eyes
+    eye: 'w-7.5 h-9', // Equal width and height for circular eyes
     pupil: 'w-4.5 h-4.5', // Proportional pupil size, circular
     reflection: 'w-2.25 h-2.25', // Proportional reflection dot, circular
-    spacing: 'w-1', // Reduced spacing between eyes
+    spacing: 'w-0.5', // Reduced spacing between eyes
     maxMove: 9, // Movement range consistent with previous size
   };
 
