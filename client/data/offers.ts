@@ -12,6 +12,24 @@ export interface Offer {
 
 export const offers: Offer[] = [
   {
+    "title": "15% Off on Tees for BrokeBro Students",
+    "brand": "NOIR & LIN",
+    "description": "Exclusive 15% off on T-shirts, oversized T-shirts, and polos for students • Fashion • Online",
+    "image": "/assets/newarrivals/noir.png",
+    "logo": "/assets/newarrivals/noirs.png",
+    "badge": "Student Exclusive",
+    "discount": "15% off",
+    "coupon": "NOIRBROKE15",
+    "terms": [
+      "Valid on selected products: T-shirts, oversized T-shirts, and polos.",
+      "Coupon code: NOIRBROKE15 must be applied at checkout.",
+      "Future access to sweatshirts and hoodies under same offer based on student traction.",
+      "Offer valid for a limited time and cannot be combined with other promotions.",
+      "Check NOIR's website for eligible products and full terms."
+    ]
+  },
+
+  {
     title: "Desert free for Couple on bill 3k",
     brand: "one8",
     description: "Exclusive discount for couples • Online • Food & Drinks",
@@ -28,7 +46,7 @@ export const offers: Offer[] = [
     ]
   },
   {
-  title: "Book an appointment 1000 for any nail service 20% for other services",
+    title: "Book an appointment 1000 for any nail services 20% for other services",
     brand: "Minou Nails",
     description: "Exclusive offer for beauty lovers • In-Store • Nails & Beauty",
     image: "/assets/newarrivals/minousnails.png",
@@ -38,7 +56,7 @@ export const offers: Offer[] = [
     coupon: "MINOUS2000",
     terms: [
       "Offer valid for a limited time only.",
-   
+
       "Applicable only on nail services.",
       "Cannot be combined with other discounts.",
       "Visit Minous Nails for full offer details."

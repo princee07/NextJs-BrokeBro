@@ -64,14 +64,25 @@ const FlightDealPage = () => {
 
     return (
         <main className="min-h-screen bg-[#F9F9F6] w-full flex flex-col items-center pt-38 pb-10 px-2 md:px-0">
-            <div className="max-w-6xl w-full flex flex-col md:flex-row gap-8 items-start justify-center">
-                {/* Main Deal Card */}
-                <div className="flex-1 max-w-xl w-full bg-white rounded-3xl shadow-2xl p-8 flex flex-col items-center relative mb-8 md:mb-0">
-                    <img src={deal.img} alt={deal.brand} className="w-48 h-48 object-cover rounded-2xl mb-6 shadow-lg" />
-                    <div className={`absolute top-6 left-6 ${deal.color} text-white text-xs font-bold px-4 py-2 rounded-full shadow`}>{deal.discount}</div>
-                    <h1 className="text-3xl font-extrabold text-[#3D375A] mb-2 text-center">{deal.brand} Flight Deal</h1>
-                    <p className="text-[#555] text-center mb-6">{deal.description}</p>
-                    <div className="flex flex-col items-center gap-3 w-full">
+            <div className="max-w-6xl w-full flex flex-col gap-8 items-center justify-center">
+                {/* Brand About & Description */}
+                <div className="flex flex-col md:flex-row bg-white rounded-2xl shadow-lg p-8 gap-8 items-center justify-center w-full">
+                    <div className="flex-shrink-0 flex justify-center items-center overflow-hidden">
+                        <img src={deal.img} alt={deal.brand} className="w-48 h-48 object-cover rounded-2xl mb-6 shadow-lg" />
+                    </div>
+                    <div className="flex flex-col flex-1 justify-center items-center md:items-start">
+                        <h1 className="text-4xl font-bold mb-2 text-gray-900 text-center md:text-left">{deal.brand} Flight Deal</h1>
+                        <div className="mb-2">
+                            <span className="block text-gray-700 font-semibold">About {deal.brand}:</span>
+                            <span className="block text-gray-800 text-base">{deal.description}</span>
+                        </div>
+                    </div>
+                </div>
+                {/* Discount Offer & Coupon Modal */}
+                <div className="bg-white rounded-xl shadow p-6 flex-1 flex flex-col items-center justify-center md:items-start w-full">
+                    <div className="mb-4 w-full flex flex-col items-center">
+                        <span className="block text-gray-700 font-semibold">Discount Offer:</span>
+                        <span className={`block font-bold ${deal.color} text-white px-4 py-2 rounded-lg mb-2`}>{deal.discount}</span>
                         {!showCode ? (
                             <>
                                 {/* Verification Banner for Unverified Users */}
@@ -120,10 +131,10 @@ const FlightDealPage = () => {
                         </ul>
                     </div>
                 </div>
-                {/* Suggested Items */}
-                <div className="w-full md:w-[340px] flex flex-col">
-                    <h2 className="text-xl font-bold text-[#3D375A] mb-4">You may also like</h2>
-                    <div className="grid grid-cols-1 gap-4">
+                {/* Similar Deals (Suggestions) */}
+                <div className="mt-8 w-full md:w-[340px] flex flex-col items-center">
+                    <h2 className="text-xl font-bold text-[#3D375A] mb-4 text-center">You may also like</h2>
+                    <div className="grid grid-cols-1 gap-4 w-full">
                         {suggested.map((item) => (
                             <a
                                 key={item.slug}

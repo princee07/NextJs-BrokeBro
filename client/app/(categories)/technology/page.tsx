@@ -222,11 +222,12 @@ const EcommerceHero: React.FC = () => {
               // Fill missing content
               const description = product.description && product.description.trim().length > 0
                 ? product.description
-                : product.isSale && product.discount
-                  ? `Get ${product.discount}% off on this product for students!`
-                  : 'Exclusive student discount available!';
+                : 'Exclusive student discount available!';
               // Build the discount page URL for this product
-              const productSlug = product.name.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '').toLowerCase();
+              const productSlug = (product.slug && typeof product.slug === 'string' && product.slug.length > 0)
+                ? product.slug.toLowerCase().replace(/[^a-z0-9\-]/g, '')
+                : product.name.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
+              console.log('Product:', product.name, 'Slug:', productSlug);
               const handleCardClick = () => {
                 // Navigate to the discount page for this product
                 router.push(`/technology/discount/${productSlug}`);
@@ -234,7 +235,7 @@ const EcommerceHero: React.FC = () => {
               return (
                 <VerificationGate key={product.id}>
                   <div
-                    className="bg-white border border-orange-100 rounded-3xl shadow-lg overflow-hidden group hover:shadow-xl hover:border-orange-300 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 animate-fade-in-up flex flex-col h-full min-h-[320px] md:min-h-[340px] xl:min-h-[360px] p-3 md:p-5 cursor-pointer"
+                    className="flex flex-col items-center justify-center p-6 rounded-2xl bg-white border border-orange-100 shadow-lg transition-transform duration-200 hover:scale-105 cursor-pointer min-h-[210px] min-w-[240px] overflow-hidden group hover:shadow-xl hover:border-orange-300 animate-fade-in-up"
                     onMouseEnter={() => setHoveredCard(product.id)}
                     onMouseLeave={() => setHoveredCard(null)}
                     onClick={handleCardClick}
@@ -247,7 +248,9 @@ const EcommerceHero: React.FC = () => {
                         <img
                           src={product.image || "/placeholder.svg"}
                           alt={product.name}
-                          className="w-full h-40 md:h-48 object-cover group-hover:scale-105 transition-transform duration-700"
+                          width={290}
+                          height={180}
+                          className="object-contain mx-auto" style={{ width: '290px', height: '180px' }}
                         />
                       </div>
 
@@ -259,11 +262,7 @@ const EcommerceHero: React.FC = () => {
                             NEW
                           </span>
                         )}
-                        {product.isSale && (
-                          <span className="bg-gradient-to-r from-orange-200 to-pink-200 text-orange-900 text-xs px-2 py-1 rounded-full font-bold shadow border border-orange-200">
-                            🔥 {product.discount}% OFF
-                          </span>
-                        )}
+                        {/* Discount badge removed from card UI */}
                       </div>
 
                       {/* Professional Quick Actions */}
@@ -298,7 +297,7 @@ const EcommerceHero: React.FC = () => {
 
           {/* Additional Professional Elements */}
           <div className="mt-20 text-center">
-            <div className="inline-flex items-center space-x-6 bg-gradient-to-r from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-full px-8 py-4 border border-gray-700/50">
+            <div className="inline-flex items-center space-x-6 bg-gradient-to-r from-gray-800/50 to-gray-900 backdrop-blur-sm rounded-full px-8 py-4 border border-gray-700/50">
               <div className="flex items-center space-x-2">
                 <Shield className="w-5 h-5 text-green-400" />
                 <span className="text-sm font-medium text-green-300">Verified Deals</span>
@@ -307,10 +306,7 @@ const EcommerceHero: React.FC = () => {
                 <Zap className="w-5 h-5 text-orange-400" />
                 <span className="text-sm font-medium text-orange-300">Instant Access</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Truck className="w-5 h-5 text-pink-400" />
-                <span className="text-sm font-medium text-pink-300">Free Delivery</span>
-              </div>
+
             </div>
           </div>
         </div>
