@@ -48,19 +48,27 @@ const gymDetails: { [key: string]: GymDetail } = {
         ],
         mapEmbed: 'https://maps.google.com/maps?q=East+Patel+Nagar+New+Delhi&t=&z=13&ie=UTF8&iwloc=&output=embed',
         couponCode: 'HR7FIT',
+        discount: `Monthly- 3500,
+Quarter- 1 month extra,
+6 months- 2 months extra,
+12 months- 20k or 3 months extra`,
+
     },
     'muscle-junkie': {
         name: 'Muscle Junkie',
         image: '/assets/gym/musclejunkie.png', // Main page image
         slugImage: '/assets/gym/musclejun.png', // Slug page image
         location: 'Delhi',
-        address: 'patel nagaar',
+        address: 'Patel Nagar',
         about: 'Muscle Junkie specializes in strength training and bodybuilding, offering top-notch equipment and expert trainers. The gym is popular among fitness enthusiasts for its energetic atmosphere and commitment to helping members achieve their muscle-building goals.',
         reviews: [
             { user: 'Simran', comment: 'Best trainers in Patel Nagar.' },
         ],
         mapEmbed: 'https://maps.google.com/maps?q=Patel+Nagar+New+Delhi&t=&z=13&ie=UTF8&iwloc=&output=embed',
         couponCode: 'MJUNKIE',
+        discount: `3 months- 12k - 8k,
+6 months- 18k - 14k,
+12 months- 22k - 18k`,
     },
     'pro-ultimate': {
         name: 'Pro Ultimate Gym',
@@ -73,7 +81,9 @@ const gymDetails: { [key: string]: GymDetail } = {
             { user: 'Ramesh', comment: 'Great location and equipment.' },
         ],
         mapEmbed: 'https://maps.google.com/maps?q=Basai+Darapur+New+Delhi&t=&z=13&ie=UTF8&iwloc=&output=embed',
+        discount: '26k Actual Price - 20k on BB (12 months)',
         couponCode: 'PROULTIMATE',
+      
     },
     // Add more gyms as needed
 };
