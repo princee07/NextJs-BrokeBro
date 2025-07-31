@@ -14,7 +14,7 @@
 - **Email:** jane.smith@college.edu
 - **Status:** ✅ VERIFIED
 
-## Testing Methods
+## Testing Method
 
 ### 1. QR Code Testing
 1. Go to your profile page: `http://localhost:3000/profile`
