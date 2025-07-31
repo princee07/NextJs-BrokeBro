@@ -212,10 +212,8 @@ const FashionHero: React.FC = () => {
             );
           })}
         </div>
-        {/* Floating Explore Button */}
-        <button className="fixed bottom-6 right-4 md:bottom-8 md:right-8 bg-white text-[#6C1AFF] font-bold px-4 py-2 md:px-6 md:py-3 rounded-full shadow-lg flex items-center gap-2 z-50 border-2 border-[#6C1AFF] hover:bg-[#6C1AFF] hover:text-white transition-all text-sm md:text-base">
-          Explore <span className="ml-1">&#8594;</span>
-        </button>
+      
+      
       </div>
       <CategorySection />
       <h2 className="text-2xl md:text-4xl lg:text-5xl font-extrabold text-center mt-4 mb-6 md:mb-8 text-[#3D375A] px-4">Our Products</h2>
