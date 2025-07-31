@@ -7,6 +7,7 @@ import HiredInterns from '@/components/sections/HiredInterns';
 import DotPattern from '@/components/ui/DotPattern';
 import TopCompanies from '@/components/sections/TopCompanies';
 
+
 const DecorativeElements = () => (
   <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
     <DotPattern className="absolute bottom-[10%] right-[2%] opacity-50 hidden md:block" style={{ transform: 'rotate(180deg)' }} />
@@ -356,6 +357,7 @@ export default function InternshipPage() {
           </div>
         </section>
       </div>
+    
     </main>
   );
 }

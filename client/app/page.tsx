@@ -12,7 +12,7 @@ import { ShieldCheck } from 'lucide-react';
 import OrbitTestimonials from '@/components/sections/OrbitTestimonials';
 import Footer from "@/components/layout/Footer";
 import VerificationTestControls from '@/components/ui/VerificationTestControls';
-
+import FeedbackWidget from '@/components/ui/FeedbackWidget';
 export default function Home() {
   const { isVerified, loading } = useUserVerification();
   const exploreRef = useRef(null);
@@ -39,6 +39,7 @@ export default function Home() {
       <AboutBrokeBro />
       <OrbitTestimonials />
       <VerificationTestControls />
+      <FeedbackWidget/>
     </div>
   );
 }
