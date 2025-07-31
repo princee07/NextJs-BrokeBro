@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Modal from '../../components/ui/Modal';
 
@@ -37,6 +37,22 @@ export default function EventsPage() {
   const [registerEventId, setRegisterEventId] = useState<number | null>(null);
   const [registrations, setRegistrations] = useState<{ [eventId: number]: string[] }>({});
   const [danceModalOpen, setDanceModalOpen] = useState(false);
+  const [navbarHeight, setNavbarHeight] = useState(0);
+
+  // Calculate navbar height dynamically
+  useEffect(() => {
+    const navbar = document.querySelector('nav');
+    if (navbar) {
+      setNavbarHeight(navbar.offsetHeight);
+    }
+    const handleResize = () => {
+      if (navbar) {
+        setNavbarHeight(navbar.offsetHeight);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -115,9 +131,12 @@ export default function EventsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-gray-100 to-gray-200 text-gray-900 mt-[140px] ">
+    <div
+      className="min-h-screen bg-gradient-to-br from-white via-gray-100 to-gray-200 text-gray-900 z-50"
+      style={{ marginTop: `${navbarHeight}px` }}
+    >
       {/* Hero Section */}
-      <div className="relative w-full h-[380px] flex items-center justify-center mb-8">
+      <div className="relative w-full h-[50vh] min-h-[200px] sm:h-[60vh] md:h-[70vh] lg:h-[380px] max-h-[380px] flex items-center justify-center mb-2">
         <Image
           src="/assets/event.png"
           alt="Event Hero"
@@ -128,7 +147,6 @@ export default function EventsPage() {
             e.currentTarget.src = '/assets/images/broke-bro.png';
           }}
         />
-      
       </div>
 
       {/* Verification Banner for Unverified Users */}
@@ -287,14 +305,12 @@ export default function EventsPage() {
         </div>
       </Modal>
 
-      {/* Filter/Search Bar removed */}
-
       {/* Main Content */}
-      <div className="container mx-auto px-4 flex flex-col lg:flex-row gap-8">
+      <div className="container mx-auto px-4 flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-8">
         {/* Events List */}
         <div className="flex-1">
-          <h2 className="text-4xl font-bold mb-10 text-center bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">Upcoming Events</h2>
-          <div className="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
+         <h2 className="text-4xl font-bold mt-4 sm:mt-6 md:mt-8 mb-4 sm:mb-6 md:mb-8 text-center bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">Upcoming Events</h2>
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 max-w-4xl mx-auto">
             {events.map(event => {
               const regCount = registrations[event.id]?.length || 0;
               const isUserRegistered = registrations[event.id]?.includes(registerName);
