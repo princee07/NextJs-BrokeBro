@@ -129,8 +129,8 @@ const TopBrands = () => {
               {/* Double the items for seamless loop */}
               {[...topBrands[0], ...topBrands[0]].map((brand, index) => (
                 <button key={index} className="relative group bg-transparent border-none p-0 m-0" onClick={() => handleBrandClick(brand)}>
-                  <div className="w-40 h-32 flex flex-col items-center justify-center bg-white rounded-lg border border-gray-200 p-3 shadow-sm">
-                    <div className="relative w-28 h-16 flex items-center justify-center mb-2">
+                  <div className="w-40 h-40 flex flex-col items-center justify-center bg-white rounded-lg border border-gray-200 p-3 shadow-sm">
+                    <div className="relative w-32 h-32 flex items-center justify-center mb-2">
                       <Image
                         src={brand.logo}
                         alt={brand.name}
@@ -139,7 +139,6 @@ const TopBrands = () => {
                         className="p-1"
                       />
                     </div>
-                    <p className="text-black font-semibold text-xs text-center mb-1">{brand.name}</p>
                   </div>
                 </button>
               ))}
@@ -168,8 +167,8 @@ const TopBrands = () => {
               {/* Double the items for seamless loop */}
               {[...topBrands[1], ...topBrands[1]].map((brand, index) => (
                 <button key={index} className="relative group bg-transparent border-none p-0 m-0" onClick={() => handleBrandClick(brand)}>
-                  <div className="w-40 h-28 flex flex-col items-center justify-center bg-white rounded-lg border border-gray-200 p-3 shadow-sm">
-                    <div className="relative w-20 h-10 flex items-center justify-center mb-2">
+                  <div className="w-40 h-40 flex flex-col items-center justify-center bg-white rounded-lg border border-gray-200 p-3 shadow-sm">
+                    <div className="relative w-32 h-32 flex items-center justify-center mb-2">
                       <Image
                         src={brand.logo}
                         alt={brand.name}
@@ -178,7 +177,6 @@ const TopBrands = () => {
                         className="p-1"
                       />
                     </div>
-                    <p className="text-black font-semibold text-xs text-center mb-1">{brand.name}</p>
                   </div>
                 </button>
               ))}

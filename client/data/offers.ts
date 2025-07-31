@@ -39,7 +39,7 @@ export const offers: Offer[] = [
     "discount": "15% off",
     "coupon": "NOIRBROKE15",
     "terms": [
-      "Valid on selected products: T-shirts, oversized T-shirts, and polos.",
+      "Valid on selected products: t-shirts, oversized T-shirts, and polos.",
       "Coupon code: NOIRBROKE15 must be applied at checkout.",
       "Future access to sweatshirts and hoodies under same offer based on student traction.",
       "Offer valid for a limited time and cannot be combined with other promotions.",
