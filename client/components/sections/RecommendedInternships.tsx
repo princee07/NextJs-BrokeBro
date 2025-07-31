@@ -25,21 +25,21 @@ const RecommendedInternships = () => {
   const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi])
 
   return (
-    <section className="py-20 relative">
+    <section className="py-12 md:py-20 relative">
       <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/20 blur-3xl rounded-full -z-10" />
       <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-400/20 blur-3xl rounded-full -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <div className="flex justify-center items-center gap-4">
-            <h2 className="text-3xl font-extrabold text-black sm:text-4xl">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-black sm:text-4xl">
               Recommended Internships
             </h2>
             <div className="relative">
-              <span className="bg-white/10 text-orange-400 text-sm font-bold px-4 py-2 rounded-full border border-orange-400/50">FOR YOU</span>
+              <span className="bg-white/10 text-orange-400 text-xs sm:text-sm font-bold px-3 sm:px-4 py-1 sm:py-2 rounded-full border border-orange-400/50">FOR YOU</span>
             </div>
           </div>
-          <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="mt-3 sm:mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
             Looking for the best of the best? Here's the top-rated Internships by the learners' community.
           </p>
         </div>
