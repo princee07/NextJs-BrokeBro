@@ -155,29 +155,16 @@ const EcommerceHero: React.FC = () => {
         </div>
       </div>
       {/* Product Cards Row - now below the wave, not overlaying the purple */}
-      <div className="w-full flex flex-col items-center pb-8 bg-white">
-        <div className="flex flex-row justify-center gap-8 mt-8 mb-4 px-4 flex-wrap">
-          {/* Product cards, all below the wave */}
-          <div className="rounded-3xl bg-[#F7F6FB] shadow-1xl flex flex-col items-center w-40 h-40 p-2 mx-2">
-            <img src="/assets/technology/image.png" alt="Watch" className="w-52 h-52 object-contain mb-2" />
-          </div>
-          <div className="rounded-3xl bg-[#F7F6FB] shadow-1xl flex flex-col items-center w-48 h-48 p-2 mx-2"><img src="/assets/technology/image2.jpg" alt="Offer" className="w-40 h-40 object-contain mb-2" /></div>
-          <div className="rounded-3xl bg-[#F7F6FB] shadow-1xl flex flex-col items-center w-48 h-48 p-2 mx-2"><img src="/assets/technology/image3.png" alt="AirPods" className="w-40 h-40 object-contain mb-2" /></div>
-          <div className="rounded-3xl bg-[#F7F6FB] shadow-1xl flex flex-col items-center w-48 h-48 p-2 mx-2"><img src="/assets/technology/image4.png" alt="Gadgets" className="w-40 h-40 object-contain mb-2" /></div>
-        </div>
-      </div>
-      {/* Floating Explore Button */}
-      <button className="fixed bottom-8 right-8 bg-white text-[#6C1AFF] font-bold px-6 py-3 rounded-full shadow-lg flex items-center gap-2 z-50 border-2 border-[#6C1AFF] hover:bg-[#6C1AFF] hover:text-white transition-all">
-        Explore <span className="ml-1">&#8594;</span>
-      </button>
+    
+     
 
-      {/* ...existing code for featured products and the rest of the page... */}
+     
 
       {/* Featured Products Section */}
       {/* Search Bar */}
 
 
-      <div className="mt-10 py-20 bg-gradient-to-b from-white via-orange-50 to-pink-50 relative overflow-hidden">
+      <div className="mt-10 py-10 bg-gradient-to-b from-white via-orange-50 to-pink-50 relative overflow-hidden">
         {/* Light theme background decorations */}
         <div className="absolute inset-0 opacity-10 pointer-events-none select-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-orange-200 to-pink-200 rounded-full filter blur-3xl"></div>
@@ -206,14 +193,7 @@ const EcommerceHero: React.FC = () => {
                   </button>
                 ))}
               </div>
-              <div className="flex items-center gap-2 ml-3">
-                <button className="w-9 h-9 rounded-xl bg-orange-100 border border-orange-200 flex items-center justify-center text-orange-400 hover:bg-orange-200 transition-all">
-                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2" /><rect x="14" y="3" width="7" height="7" rx="2" /><rect x="14" y="14" width="7" height="7" rx="2" /><rect x="3" y="14" width="7" height="7" rx="2" /></svg>
-                </button>
-                <button className="w-9 h-9 rounded-xl bg-orange-100 border border-orange-200 flex items-center justify-center text-orange-400 hover:bg-orange-200 transition-all">
-                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="2" /><rect x="3" y="10" width="18" height="4" rx="2" /><rect x="3" y="16" width="18" height="4" rx="2" /></svg>
-                </button>
-              </div>
+             
             </div>
           </div>
 
