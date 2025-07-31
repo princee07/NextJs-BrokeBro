@@ -1,4 +1,5 @@
 import Image from "next/image";
+import TypewriterText from "./TypewriterText";
 
 export default function Hero() {
   return (
@@ -20,11 +21,12 @@ export default function Hero() {
             letterSpacing: '-0.03em',
           }}
         >
-          India&apos;s largest student discount platform
+          <span>Student's&nbsp;</span>
+          <TypewriterText textArray={["Fashion", "Internships", "Travels", "Lifestyle", "Events"]} />
         </h1>
       </div>
       {/* Decorative elements (optional, can be added as needed) */}
-      {/* Main Content */}S
+      {/* Main Content */}
     </section>
   );
 }
