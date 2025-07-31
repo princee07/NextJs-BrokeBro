@@ -293,7 +293,7 @@ export default function EventsPage() {
       <div className="container mx-auto px-4 flex flex-col lg:flex-row gap-8">
         {/* Events List */}
         <div className="flex-1">
-          <h2 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">Upcoming Events</h2>
+          <h2 className="text-4xl font-bold mb-10 text-center bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">Upcoming Events</h2>
           <div className="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
             {events.map(event => {
               const regCount = registrations[event.id]?.length || 0;
