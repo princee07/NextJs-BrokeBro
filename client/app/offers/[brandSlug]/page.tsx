@@ -1,29 +1,28 @@
 "use client";
 import React, { useState } from "react";
 import { useParams } from "next/navigation";
-import featuredProducts, { Product } from '../../featuredProducts';
+import { offers } from '@/data/offers';
 import { useUserVerification } from '@/hooks/useUserVerification';
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 import { motion } from 'framer-motion';
 
-const ProductDiscountPage = () => {
+const OfferPage = () => {
     const params = useParams();
-    // params.productSlug is the dynamic slug from the URL
-    const { productSlug } = params;
-    // Find the product by slug (prefer slug property if present)
-    const product = featuredProducts.find((p: Product) => {
-        const pSlug = (p.slug && typeof p.slug === 'string' && p.slug.length > 0)
-            ? p.slug.toLowerCase().replace(/[^a-z0-9\-]/g, '')
-            : p.name.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
-        return pSlug === productSlug;
-    });
+    const { brandSlug } = params;
+    
+    // Helper to create a slug from brand name
+    const slugify = (str: string) =>
+        str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    
+    // Find the offer by slug
+    const offer = offers.find((o: any) => slugify(o.brand) === brandSlug);
 
-    if (!product) {
+    if (!offer) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-orange-50 to-pink-50">
                 <div className="text-center">
-                    <h1 className="text-3xl font-bold text-orange-600 mb-2">Product Not Found</h1>
-                    <p className="text-gray-500">Sorry, we couldn't find the discount for this product.</p>
+                    <h1 className="text-3xl font-bold text-orange-600 mb-2">Offer Not Found</h1>
+                    <p className="text-gray-500">Sorry, we couldn't find this offer.</p>
                 </div>
             </div>
         );
@@ -35,11 +34,18 @@ const ProductDiscountPage = () => {
     const { isVerified, loading } = useUserVerification();
     const { isAuthenticated } = useKindeBrowserClient();
 
-    // Suggest 4 other products (excluding current)
-    const suggestions = featuredProducts.filter((p: Product) => p !== product).slice(0, 4);
+    // Suggest 4 other offers (excluding current)
+    const suggestions = offers.filter((o: any) => o !== offer).slice(0, 4);
 
-    // Coupon code logic
-    const couponCode = product.name.replace(/\s+/g, '').replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 8) + '10';
+    // Generate coupon code from brand name
+    const generateCouponCode = (brand: string) => {
+        let codePrefix = brand.replace(/\s+/g, '').replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+        if (codePrefix.length < 4) codePrefix = codePrefix.padEnd(4, 'X');
+        else if (codePrefix.length > 8) codePrefix = codePrefix.slice(0, 8);
+        return `${codePrefix}15`;
+    };
+
+    const couponCode = generateCouponCode(offer.brand);
 
     // Copy handler
     const handleCopy = async () => {
@@ -64,29 +70,25 @@ const ProductDiscountPage = () => {
                             transition={{ duration: 0.3, ease: "easeInOut" }}
                             className="relative"
                         >
-                            <img src={product.image || "/placeholder.svg"} alt={product.name} className="rounded-3xl object-contain bg-gray-100 shadow-xl w-[320px] h-[320px] md:w-[260px] md:h-[260px]" />
+                            <img src={offer.image} alt={offer.title} className="rounded-3xl object-contain bg-gray-100 shadow-xl w-[320px] h-[320px] md:w-[260px] md:h-[260px]" />
                         </motion.div>
                     </div>
                     {/* Product Info */}
                     <div className="flex flex-col flex-1 justify-center">
-                        <h1 className="text-4xl font-bold mb-2 text-gray-900">{product.name}</h1>
+                        <h1 className="text-4xl font-bold mb-2 text-gray-900">{offer.brand}</h1>
                         <div className="mb-2">
-                            <span className="block text-gray-700 font-semibold">About {product.name}:</span>
-                            <span className="block text-gray-800 text-base">{product.description || 'No description available.'}</span>
+                            <span className="block text-gray-700 font-semibold">About {offer.brand}:</span>
+                            <span className="block text-gray-800 text-base">{offer.description || 'No description available.'}</span>
                         </div>
-                        {product.offerDetails && (
-                            <>
-                                <div className="mb-1">
-                                    <span className="block text-gray-700 font-semibold">Eligibility:</span>
-                                    <span className="block text-gray-800">{product.offerDetails.eligibility}</span>
-                                </div>
-                                {product.offerDetails.note && (
-                                    <div className="mb-1">
-                                        <span className="block text-gray-700 font-semibold">Note:</span>
-                                        <span className="block text-gray-800 text-sm">{product.offerDetails.note}</span>
-                                    </div>
-                                )}
-                            </>
+                        <div className="mb-1">
+                            <span className="block text-gray-700 font-semibold">Offer:</span>
+                            <span className="block text-gray-800">{offer.title}</span>
+                        </div>
+                        {offer.badge && (
+                            <div className="mb-1">
+                                <span className="block text-gray-700 font-semibold">Special:</span>
+                                <span className="block text-purple-600 font-bold text-sm">{offer.badge}</span>
+                            </div>
                         )}
                     </div>
                 </div>
@@ -94,7 +96,7 @@ const ProductDiscountPage = () => {
                 <div className="bg-white rounded-xl shadow p-6 flex-1 flex flex-col items-center md:items-start">
                     <div className="mb-4 w-full">
                         <span className="block text-gray-700 font-semibold">Discount Offers:</span>
-                        <span className="block text-green-600 font-bold">{product.isSale ? 'Exclusive Student Offer' : 'Student Offer Available'}</span>
+                        <span className="block text-green-600 font-bold">Get exclusive student discount on {offer.brand}!</span>
                         {!isRevealed ? (
                             <>
                                 {/* Verification Banner for Unverified Users */}
@@ -134,18 +136,6 @@ const ProductDiscountPage = () => {
                             </div>
                         )}
                         
-                        {/* Offer Steps - moved below coupon section */}
-                        {product.offerDetails && (
-                            <div className="mt-4 w-full">
-                                <h3 className="font-bold text-orange-700 mb-2">How to Redeem:</h3>
-                                <ul className="list-disc pl-6 text-gray-800 text-sm space-y-1">
-                                    {product.offerDetails.steps.map((step, idx) => (
-                                        <li key={idx}>{step}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-                        
                         {/* Terms & Conditions */}
                         <div className="mt-4 w-full">
                             <h3 className="font-bold text-gray-700 mb-1">Terms & Conditions:</h3>
@@ -162,24 +152,22 @@ const ProductDiscountPage = () => {
                 <div className="mt-8">
                     <h2 className="text-xl font-semibold mb-2 text-gray-900">You may also like</h2>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        {suggestions.map((s) => {
-                            const sSlug = (s.slug && typeof s.slug === 'string' && s.slug.length > 0)
-                                ? s.slug.toLowerCase().replace(/[^a-z0-9\-]/g, '')
-                                : s.name.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
+                        {suggestions.map((s: any) => {
+                            const sSlug = slugify(s.brand);
 
                             return (
                                 <a
-                                    key={s.name}
-                                    href={`/technology/discount/${sSlug}`}
+                                    key={s.brand}
+                                    href={`/offers/${sSlug}`}
                                     className="flex flex-col items-center bg-white rounded-xl shadow p-4 hover:scale-105 transition cursor-pointer"
                                 >
                                     <img
-                                        src={s.image || "/placeholder.svg"}
-                                        alt={s.name}
+                                        src={s.image}
+                                        alt={s.title}
                                         className="h-20 w-auto object-contain mb-2"
                                     />
-                                    <div className="font-semibold text-center text-[#222]">{s.name}</div>
-                                    <div className="text-xs text-center text-gray-500">{s.isSale ? 'Exclusive Offer' : 'Student Offer'}</div>
+                                    <div className="font-semibold text-center text-[#222]">{s.brand}</div>
+                                    <div className="text-xs text-center text-gray-500">{s.title}</div>
                                 </a>
                             );
                         })}
@@ -190,4 +178,4 @@ const ProductDiscountPage = () => {
     );
 };
 
-export default ProductDiscountPage;
+export default OfferPage;

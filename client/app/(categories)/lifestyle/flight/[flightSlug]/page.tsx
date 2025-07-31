@@ -1,7 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { useUserVerification } from "../../../../../hooks/useUserVerification";
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 import { useParams } from "next/navigation";
+import { motion } from 'framer-motion';
 
 // Dummy data for demonstration; in real app, fetch by slug
 const flightDeals = {
@@ -44,7 +46,8 @@ const FlightDealPage = () => {
     const { flightSlug } = params;
     const [showCode, setShowCode] = useState(false);
     const [copied, setCopied] = useState(false);
-    const { isVerified, loading: verificationLoading } = useUserVerification();
+    const { isVerified, loading } = useUserVerification();
+    const { isAuthenticated } = useKindeBrowserClient();
 
     const deal = flightDeals[flightSlug as keyof typeof flightDeals];
     if (!deal) {
@@ -63,30 +66,42 @@ const FlightDealPage = () => {
         .map(([slug, d]) => ({ slug, ...d }));
 
     return (
-        <main className="min-h-screen bg-[#F9F9F6] w-full flex flex-col items-center pt-38 pb-10 px-2 md:px-0">
-            <div className="max-w-6xl w-full flex flex-col gap-8 items-center justify-center">
-                {/* Brand About & Description */}
-                <div className="flex flex-col md:flex-row bg-white rounded-2xl shadow-lg p-8 gap-8 items-center justify-center w-full">
+        <section className="pt-44 pb-12 bg-gray-50 min-h-screen">
+            <div className="max-w-5xl mx-auto flex flex-col gap-8">
+                {/* Top Brand Info Row */}
+                <div className="flex flex-col md:flex-row bg-white rounded-2xl shadow-lg p-8 gap-8 items-center md:items-start">
+                    {/* Flight Image - Larger with Zoom */}
                     <div className="flex-shrink-0 flex justify-center items-center overflow-hidden">
-                        <img src={deal.img} alt={deal.brand} className="w-48 h-48 object-cover rounded-2xl mb-6 shadow-lg" />
+                        <motion.div
+                            whileHover={{ scale: 1.1 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="relative"
+                        >
+                            <img src={deal.img} alt={deal.brand} className="rounded-3xl object-contain bg-gray-100 shadow-xl w-[320px] h-[320px] md:w-[260px] md:h-[260px]" />
+                        </motion.div>
                     </div>
-                    <div className="flex flex-col flex-1 justify-center items-center md:items-start">
-                        <h1 className="text-4xl font-bold mb-2 text-gray-900 text-center md:text-left">{deal.brand} Flight Deal</h1>
+                    {/* Flight Info */}
+                    <div className="flex flex-col flex-1 justify-center">
+                        <h1 className="text-4xl font-bold mb-2 text-gray-900">{deal.brand} Flight Deal</h1>
                         <div className="mb-2">
                             <span className="block text-gray-700 font-semibold">About {deal.brand}:</span>
                             <span className="block text-gray-800 text-base">{deal.description}</span>
                         </div>
+                        <div className="mb-1">
+                            <span className="block text-gray-700 font-semibold">Offer:</span>
+                            <span className="block text-gray-800">{deal.discount}</span>
+                        </div>
                     </div>
                 </div>
-                {/* Discount Offer & Coupon Modal */}
-                <div className="bg-white rounded-xl shadow p-6 flex-1 flex flex-col items-center justify-center md:items-start w-full">
-                    <div className="mb-4 w-full flex flex-col items-center">
-                        <span className="block text-gray-700 font-semibold">Discount Offer:</span>
-                        <span className={`block font-bold ${deal.color} text-white px-4 py-2 rounded-lg mb-2`}>{deal.discount}</span>
+                {/* Coupon Modal */}
+                <div className="bg-white rounded-xl shadow p-6 flex-1 flex flex-col items-center md:items-start">
+                    <div className="mb-4 w-full">
+                        <span className="block text-gray-700 font-semibold">Discount Offers:</span>
+                        <span className="block text-green-600 font-bold">{deal.discount} on {deal.brand} flights</span>
                         {!showCode ? (
                             <>
                                 {/* Verification Banner for Unverified Users */}
-                                {!verificationLoading && !isVerified && (
+                                {isAuthenticated && !isVerified && !loading && (
                                     <div className="w-full flex flex-col items-center justify-center py-2 bg-yellow-50 border border-yellow-300 mb-2 rounded-lg">
                                         <span className="text-red-600 font-semibold mb-2 text-center">Please verify your account to reveal the coupon code.</span>
                                         <a
@@ -98,60 +113,61 @@ const FlightDealPage = () => {
                                     </div>
                                 )}
                                 <button
-                                    className="bg-gradient-to-r from-[#5B5BF6] to-[#7F5CFF] text-white font-bold py-3 px-8 rounded-xl text-lg shadow hover:from-[#7F5CFF] hover:to-[#5B5BF6] transition disabled:opacity-60 disabled:cursor-not-allowed"
-                                    onClick={() => isVerified && setShowCode(true)}
-                                    disabled={verificationLoading || !isVerified}
+                                    className={`mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition cursor-pointer ${(!isAuthenticated || !isVerified) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    onClick={() => (isAuthenticated && isVerified) && setShowCode(true)}
+                                    disabled={!isAuthenticated || !isVerified || loading}
                                 >
                                     Reveal Coupon Code
                                 </button>
-                                {!verificationLoading && !isVerified && (
-                                    <div className="text-red-500 text-sm mt-2">Please log in and verify your account to reveal the coupon code.</div>
+                                {(!isAuthenticated || !isVerified) && !loading && (
+                                    <div className="text-red-500 text-sm mt-2 text-center max-w-xs">
+                                        {!isAuthenticated ? 'Please log in to reveal the coupon code.' : 'Please verify your account to reveal the coupon code.'}
+                                    </div>
                                 )}
                             </>
                         ) : (
-                            <div className="flex items-center gap-2 mt-2">
-                                <span className="font-mono text-lg bg-gray-100 px-4 py-2 rounded-lg border border-gray-300 text-black">{deal.code}</span>
+                            <div className="mt-4 w-full flex items-center justify-between bg-gray-200 py-2 px-4 rounded border border-orange-400">
+                                <span className="text-lg font-bold text-orange-700">{deal.code}</span>
                                 <button
-                                    className="ml-2 px-3 py-2 bg-[#F9F9F6] border border-gray-300 rounded-lg text-sm hover:bg-gray-200 transition text-black"
+                                    className="ml-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-1 px-3 rounded transition cursor-pointer"
                                     onClick={handleCopy}
                                 >
-                                    {copied ? <span className="text-black">Copied!</span> : <span className="text-black">Copy</span>}
+                                    {copied ? 'Copied!' : 'Copy Code'}
                                 </button>
                             </div>
                         )}
-                    </div>
-                    {/* Terms & Conditions */}
-                    <div className="mt-8 w-full">
-                        <h3 className="font-semibold text-gray-700 mb-2">Terms & Conditions:</h3>
-                        <ul className="text-gray-500 text-sm list-disc pl-5 space-y-1">
-                            <li>Coupon valid for a limited time only.</li>
-                            <li>Applicable only on select flights/routes.</li>
-                            <li>Cannot be combined with other offers.</li>
-                            <li>See airline website for full details.</li>
-                        </ul>
+                        
+                        {/* Terms & Conditions */}
+                        <div className="mt-4 w-full">
+                            <h3 className="font-bold text-gray-700 mb-1">Terms & Conditions:</h3>
+                            <ul className="text-gray-500 text-xs list-disc pl-5 space-y-1">
+                                <li>Coupon valid for a limited time only.</li>
+                                <li>Applicable only on select flights/routes.</li>
+                                <li>Cannot be combined with other offers.</li>
+                                <li>See airline website for full details.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                {/* Similar Deals (Suggestions) */}
-                <div className="mt-8 w-full md:w-[340px] flex flex-col items-center">
-                    <h2 className="text-xl font-bold text-[#3D375A] mb-4 text-center">You may also like</h2>
-                    <div className="grid grid-cols-1 gap-4 w-full">
+                {/* Suggestions */}
+                <div className="mt-8">
+                    <h2 className="text-xl font-semibold mb-2 text-gray-900">You may also like</h2>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                         {suggested.map((item) => (
                             <a
                                 key={item.slug}
                                 href={`/lifestyle/flight/${item.slug}`}
-                                className="bg-white rounded-2xl shadow p-4 flex items-center gap-4 hover:shadow-lg transition group border border-gray-100"
+                                className="flex flex-col items-center bg-white rounded-xl shadow p-4 hover:scale-105 transition cursor-pointer"
                             >
-                                <img src={item.img} alt={item.brand} className="w-16 h-16 object-cover rounded-xl" />
-                                <div className="flex flex-col flex-1">
-                                    <span className="font-semibold text-[#3D375A] text-base group-hover:underline">{item.brand}</span>
-                                    <span className="text-xs text-gray-500 mt-1">{item.discount} | <span className="capitalize">{item.brand}</span></span>
-                                </div>
+                                <img src={item.img} alt={item.brand} className="h-20 w-auto object-contain mb-2" />
+                                <div className="font-semibold text-center text-[#222]">{item.brand}</div>
+                                <div className="text-xs text-center text-gray-500">{item.discount}</div>
                             </a>
                         ))}
                     </div>
                 </div>
             </div>
-        </main>
+        </section>
     );
 };
 

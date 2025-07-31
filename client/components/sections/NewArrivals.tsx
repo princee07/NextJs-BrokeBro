@@ -52,7 +52,7 @@ export default function NewArrivals() {
                     {offers.map((item, idx) => (
                         <Link
                             key={idx}
-                            href={`/brands/${slugify(item.brand)}`}
+                            href={`/offers/${slugify(item.brand)}`}
                             className="min-w-[340px] max-w-xs bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col flex-shrink-0 cursor-pointer transition-transform hover:scale-105"
                             style={{ scrollSnapAlign: 'start' }}
                         >
