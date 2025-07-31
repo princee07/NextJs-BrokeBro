@@ -77,18 +77,44 @@ const CategorySection: React.FC = () => {
     };
 
     return (
-        <div className="w-full bg-[#F3F4F6] py-2 mb-10 flex justify-center">
-            <div className="max-w-6xl w-full flex flex-row justify-center items-center gap-0 rounded-3xl">
-                {categories.map((cat, idx) => (
-                    <div key={idx} className="flex items-center justify-center" style={{ minWidth: 400, maxWidth: 600, marginLeft: '-16px', marginRight: '-16px' }}>
-                        <img
-                            src={cat.image}
-                            alt={cat.label}
-                            className="h-[400px] w-[500px] object-contain cursor-pointer transition-transform duration-300 hover:scale-105"
-                            onClick={() => handleCategoryClick(cat, idx)}
-                        />
-                    </div>
-                ))}
+        <div className="w-full bg-[#F3F4F6] py-2 md:py-2 mb-6 md:mb-10 flex justify-center overflow-x-hidden">
+            <div className="max-w-6xl w-full px-2 md:px-0">
+                {/* Mobile View - Vertical Stack */}
+                <div className="flex flex-col gap-2 md:hidden">
+                    {categories.map((cat, idx) => (
+                        <div key={idx} className="flex items-center justify-center w-full">
+                            <img
+                                src={cat.image}
+                                alt={cat.label}
+                                className="h-[200px] w-full max-w-[300px] object-contain cursor-pointer transition-transform duration-300 hover:scale-105 rounded-lg"
+                                onClick={() => handleCategoryClick(cat, idx)}
+                            />
+                        </div>
+                    ))}
+                </div>
+                
+                {/* Desktop View - Horizontal Overlap */}
+                <div className="hidden md:flex flex-row justify-center items-center gap-0 rounded-3xl">
+                    {categories.map((cat, idx) => (
+                        <div 
+                            key={idx} 
+                            className="flex items-center justify-center" 
+                            style={{ 
+                                minWidth: 300, 
+                                maxWidth: 500, 
+                                marginLeft: idx > 0 ? '-16px' : '0px', 
+                                marginRight: idx < categories.length - 1 ? '-16px' : '0px' 
+                            }}
+                        >
+                            <img
+                                src={cat.image}
+                                alt={cat.label}
+                                className="h-[300px] md:h-[350px] lg:h-[400px] w-[350px] md:w-[400px] lg:w-[500px] object-contain cursor-pointer transition-transform duration-300 hover:scale-105"
+                                onClick={() => handleCategoryClick(cat, idx)}
+                            />
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

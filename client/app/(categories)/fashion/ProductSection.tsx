@@ -93,23 +93,23 @@ const ProductSection: React.FC = () => {
     };
 
     return (
-        <div className="w-full bg-[#F9F9F6] py-8 mb-12">
-            <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <div className="w-full bg-[#F9F9F6] py-6 md:py-8 mb-8 md:mb-12">
+            <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 px-4 md:px-0">
                 {products.map((product, idx) => (
                     <Link
                         key={idx}
                         href={`/fashion/brand/${product.brand.toLowerCase().replace(/\s+/g, "-")}`}
-                        className="flex flex-col items-center justify-center p-6 rounded-2xl bg-white shadow-md transition-transform duration-200 hover:scale-105 cursor-pointer min-h-[210px] min-w-[240px] no-underline"
+                        className="flex flex-col items-center justify-center p-4 md:p-6 rounded-xl md:rounded-2xl bg-white shadow-md transition-transform duration-200 hover:scale-105 cursor-pointer min-h-[180px] md:min-h-[210px] w-full no-underline"
                         onClick={() => handleProductClick(product, idx)}
                     >
                         <img
                             src={product.image}
                             alt={product.brand}
-                            className="h-32 w-auto object-contain mb-4"
-                            style={{ maxHeight: 128 }}
+                            className="h-24 md:h-32 w-auto object-contain mb-3 md:mb-4"
+                            style={{ maxHeight: '6rem' }}
                         />
-                        <div className="font-bold text-2xl text-center mb-2 text-[#222]">{product.brand}</div>
-                        <div className="text-base text-center font-medium text-[#222]">{product.offer}</div>
+                        <div className="font-bold text-lg md:text-xl lg:text-2xl text-center mb-1 md:mb-2 text-[#222]">{product.brand}</div>
+                        <div className="text-sm md:text-base text-center font-medium text-[#222] px-2">{product.offer}</div>
                     </Link>
                 ))}
             </div>

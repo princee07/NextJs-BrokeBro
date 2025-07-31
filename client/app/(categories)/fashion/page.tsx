@@ -147,66 +147,65 @@ const FashionHero: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFCF7] w-full flex flex-col items-center mt-[140px] relative">
-      {/* Decorative Elements - Left Side */}
-      <svg className="absolute left-0 top-16 w-24 h-24 text-pink-300 opacity-40" fill="none" viewBox="0 0 100 100">
+    <div className="min-h-screen bg-[#FFFCF7] w-full flex flex-col items-center mt-[120px] md:mt-[140px] relative overflow-x-hidden">
+      {/* Decorative Elements - Left Side - Hidden on mobile */}
+      <svg className="absolute left-0 top-16 w-16 h-16 md:w-24 md:h-24 text-pink-300 opacity-40 hidden sm:block" fill="none" viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="8" />
       </svg>
-      <div className="absolute left-8 top-40 w-8 h-8 bg-yellow-300 rounded-full opacity-30" />
-      <svg className="absolute left-16 top-72 w-16 h-8 text-purple-300 opacity-30" fill="none" viewBox="0 0 60 30">
+      <div className="absolute left-4 md:left-8 top-32 md:top-40 w-6 h-6 md:w-8 md:h-8 bg-yellow-300 rounded-full opacity-30 hidden sm:block" />
+      <svg className="absolute left-8 md:left-16 top-56 md:top-72 w-12 h-6 md:w-16 md:h-8 text-purple-300 opacity-30 hidden sm:block" fill="none" viewBox="0 0 60 30">
         <path d="M0,30 A30,30 0 0,1 60,30" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
       </svg>
-      {/* Bag image on left side of hero section */}
-      <img src="/assets/fashion/bags.png" alt="Bag" className="absolute left-0 top-1/2 transform -translate-y-1/2 w-52 h-52 object-contain z-20" />
-      {/* modal1.png on left side, more visible */}
-      <img src="/assets/fashion/bags.png" alt="Modal 1" className="absolute left-2 top-58 w-54 h-64 object-contain z-30" />
+      
+      {/* Bag images on left side - Responsive sizing and positioning */}
+      <img src="/assets/fashion/bags.png" alt="Bag" className="absolute left-0 top-1/2 transform -translate-y-1/2 w-32 h-32 md:w-52 md:h-52 object-contain z-20 hidden lg:block" />
+      <img src="/assets/fashion/bags.png" alt="Modal 1" className="absolute left-1 md:left-2 top-40 md:top-58 w-36 h-44 md:w-54 md:h-64 object-contain z-30 hidden lg:block" />
 
-      {/* Decorative Elements - Right Side */}
-      <svg className="absolute right-0 top-24 w-20 h-20 text-blue-200 opacity-30" fill="none" viewBox="0 0 80 80">
+      {/* Decorative Elements - Right Side - Hidden on mobile */}
+      <svg className="absolute right-0 top-20 md:top-24 w-16 h-16 md:w-20 md:h-20 text-blue-200 opacity-30 hidden sm:block" fill="none" viewBox="0 0 80 80">
         <rect x="10" y="10" width="60" height="60" rx="16" stroke="currentColor" strokeWidth="6" />
       </svg>
-      <div className="absolute right-8 top-56 w-6 h-6 bg-pink-400 rounded-full opacity-30" />
-      <svg className="absolute right-16 top-80 w-12 h-12 text-green-300 opacity-30" fill="none" viewBox="0 0 48 48">
+      <div className="absolute right-4 md:right-8 top-48 md:top-56 w-4 h-4 md:w-6 md:h-6 bg-pink-400 rounded-full opacity-30 hidden sm:block" />
+      <svg className="absolute right-8 md:right-16 top-64 md:top-80 w-10 h-10 md:w-12 md:h-12 text-green-300 opacity-30 hidden sm:block" fill="none" viewBox="0 0 48 48">
         <polygon points="24,4 44,44 4,44" stroke="currentColor" strokeWidth="4" fill="none" />
       </svg>
-      {/* e1 image on right */}
-      <img src="/assets/fashion/bag2.png" alt="Element" className="absolute right-0 top-200 transform -translate-y-1/2 w-52 h-52 object-contain z-10" />
-      {/* modal2.png on right side, more visible */}
-      <img src="/assets/fashion/modal2.png" alt="Modal 2" className="absolute right-32 top-32 w-74 h-74 object-contain z-30" />
-      {/* Additional modal2.png images for more impact */}
-      <img src="/assets/fashion/modal2.png" alt="Modal 2" className="absolute right-10 top-2/3 w-40 h-40 object-contain z-20 opacity-80" />
-      <img src="/assets/fashion/modal2.png" alt="Modal 2" className="absolute left-1/2 top-1/2 w-32 h-32 object-contain z-10 opacity-60" />
+      
+      {/* Right side images - Responsive sizing and positioning */}
+      <img src="/assets/fashion/bag2.png" alt="Element" className="absolute right-0 top-64 md:top-200 transform -translate-y-1/2 w-32 h-32 md:w-52 md:h-52 object-contain z-10 hidden lg:block" />
+      <img src="/assets/fashion/modal2.png" alt="Modal 2" className="absolute right-16 md:right-32 top-24 md:top-32 w-48 h-48 md:w-74 md:h-74 object-contain z-30 hidden lg:block" />
+      <img src="/assets/fashion/modal2.png" alt="Modal 2" className="absolute right-4 md:right-10 top-2/3 w-28 h-28 md:w-40 md:h-40 object-contain z-20 opacity-80 hidden lg:block" />
+      <img src="/assets/fashion/modal2.png" alt="Modal 2" className="absolute left-1/2 top-1/2 w-20 h-20 md:w-32 md:h-32 object-contain z-10 opacity-60 hidden lg:block" />
 
-      <div className=" flex flex-col items-center py-8 w-full">
-        <div className="w-full max-w-6xl grid grid-cols-2 md:grid-cols-4 gap-5 auto-rows-[140px] md:auto-rows-[180px]">
+      <div className="flex flex-col items-center py-4 md:py-8 w-full px-2 md:px-4">
+        <div className="w-full max-w-6xl grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-5 auto-rows-[120px] md:auto-rows-[140px] lg:auto-rows-[180px]">
           {heroCards.map((card, idx) => {
             // Use card.image for all types, fallback to a default ad image if missing
             const bgImage = card.image || '/assets/fashion/ad-default.png';
             return (
               <div
                 key={idx}
-                className={`group rounded-2xl relative overflow-hidden shadow-lg cursor-pointer transition-transform hover:scale-105 flex items-center justify-center ${card.colSpan} ${card.rowSpan}`}
+                className={`group rounded-xl md:rounded-2xl relative overflow-hidden shadow-lg cursor-pointer transition-transform hover:scale-105 flex items-center justify-center ${card.colSpan} ${card.rowSpan}`}
                 style={{ background: `url('${bgImage}') center/cover no-repeat` }}
                 onClick={() => handleCardClick(card, idx)}
               >
                 <div className="absolute inset-0 bg-black/10" />
-                <div className="relative z-10 w-full h-full flex flex-col justify-center items-center p-4">
+                <div className="relative z-10 w-full h-full flex flex-col justify-center items-center p-2 md:p-4">
                   {/* Overlay text/icons for each card type */}
                   {card.type === 'banner' && (
                     <>
-                      {card.icon && <span className="absolute left-4 top-4 text-3xl">⚡</span>}
-                      <span className="font-extrabold text-2xl md:text-3xl text-black text-center drop-shadow-lg group-hover:opacity-100 opacity-0 transition-opacity duration-300">{card.text}</span>
-                      {card.icon && <span className="absolute right-4 bottom-4 text-3xl">⚡</span>}
+                      {card.icon && <span className="absolute left-2 md:left-4 top-2 md:top-4 text-xl md:text-3xl">⚡</span>}
+                      <span className="font-extrabold text-lg md:text-2xl lg:text-3xl text-black text-center drop-shadow-lg group-hover:opacity-100 opacity-0 transition-opacity duration-300">{card.text}</span>
+                      {card.icon && <span className="absolute right-2 md:right-4 bottom-2 md:bottom-4 text-xl md:text-3xl">⚡</span>}
                     </>
                   )}
                   {card.type === 'card' && (
                     <>
-                      <div className="font-bold text-lg md:text-xl mb-1 text-black drop-shadow-lg text-center w-full group-hover:opacity-100 opacity-0 transition-opacity duration-300">{card.title}</div>
-                      <div className="text-sm md:text-base opacity-80 text-black text-center w-full group-hover:opacity-100 opacity-0 transition-opacity duration-300">{card.subtitle}</div>
+                      <div className="font-bold text-sm md:text-lg lg:text-xl mb-1 text-black drop-shadow-lg text-center w-full group-hover:opacity-100 opacity-0 transition-opacity duration-300">{card.title}</div>
+                      <div className="text-xs md:text-sm lg:text-base text-black text-center w-full group-hover:opacity-100 opacity-0 transition-opacity duration-300">{card.subtitle}</div>
                     </>
                   )}
                   {card.type === 'image' && card.alt && (
-                    <span className="text-black font-semibold text-lg text-center drop-shadow-lg w-full group-hover:opacity-100 opacity-0 transition-opacity duration-300">{card.alt}</span>
+                    <span className="text-black font-semibold text-sm md:text-lg text-center drop-shadow-lg w-full group-hover:opacity-100 opacity-0 transition-opacity duration-300">{card.alt}</span>
                   )}
                 </div>
               </div>
@@ -214,12 +213,12 @@ const FashionHero: React.FC = () => {
           })}
         </div>
         {/* Floating Explore Button */}
-        <button className="fixed bottom-8 right-8 bg-white text-[#6C1AFF] font-bold px-6 py-3 rounded-full shadow-lg flex items-center gap-2 z-50 border-2 border-[#6C1AFF] hover:bg-[#6C1AFF] hover:text-white transition-all">
+        <button className="fixed bottom-6 right-4 md:bottom-8 md:right-8 bg-white text-[#6C1AFF] font-bold px-4 py-2 md:px-6 md:py-3 rounded-full shadow-lg flex items-center gap-2 z-50 border-2 border-[#6C1AFF] hover:bg-[#6C1AFF] hover:text-white transition-all text-sm md:text-base">
           Explore <span className="ml-1">&#8594;</span>
         </button>
       </div>
       <CategorySection />
-      <h2 className="text-4xl md:text-5xl font-extrabold text-center mt-4 mb-8 text-[#3D375A]">Our Products</h2>
+      <h2 className="text-2xl md:text-4xl lg:text-5xl font-extrabold text-center mt-4 mb-6 md:mb-8 text-[#3D375A] px-4">Our Products</h2>
       <ProductSection />
       <MensFashionSection />
       <WomensFashionSection />
