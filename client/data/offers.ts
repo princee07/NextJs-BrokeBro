@@ -46,6 +46,22 @@ export const offers: Offer[] = [
       "Check NOIR's website for eligible products and full terms."
     ]
   },
+  {
+    title: "25% Off on Salon Services",
+    brand: "Salon Azure",
+    description: "Exclusive 25% off for all customers • In-Store • Beauty & Personal Care",
+    image: "/assets/newarrivals/salonAzure.png",
+    logo: "/assets/newarrivals/azuresalonimg.png",
+    badge: "New Arrival",
+    discount: "25% Off",
+    coupon: "AZURE25",
+    terms: [
+      "Offer valid for a limited time only.",
+      "Applicable on all salon services at Salon Azure.",
+      "Cannot be combined with other promotional offers.",
+      "Visit the store or contact for appointment and full offer details."
+    ]
+  },
 
   {
     title: "Desert free for Couple on bill 3k",
@@ -99,22 +115,24 @@ export const offers: Offer[] = [
     ]
   },
 
-  {
-    title: "Lakme Salon Discount",
-    brand: "Lakme Salon",
-    description: "salon services • Online • Beauty & Personal Care",
-    image: "/assets/newarrivals/lakmelogos.png",
-    logo: "/assets/newarrivals/lakme.png",
-    badge: "Only on brokeBro",
-    discount: "12% off",
-    coupon: "LAKME12",
-    terms: [
-      "Coupon valid for a limited time only.",
-      "Applicable only on select products/categories.",
-      "Cannot be combined with other offers.",
-      "See brand website for full details."
-    ]
-  },
+ {
+  title: "30% Off on All Services at Lakme Salon Gurgaon",
+  brand: "Lakme Salon",
+  description: "30% off available on all salon services • In-Store • Beauty & Personal Care",
+  image: "/assets/newarrivals/lakmelogos.png",
+  logo: "/assets/newarrivals/lakme.png",
+  badge: "Only on brokeBro",
+  discount: "30% off",
+  coupon: "LAKMEGURGAON30",
+  terms: [
+    "Offer valid for a limited time only.",
+    "Applicable at Lakme Salon, Gurgaon branches only.",
+    "Valid on all salon services.",
+    "Cannot be combined with other promotional offers.",
+    "Visit the salon for full details and appointment."
+  ]
+},
+
   {
     title: "soxytoes Discount",
     brand: "soxytoes",
