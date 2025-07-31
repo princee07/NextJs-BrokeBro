@@ -13,16 +13,28 @@ export default function Hero() {
         priority
       />
       {/* Heading overlay */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[80%] w-full flex justify-center items-center z-0 px-2 sm:px-4">
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[80%] w-full flex justify-center items-center z-0 px-2 sm:px-4"
+        style={{ marginTop: "32px" }}
+      >
         <h1
           className="text-black-400 text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-center drop-shadow-lg font-sans rounded-xl px-2 py-2 sm:px-4 sm:py-3 leading-tight max-w-[98vw] sm:max-w-3xl"
           style={{
-            fontFamily: 'Montserrat, Arial Rounded MT Bold, Arial, sans-serif',
+            fontFamily:
+              'Montserrat, Arial Rounded MT Bold, Arial, sans-serif',
             letterSpacing: '-0.03em',
           }}
         >
-          <span>Student's&nbsp;</span>
-          <TypewriterText textArray={["Fashion", "Internships", "Travels", "Lifestyle", "Events"]} />
+          <span>Student's Benefit from &nbsp;</span>
+          <TypewriterText
+            textArray={[
+              "Fashion",
+              "Internships",
+              "Travels",
+              "Lifestyle",
+              "Events",
+            ]}
+          />
         </h1>
       </div>
       {/* Decorative elements (optional, can be added as needed) */}
