@@ -3,16 +3,16 @@ export const mostViewed = [
     title: "Biba Discount",
     brand: "Biba",
     description: "For everyone • Online • Courses",
-    image: "/assets/mostviewed/biba-carrd.png",
-    logo: "/assets/mostviewed/bibalogo.png",
+    image: "/assets/mostviewed/bibalogo.png",
+    logo: "/assets/mostviewed/biba-carrd.png",
     badge: "Popular",
   },
   {
     "title": "glued Discount",
     "brand": "glued",
     "description": "For gamers • Online • Gaming",
-    "image": "/assets/mostviewed/glued-logo.png",
-    "logo": "/assets/mostviewed/glued-logo.png",
+    "image": "/assets/mostviewed/gllued.png",
+    "logo": "/assets/mostviewed/gllued.png",
     "badge": "Top Rated",
     "offers": [
       {
@@ -51,8 +51,8 @@ export const mostViewed = [
     title: "soxytoes Discount",
     brand: "soxytoes",
     description: "For students only • Online • Music",
-    image: "/assets/mostviewed/soxytoes.jpg",
-    logo: "/assets/mostviewed/soxytoes-logo.png",
+    image: "/assets/newarrivals/soxytoeslogo.png",
+    logo: "/assets/newarrivals/soxytoes.jpg",
     badge: null,
   },
 ];

@@ -12,6 +12,24 @@ export interface Offer {
 
 export const offers: Offer[] = [
   {
+    title: "15% off on nail services • 20% off on other services",
+    brand: "Nail Gallery",
+    description: "Special discounts on nail and beauty services • In-Store • Nails & Beauty",
+    image: "/assets/newarrivals/nailgallery.png",
+    logo: "/assets/newarrivals/nails.png",
+    badge: "New Arrival",
+    discount: "15% off on nail services • 20% off on other services",
+    coupon: "NAILGALLERY2024",
+    terms: [
+      "Offer valid for a limited time only.",
+      "15% off applies to all nail services.",
+      "20% off applies to other beauty services.",
+      "Cannot be combined with other ongoing promotions.",
+      "Visit Nail Gallery for full terms and services."
+    ]
+  },
+
+  {
     "title": "15% Off on Tees for BrokeBro Students",
     "brand": "NOIR & LIN",
     "description": "Exclusive 15% off on T-shirts, oversized T-shirts, and polos for students • Fashion • Online",
@@ -113,28 +131,13 @@ export const offers: Offer[] = [
       "See brand website for full details."
     ]
   },
-  {
-    title: "lakme Discount",
-    brand: "Lakme",
-    description: "For students • Online • Beauty & Personal Care",
-    image: "/assets/newarrivals/lakmelogos.png",
-    logo: "/assets/newarrivals/lakme.png",
-    badge: "Student Exclusive",
-    discount: "15% off",
-    coupon: "LAKME15",
-    terms: [
-      "Coupon valid for a limited time only.",
-      "Applicable only on select products/categories.",
-      "Cannot be combined with other offers.",
-      "See brand website for full details."
-    ]
-  },
+
   {
     title: "salty Discount",
     brand: "Salty",
     description: "For students & educators • Online • Fashion",
-    image: "/assets/newarrivals/salty-card.png",
-    logo: "/assets/newarrivals/salty-logo.png",
+    image: "/assets/newarrivals/salty.png",
+    logo: "/assets/newarrivals/salty-card.png",
     badge: null,
     discount: "18% off",
     coupon: "SALTY18",
@@ -161,28 +164,13 @@ export const offers: Offer[] = [
       "See brand website for full details."
     ]
   },
-  {
-    title: "Biba Discount",
-    brand: "Biba",
-    description: "For everyone • Online • Courses",
-    image: "/assets/mostviewed/biba-carrd.png",
-    logo: "/assets/mostviewed/bibalogo.png",
-    badge: "Popular",
-    discount: "10% off",
-    coupon: "BIBA10",
-    terms: [
-      "Coupon valid for a limited time only.",
-      "Applicable only on select products/categories.",
-      "Cannot be combined with other offers.",
-      "See brand website for full details."
-    ]
-  },
+
   {
     title: "glued Discount",
     brand: "glued",
     description: "For gamers • Online • Gaming",
     image: "/assets/mostviewed/gllued.png",
-    logo: "/assets/mostviewed/glued-logo.png",
+    logo: "/assets/newarrivals/gluedimage.png",
     badge: "Top Rated",
     discount: "15% off",
     coupon: "GLUED15",
@@ -213,8 +201,8 @@ export const offers: Offer[] = [
     title: "soxytoes Discount",
     brand: "soxytoes",
     description: "For students only • Online • Music",
-    image: "/assets/mostviewed/soxytoes.jpg",
-    logo: "/assets/mostviewed/soxytoes-logo.png",
+    image: "/assets/newarrivals/soxytoeslogo.png",
+    logo: "/assets/newarrivals/soxytoes.jpg",
     badge: null,
     discount: "10% off",
     coupon: "SOXY10",
