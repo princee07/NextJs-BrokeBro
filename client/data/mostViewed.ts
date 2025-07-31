@@ -1,12 +1,5 @@
 export const mostViewed = [
-  {
-    title: "Biba Discount",
-    brand: "Biba",
-    description: "For everyone • Online • Courses",
-    image: "/assets/mostviewed/bibalogo.png",
-    logo: "/assets/mostviewed/biba-carrd.png",
-    badge: "Popular",
-  },
+
   {
     "title": "glued Discount",
     "brand": "glued",
@@ -38,6 +31,24 @@ export const mostViewed = [
     ],
     "note": "For Brokebro users only. Capped at 1 ticket per day, per user."
   },
+  {
+    title: "1+1 Offer – Pay for 30 min, Get 30 min Free",
+    brand: "Ultimate RC",
+    description: "Exclusive 1+1 racing offer • On-site • Remote Control Car Racing",
+    image: "/assets/mostviewed/ultimate.png",
+    logo: "/assets/mostviewed/ultimate.png",
+    badge: "Hot Deal",
+    discount: "Pay for 30 min, get 30 min free",
+    coupon: "ULTIMATERC1PLUS1",
+    terms: [
+      "Offer valid on standard 30-minute RC sessions.",
+      "Get an additional 30 minutes free with every paid 30-minute session.",
+      "Applicable only at participating Ultimate RC venues.",
+      "Cannot be combined with other offers.",
+      "Limited-time promotional offer."
+    ]
+  },
+
 
   {
     title: "muscle junkie Discount",
@@ -50,9 +61,10 @@ export const mostViewed = [
   {
     title: "soxytoes Discount",
     brand: "soxytoes",
-    description: "For students only • Online • Music",
+    description: "30% off for students on Soxytoes socks and accessories • Online • Fashion & Music",
     image: "/assets/newarrivals/soxytoeslogo.png",
     logo: "/assets/newarrivals/soxytoes.jpg",
     badge: null,
+    discount: "30% off",
   },
 ];
