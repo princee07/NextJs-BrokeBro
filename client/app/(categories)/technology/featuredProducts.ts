@@ -32,7 +32,7 @@ const featuredProducts: Product[] = [
         reviews: 4213,
         isNew: true,
         isSale: true,
-        description: "Students enjoy 3 months of Microsoft 365 Personal for free...",
+        description: "Students enjoy 3 months of Microsoft 365 Personal for free",
         code: undefined,
         codeType: undefined,
         offerDetails: {
@@ -56,7 +56,7 @@ const featuredProducts: Product[] = [
         reviews: 3121,
         isNew: true,
         isSale: true,
-        description: "Free Plus Plan for students, with 50% off Notion AI...",
+        description: "Free Plus Plan for students, with 50% off Notion AI",
         code: undefined,
         codeType: undefined,
         offerDetails: {
@@ -79,7 +79,7 @@ const featuredProducts: Product[] = [
         reviews: 2756,
         isNew: false,
         isSale: true,
-        description: "Free Canva Pro access for certified K–12 teachers...",
+        description: "Free Canva Pro access for certified K–12 teachers",
         code: undefined,
         codeType: undefined,
         offerDetails: {
@@ -101,7 +101,7 @@ const featuredProducts: Product[] = [
         reviews: 6832,
         isNew: false,
         isSale: true,
-        description: "Enjoy ad-free music, offline listening...",
+        description: "Enjoy ad-free music, offline listening",
         code: undefined,
         codeType: undefined,
         offerDetails: {
@@ -124,7 +124,7 @@ const featuredProducts: Product[] = [
         reviews: 3419,
         isNew: false,
         isSale: true,
-        description: "Get access to 20+ Adobe apps like Photoshop...",
+        description: "Get access to 20+ Adobe apps like Photoshop",
         code: undefined,
         codeType: undefined,
         offerDetails: {
@@ -147,7 +147,7 @@ const featuredProducts: Product[] = [
         reviews: 4992,
         isNew: false,
         isSale: true,
-        description: "Get Apple Music at ₹59/month with free Apple TV+...",
+        description: "Get Apple Music at ₹59/month with free Apple TV+",
         code: undefined,
         codeType: undefined,
         offerDetails: {
@@ -170,7 +170,7 @@ const featuredProducts: Product[] = [
         reviews: 3887,
         isNew: false,
         isSale: true,
-        description: "Improve your writing with Grammarly Free...",
+        description: "Improve your writing with Grammarly Free",
         code: undefined,
         codeType: undefined,
         offerDetails: {
@@ -190,7 +190,7 @@ const featuredProducts: Product[] = [
         reviews: 1621,
         isNew: false,
         isSale: true,
-        description: "Save on laptops and accessories at Lenovo...",
+        description: "Save on laptops and accessories at Lenovo",
         code: undefined,
         codeType: undefined,
         offerDetails: {
@@ -211,7 +211,7 @@ const featuredProducts: Product[] = [
         reviews: 1342,
         isNew: true,
         isSale: true,
-        description: "Exclusive offers on Realme smartphones...",
+        description: "Exclusive offers on Realme smartphones",
         code: undefined,
         codeType: undefined,
         offerDetails: {
@@ -232,7 +232,7 @@ const featuredProducts: Product[] = [
         reviews: 2104,
         isNew: false,
         isSale: true,
-        description: "Access exclusive deals on Dell laptops...",
+        description: "Access exclusive deals on Dell laptops",
         code: undefined,
         codeType: undefined,
         offerDetails: {
@@ -252,7 +252,7 @@ const featuredProducts: Product[] = [
         reviews: 1932,
         isNew: false,
         isSale: true,
-        description: "Get up to ₹8000 off and cashback on laptops...",
+        description: "Get up to ₹8000 off and cashback on laptops",
         code: undefined,
         codeType: undefined,
         offerDetails: {
@@ -275,7 +275,7 @@ const featuredProducts: Product[] = [
         reviews: 1200,
         isNew: true,
         isSale: true,
-        description: "Choose from two exclusive GluedRC combos...",
+        description: "Choose from two exclusive GluedRC combos",
         code: undefined,
         codeType: undefined,
         offerDetails: {

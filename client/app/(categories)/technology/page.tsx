@@ -138,18 +138,18 @@ const EcommerceHero: React.FC = () => {
 
     <div className="min-h-screen  bg-gradient-to-br from-white via-rose-50 to-pink-50 mt-[140px]">
       {/* New Hero Section */}
-      <div className="relative w-full overflow-hidden bg-gradient-to-br from-[#6C1AFF] via-[#A259FF] to-[#6C1AFF] min-h-[340px] flex flex-col justify-end pb-0">
+       <div className="relative w-full overflow-hidden bg-gradient-to-br from-[#6C1AFF] via-[#A259FF] to-[#6C1AFF] min-h-[280px] sm:min-h-[320px] md:min-h-[340px] flex flex-col justify-end pb-0">
         {/* Hero Content Centered */}
-        <div className="relative z-10 flex flex-col items-center justify-center text-center pt-16 pb-0 px-4">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-2 drop-shadow-lg">
-            <span className="block">Why Pay More?</span>
-            <span className="block text-5xl md:text-6xl font-black text-white mt-2 mb-1">Upgrade with BrokeBro</span>
-            <span className="block text-lg md:text-xl font-semibold text-white/90 mt-2">Smart Tech. Smarter Prices.</span>
+        <div className="relative z-10 flex flex-col items-center justify-center text-center px-4 py-8 sm:py-12 md:py-16">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-2 drop-shadow-lg">
+           <span className="block">Why Pay More?</span>
+            <span className="block text-4xl sm:text-5xl md:text-6xl font-black text-white mt-1 mb-1">Upgrade with BrokeBro</span>
+            <span className="block text-base sm:text-lg md:text-xl font-semibold text-white/90 mt-2">Smart Tech. Smarter Prices.</span>
           </h1>
         </div>
         {/* Wavy SVG Divider */}
         <div className="w-full overflow-hidden -mb-1">
-          <svg viewBox="0 0 1440 90" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-20">
+          <svg viewBox="0 0 1440 90" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-16 sm:h-20">
             <path d="M0 60 Q360 0 720 60 T1440 60 V90 H0 V60Z" fill="#fff" />
           </svg>
         </div>
@@ -260,11 +260,11 @@ const EcommerceHero: React.FC = () => {
 
                     <div className="p-4 flex flex-col flex-1 justify-between">
                       <div>
-                        <h3 className="text-lg font-bold text-black mb-2 group-hover:text-black transition-all leading-tight">
+                        <h2 className="text-lg font-bold text-black mb-2 group-hover:text-black transition-all leading-tight">
                           {product.name}
-                        </h3>
+                        </h2>
 
-                        <p className="text-xs text-orange-900/80 mb-3 line-clamp-2 leading-relaxed min-h-[32px]">
+                        <p className="text-sm font-bold text-orange-900/80 mb-3 line-clamp-2 leading-relaxed min-h-[32px]">
                           {description}
                         </p>
                       </div>
