@@ -477,7 +477,20 @@ export default function NavbarClient({ user }: { user: KindeUser | null }) {
             exit={{ x: "-100%" }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-            {/* ... Mobile menu content ... */}
+            <div className="flex flex-col py-6 px-4 gap-2 h-full overflow-y-auto">
+              {navCategories.map((category, index) => (
+                <Link
+                  key={index}
+                  href={category.path}
+                  className="font-bold text-base py-3 px-2 text-black hover:text-orange-600 border-b border-gray-200 hover:bg-orange-50 rounded transition-all duration-200"
+                  onClick={resetNavState}
+                  prefetch={false}
+                >
+                  {category.name}
+                </Link>
+              ))}
+              {/* ...other sidebar content... */}
+            </div>
           </motion.aside>
         )}
       </AnimatePresence>
