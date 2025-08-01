@@ -25,7 +25,13 @@ const getUniqueBrands = (): Brand[] => {
     ])).sort((a, b) => a.localeCompare(b));
 };
 
-const BrandSearchBar: React.FC<{ onSelect?: (brand: Brand) => void }> = ({ onSelect }) => {
+interface BrandSearchBarProps {
+    onSelect?: (brand: Brand) => void;
+    inputClassName?: string;
+    placeholder?: string;
+}
+
+const BrandSearchBar: React.FC<BrandSearchBarProps> = ({ onSelect, inputClassName = '', placeholder = 'Search brands...' }) => {
     const [input, setInput] = useState('');
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [filteredBrands, setFilteredBrands] = useState<Brand[]>(getUniqueBrands());
@@ -60,6 +66,17 @@ const BrandSearchBar: React.FC<{ onSelect?: (brand: Brand) => void }> = ({ onSel
         };
     }, []);
 
+    // Hide suggestions on window scroll
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowSuggestions(false);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value);
         setShowSuggestions(true);
@@ -77,18 +94,20 @@ const BrandSearchBar: React.FC<{ onSelect?: (brand: Brand) => void }> = ({ onSel
                 <input
                     ref={inputRef}
                     type="text"
-                    placeholder="Search brands..."
+                    placeholder={placeholder}
                     value={input}
                     onChange={handleInputChange}
                     onFocus={() => setShowSuggestions(true)}
+                    className={inputClassName}
                     style={{
                         width: '100%',
-                        padding: '8px 44px 8px 12px',
+                        padding: '8px 44px 8px 32px',
                         borderRadius: 32,
                         border: '1px solid #ccc',
                         fontSize: 16,
                         boxSizing: 'border-box',
                         background: '#fff',
+                        color: 'black',
                     }}
                 />
                 <div style={{
@@ -130,6 +149,7 @@ const BrandSearchBar: React.FC<{ onSelect?: (brand: Brand) => void }> = ({ onSel
                                 cursor: 'pointer',
                                 borderBottom: '1px solid #eee',
                                 background: input === brand ? '#f0f0f0' : '#fff',
+                                color: 'black',
                             }}
                         >
                             {brand}

@@ -53,7 +53,7 @@ const SearchBar = () => {
             {brandsList.filter(b => b.toLowerCase().includes(searchQuery.toLowerCase())).map((brand) => (
               <li
                 key={brand}
-                className="px-4 py-2 cursor-pointer hover:bg-orange-500/10 text-white text-sm"
+                className="px-4 py-2 cursor-pointer hover:bg-orange-500/10 text-black text-sm"
                 onClick={() => {
                   setSearchQuery(brand);
                   setSearchFocused(false);
@@ -119,7 +119,7 @@ const SearchBar = () => {
             onKeyDown={(e) => {
               if (e.key === "Enter") handleSearch();
             }}
-            className="w-full bg-transparent py-3 pl-10 pr-16 text-white placeholder-gray-400 focus:outline-none focus:placeholder-gray-300"
+            className="w-full bg-transparent py-3 pl-10 pr-16 text-black placeholder-gray-400 focus:outline-none focus:placeholder-gray-300"
           />
           {/* Animated Eyes removed for now to ensure search bar works */}
           {/* <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">

@@ -266,7 +266,12 @@ export default function NavbarClient({ user }: { user: KindeUser | null }) {
         </Link>
         <div className="w-full max-w-xs md:max-w-xl relative flex-shrink hidden md:block">
           <div className="relative">
-            <BrandSearchBar onSelect={(brand) => handleSmartSearch(brand)} />
+            <BrandSearchBar
+              onSelect={(brand) => handleSmartSearch(brand)}
+              placeholder="Search brands, categories, deals..."
+              inputClassName="text-black placeholder:text-black"
+            />
+
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-black">
               <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
@@ -451,7 +456,7 @@ export default function NavbarClient({ user }: { user: KindeUser | null }) {
         </div>
       )}
 
-      {/* Rest of the JSX remains largely unchanged */}
+      {/* Navigation Links */}
       <nav className="w-full bg-[#e0e0e0] border-t border-orange-200 shadow-inner z-50" ref={navLinksRef}>
         <div className="flex items-center justify-center gap-16 px-8 py-2 max-w-7xl mx-auto">
           {navCategories.map((category, index) => (
@@ -489,7 +494,6 @@ export default function NavbarClient({ user }: { user: KindeUser | null }) {
                   {category.name}
                 </Link>
               ))}
-              {/* ...other sidebar content... */}
             </div>
           </motion.aside>
         )}
