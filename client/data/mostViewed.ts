@@ -54,8 +54,8 @@ export const mostViewed = [
     title: "muscle junkie Discount",
     brand: "muscle junkie",
     description: "For students gym-goers • Online • Fitness",
-    image: "/assets/mostviewed/musclejunkie.png",
-    logo: "/assets/mostviewed/musclejunkielogo.png",
+    image: "/assets/mostviewed/muscle.png",
+    logo: "/assets/mostviewed/musclejunkie.png",
     badge: null,
   },
   {
