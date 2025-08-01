@@ -1,6 +1,7 @@
 
 "use client";
 import React from "react";
+import Image from "next/image";
 import CategorySection from "./CategorySection";
 import ProductSection from "./ProductSection";
 import MensFashionSection from "./MensFashionSection";
@@ -86,9 +87,9 @@ const FashionHero: React.FC = () => {
   const { trackClick } = useClickTracker();
 
   const handleCardClick = (card: any, index: number) => {
-    const cardIdentifier = card.type === 'banner' 
+    const cardIdentifier = card.type === 'banner'
       ? `banner-${index}`
-      : card.type === 'card' 
+      : card.type === 'card'
         ? `card-${card.title || index}`
         : `image-${card.alt || index}`;
 
@@ -99,7 +100,7 @@ const FashionHero: React.FC = () => {
       image: card.image,
       type: card.type,
       category: 'fashion',
-      
+
       // Card styling and layout
       bg: card.bg,
       textColor: card.textColor,
@@ -107,34 +108,34 @@ const FashionHero: React.FC = () => {
       colSpan: card.colSpan,
       rowSpan: card.rowSpan,
       alt: card.alt,
-      
+
       // Position and context
       position: `hero_position_${index}`,
       cardSize: `${card.colSpan}_${card.rowSpan}`,
-      
+
       // Additional metadata based on card type
       ...(card.type === 'banner' && {
         bannerText: card.text,
         bannerType: 'promotional',
         hasLightningIcon: card.icon,
       }),
-      
+
       ...(card.type === 'card' && {
         cardTitle: card.title,
         cardSubtitle: card.subtitle,
-        theme: card.title?.includes('Winter') ? 'seasonal' : 
-               card.title?.includes('Knitwear') ? 'clothing' :
-               card.title?.includes('Textures') ? 'material' : 'general'
+        theme: card.title?.includes('Winter') ? 'seasonal' :
+          card.title?.includes('Knitwear') ? 'clothing' :
+            card.title?.includes('Textures') ? 'material' : 'general'
       }),
-      
+
       ...(card.type === 'image' && {
         imageAlt: card.alt,
         productType: card.alt?.includes('shoes') ? 'footwear' :
-                    card.alt?.includes('trainers') ? 'sports' :
-                    card.alt?.includes('joggers') ? 'activewear' :
-                    card.alt?.includes('Scarf') ? 'accessories' : 'unknown'
+          card.alt?.includes('trainers') ? 'sports' :
+            card.alt?.includes('joggers') ? 'activewear' :
+              card.alt?.includes('Scarf') ? 'accessories' : 'unknown'
       }),
-      
+
       // Tags for categorization
       tags: [
         'hero-section',
@@ -156,10 +157,38 @@ const FashionHero: React.FC = () => {
       <svg className="absolute left-8 md:left-16 top-56 md:top-72 w-12 h-6 md:w-16 md:h-8 text-purple-300 opacity-30 hidden sm:block" fill="none" viewBox="0 0 60 30">
         <path d="M0,30 A30,30 0 0,1 60,30" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
       </svg>
-      
+
       {/* Bag images on left side - Responsive sizing and positioning */}
-      <img src="/assets/fashion/bags.png" alt="Bag" className="absolute left-0 top-1/2 transform -translate-y-1/2 w-32 h-32 md:w-52 md:h-52 object-contain z-20 hidden lg:block" />
-      <img src="/assets/fashion/bags.png" alt="Modal 1" className="absolute left-1 md:left-2 top-40 md:top-58 w-36 h-44 md:w-54 md:h-64 object-contain z-30 hidden lg:block" />
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 z-20 hidden lg:block" style={{ width: '18vw', maxWidth: 200 }}>
+        <Image
+          src="/assets/fashion/bags.png"
+          alt="Bag"
+          width={200}
+          height={200}
+          style={{ width: '100%', height: 'auto', aspectRatio: '1/1' }}
+          sizes="(max-width: 1024px) 120px, 18vw"
+          priority
+        />
+      </div>
+      <div
+        className="absolute left-1 md:left-2 top-40 md:top-58 z-30 hidden lg:block"
+        style={{
+          width: 'clamp(100px, 18vw, 220px)',
+          maxWidth: '220px',
+          minWidth: '100px',
+          aspectRatio: '4/5',
+        }}
+      >
+        <Image
+          src="/assets/fashion/bags.png"
+          alt="Modal 1"
+          width={220}
+          height={275}
+          style={{ width: '100%', height: 'auto', aspectRatio: '4/5' }}
+          sizes="(max-width: 600px) 100px, (max-width: 1024px) 140px, 18vw"
+          priority
+        />
+      </div>
 
       {/* Decorative Elements - Right Side - Hidden on mobile */}
       <svg className="absolute right-0 top-20 md:top-24 w-16 h-16 md:w-20 md:h-20 text-blue-200 opacity-30 hidden sm:block" fill="none" viewBox="0 0 80 80">
@@ -169,12 +198,52 @@ const FashionHero: React.FC = () => {
       <svg className="absolute right-8 md:right-16 top-64 md:top-80 w-10 h-10 md:w-12 md:h-12 text-green-300 opacity-30 hidden sm:block" fill="none" viewBox="0 0 48 48">
         <polygon points="24,4 44,44 4,44" stroke="currentColor" strokeWidth="4" fill="none" />
       </svg>
-      
+
       {/* Right side images - Responsive sizing and positioning */}
-      <img src="/assets/fashion/bag2.png" alt="Element" className="absolute right-0 top-64 md:top-200 transform -translate-y-1/2 w-32 h-32 md:w-52 md:h-52 object-contain z-10 hidden lg:block" />
-      <img src="/assets/fashion/modal2.png" alt="Modal 2" className="absolute right-16 md:right-32 top-24 md:top-32 w-48 h-48 md:w-74 md:h-74 object-contain z-30 hidden lg:block" />
-      <img src="/assets/fashion/modal2.png" alt="Modal 2" className="absolute right-4 md:right-10 top-2/3 w-28 h-28 md:w-40 md:h-40 object-contain z-20 opacity-80 hidden lg:block" />
-      <img src="/assets/fashion/modal2.png" alt="Modal 2" className="absolute left-1/2 top-1/2 w-20 h-20 md:w-32 md:h-32 object-contain z-10 opacity-60 hidden lg:block" />
+      <div className="absolute right-0 top-2/3 -translate-y-1/2 z-10 hidden lg:block" style={{ width: 'clamp(80px, 18vw, 200px)', aspectRatio: '1/1' }}>
+        <Image
+          src="/assets/fashion/modal2.png"
+          alt="Element"
+          width={200}
+          height={200}
+          style={{ width: '100%', height: 'auto', aspectRatio: '1/1' }}
+          sizes="(max-width: 600px) 80px, (max-width: 1024px) 120px, 18vw"
+          priority
+        />
+      </div>
+      {/* <div className="absolute right-16 md:right-32 top-24 md:top-32 z-30 hidden lg:block" style={{ width: 'clamp(100px, 25vw, 300px)', aspectRatio: '1/1' }}>
+        <Image
+          src="/assets/fashion/modal2.png"
+          alt="Modal 2"
+          width={300}
+          height={300}
+          style={{ width: '100%', height: 'auto', aspectRatio: '1/1' }}
+          sizes="(max-width: 600px) 100px, (max-width: 1024px) 180px, 25vw"
+          priority
+        />
+      </div> */}
+      <div className="absolute right-4 md:right-10 top-2/3 z-20 opacity-80 hidden lg:block" style={{ width: 'clamp(60px, 15vw, 160px)', aspectRatio: '1/1' }}>
+        <Image
+          src="/assets/fashion/modal2.png"
+          alt="Modal 2"
+          width={160}
+          height={160}
+          style={{ width: '100%', height: 'auto', aspectRatio: '1/1' }}
+          sizes="(max-width: 600px) 60px, (max-width: 1024px) 100px, 15vw"
+          priority
+        />
+      </div>
+      <div className="absolute left-1/2 top-1/2 z-10 opacity-60 hidden lg:block" style={{ width: 'clamp(40px, 10vw, 120px)', aspectRatio: '1/1' }}>
+        <Image
+          src="/assets/fashion/modal2.png"
+          alt="Modal 2"
+          width={120}
+          height={120}
+          style={{ width: '100%', height: 'auto', aspectRatio: '1/1' }}
+          sizes="(max-width: 600px) 40px, (max-width: 1024px) 80px, 10vw"
+          priority
+        />
+      </div>
 
       <div className="flex flex-col items-center py-4 md:py-8 w-full px-2 md:px-4">
         <div className="w-full max-w-6xl grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-5 auto-rows-[120px] md:auto-rows-[140px] lg:auto-rows-[180px]">
@@ -212,8 +281,8 @@ const FashionHero: React.FC = () => {
             );
           })}
         </div>
-      
-      
+
+
       </div>
       <CategorySection />
       <h2 className="text-2xl md:text-4xl lg:text-5xl font-extrabold text-center mt-4 mb-6 md:mb-8 text-[#3D375A] px-4">Our Products</h2>
