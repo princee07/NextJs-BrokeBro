@@ -137,7 +137,7 @@ const FeedbackWidget: React.FC = () => {
   ];
 
   return (
-    <div ref={widgetRef} className="fixed bottom-6 right-6 z-50">
+    <div ref={widgetRef} className="fixed bottom-6 right-6 z-[9999]">
       {/* Main Widget Button */}
       {!isOpen && (
         <button
@@ -180,49 +180,53 @@ const FeedbackWidget: React.FC = () => {
 
       {/* Feedback Form Modal */}
       {isOpen && (
-        <div className="absolute bottom-16 right-0 w-64 bg-white rounded-lg shadow-xl border border-gray-200">
+        <div className="absolute bottom-16 right-0 w-72 bg-white rounded-lg shadow-xl border border-gray-200">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-2 flex justify-between items-center">
+          <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-2.5 flex justify-between items-center">
             <h3 className="font-medium text-sm">Share Feedback</h3>
             <button
               onClick={() => setIsOpen(false)}
               className="text-white hover:text-gray-200 transition-colors"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Content */}
-          <div className="p-2">
+          <div className="p-3">
             {isSubmitted ? (
               <div className="text-center py-4">
-                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <ThumbsUp className="w-4 h-4 text-green-600" />
+                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <ThumbsUp className="w-5 h-5 text-green-600" />
                 </div>
                 <h4 className="text-sm font-semibold text-gray-900 mb-1">Thank You!</h4>
                 <p className="text-xs text-gray-600">Feedback submitted successfully.</p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-2">
+              <form onSubmit={handleSubmit} className="space-y-2.5">
                 {/* Feedback Type Selection */}
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
-                    Type
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                    Feedback Type
                   </label>
-                  <div className="grid grid-cols-2 gap-1">
+                  <div className="grid grid-cols-2 gap-1.5">
                     {feedbackTypes.map(({ type, icon: Icon, label, color }) => (
                       <button
                         key={type}
                         type="button"
                         onClick={() => setFeedbackType(type)}
-                        className={`p-1.5 rounded border transition-all duration-200 ${
+                        className={`p-2 rounded-lg border transition-all duration-200 ${
                           feedbackType === type
-                            ? `${color} text-white border-transparent`
+                            ? `${color} border-transparent`
                             : 'bg-gray-50 text-gray-700 border-gray-200 hover:border-gray-300'
                         }`}
                       >
-                        <Icon className="w-3 h-3 mx-auto mb-0.5" />
-                        <span className="text-xs font-medium">{label.split(' ')[0]}</span>
+                        <Icon className={`w-3.5 h-3.5 mx-auto mb-1 ${
+                          feedbackType === type ? 'text-white' : 'text-gray-700'
+                        }`} />
+                        <span className={`text-xs font-medium ${
+                          feedbackType === type ? 'text-white' : 'text-gray-700'
+                        }`}>{label.split(' ')[0]}</span>
                       </button>
                     ))}
                   </div>
@@ -231,7 +235,7 @@ const FeedbackWidget: React.FC = () => {
                 {/* Rating (only for rating type) */}
                 {feedbackType === 'rating' && (
                   <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
                       Rate Experience
                     </label>
                     <div className="flex gap-0.5 justify-center">
@@ -257,9 +261,9 @@ const FeedbackWidget: React.FC = () => {
 
                 {/* Message */}
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
-                    {feedbackType === 'bug' ? 'Issue' :
-                     feedbackType === 'suggestion' ? 'Idea' : 'Message'}
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                    {feedbackType === 'bug' ? 'Describe issue' :
+                     feedbackType === 'suggestion' ? 'Your idea' : 'Message'}
                   </label>
                   <textarea
                     value={message}
@@ -271,15 +275,15 @@ const FeedbackWidget: React.FC = () => {
                         ? 'Share your idea...'
                         : 'Tell us what you think...'
                     }
-                    className="w-full p-1.5 text-xs border border-gray-300 rounded resize-none focus:ring-1 focus:ring-blue-500 focus:border-transparent"
-                    rows={2}
+                    className="w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg resize-none focus:ring-1 focus:ring-blue-500 focus:border-transparent placeholder-gray-500"
+                    rows={2.5}
                     required
                   />
                 </div>
 
                 {/* Email (optional) */}
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
                     Email (optional)
                   </label>
                   <input
@@ -287,7 +291,7 @@ const FeedbackWidget: React.FC = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="your@email.com"
-                    className="w-full p-1.5 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent placeholder-gray-500"
                   />
                 </div>
 
@@ -295,13 +299,13 @@ const FeedbackWidget: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting || !message.trim()}
-                  className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-400 text-white font-medium py-1.5 px-2 text-xs rounded transition-all duration-200 flex items-center justify-center gap-1"
+                  className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-400 text-white font-medium py-2 px-3 text-sm rounded-lg transition-all duration-200 flex items-center justify-center gap-1.5"
                 >
                   {isSubmitting ? (
-                    <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   ) : (
                     <>
-                      <Send className="w-3 h-3" />
+                      <Send className="w-3.5 h-3.5" />
                       Send
                     </>
                   )}
@@ -311,7 +315,7 @@ const FeedbackWidget: React.FC = () => {
           </div>
 
           {/* Footer */}
-          <div className="bg-gray-50 px-2 py-1 border-t border-gray-200">
+          <div className="bg-gray-50 px-3 py-1.5 border-t border-gray-200">
             <p className="text-xs text-gray-500 text-center">
               Help us improve BrokeBro
             </p>
