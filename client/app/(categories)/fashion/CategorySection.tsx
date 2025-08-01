@@ -4,25 +4,25 @@ import { useClickTracker } from "@/hooks/useClickTracker";
 
 const categories = [
     {
-        label: "Women Gallery",
+        label: "shoes",
         bg: "bg-[#3D375A]",
         text: "text-white",
         image: "/assets/fashion/category1.png",
     },
     {
-        label: "Fashion",
+        label: "women gallery",
         bg: "bg-[#5ED6F7]",
         text: "text-black",
         image: "/assets/fashion/category2.png",
     },
     {
-        label: "Fashion",
+        label: "men style",
         bg: "bg-[#FF6C6C]",
         text: "text-white",
         image: "/assets/fashion/category3.png",
     },
     {
-        label: "Fashion",
+        label: "Beauty",
         bg: "bg-[#F7D86C]",
         text: "text-black",
         image: "/assets/fashion/category4.png",
@@ -33,38 +33,64 @@ const CategorySection: React.FC = () => {
     const { trackClick } = useClickTracker();
 
     const handleCategoryClick = (category: any, index: number) => {
+        const lowerLabel = category.label.toLowerCase();
+        // Scroll to BeautySection if label is 'beauty'
+        if (lowerLabel === 'beauty') {
+            const section = document.getElementById('beauty-section');
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+            return;
+        }
+        // Scroll to Women Gallery section if label is exactly 'women gallery'
+        if (lowerLabel === 'women gallery') {
+            const section = document.getElementById('womengallerysection');
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+            return;
+        }
+        // Scroll to MensFashionSection if label is 'shoes' or 'men style'
+        if (lowerLabel === 'shoes' || lowerLabel === 'men style') {
+            const section = document.getElementById('mens-fashion-section');
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+            return;
+        }
+        // If no scroll, always track click
         trackClick('category', `category-${category.label}-${index}`, {
             // Basic category info
             label: category.label,
             image: category.image,
             category: 'fashion',
             type: 'category-image',
-            
+
             // Category styling
             bg: category.bg,
             textColor: category.text,
-            
+
             // Position and layout info
             position: `category_position_${index}`,
             categoryIndex: index,
             totalCategories: categories.length,
-            
+
             // Category-specific metadata
             categoryType: category.label.includes('Women') ? 'womens' :
-                         category.label.includes('Men') ? 'mens' :
-                         category.label.includes('Fashion') ? 'general-fashion' : 'other',
-            
+                category.label.includes('Men') ? 'mens' :
+                    category.label.includes('Fashion') ? 'general-fashion' : 'other',
+
             // Image details
             imageAlt: category.label,
             imageFile: category.image.split('/').pop(),
             imagePath: category.image,
-            
+
             // Layout specifications
             width: '500px',
             height: '400px',
             minWidth: '400px',
             maxWidth: '600px',
-            
+
             // Tags for filtering
             tags: [
                 'category-section',
@@ -92,18 +118,18 @@ const CategorySection: React.FC = () => {
                         </div>
                     ))}
                 </div>
-                
+
                 {/* Desktop View - Horizontal Overlap */}
                 <div className="hidden md:flex flex-row justify-center items-center gap-0 rounded-3xl">
                     {categories.map((cat, idx) => (
-                        <div 
-                            key={idx} 
-                            className="flex items-center justify-center" 
-                            style={{ 
-                                minWidth: 300, 
-                                maxWidth: 500, 
-                                marginLeft: idx > 0 ? '-16px' : '0px', 
-                                marginRight: idx < categories.length - 1 ? '-16px' : '0px' 
+                        <div
+                            key={idx}
+                            className="flex items-center justify-center"
+                            style={{
+                                minWidth: 300,
+                                maxWidth: 500,
+                                marginLeft: idx > 0 ? '-16px' : '0px',
+                                marginRight: idx < categories.length - 1 ? '-16px' : '0px'
                             }}
                         >
                             <img

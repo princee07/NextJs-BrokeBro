@@ -287,9 +287,15 @@ const FashionHero: React.FC = () => {
       <CategorySection />
       <h2 className="text-2xl md:text-4xl lg:text-5xl font-extrabold text-center mt-4 mb-6 md:mb-8 text-[#3D375A] px-4">Our Products</h2>
       <ProductSection />
-      <MensFashionSection />
-      <WomensFashionSection />
-      <BeautySection />
+      <div id="mens-fashion-section">
+        <MensFashionSection />
+      </div>
+      <div id="womengallerysection" className="w-full max-w-6xl mx-auto my-8 md:my-12 px-4 md:px-0" style={{ marginTop: '4rem', marginBottom: '4rem' }}>
+        <WomensFashionSection />
+      </div>
+      <div id="beauty-section">
+        <BeautySection />
+      </div>
     </div>
   );
 };
