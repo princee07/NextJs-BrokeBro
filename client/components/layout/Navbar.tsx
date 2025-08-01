@@ -483,6 +483,20 @@ export default function NavbarClient({ user }: { user: KindeUser | null }) {
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             <div className="flex flex-col py-6 px-4 gap-2 h-full overflow-y-auto">
+              {/* User profile info at the top of sidebar */}
+              {isHydrated && user && (
+                <div className="flex items-center gap-3 mb-6">
+                  <img
+                    src={user.picture || "/assets/images/remove.png"}
+                    alt={user.given_name || "User"}
+                    className="w-10 h-10 rounded-full object-cover border border-orange-300"
+                  />
+                  <div>
+                    <div className="font-bold text-black text-base">{user.given_name || "User"}</div>
+                    <div className="text-sm text-gray-600">{user.email}</div>
+                  </div>
+                </div>
+              )}
               {navCategories.map((category, index) => (
                 <Link
                   key={index}
