@@ -453,7 +453,20 @@ export default function NavbarClient({ user }: { user: KindeUser | null }) {
 
       {/* Rest of the JSX remains largely unchanged */}
       <nav className="w-full bg-[#e0e0e0] border-t border-orange-200 shadow-inner z-50" ref={navLinksRef}>
-        {/* ... Nav categories rendering ... */}
+        <div className="flex items-center justify-center gap-16 px-8 py-2 max-w-7xl mx-auto">
+          {navCategories.map((category, index) => (
+            <Link
+              key={index}
+              href={category.path}
+              className="text-base font-extrabold tracking-wide uppercase text-black hover:text-orange-600 hover:drop-shadow-md transition-all duration-200 hidden md:block"
+              style={{ fontFamily: 'Inter, Segoe UI, Arial, sans-serif' }}
+              onClick={resetNavState}
+              prefetch={false}
+            >
+              {category.name}
+            </Link>
+          ))}
+        </div>
       </nav>
       <AnimatePresence>
         {mobileMenuOpen && (
