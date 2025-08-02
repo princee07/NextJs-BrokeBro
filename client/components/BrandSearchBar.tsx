@@ -85,7 +85,7 @@ const BrandSearchBar: React.FC<BrandSearchBarProps> = ({ onSelect, inputClassNam
                     className={inputClassName}
                     style={{
                         width: '100%',
-                        padding: '8px 44px 8px 32px',
+                        padding: '8px 44px 8px 42px',
                         borderRadius: 32,
                         border: '1px solid #ccc',
                         fontSize: 16,

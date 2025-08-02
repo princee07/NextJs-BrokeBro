@@ -199,6 +199,7 @@ const EnhancedBrandSearch: React.FC<EnhancedBrandSearchProps> = ({
             background: '#fff',
             color: '#1f2937',
             boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+            ...(inputClassName?.includes('pl-12') ? { paddingLeft: '48px' } : {})
           }}
         />
         <div style={{

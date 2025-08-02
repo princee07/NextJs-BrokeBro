@@ -272,18 +272,17 @@ export default function NavbarClient({ user }: { user: KindeUser | null }) {
         </Link>
         <div className="w-full max-w-xs md:max-w-xl relative flex-shrink hidden md:block">
           <div className="relative">
-            <EnhancedBrandSearch
-              onSelect={(brand) => handleSmartSearch(brand)}
-              placeholder="Search brands, items or categories..."
-              inputClassName="text-black placeholder:text-black"
-            />
-
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-black">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-black z-10">
               <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
                 <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
             </span>
+            <EnhancedBrandSearch
+              onSelect={(brand) => handleSmartSearch(brand)}
+              placeholder="Search brands, items or categories..."
+              inputClassName="text-black placeholder:text-black pl-12"
+            />
           </div>
         </div>
         <div className="flex items-center gap-2 md:gap-3 min-w-[120px] md:min-w-0" ref={dropdownRef}>
