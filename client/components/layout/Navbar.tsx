@@ -95,10 +95,15 @@ export default function NavbarClient({ user }: { user: KindeUser | null }) {
         setShowNavbar(true);
       }
       lastScrollY.current = currentScrollY;
+      
+      // Close dropdown menu when scrolling
+      if (profileDropdownOpen) {
+        setProfileDropdownOpen(false);
+      }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [profileDropdownOpen]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
