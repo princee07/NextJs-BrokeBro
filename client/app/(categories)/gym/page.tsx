@@ -41,9 +41,9 @@ export default function GymHeroSection() {
                             <Image
                                 src={banners[current]}
                                 alt={`Gym banner ${current + 1}`}
-                                layout="fill"
-                                objectFit="cover"
-                                className="transition-opacity duration-700"
+                                fill
+                                sizes="100vw"
+                                className="transition-opacity duration-700 object-cover"
                                 priority
                             />
                         </motion.div>

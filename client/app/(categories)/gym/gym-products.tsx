@@ -69,7 +69,7 @@ export default function GymProductsSection() {
                         className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center transition-transform duration-200 hover:-translate-y-2 hover:shadow-2xl border border-gray-200"
                     >
                         <div className="w-48 h-48 mb-4 relative flex items-center justify-center bg-gradient-to-br from-yellow-50 to-gray-100 rounded-lg overflow-hidden">
-                            <Image src={product.image} alt={product.name} layout="fill" objectFit="contain" className="rounded-lg" />
+                            <Image src={product.image} alt={product.name} fill sizes="(max-width: 640px) 192px, (max-width: 768px) 192px, (max-width: 1024px) 192px, 192px" className="rounded-lg object-contain" />
                         </div>
                         <span className="text-base text-gray-700 font-medium mb-2 tracking-wide">Brand: {product.brand}</span>
                         <button

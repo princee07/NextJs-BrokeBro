@@ -40,7 +40,7 @@ export default function GymPartnersSection() {
                         className="bg-white rounded-xl shadow-lg flex flex-col items-center hover:shadow-2xl transition p-3 cursor-pointer no-underline"
                     >
                         <div className="w-full h-[180px] relative flex items-center justify-center">
-                            <Image src={gym.image} alt={gym.name} layout="fill" objectFit="cover" className="rounded-lg" />
+                            <Image src={gym.image} alt={gym.name} fill sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw" className="rounded-lg object-cover" />
                         </div>
                         <h3 className="text-lg font-semibold text-center text-black mt-3">{gym.name}</h3>
                     </a>

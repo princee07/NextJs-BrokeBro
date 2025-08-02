@@ -40,7 +40,7 @@ export default function BrandCouponPage() {
         <div className="flex-1 flex flex-col items-center">
           <div className="w-full flex flex-col items-center">
             <div className="relative w-64 h-40 mb-4 rounded-xl overflow-hidden">
-              <Image src={offer.image} alt={offer.title} fill className="object-cover object-center" />
+              <Image src={offer.image} alt={offer.title} fill sizes="(max-width: 768px) 256px, 256px" className="object-cover object-center" />
               <span className="absolute inset-0 flex items-center justify-center text-white text-3xl font-bold bg-black/40">{offer.brand.toUpperCase()}</span>
             </div>
             <h2 className="text-3xl font-extrabold text-gray-800 mb-2 text-center">{offer.brand.toUpperCase()}</h2>
@@ -103,7 +103,7 @@ export default function BrandCouponPage() {
               <div key={i} className="bg-white rounded-xl shadow p-4 flex flex-col items-center border border-gray-200">
                 <div className="relative w-28 h-16 mb-2 flex items-center justify-center">
                   {o.image ? (
-                    <Image src={o.image} alt={o.brand} fill className="object-contain object-center" />
+                    <Image src={o.image} alt={o.brand} fill sizes="(max-width: 768px) 112px, 112px" className="object-contain object-center" />
                   ) : (
                     <span className="text-gray-400">No Image</span>
                   )}

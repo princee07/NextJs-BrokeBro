@@ -258,6 +258,7 @@ export default function NavbarClient({ user }: { user: KindeUser | null }) {
                 src="/assets/images/remove.png"
                 alt="BrokeBro Logo"
                 fill
+                sizes="(max-width: 768px) 100px, 150px"
                 style={{ objectFit: "contain", objectPosition: "left center" }}
                 priority
               />
@@ -524,7 +525,95 @@ export default function NavbarClient({ user }: { user: KindeUser | null }) {
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            {/* ... Profile dropdown content ... */}
+            {/* Profile Header */}
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  {user?.picture ? (
+                    <Image
+                      src={user.picture}
+                      alt={user.given_name || "User"}
+                      width={40}
+                      height={40}
+                      className="rounded-full border-2 border-orange-500/50"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 flex items-center justify-center text-white font-semibold">
+                      {user?.given_name?.charAt(0) || 'U'}
+                    </div>
+                  )}
+                  {isVerified && (
+                    <div className="absolute -bottom-1 -right-1">
+                      <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                        <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-gray-900 font-semibold">{user?.given_name || "User"}</h3>
+                    {isVerified && (
+                      <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Verified</span>
+                    )}
+                  </div>
+                  <p className="text-gray-500 text-sm">{user?.email}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Dropdown Menu Items */}
+            <div className="p-2">
+              <Link
+                href="/profileClient"
+                className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors text-gray-700"
+                onClick={() => setProfileDropdownOpen(false)}
+              >
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span>Profile</span>
+              </Link>
+              
+              <Link
+                href="/student-verification"
+                className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors text-gray-700"
+                onClick={() => setProfileDropdownOpen(false)}
+              >
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Verification</span>
+              </Link>
+
+              <button
+                onClick={() => {
+                  setProfileDropdownOpen(false);
+                  handleOpenReferralModal();
+                }}
+                className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors text-gray-700"
+              >
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                </svg>
+                <span>Refer & Earn</span>
+              </button>
+
+              <div className="border-t border-gray-200 my-2"></div>
+
+              <LogoutLink
+                postLogoutRedirectURL={LOGOUT_REDIRECT_URL}
+                className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors text-gray-700"
+                onClick={() => setProfileDropdownOpen(false)}
+              >
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span>Sign Out</span>
+              </LogoutLink>
+            </div>
           </motion.div>
         </AnimatePresence>,
         document.body
