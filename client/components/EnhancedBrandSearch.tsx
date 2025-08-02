@@ -1,108 +1,103 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { getAllBrands, getBrandCategory, brandCategories } from '../data/allBrands';
+import { allBrands } from '../app/(categories)/fashion/brand/brandData';
+import { offers } from '../data/offers';
+import { mostViewed } from '../data/mostViewed';
+import featuredProducts from '../app/(categories)/technology/featuredProducts';
+// Gym data
+import gymDetails from '../app/gym-partner/[gymSlug]/page';
+// Travel data
+// Flight deals object from flight page
+import flightDeals from '../app/(categories)/lifestyle/flight/[flightSlug]/page';
 import AnimatedEyes from './ui/AnimatedEyes';
+
 
 interface BrandOffer {
   brand: string;
   offer: string;
   category: string;
+  slug: string;
+  image?: string;
   isPromoted?: boolean;
   logo?: string;
 }
 
-// Enhanced brand data with realistic offers
-const getBrandOffers = (): BrandOffer[] => {
-  const allBrands = getAllBrands();
-  
-  return allBrands.map(brand => {
-    const category = getBrandCategory(brand);
-    
-    // Generate realistic offers based on brand and category
-    let offer = "Student Discount";
-    
-    // Technology offers
-    if (brand.toLowerCase().includes('microsoft')) {
-      offer = "Free 3-Month Trial";
-    } else if (brand.toLowerCase().includes('spotify')) {
-      offer = "50% Off Premium Plan";
-    } else if (brand.toLowerCase().includes('adobe')) {
-      offer = "60% Off Creative Cloud";
-    } else if (brand.toLowerCase().includes('apple music')) {
-      offer = "50% Off Student Plan";
-    } else if (brand.toLowerCase().includes('notion')) {
-      offer = "Free Plus Plan";
-    } else if (brand.toLowerCase().includes('canva')) {
-      offer = "Free Pro Access";
-    } else if (brand.toLowerCase().includes('grammarly')) {
-      offer = "Free Premium Features";
-    }
-    // Fashion offers
-    else if (brand.toLowerCase().includes('nike')) {
-      offer = "20% Off Student Discount";
-    } else if (brand.toLowerCase().includes('levis')) {
-      offer = "22% Off Denim";
-    } else if (brand.toLowerCase().includes('ajio')) {
-      offer = "15% Off Order Value";
-    } else if (brand.toLowerCase().includes('biba')) {
-      offer = "22% Off Ethnic Wear";
-    } else if (brand.toLowerCase().includes('salty')) {
-      offer = "18% Off Sitewide";
-    } else if (brand.toLowerCase().includes('soxytoes')) {
-      offer = "30% Off Socks & Accessories";
-    }
-    // Beauty offers
-    else if (brand.toLowerCase().includes('lakme')) {
-      offer = "40% Off Beauty Essentials";
-    } else if (brand.toLowerCase().includes('swiss beauty')) {
-      offer = "15% Off Sitewide";
-    } else if (brand.toLowerCase().includes('salon azure')) {
-      offer = "25% Off Salon Services";
-    } else if (brand.toLowerCase().includes('nail gallery')) {
-      offer = "15% Off Nail Services";
-    }
-    // Gym & Fitness offers
-    else if (brand.toLowerCase().includes('anytime fitness')) {
-      offer = "Special Student Rates";
-    } else if (brand.toLowerCase().includes('muscle junkie')) {
-      offer = "8% Off Supplements";
-    } else if (brand.toLowerCase().includes('nutrabay')) {
-      offer = "Up to 15% Off Nutrition";
-    }
-    // Travel offers
-    else if (brand.toLowerCase().includes('jetstar')) {
-      offer = "Student Travel Deals";
-    } else if (brand.toLowerCase().includes('expedia')) {
-      offer = "Up to 20% Off Stays";
-    } else if (brand.toLowerCase().includes('qantas')) {
-      offer = "Student Flight Discounts";
-    }
-    // Gaming & Entertainment
-    else if (brand.toLowerCase().includes('glued')) {
-      offer = "Exclusive Gaming Combos";
-    } else if (brand.toLowerCase().includes('ultimate rc')) {
-      offer = "1+1 Racing Offer";
-    }
-    // Default offers based on category
-    else if (category?.name === "Technology") {
-      offer = "Student Plan Available";
-    } else if (category?.name === "Fashion & Beauty") {
-      offer = "10-20% Student Discount";
-    } else if (category?.name === "Gym & Fitness") {
-      offer = "Special Student Rates";
-    } else if (category?.name === "Travel & Lifestyle") {
-      offer = "Student Travel Deals";
-    } else if (category?.name === "Offers & Deals") {
-      offer = "Exclusive Student Offer";
-    }
-    
+
+// Helper to flatten gymDetails object
+const getGymOffers = () => {
+  return Object.entries(gymDetails).map(([slug, gym]) => ({
+    brand: gym.name,
+    offer: gym.discount || 'Special Student Rates',
+    category: 'Gym',
+    slug,
+    image: gym.image
+  }));
+};
+
+// Helper to flatten flightDeals object
+const getFlightOffers = () => {
+  // flightDeals is an object: { [slug]: { brand, discount, img, ... } }
+  return Object.entries(flightDeals).map(([slug, dealRaw]) => {
+    const deal = dealRaw as { brand: string; discount: string; img: string };
     return {
-      brand,
-      offer,
-      category: category?.name || "Other",
-      isPromoted: Math.random() > 0.7, // 30% chance to be promoted
-      logo: `/assets/logos/${brand.toLowerCase().replace(/\s+/g, '-')}.png`
+      brand: deal.brand,
+      offer: deal.discount,
+      category: 'Travel',
+      slug,
+      image: deal.img
     };
   });
+};
+
+const getBrandOffers = (): BrandOffer[] => {
+  // Fashion brands
+  const fashion = allBrands.map(b => ({
+    brand: b.brand,
+    offer: b.offer || b.discount,
+    category: 'Fashion',
+    slug: b.slug,
+    image: b.image
+  }));
+
+  // Technology
+  const technology = featuredProducts.map(p => ({
+    brand: p.name,
+    offer: p.description || 'Student Offer',
+    category: 'Technology',
+    slug: p.slug || p.name.toLowerCase().replace(/\s+/g, '-'),
+    image: p.image
+  }));
+
+  // Gym
+  const gym = getGymOffers();
+
+  // Travel
+  const travel = getFlightOffers();
+
+  // New Arrivals & Most Viewed/Discount
+  const newArrivals = offers.filter(o => o.badge && o.badge.toLowerCase().includes('new')).map(o => ({
+    brand: o.brand,
+    offer: o.title || o.discount,
+    category: 'New Arrival',
+    slug: o.brand.toLowerCase().replace(/\s+/g, '-'),
+    image: o.image
+  }));
+  const mostViewedDiscount = mostViewed.map(o => ({
+    brand: o.brand,
+    offer: o.title || o.discount,
+    category: 'Most Viewed',
+    slug: o.brand.toLowerCase().replace(/\s+/g, '-'),
+    image: o.image
+  }));
+
+  // Combine all
+  return [
+    ...fashion,
+    ...technology,
+    ...gym,
+    ...travel,
+    ...newArrivals,
+    ...mostViewedDiscount
+  ];
 };
 
 interface EnhancedBrandSearchProps {
@@ -111,10 +106,10 @@ interface EnhancedBrandSearchProps {
   placeholder?: string;
 }
 
-const EnhancedBrandSearch: React.FC<EnhancedBrandSearchProps> = ({ 
-  onSelect, 
-  inputClassName = '', 
-  placeholder = 'Search brands, items or categories...' 
+const EnhancedBrandSearch: React.FC<EnhancedBrandSearchProps> = ({
+  onSelect,
+  inputClassName = '',
+  placeholder = 'Search brands, items or categories...'
 }) => {
   const [input, setInput] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -168,13 +163,30 @@ const EnhancedBrandSearch: React.FC<EnhancedBrandSearchProps> = ({
     setShowSuggestions(true);
   };
 
-  const handleSuggestionClick = (brand: string) => {
+
+  // Route user to correct slug page based on category
+  const handleSuggestionClick = (brand: string, slug: string, category: string) => {
     setInput(brand);
     setShowSuggestions(false);
     if (onSelect) onSelect(brand);
+    // Routing logic
+    let url = '/';
+    if (category === 'Fashion') {
+      url = `/fashion/brand/${slug}`;
+    } else if (category === 'Technology') {
+      url = `/technology/featured/${slug}`;
+    } else if (category === 'Gym') {
+      url = `/gym-partner/${slug}`;
+    } else if (category === 'Travel') {
+      url = `/lifestyle/flight/${slug}`;
+    } else if (category === 'New Arrival' || category === 'Most Viewed') {
+      url = `/fashion/brand/${slug}`;
+    }
+    window.location.href = url;
   };
 
   // Separate promoted and recommended brands
+
   const promotedOffers = filteredBrands.filter(brand => brand.isPromoted).slice(0, 3);
   const recommendedOffers = filteredBrands.filter(brand => !brand.isPromoted).slice(0, 9);
 
@@ -213,7 +225,7 @@ const EnhancedBrandSearch: React.FC<EnhancedBrandSearchProps> = ({
           <AnimatedEyes />
         </div>
       </div>
-      
+
       {showSuggestions && filteredBrands.length > 0 && (
         <div
           style={{
@@ -235,10 +247,10 @@ const EnhancedBrandSearch: React.FC<EnhancedBrandSearchProps> = ({
           {/* Promoted Offers Section */}
           {promotedOffers.length > 0 && (
             <div style={{ padding: '16px 0' }}>
-              <h3 style={{ 
-                margin: '0 16px 12px 16px', 
-                fontSize: '14px', 
-                fontWeight: 600, 
+              <h3 style={{
+                margin: '0 16px 12px 16px',
+                fontSize: '14px',
+                fontWeight: 600,
                 color: '#374151',
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em'
@@ -247,10 +259,16 @@ const EnhancedBrandSearch: React.FC<EnhancedBrandSearchProps> = ({
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {promotedOffers.map((brandOffer) => (
-                  <div
+                  <button
                     key={brandOffer.brand}
-                    onClick={() => handleSuggestionClick(brandOffer.brand)}
+                    type="button"
+                    tabIndex={0}
+                    onMouseDown={e => { e.preventDefault(); handleSuggestionClick(brandOffer.brand, brandOffer.slug, brandOffer.category); }}
                     style={{
+                      width: '100%',
+                      background: 'none',
+                      border: 'none',
+                      textAlign: 'left',
                       padding: '12px 16px',
                       cursor: 'pointer',
                       display: 'flex',
@@ -259,12 +277,8 @@ const EnhancedBrandSearch: React.FC<EnhancedBrandSearchProps> = ({
                       borderBottom: '1px solid #f3f4f6',
                       transition: 'background-color 0.2s',
                     }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#f9fafb';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = '#fff';
-                    }}
+                    onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#f9fafb'; }}
+                    onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#fff'; }}
                   >
                     {/* Brand Logo Placeholder */}
                     <div style={{
@@ -282,26 +296,26 @@ const EnhancedBrandSearch: React.FC<EnhancedBrandSearchProps> = ({
                     }}>
                       {brandOffer.brand.charAt(0)}
                     </div>
-                    
+
                     {/* Brand Info */}
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ 
-                        fontSize: '14px', 
-                        fontWeight: 600, 
+                      <div style={{
+                        fontSize: '14px',
+                        fontWeight: 600,
                         color: '#111827',
                         marginBottom: '2px'
                       }}>
                         {brandOffer.brand}
                       </div>
-                      <div style={{ 
-                        fontSize: '12px', 
+                      <div style={{
+                        fontSize: '12px',
                         color: '#6b7280',
                         marginBottom: '2px'
                       }}>
                         {brandOffer.offer}
                       </div>
-                      <div style={{ 
-                        fontSize: '11px', 
+                      <div style={{
+                        fontSize: '11px',
                         color: '#9ca3af',
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em'
@@ -309,7 +323,7 @@ const EnhancedBrandSearch: React.FC<EnhancedBrandSearchProps> = ({
                         Online
                       </div>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
@@ -318,10 +332,10 @@ const EnhancedBrandSearch: React.FC<EnhancedBrandSearchProps> = ({
           {/* Recommended For You Section */}
           {recommendedOffers.length > 0 && (
             <div style={{ padding: '16px 0' }}>
-              <h3 style={{ 
-                margin: '0 16px 12px 16px', 
-                fontSize: '14px', 
-                fontWeight: 600, 
+              <h3 style={{
+                margin: '0 16px 12px 16px',
+                fontSize: '14px',
+                fontWeight: 600,
                 color: '#374151',
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em'
@@ -330,10 +344,16 @@ const EnhancedBrandSearch: React.FC<EnhancedBrandSearchProps> = ({
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {recommendedOffers.map((brandOffer) => (
-                  <div
+                  <button
                     key={brandOffer.brand}
-                    onClick={() => handleSuggestionClick(brandOffer.brand)}
+                    type="button"
+                    tabIndex={0}
+                    onMouseDown={e => { e.preventDefault(); handleSuggestionClick(brandOffer.brand, brandOffer.slug, brandOffer.category); }}
                     style={{
+                      width: '100%',
+                      background: 'none',
+                      border: 'none',
+                      textAlign: 'left',
                       padding: '12px 16px',
                       cursor: 'pointer',
                       display: 'flex',
@@ -342,12 +362,8 @@ const EnhancedBrandSearch: React.FC<EnhancedBrandSearchProps> = ({
                       borderBottom: '1px solid #f3f4f6',
                       transition: 'background-color 0.2s',
                     }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#f9fafb';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = '#fff';
-                    }}
+                    onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#f9fafb'; }}
+                    onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#fff'; }}
                   >
                     {/* Brand Logo Placeholder */}
                     <div style={{
@@ -365,26 +381,26 @@ const EnhancedBrandSearch: React.FC<EnhancedBrandSearchProps> = ({
                     }}>
                       {brandOffer.brand.charAt(0)}
                     </div>
-                    
+
                     {/* Brand Info */}
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ 
-                        fontSize: '14px', 
-                        fontWeight: 600, 
+                      <div style={{
+                        fontSize: '14px',
+                        fontWeight: 600,
                         color: '#111827',
                         marginBottom: '2px'
                       }}>
                         {brandOffer.brand}
                       </div>
-                      <div style={{ 
-                        fontSize: '12px', 
+                      <div style={{
+                        fontSize: '12px',
                         color: '#6b7280',
                         marginBottom: '2px'
                       }}>
                         {brandOffer.offer}
                       </div>
-                      <div style={{ 
-                        fontSize: '11px', 
+                      <div style={{
+                        fontSize: '11px',
                         color: '#9ca3af',
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em'
@@ -392,7 +408,7 @@ const EnhancedBrandSearch: React.FC<EnhancedBrandSearchProps> = ({
                         Online
                       </div>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
