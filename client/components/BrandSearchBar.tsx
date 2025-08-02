@@ -1,28 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { offers } from '../data/offers';
-import { mostViewed } from '../data/mostViewed';
-import { mensFashion } from '../app/(categories)/fashion/data/mensFashionData';
-import { womensFashion } from '@/app/(categories)/fashion/data/womensFashionData';
-import { beauty } from '@/app/(categories)/fashion/data/beautyData';
-import featuredProducts from '../app/(categories)/technology/featuredProducts';
+import { getAllBrands, getBrandCategory } from '../data/allBrands';
 import AnimatedEyes from './ui/AnimatedEyes';
-// Extract unique brands from offers, mostViewed, and mensFashion
+
+// Extract unique brands from all data sources
 type Brand = string;
+
 const getUniqueBrands = (): Brand[] => {
-    const offerBrands = offers.map((offer) => offer.brand.trim());
-    const mostViewedBrands = mostViewed.map((item) => item.brand.trim());
-    const mensFashionBrands = mensFashion.map((item) => item.brand.trim());
-    const womensFashionBrands = womensFashion.map((item) => item.brand.trim());
-    const beautyBrands = beauty.map((item) => item.brand.trim());
-    const featuredProductBrands = featuredProducts.map((item) => (item.name || '').trim());
-    return Array.from(new Set([
-        ...offerBrands,
-        ...mostViewedBrands,
-        ...mensFashionBrands,
-        ...womensFashionBrands,
-        ...beautyBrands,
-        ...featuredProductBrands
-    ])).sort((a, b) => a.localeCompare(b));
+    return getAllBrands();
 };
 
 interface BrandSearchBarProps {
@@ -140,21 +124,37 @@ const BrandSearchBar: React.FC<BrandSearchBarProps> = ({ onSelect, inputClassNam
                         listStyle: 'none',
                     }}
                 >
-                    {filteredBrands.map((brand) => (
-                        <li
-                            key={brand}
-                            onClick={() => handleSuggestionClick(brand)}
-                            style={{
-                                padding: '8px 12px',
-                                cursor: 'pointer',
-                                borderBottom: '1px solid #eee',
-                                background: input === brand ? '#f0f0f0' : '#fff',
-                                color: 'black',
-                            }}
-                        >
-                            {brand}
-                        </li>
-                    ))}
+                    {filteredBrands.map((brand) => {
+                        const category = getBrandCategory(brand);
+                        return (
+                            <li
+                                key={brand}
+                                onClick={() => handleSuggestionClick(brand)}
+                                style={{
+                                    padding: '8px 12px',
+                                    cursor: 'pointer',
+                                    borderBottom: '1px solid #eee',
+                                    background: input === brand ? '#f0f0f0' : '#fff',
+                                    color: 'black',
+                                }}
+                            >
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <span>{brand}</span>
+                                    {category && (
+                                        <span style={{ 
+                                            fontSize: '12px', 
+                                            color: '#666', 
+                                            backgroundColor: '#f5f5f5',
+                                            padding: '2px 6px',
+                                            borderRadius: '4px'
+                                        }}>
+                                            {category.name}
+                                        </span>
+                                    )}
+                                </div>
+                            </li>
+                        );
+                    })}
                 </ul>
             )}
         </div>

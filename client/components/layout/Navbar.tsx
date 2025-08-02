@@ -10,7 +10,7 @@ import { useRouter, usePathname } from "next/navigation";
 import VerificationModal from "../auth/VerificationModal";
 import NavbarUserMenu from "./NavbarUserMenu";
 import { useStudentVerification } from "@/hooks/useStudentVerification";
-import BrandSearchBar from "../BrandSearchBar";
+import EnhancedBrandSearch from "../EnhancedBrandSearch";
 import { getUserReferralData } from "@/app/lib/actions/referral.actions";
 import { createPortal } from "react-dom";
 import {
@@ -272,9 +272,9 @@ export default function NavbarClient({ user }: { user: KindeUser | null }) {
         </Link>
         <div className="w-full max-w-xs md:max-w-xl relative flex-shrink hidden md:block">
           <div className="relative">
-            <BrandSearchBar
+            <EnhancedBrandSearch
               onSelect={(brand) => handleSmartSearch(brand)}
-              placeholder="Search brands, categories, deals..."
+              placeholder="Search brands, items or categories..."
               inputClassName="text-black placeholder:text-black"
             />
 
