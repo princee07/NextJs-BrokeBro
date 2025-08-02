@@ -31,7 +31,7 @@ export default function Home() {
     }, []);
 
     return (
-        <>
+        <div style={{ marginTop: '6.5rem' }}>
             <Hero />
             <NewArrivals />
             <MostViewedDiscounts />
@@ -39,6 +39,6 @@ export default function Home() {
             <AboutBrokeBro />
             <OrbitTestimonials />
             <VerificationTestControls />
-        </>
+        </div>
     );
 }

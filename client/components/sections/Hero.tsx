@@ -3,7 +3,7 @@ import TypewriterText from "./TypewriterText";
 
 export default function Hero() {
   return (
-    <section className="relative w-full flex flex-col items-center justify-center h-[220px] xs:h-[260px] sm:h-[300px] md:h-[420px] lg:h-[480px] !m-0 !p-0 !border-0 z-0 mt-[84px]">
+    <section className="relative w-full flex flex-col items-center justify-center h-[220px] xs:h-[260px] sm:h-[300px] md:h-[420px] lg:h-[480px] !m-0 !p-0 !border-0 z-0 mt-[120px]">
       {/* Background image overlay */}
       <Image
         src="/assets/hero2.jpg"
@@ -14,8 +14,7 @@ export default function Hero() {
       />
       {/* Heading overlay */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[80%] w-full flex justify-center items-center z-0 px-2 sm:px-4"
-        style={{ marginTop: "32px" }}
+        className="absolute top-0 left-1/2 -translate-x-1/2 mt-16 w-full flex justify-center items-center z-0 px-2 sm:px-4"
       >
         <h1
           className="text-black-400 text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-center drop-shadow-lg font-sans rounded-xl px-2 py-2 sm:px-4 sm:py-3 leading-tight max-w-[98vw] sm:max-w-3xl"
